@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*', 'http://localhost:3500'],
+    'allowed_origins' => ['*', 'http://localhost:3500', 'https://main.d3rwsmys7ohsil.amplifyapp.com'],
 
     'allowed_origins_patterns' => [],
 
