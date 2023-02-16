@@ -5,10 +5,15 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "@types/dotenv-webpack": "^7.0.3",
         "axios": "^1.1.2",
+        "dotenv-webpack": "^8.0.1",
         "laravel-vite-plugin": "^0.7.2",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
         "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "process": "^0.11.10"
     }
 }

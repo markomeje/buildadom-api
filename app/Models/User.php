@@ -21,6 +21,8 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'type',
+        'business_name'
     ];
 
     /**
@@ -38,6 +40,16 @@ class User extends Authenticatable implements JWTSubject
      * @var array<string, string>
      */
     protected $casts = [];
+
+    /**
+     * User types
+     *
+     * @var array<int, string>
+     */
+    public static $types = [
+        'individual',
+        'business'
+    ];
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

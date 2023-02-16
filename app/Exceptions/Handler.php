@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Exceptions;
-
+use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -47,4 +47,19 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    protected function invalidJson($request, ValidationException $exception)
+    {
+        return response()->json([
+            'success' => false,
+            'errors' => $exception->errors(),
+            'message' => 'Operation failed. Try again.'
+        ], $exception->status);
+    }
+
 }
+
+
+
+
+
