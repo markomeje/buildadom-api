@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Middleware\Custom;
+namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Closure;
 
-class HeadersMiddleware
+class CorsMiddleware
 {
     /**
      * Handle an incoming request.

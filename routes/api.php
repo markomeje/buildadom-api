@@ -19,8 +19,8 @@ use App\Http\Controllers\V1\{OnboardingController};
 Route::domain(env('STORE_URL'))->group(function() {
     Route::post('/onboarding', [OnboardingController::class, 'create']);
 
-    Route::prefix('properties')->group(function () {
-        Route::post('/all', [\App\Http\Controllers\Api\PropertiesController::class, 'all'])->name('api.properties');
+    Route::prefix('materials')->group(function () {
+        Route::post('/all', [\App\Http\Controllers\Api\PropertiesController::class, 'all']);
     });
 
 });

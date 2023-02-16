@@ -17,8 +17,6 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
 
-        // \App\Http\Middleware\CorsMiddleware::class,
-
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
@@ -44,8 +42,9 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:api',
             \App\Http\Middleware\TrustHosts::class,
-            \App\Http\Middleware\Custom\HeadersMiddleware::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+
+            \App\Http\Middleware\CorsMiddleware::class,
         ],
     ];
 
@@ -67,5 +66,7 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
+        //'cors' => \App\Http\Middleware\CorsMiddleware::class,
     ];
 }
