@@ -8,7 +8,10 @@ use App\Http\Controllers\Controller;
 
 class OnboardingController extends Controller
 {
-    //
+    /**
+     * Create waiting list
+     * @param $request $action
+     */
     public function create(OnboardingRequest $request, OnboardingAction $action)
     {
         $onboarding = $action->handle($request);
