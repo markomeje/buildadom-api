@@ -4,7 +4,6 @@ namespace App\Http\Controllers\V1;
 use App\Http\Requests\OnboardingRequest;
 use App\Actions\OnboardingAction;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 
 class OnboardingController extends Controller
