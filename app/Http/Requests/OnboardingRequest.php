@@ -35,7 +35,7 @@ class OnboardingRequest extends FormRequest
         $response = new JsonResponse([
             'success' => false,
             'errors' => $validator->errors(),
-            'message' => 'Validation failed. Try again.'
+            'message' => 'Please fill in all required fields.'
         ]);
 
         throw new ValidationException($validator, $response);
