@@ -30,5 +30,10 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'africastalking' => [
+        'username' => env('AT_USERNAME'),
+        'key' => env('AT_KEY'),
+        'from' => env('AT_FROM'),
+    ],
 
 ];

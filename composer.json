@@ -6,10 +6,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
-        "guzzlehttp/guzzle": "^7.2",
+        "africastalking/africastalking": "^3.0",
+        "guzzlehttp/guzzle": "^7.5",
+        "halaxa/json-machine": "^1.1",
+        "laravel-notification-channels/africastalking": "^3.1.0",
         "laravel/framework": "^9.19",
         "laravel/tinker": "^2.7",
-        "php-open-source-saver/jwt-auth": "^2.0"
+        "php-open-source-saver/jwt-auth": "^2.0",
+        "propaganistas/laravel-phone": "^5.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -44,6 +48,9 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "post-install-cmd": [
+          "chmod -R ug+rwx storage bootstrap/cache"
         ]
     },
     "extra": {

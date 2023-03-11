@@ -6,11 +6,11 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+// use Illuminate\Notifications\Notification;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -18,11 +18,14 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'firstname',
         'email',
         'password',
+        'phone',
+        'lastname',
         'type',
-        'business_name'
+        'status',
+        'address'
     ];
 
     /**
@@ -69,6 +72,22 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * Route notifications for the Africas Talking channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return string
+     */
+    public function routeNotificationForAfricasTalking($notification): string
+    {
+        return $this->phone;
+    }
+
+    public function verification()
+    {
+        return $this->hasMany(Verification::class);
     }
 
 }

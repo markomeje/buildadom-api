@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('ip')->nullable();
             $table->string('browser')->nullable();
             $table->string('device')->nullable();
-            $table->boolean('logged_in')->default(false);
+            $table->boolean('online')->default(false);
             $table->timestamps();
         });
     }

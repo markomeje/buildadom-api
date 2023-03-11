@@ -14,11 +14,18 @@ class CorsMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $origin = $request->getHttpHost() === 'localhost' ? 'http://localhost:3500' : env('STORE_URL');
+        if($request->isMethod('OPTIONS')) {
+            $response = response('', 200);
+        } else {
+            // Pass the request to the next middleware
+            $response = $next($request);
+        }
 
-        return $next($request)
-            ->header('Access-Control-Allow-Origin', $origin)
-            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
-            ->header('Access-Control-Allow-Headers', 'Content-Type');
+        // Adds headers to the response
+        $response->header('Access-Control-Allow-Methods', 'HEAD, GET, POST, PUT, PATCH, DELETE');
+        $response->header('Access-Control-Allow-Headers', $request->header('Access-Control-Request-Headers'));
+
+        // Sends it
+        return $response;
     }
 }

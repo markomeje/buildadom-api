@@ -17,21 +17,22 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '3bd81c9b8fcc150b69d8b63b4d2ccf23' => __DIR__ . '/..' . '/spatie/flare-client-php/src/helpers.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
-        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         '09f6b20656683369174dd6fa83b7e5fb' => __DIR__ . '/..' . '/symfony/polyfill-uuid/bootstrap.php',
-        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '35a6ad97d21e794e7e22a17d806652e4' => __DIR__ . '/..' . '/nunomaduro/termwind/src/Functions.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
-        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '265b4faa2b3a9766332744949e83bf97' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Collections/helpers.php',
         'c7a3c339e7e14b60e06a2d7fcce9476b' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Events/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
+        '017b24472353920ed42bb364f7653c43' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/helpers.php',
         '320163ac6b93aebe3dc25b60a0533d56' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/helpers.php',
     );
 
@@ -39,6 +40,10 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'v' => 
         array (
             'voku\\' => 5,
+        ),
+        'l' => 
+        array (
+            'libphonenumber\\' => 15,
         ),
         'W' => 
         array (
@@ -99,6 +104,7 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
             'Psr\\EventDispatcher\\' => 20,
             'Psr\\Container\\' => 14,
             'Psr\\Clock\\' => 10,
+            'Propaganistas\\LaravelPhone\\' => 27,
             'PhpParser\\' => 10,
             'PhpOption\\' => 10,
             'PHPOpenSourceSaver\\JWTAuth\\' => 27,
@@ -106,6 +112,7 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'N' => 
         array (
             'NunoMaduro\\Collision\\' => 21,
+            'NotificationChannels\\AfricasTalking\\' => 36,
             'Namshi\\JOSE\\' => 12,
         ),
         'M' => 
@@ -123,6 +130,10 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
             'Laravel\\Tinker\\' => 15,
             'Laravel\\SerializableClosure\\' => 28,
         ),
+        'J' => 
+        array (
+            'JsonMachine\\' => 12,
+        ),
         'I' => 
         array (
             'Illuminate\\Support\\' => 19,
@@ -135,6 +146,7 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
             'GrahamCampbell\\ResultType\\' => 26,
+            'Giggsey\\Locale\\' => 15,
         ),
         'F' => 
         array (
@@ -168,6 +180,8 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'A' => 
         array (
             'App\\' => 4,
+            'AfricasTalking\\SDK\\Tests\\' => 25,
+            'AfricasTalking\\SDK\\' => 19,
         ),
     );
 
@@ -175,6 +189,10 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'voku\\' => 
         array (
             0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
+        ),
+        'libphonenumber\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src',
         ),
         'Whoops\\' => 
         array (
@@ -357,6 +375,10 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         array (
             0 => __DIR__ . '/..' . '/psr/clock/src',
         ),
+        'Propaganistas\\LaravelPhone\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/propaganistas/laravel-phone/src',
+        ),
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
@@ -372,6 +394,10 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'NunoMaduro\\Collision\\' => 
         array (
             0 => __DIR__ . '/..' . '/nunomaduro/collision/src',
+        ),
+        'NotificationChannels\\AfricasTalking\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel-notification-channels/africastalking/src',
         ),
         'Namshi\\JOSE\\' => 
         array (
@@ -413,6 +439,10 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         array (
             0 => __DIR__ . '/..' . '/laravel/serializable-closure/src',
         ),
+        'JsonMachine\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/halaxa/json-machine/src',
+        ),
         'Illuminate\\Support\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Macroable',
@@ -442,6 +472,10 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'GrahamCampbell\\ResultType\\' => 
         array (
             0 => __DIR__ . '/..' . '/graham-campbell/result-type/src',
+        ),
+        'Giggsey\\Locale\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/giggsey/locale/src',
         ),
         'Fruitcake\\Cors\\' => 
         array (
@@ -506,6 +540,14 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
             0 => __DIR__ . '/../..' . '/app',
             1 => __DIR__ . '/..' . '/laravel/pint/app',
         ),
+        'AfricasTalking\\SDK\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/africastalking/africastalking/tests',
+        ),
+        'AfricasTalking\\SDK\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/africastalking/africastalking/src',
+        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -519,14 +561,38 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
     );
 
     public static $classMap = array (
+        'AfricasTalking\\SDK\\AfricasTalking' => __DIR__ . '/..' . '/africastalking/africastalking/src/AfricasTalking.php',
+        'AfricasTalking\\SDK\\Airtime' => __DIR__ . '/..' . '/africastalking/africastalking/src/Airtime.php',
+        'AfricasTalking\\SDK\\Application' => __DIR__ . '/..' . '/africastalking/africastalking/src/Application.php',
+        'AfricasTalking\\SDK\\Content' => __DIR__ . '/..' . '/africastalking/africastalking/src/Content.php',
+        'AfricasTalking\\SDK\\Payments' => __DIR__ . '/..' . '/africastalking/africastalking/src/Payments.php',
+        'AfricasTalking\\SDK\\SMS' => __DIR__ . '/..' . '/africastalking/africastalking/src/SMS.php',
+        'AfricasTalking\\SDK\\Service' => __DIR__ . '/..' . '/africastalking/africastalking/src/Service.php',
+        'AfricasTalking\\SDK\\Tests\\AfricasTalkingTest' => __DIR__ . '/..' . '/africastalking/africastalking/tests/AfricasTalkingTest.php',
+        'AfricasTalking\\SDK\\Tests\\AirtimeTest' => __DIR__ . '/..' . '/africastalking/africastalking/tests/AirtimeTest.php',
+        'AfricasTalking\\SDK\\Tests\\ApplicationTest' => __DIR__ . '/..' . '/africastalking/africastalking/tests/ApplicationTest.php',
+        'AfricasTalking\\SDK\\Tests\\ContentTest' => __DIR__ . '/..' . '/africastalking/africastalking/tests/ContentTest.php',
+        'AfricasTalking\\SDK\\Tests\\PaymentsTest' => __DIR__ . '/..' . '/africastalking/africastalking/tests/PaymentsTest.php',
+        'AfricasTalking\\SDK\\Tests\\SMSTest' => __DIR__ . '/..' . '/africastalking/africastalking/tests/SMSTest.php',
+        'AfricasTalking\\SDK\\Tests\\TokenTest' => __DIR__ . '/..' . '/africastalking/africastalking/tests/TokenTest.php',
+        'AfricasTalking\\SDK\\Tests\\VoiceTest' => __DIR__ . '/..' . '/africastalking/africastalking/tests/VoiceTest.php',
+        'AfricasTalking\\SDK\\Token' => __DIR__ . '/..' . '/africastalking/africastalking/src/Token.php',
+        'AfricasTalking\\SDK\\Voice' => __DIR__ . '/..' . '/africastalking/africastalking/src/Voice.php',
         'App\\Actions\\OnboardingAction' => __DIR__ . '/../..' . '/app/Actions/OnboardingAction.php',
+        'App\\Actions\\SignupAction' => __DIR__ . '/../..' . '/app/Actions/SignupAction.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Http\\Controllers\\BusinessController' => __DIR__ . '/../..' . '/app/Http/Controllers/BusinessController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\V1\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/V1/AuthController.php',
+        'App\\Http\\Controllers\\V1\\CountriesController' => __DIR__ . '/../..' . '/app/Http/Controllers/V1/CountriesController.php',
+        'App\\Http\\Controllers\\V1\\Marchant\\StoreController' => __DIR__ . '/../..' . '/app/Http/Controllers/V1/Marchant/StoreController.php',
         'App\\Http\\Controllers\\V1\\OnboardingController' => __DIR__ . '/../..' . '/app/Http/Controllers/V1/OnboardingController.php',
+        'App\\Http\\Controllers\\V1\\SignupController' => __DIR__ . '/../..' . '/app/Http/Controllers/V1/SignupController.php',
+        'App\\Http\\Controllers\\V1\\VerificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/V1/VerificationController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
-        'App\\Http\\Middleware\\Custom\\HeadersMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/Custom/HeadersMiddleware.php',
+        'App\\Http\\Middleware\\CorsMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/CorsMiddleware.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
         'App\\Http\\Middleware\\PreventRequestsDuringMaintenance' => __DIR__ . '/../..' . '/app/Http/Middleware/PreventRequestsDuringMaintenance.php',
         'App\\Http\\Middleware\\RedirectIfAuthenticated' => __DIR__ . '/../..' . '/app/Http/Middleware/RedirectIfAuthenticated.php',
@@ -538,18 +604,28 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'App\\Http\\Requests\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/LoginRequest.php',
         'App\\Http\\Requests\\OnboardingRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OnboardingRequest.php',
         'App\\Http\\Requests\\SignupRequest' => __DIR__ . '/../..' . '/app/Http/Requests/SignupRequest.php',
+        'App\\Http\\Requests\\StoreRequest' => __DIR__ . '/../..' . '/app/Http/Requests/StoreRequest.php',
         'App\\Http\\Resources\\MaterialsResource' => __DIR__ . '/../..' . '/app/Http/Resources/MaterialsResource.php',
+        'App\\Listeners\\EmailVerificationMail' => __DIR__ . '/../..' . '/app/Listeners/EmailVerificationMail.php',
         'App\\Models\\Attempt' => __DIR__ . '/../..' . '/app/Models/Attempt.php',
+        'App\\Models\\Business' => __DIR__ . '/../..' . '/app/Models/Business.php',
+        'App\\Models\\Country' => __DIR__ . '/../..' . '/app/Models/Country.php',
         'App\\Models\\Login' => __DIR__ . '/../..' . '/app/Models/Login.php',
         'App\\Models\\Onboarding' => __DIR__ . '/../..' . '/app/Models/Onboarding.php',
         'App\\Models\\Store' => __DIR__ . '/../..' . '/app/Models/Store.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
+        'App\\Models\\Verification' => __DIR__ . '/../..' . '/app/Models/Verification.php',
+        'App\\Notifications\\EmailVerificationNotification' => __DIR__ . '/../..' . '/app/Notifications/EmailVerificationNotification.php',
+        'App\\Notifications\\PhoneVerificationNotification' => __DIR__ . '/../..' . '/app/Notifications/PhoneVerificationNotification.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'App\\Rules\\EmailRule' => __DIR__ . '/../..' . '/app/Rules/EmailRule.php',
+        'App\\Rules\\LowercaseRule' => __DIR__ . '/../..' . '/app/Rules/LowercaseRule.php',
+        'App\\Services\\StoreService' => __DIR__ . '/../..' . '/app/Services/StoreService.php',
+        'App\\Services\\VerificationService' => __DIR__ . '/../..' . '/app/Services/VerificationService.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Brick\\Math\\BigDecimal' => __DIR__ . '/..' . '/brick/math/src/BigDecimal.php',
         'Brick\\Math\\BigInteger' => __DIR__ . '/..' . '/brick/math/src/BigInteger.php',
@@ -661,10 +737,12 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'Cron\\MinutesField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/MinutesField.php',
         'Cron\\MonthField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/MonthField.php',
         'Database\\Factories\\UserFactory' => __DIR__ . '/../..' . '/database/factories/UserFactory.php',
+        'Database\\Seeders\\CountrySeeder' => __DIR__ . '/../..' . '/database/seeders/CountrySeeder.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
         'DeepCopy\\DeepCopy' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
         'DeepCopy\\Exception\\CloneException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/CloneException.php',
         'DeepCopy\\Exception\\PropertyException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/PropertyException.php',
+        'DeepCopy\\Filter\\ChainableFilter' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Filter/ChainableFilter.php',
         'DeepCopy\\Filter\\Doctrine\\DoctrineCollectionFilter' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Filter/Doctrine/DoctrineCollectionFilter.php',
         'DeepCopy\\Filter\\Doctrine\\DoctrineEmptyCollectionFilter' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Filter/Doctrine/DoctrineEmptyCollectionFilter.php',
         'DeepCopy\\Filter\\Doctrine\\DoctrineProxyFilter' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Filter/Doctrine/DoctrineProxyFilter.php',
@@ -1375,6 +1453,7 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'Faker\\ValidGenerator' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/ValidGenerator.php',
         'Fruitcake\\Cors\\CorsService' => __DIR__ . '/..' . '/fruitcake/php-cors/src/CorsService.php',
         'Fruitcake\\Cors\\Exceptions\\InvalidOptionException' => __DIR__ . '/..' . '/fruitcake/php-cors/src/Exceptions/InvalidOptionException.php',
+        'Giggsey\\Locale\\Locale' => __DIR__ . '/..' . '/giggsey/locale/src/Locale.php',
         'GrahamCampbell\\ResultType\\Error' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Error.php',
         'GrahamCampbell\\ResultType\\Result' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Result.php',
         'GrahamCampbell\\ResultType\\Success' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Success.php',
@@ -1631,6 +1710,7 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'Illuminate\\Cache\\Events\\CacheMissed' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/Events/CacheMissed.php',
         'Illuminate\\Cache\\Events\\KeyForgotten' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/Events/KeyForgotten.php',
         'Illuminate\\Cache\\Events\\KeyWritten' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/Events/KeyWritten.php',
+        'Illuminate\\Cache\\FileLock' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/FileLock.php',
         'Illuminate\\Cache\\FileStore' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/FileStore.php',
         'Illuminate\\Cache\\HasCacheLock' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/HasCacheLock.php',
         'Illuminate\\Cache\\Lock' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/Lock.php',
@@ -2018,6 +2098,7 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'Illuminate\\Database\\Query\\Grammars\\PostgresGrammar' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Query/Grammars/PostgresGrammar.php',
         'Illuminate\\Database\\Query\\Grammars\\SQLiteGrammar' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Query/Grammars/SQLiteGrammar.php',
         'Illuminate\\Database\\Query\\Grammars\\SqlServerGrammar' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Query/Grammars/SqlServerGrammar.php',
+        'Illuminate\\Database\\Query\\IndexHint' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Query/IndexHint.php',
         'Illuminate\\Database\\Query\\JoinClause' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Query/JoinClause.php',
         'Illuminate\\Database\\Query\\Processors\\MySqlProcessor' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Query/Processors/MySqlProcessor.php',
         'Illuminate\\Database\\Query\\Processors\\PostgresProcessor' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Query/Processors/PostgresProcessor.php',
@@ -2287,6 +2368,7 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'Illuminate\\Mail\\Transport\\ArrayTransport' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Mail/Transport/ArrayTransport.php',
         'Illuminate\\Mail\\Transport\\LogTransport' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Mail/Transport/LogTransport.php',
         'Illuminate\\Mail\\Transport\\SesTransport' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Mail/Transport/SesTransport.php',
+        'Illuminate\\Mail\\Transport\\SesV2Transport' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Mail/Transport/SesV2Transport.php',
         'Illuminate\\Notifications\\Action' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Notifications/Action.php',
         'Illuminate\\Notifications\\AnonymousNotifiable' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Notifications/AnonymousNotifiable.php',
         'Illuminate\\Notifications\\ChannelManager' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Notifications/ChannelManager.php',
@@ -2690,6 +2772,28 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'Illuminate\\View\\ViewFinderInterface' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewFinderInterface.php',
         'Illuminate\\View\\ViewName' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewName.php',
         'Illuminate\\View\\ViewServiceProvider' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewServiceProvider.php',
+        'JsonMachine\\Exception\\InvalidArgumentException' => __DIR__ . '/..' . '/halaxa/json-machine/src/Exception/InvalidArgumentException.php',
+        'JsonMachine\\Exception\\JsonMachineException' => __DIR__ . '/..' . '/halaxa/json-machine/src/Exception/JsonMachineException.php',
+        'JsonMachine\\Exception\\PathNotFoundException' => __DIR__ . '/..' . '/halaxa/json-machine/src/Exception/PathNotFoundException.php',
+        'JsonMachine\\Exception\\SyntaxErrorException' => __DIR__ . '/..' . '/halaxa/json-machine/src/Exception/SyntaxErrorException.php',
+        'JsonMachine\\Exception\\UnexpectedEndSyntaxErrorException' => __DIR__ . '/..' . '/halaxa/json-machine/src/Exception/UnexpectedEndSyntaxErrorException.php',
+        'JsonMachine\\FileChunks' => __DIR__ . '/..' . '/halaxa/json-machine/src/FileChunks.php',
+        'JsonMachine\\Items' => __DIR__ . '/..' . '/halaxa/json-machine/src/Items.php',
+        'JsonMachine\\ItemsOptions' => __DIR__ . '/..' . '/halaxa/json-machine/src/ItemsOptions.php',
+        'JsonMachine\\JsonDecoder\\DecodingError' => __DIR__ . '/..' . '/halaxa/json-machine/src/JsonDecoder/DecodingError.php',
+        'JsonMachine\\JsonDecoder\\ErrorWrappingDecoder' => __DIR__ . '/..' . '/halaxa/json-machine/src/JsonDecoder/ErrorWrappingDecoder.php',
+        'JsonMachine\\JsonDecoder\\ExtJsonDecoder' => __DIR__ . '/..' . '/halaxa/json-machine/src/JsonDecoder/ExtJsonDecoder.php',
+        'JsonMachine\\JsonDecoder\\InvalidResult' => __DIR__ . '/..' . '/halaxa/json-machine/src/JsonDecoder/InvalidResult.php',
+        'JsonMachine\\JsonDecoder\\ItemDecoder' => __DIR__ . '/..' . '/halaxa/json-machine/src/JsonDecoder/ItemDecoder.php',
+        'JsonMachine\\JsonDecoder\\PassThruDecoder' => __DIR__ . '/..' . '/halaxa/json-machine/src/JsonDecoder/PassThruDecoder.php',
+        'JsonMachine\\JsonDecoder\\ValidResult' => __DIR__ . '/..' . '/halaxa/json-machine/src/JsonDecoder/ValidResult.php',
+        'JsonMachine\\Parser' => __DIR__ . '/..' . '/halaxa/json-machine/src/Parser.php',
+        'JsonMachine\\PositionAware' => __DIR__ . '/..' . '/halaxa/json-machine/src/PositionAware.php',
+        'JsonMachine\\StreamChunks' => __DIR__ . '/..' . '/halaxa/json-machine/src/StreamChunks.php',
+        'JsonMachine\\StringChunks' => __DIR__ . '/..' . '/halaxa/json-machine/src/StringChunks.php',
+        'JsonMachine\\Tokens' => __DIR__ . '/..' . '/halaxa/json-machine/src/Tokens.php',
+        'JsonMachine\\TokensWithDebugging' => __DIR__ . '/..' . '/halaxa/json-machine/src/TokensWithDebugging.php',
+        'JsonMachine\\ValidJsonPointers' => __DIR__ . '/..' . '/halaxa/json-machine/src/ValidJsonPointers.php',
         'Laravel\\SerializableClosure\\Contracts\\Serializable' => __DIR__ . '/..' . '/laravel/serializable-closure/src/Contracts/Serializable.php',
         'Laravel\\SerializableClosure\\Contracts\\Signer' => __DIR__ . '/..' . '/laravel/serializable-closure/src/Contracts/Signer.php',
         'Laravel\\SerializableClosure\\Exceptions\\InvalidSignatureException' => __DIR__ . '/..' . '/laravel/serializable-closure/src/Exceptions/InvalidSignatureException.php',
@@ -3436,6 +3540,12 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'Nette\\Utils\\UnknownImageFileException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'Nette\\Utils\\Validators' => __DIR__ . '/..' . '/nette/utils/src/Utils/Validators.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
+        'NotificationChannels\\AfricasTalking\\AfricasTalkingChannel' => __DIR__ . '/..' . '/laravel-notification-channels/africastalking/src/AfricasTalkingChannel.php',
+        'NotificationChannels\\AfricasTalking\\AfricasTalkingMessage' => __DIR__ . '/..' . '/laravel-notification-channels/africastalking/src/AfricasTalkingMessage.php',
+        'NotificationChannels\\AfricasTalking\\AfricasTalkingServiceProvider' => __DIR__ . '/..' . '/laravel-notification-channels/africastalking/src/AfricasTalkingServiceProvider.php',
+        'NotificationChannels\\AfricasTalking\\Exceptions\\CouldNotSendNotification' => __DIR__ . '/..' . '/laravel-notification-channels/africastalking/src/Exceptions/CouldNotSendNotification.php',
+        'NotificationChannels\\AfricasTalking\\Exceptions\\InvalidConfiguration' => __DIR__ . '/..' . '/laravel-notification-channels/africastalking/src/Exceptions/InvalidConfiguration.php',
+        'NotificationChannels\\AfricasTalking\\Exceptions\\InvalidPhonenumber' => __DIR__ . '/..' . '/laravel-notification-channels/africastalking/src/Exceptions/InvalidPhonenumber.php',
         'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Laravel/CollisionServiceProvider.php',
         'NunoMaduro\\Collision\\Adapters\\Laravel\\Commands\\TestCommand' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Laravel/Commands/TestCommand.php',
         'NunoMaduro\\Collision\\Adapters\\Laravel\\ExceptionHandler' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Laravel/ExceptionHandler.php',
@@ -4210,6 +4320,18 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'PhpParser\\PrettyPrinterAbstract' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/PrettyPrinterAbstract.php',
         'PhpParser\\PrettyPrinter\\Standard' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/PrettyPrinter/Standard.php',
         'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
+        'Propaganistas\\LaravelPhone\\Aspects\\PhoneNumberCountry' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/Aspects/PhoneNumberCountry.php',
+        'Propaganistas\\LaravelPhone\\Aspects\\PhoneNumberFormat' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/Aspects/PhoneNumberFormat.php',
+        'Propaganistas\\LaravelPhone\\Aspects\\PhoneNumberType' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/Aspects/PhoneNumberType.php',
+        'Propaganistas\\LaravelPhone\\Casts\\E164PhoneNumberCast' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/Casts/E164PhoneNumberCast.php',
+        'Propaganistas\\LaravelPhone\\Casts\\PhoneNumberCast' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/Casts/PhoneNumberCast.php',
+        'Propaganistas\\LaravelPhone\\Casts\\RawPhoneNumberCast' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/Casts/RawPhoneNumberCast.php',
+        'Propaganistas\\LaravelPhone\\Exceptions\\CountryCodeException' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/Exceptions/CountryCodeException.php',
+        'Propaganistas\\LaravelPhone\\Exceptions\\NumberFormatException' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/Exceptions/NumberFormatException.php',
+        'Propaganistas\\LaravelPhone\\Exceptions\\NumberParseException' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/Exceptions/NumberParseException.php',
+        'Propaganistas\\LaravelPhone\\PhoneNumber' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/PhoneNumber.php',
+        'Propaganistas\\LaravelPhone\\PhoneServiceProvider' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/PhoneServiceProvider.php',
+        'Propaganistas\\LaravelPhone\\Rules\\Phone' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/Rules/Phone.php',
         'Psr\\Clock\\ClockInterface' => __DIR__ . '/..' . '/psr/clock/src/ClockInterface.php',
         'Psr\\Container\\ContainerExceptionInterface' => __DIR__ . '/..' . '/psr/container/src/ContainerExceptionInterface.php',
         'Psr\\Container\\ContainerInterface' => __DIR__ . '/..' . '/psr/container/src/ContainerInterface.php',
@@ -5906,12 +6028,56 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'Whoops\\Handler\\PlainTextHandler' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Handler/PlainTextHandler.php',
         'Whoops\\Handler\\PrettyPageHandler' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Handler/PrettyPageHandler.php',
         'Whoops\\Handler\\XmlResponseHandler' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Handler/XmlResponseHandler.php',
+        'Whoops\\Inspector\\InspectorFactory' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Inspector/InspectorFactory.php',
+        'Whoops\\Inspector\\InspectorFactoryInterface' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Inspector/InspectorFactoryInterface.php',
+        'Whoops\\Inspector\\InspectorInterface' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Inspector/InspectorInterface.php',
         'Whoops\\Run' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Run.php',
         'Whoops\\RunInterface' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/RunInterface.php',
         'Whoops\\Util\\HtmlDumperOutput' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/HtmlDumperOutput.php',
         'Whoops\\Util\\Misc' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/Misc.php',
         'Whoops\\Util\\SystemFacade' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/SystemFacade.php',
         'Whoops\\Util\\TemplateHelper' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/TemplateHelper.php',
+        'libphonenumber\\AlternateFormatsCountryCodeSet' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/AlternateFormatsCountryCodeSet.php',
+        'libphonenumber\\AsYouTypeFormatter' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/AsYouTypeFormatter.php',
+        'libphonenumber\\CountryCodeSource' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/CountryCodeSource.php',
+        'libphonenumber\\CountryCodeToRegionCodeMap' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/CountryCodeToRegionCodeMap.php',
+        'libphonenumber\\CountryCodeToRegionCodeMapForTesting' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/CountryCodeToRegionCodeMapForTesting.php',
+        'libphonenumber\\DefaultMetadataLoader' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/DefaultMetadataLoader.php',
+        'libphonenumber\\Leniency' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/Leniency.php',
+        'libphonenumber\\Leniency\\AbstractLeniency' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/Leniency/AbstractLeniency.php',
+        'libphonenumber\\Leniency\\ExactGrouping' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/Leniency/ExactGrouping.php',
+        'libphonenumber\\Leniency\\Possible' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/Leniency/Possible.php',
+        'libphonenumber\\Leniency\\StrictGrouping' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/Leniency/StrictGrouping.php',
+        'libphonenumber\\Leniency\\Valid' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/Leniency/Valid.php',
+        'libphonenumber\\MatchType' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/MatchType.php',
+        'libphonenumber\\Matcher' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/Matcher.php',
+        'libphonenumber\\MatcherAPIInterface' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/MatcherAPIInterface.php',
+        'libphonenumber\\MetadataLoaderInterface' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/MetadataLoaderInterface.php',
+        'libphonenumber\\MetadataSourceInterface' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/MetadataSourceInterface.php',
+        'libphonenumber\\MultiFileMetadataSourceImpl' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/MultiFileMetadataSourceImpl.php',
+        'libphonenumber\\NumberFormat' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/NumberFormat.php',
+        'libphonenumber\\NumberParseException' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/NumberParseException.php',
+        'libphonenumber\\PhoneMetadata' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/PhoneMetadata.php',
+        'libphonenumber\\PhoneNumber' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/PhoneNumber.php',
+        'libphonenumber\\PhoneNumberDesc' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/PhoneNumberDesc.php',
+        'libphonenumber\\PhoneNumberFormat' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/PhoneNumberFormat.php',
+        'libphonenumber\\PhoneNumberMatch' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/PhoneNumberMatch.php',
+        'libphonenumber\\PhoneNumberMatcher' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/PhoneNumberMatcher.php',
+        'libphonenumber\\PhoneNumberToCarrierMapper' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/PhoneNumberToCarrierMapper.php',
+        'libphonenumber\\PhoneNumberToTimeZonesMapper' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/PhoneNumberToTimeZonesMapper.php',
+        'libphonenumber\\PhoneNumberType' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/PhoneNumberType.php',
+        'libphonenumber\\PhoneNumberUtil' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/PhoneNumberUtil.php',
+        'libphonenumber\\RegexBasedMatcher' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/RegexBasedMatcher.php',
+        'libphonenumber\\RegionCode' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/RegionCode.php',
+        'libphonenumber\\ShortNumberCost' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/ShortNumberCost.php',
+        'libphonenumber\\ShortNumberInfo' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/ShortNumberInfo.php',
+        'libphonenumber\\ShortNumbersRegionCodeSet' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/ShortNumbersRegionCodeSet.php',
+        'libphonenumber\\ValidationResult' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/ValidationResult.php',
+        'libphonenumber\\geocoding\\PhoneNumberOfflineGeocoder' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/geocoding/PhoneNumberOfflineGeocoder.php',
+        'libphonenumber\\prefixmapper\\MappingFileProvider' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/prefixmapper/MappingFileProvider.php',
+        'libphonenumber\\prefixmapper\\PhonePrefixMap' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/prefixmapper/PhonePrefixMap.php',
+        'libphonenumber\\prefixmapper\\PrefixFileReader' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/prefixmapper/PrefixFileReader.php',
+        'libphonenumber\\prefixmapper\\PrefixTimeZonesMap' => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src/prefixmapper/PrefixTimeZonesMap.php',
         'voku\\helper\\ASCII' => __DIR__ . '/..' . '/voku/portable-ascii/src/voku/helper/ASCII.php',
     );
 

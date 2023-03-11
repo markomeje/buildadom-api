@@ -4,7 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class Lowercase implements Rule
+class LowercaseRule implements Rule
 {
 
     /**

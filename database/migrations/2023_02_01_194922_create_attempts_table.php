@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('attempts', function (Blueprint $table) {
             $table->id();
+            $table->string('ip_address')->nullable();
             $table->timestamps();
         });
     }
