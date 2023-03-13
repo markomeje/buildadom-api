@@ -1,7 +1,7 @@
 <?php
 
 
-header('Access-Control-Allow-Origin: http://localhost:6100');
+header('Access-Control-Allow-Origin: '.env('FRONTEND_URL'));
 header('Access-Control-Allow-Headers: origin, x-requested-with, content-type');
 header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 
