@@ -21,4 +21,9 @@ class Verification extends Model
         'verified',
         'code'
     ];
+
+    public function user($type = 'phone')
+    {
+        return $this->belongsTo(User::class)->where(['type' => $type]);
+    }
 }

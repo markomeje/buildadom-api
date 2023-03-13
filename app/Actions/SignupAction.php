@@ -5,7 +5,7 @@ use App\Models\{User, Business};
 use App\Http\Requests\SignupRequest;
 use Illuminate\Support\Facades\DB as Database;
 use App\Services\VerificationService;
-use App\Notifications\{EmailVerificationNotification, PhoneVerificationNotification};
+use App\Notifications\PhoneVerificationNotification;
 use Illuminate\Support\Facades\Notification;
 use Propaganistas\LaravelPhone\PhoneNumber;
 use Hash;

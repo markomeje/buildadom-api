@@ -45,10 +45,11 @@ class EmailVerificationNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $link = env('FRONTEND_URL').'/login/verify?code='.$this->code;
         return (new MailMessage)
                     ->subject('Email Verification Required')
-                    ->line('Thank you for your registration. Please use the code below to veirfy your email')
-                    ->line($this->code)
+                    ->line('Thank you for your registration. Please click the link below to veirfy your email')
+                    ->line($link)
                     ->line('Thank you for choosing our platform');
     }
 
