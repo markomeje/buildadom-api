@@ -21,9 +21,11 @@ class VerificationController extends Controller
     * Verify email or phone
     * @param json
     */
-    public function verify(VerificationRequest $request, VerificationService $verification)
+    public function verify(VerificationRequest $request)
     {
-        return Database::transaction(function() use ($request, $verification) {
+        return Database::transaction(function() use ($request) {
+            $verification = (new VerificationService());
+
             $type = $request->type;
             if (!in_array($type, $this->types)) {
                 return response()->json([

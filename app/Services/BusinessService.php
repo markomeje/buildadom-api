@@ -8,7 +8,7 @@ use Exception;
 /**
  * Service class
  */
-class VerificationService
+class BusinessService
 {
 
 	/**
