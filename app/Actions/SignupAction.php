@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Actions;
-use App\Models\{User, Business};
+use App\Models\{User, Business, Verification};
 use App\Http\Requests\SignupRequest;
 use Illuminate\Support\Facades\DB as Database;
-use App\Services\VerificationService;
 use App\Notifications\PhoneVerificationNotification;
 use Illuminate\Support\Facades\Notification;
 use Propaganistas\LaravelPhone\PhoneNumber;
@@ -48,8 +47,8 @@ class SignupAction
 				]);
 			}
 
-			$token = random_int(100000, 999999);
-			$verification = (new VerificationService())->create([
+			$token = rand(100000, 999999);
+			Verification::create([
 				'type' => 'phone', 
 				'code' => $token,
 				'reference' => str()->random(64),

@@ -28,10 +28,7 @@ Route::prefix('v1')->group(function() {
 
     Route::domain(env('API_URL'))->group(function() {    
         Route::post('/signup', [App\Http\Controllers\V1\SignupController::class, 'signup']);
-
-        Route::prefix('verification')->group(function() {
-            Route::post('/phone', [App\Http\Controllers\V1\VerificationController::class, 'phone']);
-        });
+        Route::post('/verification/verify', [App\Http\Controllers\V1\VerificationController::class, 'verify']);
     });
 
     Route::domain(env('AUTH_URL'))->group(function() {    

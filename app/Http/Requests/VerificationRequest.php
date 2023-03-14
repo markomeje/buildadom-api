@@ -58,7 +58,9 @@ class VerificationRequest extends FormRequest
      */
     public function messages()
     {
-        return [];
+        return [
+            'code.required' => 'Please enter the verification code sent to your '. $this->type,
+        ];
     }
 }
 
