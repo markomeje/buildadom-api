@@ -24,7 +24,7 @@ class VerificationController extends Controller
     public function verify(VerificationRequest $request)
     {
         return Database::transaction(function() use ($request) {
-            $verification = (new VerificationService());
+            $verification = (new \App\Services\VerificationService());
 
             $type = $request->type;
             if (!in_array($type, $this->types)) {
