@@ -28,7 +28,7 @@ class VerificationService
 	public function __construct($user_id)
 	{
 		$this->user_id = $user_id;
-		f(!User::where(['user_id' => $this->user_id])->exists()) {
+		if(!User::where(['user_id' => $this->user_id])->exists()) {
 			throw new Exception('Invalid user passed to create business profile');
 		}
 	}
