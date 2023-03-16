@@ -29,16 +29,16 @@ Route::prefix('v1')->group(function() {
     Route::domain(env('API_URL'))->group(function() {    
         Route::post('/signup', [App\Http\Controllers\V1\SignupController::class, 'signup']);
         Route::post('/verification/verify', [App\Http\Controllers\V1\VerificationController::class, 'verify']);
-    });
 
-    Route::domain(env('AUTH_URL'))->group(function() {    
-        Route::post('/login', [App\Http\Controllers\V1\AuthController::class, 'login']);
-        Route::post('/logout', [\App\Http\Controllers\V1\AuthController::class, 'logout']);
-        Route::post('/refresh', [\App\Http\Controllers\V1\AuthController::class, 'refresh']);
-    });
+        Route::prefix('auth')->group(function() {
+            Route::post('/login', [App\Http\Controllers\V1\AuthController::class, 'login']);
+            Route::post('/logout', [\App\Http\Controllers\V1\AuthController::class, 'logout']);
+            Route::post('/refresh', [\App\Http\Controllers\V1\AuthController::class, 'refresh']);
+        });
 
-    Route::domain(env('STORE_URL'))->group(function() {    
-        Route::post('/create', [App\Http\Controllers\V1\Marchant\StoreController::class, 'create']);
+        Route::prefix('user')->group(function() {
+            Route::post('/me', [App\Http\Controllers\V1\UserController::class, 'me']);
+        });
     });
 
 });

@@ -14,8 +14,10 @@ use \Exception;
 class VerificationController extends Controller
 {
 
+    /**
+     * Types of field to verify
+     */
     public $types = ['email', 'phone'];
-
 
     /**
     * Verify email or phone

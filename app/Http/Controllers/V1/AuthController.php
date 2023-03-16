@@ -7,27 +7,42 @@ use App\Http\Requests\LoginRequest;
 
 class AuthController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api', [
+            'except' => ['login']
+        ]);
+    }
+
     /**
      * Login
      * @param $request
      */
     public function login(LoginRequest $request)
     {
-        $token = auth()->attempt($request);
+        $token = auth()->attempt($request->validated());
         if (!$token) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized access',
-            ], 401);
+                'message' => 'Invalid login details.',
+            ]);
         }
 
         $user = auth()->user();
         return response()->json([
             'success' => true,
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
+            'response' => [
+                'user' => [
+                    'id' => $user->id, 
+                    'name' => $user->fullname(), 
+                    'email' => $user->email, 
+                    'token' => $token
+                ],
+                'authorisation' => [
+                    'token' => $token,
+                    'type' => 'bearer',
+                ]
             ],
             'message' => 'Login successful',
         ]);
@@ -47,12 +62,21 @@ class AuthController extends Controller
      */
     public function refresh()
     {
+        $user = auth()->user();
         return response()->json([
             'success' => true,
-            'user' => auth()->user(),
-            'authorisation' => [
-                'token' => auth()->refresh(),
-                'type' => 'bearer',
+            'response' => [
+                'user' => [
+                    'id' => $user->id, 
+                    'name' => $user->fullname(), 
+                    'email' => $user->email, 
+                    'token' => $token
+                ],
+            
+                'authorisation' => [
+                    'token' => auth()->refresh(),
+                    'type' => 'bearer',
+                ]
             ],
             'message' => 'Token refreshed',
         ]);

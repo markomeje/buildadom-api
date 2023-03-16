@@ -55,6 +55,14 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
+     * Get the user's full name.
+     */
+    public function fullname() 
+    {
+        return ucwords($this->firstname . ' ' . $this->lastname);
+    }
+
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
