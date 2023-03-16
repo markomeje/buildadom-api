@@ -6,6 +6,7 @@ use App\Models\{Reset, User};
 use Illuminate\Support\Facades\DB as Database;
 use App\Notifications\ResetNotification;
 use Exception;
+use Hash;
 
 /**
  * Service class
@@ -20,7 +21,7 @@ class ResetService
 	 * @param data containung the reset code and type
 	 * @types 'phone' || 'email'
 	 */
-	public function create($data): Reset
+	public static function create($data): Reset
 	{
 		$data = (object)$data;
 		return Database::transaction(function() use($data) {
@@ -30,13 +31,13 @@ class ResetService
 			$code = rand(111111, 999999);
 			$reset = Reset::create([
 				'email' => $user->email,
-				'expiry' => now()->addMinutes(60),
+				'expiry' => now()->addMinutes(10),
 				'code' => $code,
 				'type' => $data->type,
 				'done' => false,
 			]);
 
-			$user->notify(new ResetNotification($code, $data->type))
+			$user->notify(new ResetNotification($code, $data->type));
 			return $reset;
 		});
 	}
@@ -44,12 +45,30 @@ class ResetService
 	/**
 	 * 
 	 */
-	public function update($info): Reset
+	public static function update($info): Reset
 	{	
-		$Reset = Reset::find($info->id);
-		$Reset->code = $info->code;
-		$Reset->verified = $info->verified ?? false;
-		return $Reset->update();
+		$info = (object)$info;
+		return Database::transaction(function() use($info) {
+			$reset = Reset::where(['code' => $info->code])->first();
+			if (empty($reset)) throw new Exception('Invalid reset code');
+
+			$user = User::where(['email' => $reset->email])->first();
+			switch ($info->type) {
+				case 'password':
+					$user->password = Hash::make($info->password);
+					$user->update();
+					break;
+				default:
+					// code...
+					break;
+			}
+
+			$reset->done = true;
+			$reset->code = null;
+			$reset->update();
+			
+			return $reset;
+		});
 	}
 
 	/**

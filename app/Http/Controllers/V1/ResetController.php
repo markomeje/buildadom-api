@@ -25,11 +25,54 @@ class ResetController extends Controller
     public function process(ResetRequest $request)
     {
         try {
-            ResetService::create($request->validated(), $user);
-        } catch (Exception $error) {
+            $reset = ResetService::create([
+                'email' => $request->email,
+                'type' => $request->type,
+            ]);
+
+            if ($reset) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'A reset code have been sent to your email.'
+                ]);
+            }
+
             return response()->json([
                 'success' => false,
                 'message' => 'Operation failed'
+            ]);
+        } catch (Exception $error) {
+            return response()->json([
+                'success' => false,
+                'message' => app()->environment(['production']) ? 'Unknown server error. Try again later.' : $error->getMessage()
+            ]);
+        }  
+    }
+
+    /**
+    * Update
+    * @param json
+    */
+    public function update(ResetRequest $request)
+    {
+        //dd($request->validated());
+        try {
+            $reset = ResetService::update($request->validated());
+            if ($reset) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Operation successful.'
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Operation failed'
+            ]);
+        } catch (Exception $error) {
+            return response()->json([
+                'success' => false,
+                'message' => app()->environment(['production']) ? 'Unknown server error. Try again later.' : $error->getMessage()
             ]);
         }  
     }

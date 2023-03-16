@@ -1,11 +1,9 @@
 <?php
 
 
-header('Access-Control-Allow-Origin: '.env('FRONTEND_URL'));
+header("Access-Control-Allow-Origin: *");
 header('Access-Control-Allow-Headers: origin, x-requested-with, content-type');
 header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
-
-
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +36,11 @@ Route::prefix('v1')->group(function() {
 
         Route::prefix('user')->group(function() {
             Route::post('/me', [App\Http\Controllers\V1\UserController::class, 'me']);
+        });
+
+        Route::prefix('reset')->group(function() {
+            Route::post('/process', [App\Http\Controllers\V1\ResetController::class, 'process']);
+            Route::post('/update', [App\Http\Controllers\V1\ResetController::class, 'update']);
         });
     });
 
