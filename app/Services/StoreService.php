@@ -2,32 +2,60 @@
 
 
 namespace App\Services;
-use App\Models\Store;
-use App\Http\Requests\StoreRequest;
+use App\Models\{Store, Country};
+use \Exception;
 
-/**
- * Service class
- */
+
 class StoreService
 {
 	
-	public function create(StoreRequest $request): Store
+	public function create(array $data): Store
 	{
-		return Store::create([
+		$country = $data['country_id'] ?? 0;
+		if (empty(Country::find($country))) {
+			throw new Exception('Invalid country selected');
+		}
+
+		$store = Store::create([
 			'user_id' => auth()->id(),
-			'name' => $request->name,
-			'description' => $request->description,
-			'address' => $request->address,
-			'location' => $request->location,
+			...$data
 		]);
+
+		if (empty($store)) {
+			throw new Exception('Error creating store. Try again');
+		}
+
+		return $store;
 	}
 
-	public function update(StoreRequest $request, Store $store): Store
+	public function update(array $data, $id)
 	{
-		$store->name = $request->name;
-		$store->description = $request->description;
-		$store->address = $request->address;
-		$store->location = $request->location;
-		return $store->update();
+		$country = $data['country_id'] ?? 0;
+		if (empty(Country::find($country))) {
+			throw new Exception('Invalid country selected');
+		}
+
+		$store = Store::find($id);
+		if (empty($store)) {
+			throw new Exception('Store not found.');
+		}
+		
+		if(!$store->update($data)) {
+			throw new Exception('Error updating store info. Try again.');
+		}
+
+		return $store;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

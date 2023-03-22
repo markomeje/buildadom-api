@@ -17,10 +17,20 @@ class Store extends Model
     protected $fillable = [
         'name',
         'location',
-        'description'
+        'description',
         'address',
         'user_id',
-        'reference',
-        'status'
+        'city',
+        'status',
+        'country_id',
     ];
+
+    /**
+     * A store belongs to a country
+     * @return Country
+     */
+    public function country(): Country
+    {
+        return $this->belongsTo(Country::class, 'country_id');
+    }
 }
