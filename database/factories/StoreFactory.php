@@ -1,15 +1,16 @@
 <?php
 
 namespace Database\Factories;
+use App\Models\{Country, User};
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Hash;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
-class UserFactory extends Factory
+class StoreFactory extends Factory
 {
+
   /**
    * Define the model's default state.
    *
@@ -18,15 +19,13 @@ class UserFactory extends Factory
   public function definition()
   {
     return [
-      'firstname' => fake()->firstName(),
-      'lastname' => fake()->lastName(),
+      'name' => fake()->sentence(2),
+      'country_id' => rand(1, Country::count()),
+      'city' => fake()->city(),
+      'description' => fake()->text(),
       'address' => fake()->address(),
-      'email' => fake()->unique()->safeEmail(),
-      'phone' => fake()->unique()->phoneNumber(),
-      'password' => Hash::make('1234567'),
-      'status' => 'active',
-      'type' => array_rand(['individual', 'business']),
+      'active' => true,
+      'user_id' => rand(1, User::count()),
     ];
   }
-
 }

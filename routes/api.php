@@ -47,6 +47,7 @@ Route::prefix('v1')->group(function() {
 
     Route::middleware(['accept.json', 'auth:api'])->group(function() {
       Route::prefix('store')->group(function() {
+        Route::post('/{id}', [App\Http\Controllers\V1\Marchant\StoreController::class, 'store']);
         Route::post('/create', [App\Http\Controllers\V1\Marchant\StoreController::class, 'create']);
         Route::post('/update/{id}', [App\Http\Controllers\V1\Marchant\StoreController::class, 'update']);
       });

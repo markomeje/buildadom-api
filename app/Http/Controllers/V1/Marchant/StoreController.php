@@ -33,7 +33,34 @@ class StoreController extends Controller
   }
 
   /**
-   * Store
+   * Get a single Store
+   * @param $id
+   */
+  public function store($id = 0)
+  {
+    try {
+      if($store = Store::find($id)) {
+        return response()->json([
+          'success' => true,
+          'message' => 'Store retrieved successfully',
+          'store' => $store,
+        ], 201);
+      }
+
+      return response()->json([
+        'success' => false,
+        'message' => 'Store not found',
+      ], 404);
+    } catch (Exception $error) {
+      return response()->json([
+        'success' => false,
+        'message' => $error->getMessage(),
+      ], 500);
+    }
+  }
+
+  /**
+   * Update Store
    * @param StoreService $request, $id
    */
   public function update($id, StoreRequest $request)
