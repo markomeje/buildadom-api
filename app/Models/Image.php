@@ -5,23 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Onboarding extends Model
+class Image extends Model
 {
   use HasFactory;
 
-  /**
+    /**
    * The attributes that are mass assignable.
    *
    * @var array<int, string>
    */
   protected $fillable = [
-    'firstname',
-    'email',
-    'lastname',
+    'model_id',
+    'role',
+    'model',
     'type',
-    'business_name',
-    'location',
-    'phone',
-    'materials',
+    'url',
   ];
 }

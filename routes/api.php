@@ -45,10 +45,17 @@ Route::prefix('v1')->group(function() {
       Route::post('/update', [App\Http\Controllers\V1\ResetController::class, 'update']);
     });
 
-    Route::middleware(['auth:api'])->prefix('store')->group(function() {
-      Route::post('/create', [App\Http\Controllers\V1\Marchant\StoreController::class, 'create']);
-      Route::post('/update/{id}', [App\Http\Controllers\V1\Marchant\StoreController::class, 'update']);
+    Route::middleware(['accept.json', 'auth:api'])->group(function() {
+      Route::prefix('store')->group(function() {
+        Route::post('/create', [App\Http\Controllers\V1\Marchant\StoreController::class, 'create']);
+        Route::post('/update/{id}', [App\Http\Controllers\V1\Marchant\StoreController::class, 'update']);
+      });
+
+      Route::prefix('image')->group(function() {
+        Route::post('/upload', [App\Http\Controllers\V1\ImageController::class, 'upload']);
+      });
     });
+
   });
 
 });

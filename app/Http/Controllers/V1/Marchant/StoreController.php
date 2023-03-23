@@ -34,7 +34,7 @@ class StoreController extends Controller
 
   /**
    * Store
-   * @param $request, StoreService
+   * @param StoreService $request, $id
    */
   public function update($id, StoreRequest $request)
   {

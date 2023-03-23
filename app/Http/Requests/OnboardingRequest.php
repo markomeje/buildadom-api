@@ -52,7 +52,6 @@ class OnboardingRequest extends FormRequest
             'phone' => ['required', 'unique:onboardings'],
             'firstname' => ['required', 'string', 'max:50'],
             'business_name' => [strtolower($this->type) === 'individual' ? 'nullable' : 'required', 'max:255'],
-            
             'lastname' => ['required', 'string', 'max:50'],
             'location' => ['required', 'max:255'],
             'materials' => ['required', 'max:500'],
