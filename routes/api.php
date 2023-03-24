@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('v1')->group(function() {
+Route::middleware(['accept.json'])->prefix('v1')->group(function() {
+
   Route::domain(env('ONBOARDING_URL'))->group(function() {
     Route::post('/create', [\App\Http\Controllers\V1\OnboardingController::class, 'create']);
   });
@@ -27,6 +28,11 @@ Route::prefix('v1')->group(function() {
   Route::domain(env('API_URL'))->group(function() {    
     Route::post('/signup', [App\Http\Controllers\V1\SignupController::class, 'signup']);
     Route::post('/verification/verify', [App\Http\Controllers\V1\VerificationController::class, 'verify']);
+
+    Route::prefix('stores')->group(function() {
+      Route::post('/', [App\Http\Controllers\V1\StoreController::class, 'index']);
+      Route::post('/store/{id}', [App\Http\Controllers\V1\StoreController::class, 'store']);
+    });
 
     Route::prefix('auth')->group(function() {
       Route::post('/login', [App\Http\Controllers\V1\AuthController::class, 'login']);
@@ -45,7 +51,7 @@ Route::prefix('v1')->group(function() {
       Route::post('/update', [App\Http\Controllers\V1\ResetController::class, 'update']);
     });
 
-    Route::middleware(['accept.json', 'auth:api'])->group(function() {
+    Route::middleware(['auth:api'])->group(function() {
       Route::prefix('store')->group(function() {
         Route::post('/{id}', [App\Http\Controllers\V1\Marchant\StoreController::class, 'store']);
         Route::post('/create', [App\Http\Controllers\V1\Marchant\StoreController::class, 'create']);
