@@ -16,16 +16,10 @@ class StoreService
 			throw new Exception('Invalid country selected');
 		}
 
-		$store = Store::create([
+		return Store::create([
 			'user_id' => auth()->id(),
 			...$data
 		]);
-
-		if (empty($store)) {
-			throw new Exception('Error creating store. Try again');
-		}
-
-		return $store;
 	}
 
 	public function update(array $data, $id)
@@ -35,16 +29,12 @@ class StoreService
 			throw new Exception('Invalid country selected');
 		}
 
-		$store = Store::find($id);
-		if (empty($store)) {
-			throw new Exception('Store not found.');
-		}
-		
-		if(!$store->update($data)) {
-			throw new Exception('Error updating store info. Try again.');
-		}
-
-		return $store;
+		if ($store = Store::find($id)) {
+      $store->update($data);
+      return $store;
+		}else {
+      throw new Exception('Store not found.');
+    }
 	}
 }
 

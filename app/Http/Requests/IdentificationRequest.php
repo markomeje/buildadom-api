@@ -1,14 +1,12 @@
 <?php
 
 namespace App\Http\Requests;
-use Illuminate\Contracts\Validation\Validator;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Http\JsonResponse;
 
-class StoreRequest extends FormRequest
+class IdentificationRequest extends FormRequest
 {
-    /**
+  /**
    * Determine if the user is authorized to make this request.
    *
    * @return bool
@@ -25,16 +23,17 @@ class StoreRequest extends FormRequest
    */
   public function rules()
   {
+    $now = Carbon::now()->format('d/m/Y');
     return [
-      'name' => ['required', 'string', 'max:255', 'unique:stores'],
-      'description' => ['required', 'string', 'max:500'],
-      'country_id' => ['required', 'string'],
-      'address' => ['required', 'string', 'max:255'],
-      'city' => ['required', 'string', 'max:255']
+      'id_type' => ['required', 'string'],
+      'id_number' => ['required'],
+      'expiry_date' => ['required', 'date_format:d/m/Y', "after:{$now}"],
+      'dob' => ['required', 'date_format:d/m/Y', 'after:01/01/1940'],
+      'address' => ['required', 'string'],
     ];
   }
 
-   /**
+  /**
    * Custom message for validation
    *
    * @return array
@@ -42,10 +41,14 @@ class StoreRequest extends FormRequest
   public function messages()
   {
     return [
-      'country_id.required' => 'Please select country.',
+      'dob.required' => 'Date of birth is required',
+      'dob.after' => 'Date of birth must be date after 01/01/1940',
     ];
   }
 }
+
+
+
 
 
 

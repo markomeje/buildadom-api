@@ -17,7 +17,7 @@ class JsonMiddleware
     if(!in_array(strtolower($request->headers->get('accept')), ['application/json'])) {
       return response()->json([
         'status' => false,
-        'message' => 'Please add JSON header.'
+        'message' => 'Please add `Accept: application/json` header.'
       ], 501);
     }
 

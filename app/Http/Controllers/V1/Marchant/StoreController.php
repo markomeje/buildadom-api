@@ -39,7 +39,7 @@ class StoreController extends Controller
   public function store($id = 0)
   {
     try {
-      if($store = Store::find($id)) {
+      if($store = Store::where(['id' => $id, 'user_id' => auth()->id()])->first()) {
         return response()->json([
           'success' => true,
           'message' => 'Store retrieved successfully',
