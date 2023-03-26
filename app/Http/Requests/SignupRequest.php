@@ -21,60 +21,43 @@ class SignupRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Customize failed validation json response
-     * 
-     * @return void
-     * 
-     * @param Validator
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        $response = new JsonResponse([
-            'success' => false,
-            'errors' => $validator->errors(),
-            'message' => 'Please fill in all required fields.'
-        ]);
+  /**
+   * Get the validation rules that apply to the request.
+   *
+   * @return array
+   */
+  public function rules()
+  {
+    $type = strtolower($this->type);
+    return [
+      'type' => ['required'],
+      'email' => ['required', 'email', 'unique:users', (new EmailRule)],
+      'phone' => ['required', 'unique:users', 'phone'],
+      'firstname' => ['required', 'string', 'max:50'],
+      'lastname' => ['required', 'string', 'max:50'],
 
-        throw new ValidationException($validator, $response);
-        
-    }
+      'business_name' => [$type === 'business' ? 'required' : 'nullable', 'max:255'],
+      'cac_number' => [$type === 'business' ? 'required' : 'nullable', 'max:20'],
+      'website' => [$type === 'business' ? 'required' : 'nullable', 'max:255'],
+      
+      'address' => ['required', 'max:255'],
+      'password' => ['required', 'min:6'],
+      'confirm_password' => ['required', 'min:6', 'same:password']
+    ];
+  }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        $business = strtolower($this->type) === 'business';
-        return [
-            'email' => ['required', 'email', 'unique:users', (new EmailRule)],
-            'phone' => ['required', 'unique:users', 'phone'],
-            'firstname' => ['required', 'string', 'max:50'],
-            'lastname' => ['required', 'string', 'max:50'],
-
-            'business_name' => [$business ? 'required' : 'nullable', 'max:255'],
-            'cac_number' => [$business ? 'required' : 'nullable', 'max:20'],
-            'website' => [$business ? 'required' : 'nullable', 'max:255'],
-            
-            'address' => ['required', 'max:255'],
-            'password' => ['required', 'min:6'],
-            'confirm_password' => ['required', 'min:6', 'same:password']
-        ];
-    }
-
-     /**
-     * Custom message for validation
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'cac_number.required' => 'Please enter your CAC registration number.',
-        ];
-    }
+   /**
+   * Custom message for validation
+   *
+   * @return array
+   */
+  public function messages()
+  {
+    return [
+      'cac_number.required' => 'Please enter your CAC registration number.',
+      'type' => 'Type must be either individual or business'
+    ];
+  }
 }
 
 

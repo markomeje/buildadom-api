@@ -38,6 +38,18 @@ class IdentificationController extends Controller
       ], 500);
     }
   }
+
+  /**
+   * Identification types
+   */
+  public function types()
+  {
+    return response()->json([
+      'success' => true,
+      'message' => 'All identification types',
+      'types' => Identification::$types,
+    ], 200);
+  }
     
 
 }
