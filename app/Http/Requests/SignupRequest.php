@@ -30,7 +30,7 @@ class SignupRequest extends FormRequest
   {
     $type = strtolower($this->type);
     return [
-      'type' => ['required'],
+      'type' => ['required', 'string'],
       'email' => ['required', 'email', 'unique:users', (new EmailRule)],
       'phone' => ['required', 'unique:users', 'phone'],
       'firstname' => ['required', 'string', 'max:50'],
@@ -55,7 +55,8 @@ class SignupRequest extends FormRequest
   {
     return [
       'cac_number.required' => 'Please enter your CAC registration number.',
-      'type' => 'Type must be either individual or business'
+      'type' => 'Type must be either individual or business',
+      'phone.phone' => 'Invalid phone number. Please include country code and try again.'
     ];
   }
 }

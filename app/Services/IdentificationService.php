@@ -18,7 +18,7 @@ class IdentificationService
   {
     $identification = Identification::where(['user_id' => auth()->id()])->first();
     if(empty($identification)) {
-      return Identification::create([
+      $identification = Identification::create([
         'user_id' => auth()->id(),
         ...$data
       ]);

@@ -28,7 +28,7 @@ class ResetService
 			$user = User::where(['email' => $data->email])->first();
 			if (empty($user)) throw new Exception('No account found with the supplied email.');
 
-			$code = rand(111111, 999999);
+			$code = random_int(111111, 999999);
 			$reset = Reset::create([
 				'email' => $user->email,
 				'expiry' => now()->addMinutes(10),

@@ -14,77 +14,60 @@ use \Exception;
 class VerificationController extends Controller
 {
 
-    /**
-     * Types of field to verify
-     */
-    public $types = ['email', 'phone'];
+  /**
+  * Verify email or phone
+  * @param json
+  */
+  public function verify(VerificationRequest $request)
+  {
+    return Database::transaction(function() use ($request) {
+      $type = strtolower($request->type);
+      if (!in_array($type, Verification::$types)) {
+        return response()->json([
+          'success' => false,
+          'message' => 'Invalid verification.'
+        ]);
+      }
 
-    /**
-    * Verify email or phone
-    * @param json
-    */
-    public function verify(VerificationRequest $request)
-    {
-        return Database::transaction(function() use ($request) {
-            $verification = (new \App\Services\VerificationService());
+      $verification = Verification::where(['code' => $request->code, 'type' => $type])->first();
+      if (empty($verification)) {
+        return response()->json([
+          'success' => false,
+          'message' => 'Invalid verification code.'
+        ]);
+      }
 
-            $type = $request->type;
-            if (!in_array($type, $this->types)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invalid verification.'
-                ]);
-            }
+      $verification->code = null;
+      $verification->verified = true;
+      $verification->update();
 
-            $verify = $verification->exists([
-                'type' => $type,
-                'code' => $request->code
-            ]);
-
-            if (empty($verify)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invalid verification code.'
-                ]);
-            }
-
-            $verify->update([
-                'id' => $verify->id, 
-                'code' => null, 
-                'verified' => true
-            ]);
-
-            if($type === 'phone') {
-                $user = User::where(['id' => $verify->user_id])->first();
-                Verification::where(['type' => 'email', 'user_id' => $user->id])->delete();
-
-                $token = rand(111111, 999999);
-                Verification::create([
-                    'type' => 'email', 
-                    'code' => $token,
-                    'reference' => str()->random(64),
-                    'user_id' => $user->id,
-                ]);
-
-                $user->notify(new EmailVerificationNotification($token));
-                return response()->json([
-                    'success' => true,
-                    'message' => 'An email verification code have been sent to your email.',
-                ]);
-            }else {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Verification successful.',
-                    'response' => ['done' => true],
-                ]);
-            }
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Operation failed'
-            ]);
-        });   
-    }
+      $user = User::find($verification->user_id);
+      if($type === 'phone') {
+        (new VerificationService())->send(['user' => $user, 'type' => 'email']);
+        return response()->json([
+          'success' => true,
+          'message' => 'An email verification code have been sent to your email.',
+        ]);
+      }else {
+        $token = auth()->login($user);
+        return response()->json([
+          'success' => true,
+          'message' => 'Verification successful.',
+          'response' => ['done' => true],
+          'user' => [
+            'id' => $user->id, 
+            'name' => $user->fullname(), 
+            'email' => $user->email, 
+            'token' => $token
+          ],
+          'authorisation' => [
+            'token' => $token,
+            'type' => 'bearer',
+          ]
+        ]);
+      }
+    });   
+  }
 
 }
 

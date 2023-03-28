@@ -1,13 +1,13 @@
 <?php
 
 namespace App\Actions;
-use App\Models\{User, Business, Verification};
-use App\Http\Requests\SignupRequest;
+use App\Models\{User, Business};
 use Illuminate\Support\Facades\DB as Database;
-use App\Notifications\PhoneVerificationNotification;
+use App\Services\VerificationService;
 use Illuminate\Support\Facades\Notification;
 use Propaganistas\LaravelPhone\PhoneNumber;
 use Hash;
+use Exception;
 
 /**
  * Like a black box
@@ -17,45 +17,37 @@ use Hash;
 class SignupAction 
 {
 	/**
-	 * Handle Signup request
-	 * 
+	 * Handle Signup data[' * 
 	 * @return Signup model
 	 */
-	public function handle(SignupRequest $request)
-	{
-		return Database::transaction(function() use ($request) {
-			$type = strtolower($request->type);
-			$phone = (string)(new PhoneNumber($request->phone));
+	public function handle($data) {
+		return Database::transaction(function() use($data) {
+			$type = strtolower($data['type']);
+      if (!in_array($type, User::$types)) {
+        throw new Exception('Invalid user account type. Type must be either business or individual.');
+      }
 
 			$user = User::create([
-				'firstname' => $request->firstname,
-		        'email' => $request->email,
-		        'phone' => $phone,
-		        'lastname' => $request->lastname,
-		        'type' => $type,
-		        'status' => 'active',
-		        'address' => $request->address,
-		        'password' => Hash::make($request->password)
+				'firstname' => $data['firstname'],
+        'email' => $data['email'],
+        'phone' => (string)(new PhoneNumber($data['phone'])),
+        'lastname' => $data['lastname'],
+        'type' => $type,
+        'status' => 'active',
+        'address' => $data['address'],
+        'password' => Hash::make($data['password'])
 			]);
 
 			if ($type === 'business') {
 				Business::create([
 					'user_id' => $user->id,
-					'name' => $request->business_name,
-					'website' => $request->website,
-					'cac_number' => $request->cac_number,
+					'name' => $data['business_name'],
+					'website' => $data['website'],
+					'cac_number' => $data['cac_number'],
 				]);
 			}
 
-			$token = rand(100000, 999999);
-			Verification::create([
-				'type' => 'phone', 
-				'code' => $token,
-				'reference' => str()->random(64),
-				'user_id' => $user->id,
-			]);
-
-			$user->notify(new PhoneVerificationNotification($token));
+			(new VerificationService())->send(['user' => $user, 'type' => 'phone']);
 			return $user;
 		});
 	}
