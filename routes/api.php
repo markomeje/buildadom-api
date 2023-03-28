@@ -45,8 +45,8 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
 
     Route::middleware(['auth:api'])->group(function() {
       Route::post('/me', [\App\Http\Controllers\V1\UserController::class, 'me']);
-      Route::post('/logout', [\App\Http\Controllers\V1\AuthController::class, 'logout']);
-      Route::post('/refresh', [\App\Http\Controllers\V1\AuthController::class, 'refresh']);
+      Route::post('/auth/logout', [\App\Http\Controllers\V1\AuthController::class, 'logout']);
+      Route::post('/auth/refresh', [\App\Http\Controllers\V1\AuthController::class, 'refresh']);
 
       Route::prefix('marchant')->group(function() {
         Route::prefix('store')->group(function() {

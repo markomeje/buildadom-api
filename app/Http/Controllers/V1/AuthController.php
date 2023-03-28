@@ -68,10 +68,6 @@ class AuthController extends Controller
           'name' => $user->fullname(), 
           'email' => $user->email, 
           'token' => $token
-        ],
-        'authorisation' => [
-          'token' => $token,
-          'type' => 'bearer',
         ]
       ],
       'message' => 'Login successful',
@@ -100,13 +96,8 @@ class AuthController extends Controller
           'id' => $user->id, 
           'name' => $user->fullname(), 
           'email' => $user->email, 
-          'token' => $token
+          'token' => auth()->refresh()
         ],
-    
-        'authorisation' => [
-          'token' => auth()->refresh(),
-          'type' => 'bearer',
-        ]
       ],
       'message' => 'Token refreshed',
     ]);

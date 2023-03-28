@@ -60,10 +60,6 @@ class VerificationController extends Controller
             'email' => $user->email, 
             'token' => $token
           ],
-          'authorisation' => [
-            'token' => $token,
-            'type' => 'bearer',
-          ]
         ]);
       }
     });   
