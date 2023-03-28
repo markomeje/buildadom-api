@@ -28,7 +28,7 @@ class AuthController extends Controller
       return response()->json([
         'success' => false,
         'message' => 'Invalid account details.',
-      ]);
+      ], 401);
     }
 
     $verification = Verification::where(['user_id' => $user->id, 'type' => 'phone'])->first();
@@ -38,7 +38,7 @@ class AuthController extends Controller
         'success' => false,
         'message' => 'A verification code have been sent to your phone number.',
         'verification' => ['verified' => false, 'type' => 'phone']
-      ]);
+      ], 401);
     }
 
     $verification = Verification::where(['user_id' => $user->id, 'type' => 'email'])->first();
@@ -48,7 +48,7 @@ class AuthController extends Controller
         'success' => false,
         'message' => 'A verification code have been sent to your email.',
         'verification' => ['verified' => false, 'type' => 'email']
-      ]);
+      ], 401);
     }
 
     $token = auth()->attempt($request->validated());
@@ -56,7 +56,7 @@ class AuthController extends Controller
       return response()->json([
         'success' => false,
         'message' => 'Invalid login details.',
-      ]);
+      ], 401);
     }
 
     $user = auth()->user();
@@ -71,7 +71,7 @@ class AuthController extends Controller
         ]
       ],
       'message' => 'Login successful',
-    ]);
+    ], 200);
   }
 
   public function logout()

@@ -26,7 +26,7 @@ class VerificationController extends Controller
         return response()->json([
           'success' => false,
           'message' => 'Invalid verification.'
-        ]);
+        ], 401);
       }
 
       $verification = Verification::where(['code' => $request->code, 'type' => $type])->first();
@@ -34,7 +34,7 @@ class VerificationController extends Controller
         return response()->json([
           'success' => false,
           'message' => 'Invalid verification code.'
-        ]);
+        ], 401);
       }
 
       $verification->code = null;
