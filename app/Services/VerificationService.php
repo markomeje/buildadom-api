@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Verification;
 use Illuminate\Support\Facades\DB as Database;
 use App\Notifications\{EmailVerificationNotification, PhoneVerificationNotification};
+use App\Library\Termii;
 use Exception;
 
 
@@ -40,7 +41,8 @@ class VerificationService
 
       switch ($type) {
         case 'phone':
-          $user->notify(new PhoneVerificationNotification($code));
+          //$user->notify(new PhoneVerificationNotification($code));
+          Termii::sms(['message' => $code, 'phone' => $user->phone])->send();
           break;
         case 'email':
           $user->notify(new EmailVerificationNotification($code));
@@ -59,7 +61,7 @@ class VerificationService
   /**
    * Write code on Method
    *
-   * @return response()
+   * @return int
    */
   public function generateUniqueCode()
   {
@@ -69,30 +71,6 @@ class VerificationService
 
     return $code;
   }
-	
-
-	/**
-	 * 
-	 */
-	public function update($info): Verification
-	{	
-		$verification = Verification::find($info->id);
-		$verification->code = $info->code;
-		$verification->verified = $info->verified ?? false;
-		return $verification->update();
-	}
-
-	/**
-	 * 
-	 */
-	public function exists($info): ?Verification
-	{
-		$info = (object)$info;
-		return Verification::where([
-			'code' => $info->code,
-			'type' => $info->type
-		])->latest()->first();	
-	}
 
 }
 

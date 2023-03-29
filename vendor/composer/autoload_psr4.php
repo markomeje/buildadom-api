@@ -61,6 +61,8 @@ return array(
     'NotificationChannels\\AfricasTalking\\' => array($vendorDir . '/laravel-notification-channels/africastalking/src'),
     'Namshi\\JOSE\\' => array($vendorDir . '/namshi/jose/src/Namshi/JOSE'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
+    'ManeOlawale\\Termii\\' => array($vendorDir . '/mane-olawale/termii/src'),
+    'ManeOlawale\\RestResponse\\' => array($vendorDir . '/mane-olawale/rest-response/src'),
     'League\\MimeTypeDetection\\' => array($vendorDir . '/league/mime-type-detection/src'),
     'League\\Flysystem\\AwsS3V3\\' => array($vendorDir . '/league/flysystem-aws-s3-v3'),
     'League\\Flysystem\\' => array($vendorDir . '/league/flysystem/src'),
