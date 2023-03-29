@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use App\Models\Store;
 
 class StoreSeeder extends Seeder
@@ -14,7 +15,10 @@ class StoreSeeder extends Seeder
    */
   public function run()
   {
-    Store::truncate();
+    DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+    DB::table('stores')->truncate();
+    DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
     Store::factory()->count(520)->create();
   }
 }

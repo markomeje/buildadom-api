@@ -20,11 +20,9 @@ return new class extends Migration
       $table->float('total');
       $table->integer('quantity');
       $table->boolean('paid')->default(false);
-      $table->enum('payment_method', ['cash_on_delivery'])->default('cash_on_delivery');
-
       $table->string('notes')->nullable();
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
-      //$table->foreignId('product_id')->nullable()->references('id')->on('products');
+      $table->foreignId('product_id')->nullable()->references('id')->on('products');
       $table->foreignId('store_id')->nullable()->references('id')->on('stores');
       $table->timestamps();
     });

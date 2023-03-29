@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 use \JsonMachine\Items;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 use App\Models\Country;
 
@@ -15,6 +16,10 @@ class CountrySeeder extends Seeder
    */
   public function run()
   {
+    DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+    DB::table('countries')->truncate();
+    DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
     $path = storage_path('/globe.json');
     $countries = Items::fromFile($path);
 

@@ -41,13 +41,9 @@ class Termii
   public function send()
   {
     $response = $this->client->sms->send($this->phone, $this->message);
-    $response->onError(function ($response) {
-      throw new Exception($response);
-    });
-
-    // if ($response->failed()) {
-    //   throw new Exception('Sending sms failed. Try again');
-    // }
+    if ($response->failed()) {
+      throw new Exception('Sending sms failed. Try again');
+    }
   }
 }
 

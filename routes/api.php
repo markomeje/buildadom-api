@@ -31,12 +31,12 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
     Route::post('/login', [\App\Http\Controllers\V1\AuthController::class, 'login']);
 
     Route::prefix('stores')->group(function() {
-      Route::post('/', [App\Http\Controllers\V1\StoreController::class, 'index']);
-      Route::post('/store/{id}', [App\Http\Controllers\V1\StoreController::class, 'store']);
+      Route::get('/', [App\Http\Controllers\V1\StoreController::class, 'index']);
+      Route::get('/store/{id}', [App\Http\Controllers\V1\StoreController::class, 'store']);
     });
 
 
-    Route::post('/countries', [App\Http\Controllers\V1\CountriesController::class, 'countries']);
+    Route::get('/countries', [App\Http\Controllers\V1\CountriesController::class, 'countries']);
 
     Route::prefix('reset')->group(function() {
       Route::post('/process', [App\Http\Controllers\V1\ResetController::class, 'process']);
