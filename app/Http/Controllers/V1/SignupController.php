@@ -10,7 +10,7 @@ use \Exception;
 class SignupController extends Controller
 {
   /**
-   * Create waiting list
+   * Signup user
    * @param $request $signup
    */
   public function signup(SignupRequest $request, SignupAction $signup)

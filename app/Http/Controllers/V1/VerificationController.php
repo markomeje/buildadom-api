@@ -6,7 +6,7 @@ use App\Actions\SignupAction;
 use App\Services\VerificationService;
 use App\Notifications\EmailVerificationNotification;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB as Database;
+use Illuminate\Support\Facades\DB;
 use App\Models\{User, Verification};
 use \Exception;
 
@@ -20,7 +20,7 @@ class VerificationController extends Controller
   */
   public function verify(VerificationRequest $request)
   {
-    return Database::transaction(function() use ($request) {
+    return DB::transaction(function() use ($request) {
       $type = strtolower($request->type);
       if (!in_array($type, Verification::$types)) {
         return response()->json([
@@ -48,20 +48,21 @@ class VerificationController extends Controller
           'success' => true,
           'message' => 'An email verification code have been sent to your email.',
         ]);
-      }else {
-        $token = auth()->login($user);
-        return response()->json([
-          'success' => true,
-          'message' => 'Verification successful.',
-          'response' => ['done' => true],
-          'user' => [
-            'id' => $user->id, 
-            'name' => $user->fullname(), 
-            'email' => $user->email, 
-            'token' => $token
-          ],
-        ]);
       }
+
+      $token = auth()->login($user);
+      return response()->json([
+        'success' => true,
+        'message' => 'Verification successful.',
+        'response' => ['done' => true],
+        'user' => [
+          'id' => $user->id, 
+          'name' => $user->fullname(), 
+          'email' => $user->email, 
+          'token' => $token
+        ],
+      ]);
+        
     });   
   }
 

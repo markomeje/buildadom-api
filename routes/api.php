@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['accept.json'])->prefix('v1')->group(function() {
-
   Route::domain(env('ONBOARDING_URL'))->group(function() {
     Route::post('/create', [\App\Http\Controllers\V1\OnboardingController::class, 'create']);
   });
@@ -35,8 +34,14 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
       Route::get('/store/{id}', [App\Http\Controllers\V1\StoreController::class, 'store']);
     });
 
+    Route::prefix('products')->group(function() {
+      Route::get('/', [App\Http\Controllers\V1\ProductsController::class, 'index']);
+      Route::get('/categories', [App\Http\Controllers\V1\ProductsController::class, 'categories']);
+      Route::get('/product/{id}', [App\Http\Controllers\V1\ProductsController::class, 'product']);
+    });
 
     Route::get('/countries', [App\Http\Controllers\V1\CountriesController::class, 'countries']);
+    Route::get('/cities', [App\Http\Controllers\V1\CitiesController::class, 'cities']);
 
     Route::prefix('reset')->group(function() {
       Route::post('/process', [App\Http\Controllers\V1\ResetController::class, 'process']);
@@ -65,9 +70,7 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
         });
       });
     });
-
   });
-
 });
 
 

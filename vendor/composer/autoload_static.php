@@ -671,6 +671,7 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'App\\Listeners\\EmailVerificationMail' => __DIR__ . '/../..' . '/app/Listeners/EmailVerificationMail.php',
         'App\\Models\\Business' => __DIR__ . '/../..' . '/app/Models/Business.php',
         'App\\Models\\Cart' => __DIR__ . '/../..' . '/app/Models/Cart.php',
+        'App\\Models\\Category' => __DIR__ . '/../..' . '/app/Models/Category.php',
         'App\\Models\\Country' => __DIR__ . '/../..' . '/app/Models/Country.php',
         'App\\Models\\Identification' => __DIR__ . '/../..' . '/app/Models/Identification.php',
         'App\\Models\\Image' => __DIR__ . '/../..' . '/app/Models/Image.php',

@@ -9,13 +9,13 @@ class CountriesController extends Controller
 {
   /**
    * Get all countries
-   * @param void
+   * @param json
    */
   public function countries()
   {
     return response()->json([
       'success' => true,
-      'message' => 'Countries returned',
+      'message' => 'Countries retrieved successfully',
       'countries' => CountryResource::collection(Country::all())
     ], 200);
   }

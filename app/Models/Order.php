@@ -30,5 +30,10 @@ class Order extends Model
    *
    * @var array<string>
    */
-  private $status = ['pending','processing','completed','decline']
+  private $status = [
+    'pending',
+    'processing',
+    'completed',
+    'decline'
+  ];
 }

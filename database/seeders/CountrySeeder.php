@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 use \JsonMachine\Items;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 use App\Models\Country;

@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 use App\Models\Image;
-use Illuminate\Support\Facades\DB as Database;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\OnboardingRequest;
 use Storage;
 
@@ -20,7 +20,7 @@ class ImageAction
    */
   public function handle($request): Image
   {
-    return Database::transaction(function() use ($request) {
+    return DB::transaction(function() use ($request) {
       $file = $request->file('image');
 
       $filename = str()->random(64);

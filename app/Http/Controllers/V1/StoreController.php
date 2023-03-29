@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreRequest;
-use App\Services\StoreService;
 use App\Models\Store;
 use \Exception;
 

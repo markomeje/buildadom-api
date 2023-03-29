@@ -89,6 +89,7 @@ return array(
     'App\\Listeners\\EmailVerificationMail' => $baseDir . '/app/Listeners/EmailVerificationMail.php',
     'App\\Models\\Business' => $baseDir . '/app/Models/Business.php',
     'App\\Models\\Cart' => $baseDir . '/app/Models/Cart.php',
+    'App\\Models\\Category' => $baseDir . '/app/Models/Category.php',
     'App\\Models\\Country' => $baseDir . '/app/Models/Country.php',
     'App\\Models\\Identification' => $baseDir . '/app/Models/Identification.php',
     'App\\Models\\Image' => $baseDir . '/app/Models/Image.php',
