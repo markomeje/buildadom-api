@@ -25,15 +25,13 @@ class IdentificationRequest extends FormRequest
   public function rules()
   {
     $now = Carbon::now()->format('d/m/Y');
-    $ontype = function ($attribute, $value, $fail) use($types = Identification::$types) {
-      if (!in_array(strtolower($request->id_type), $types)) {
-        $fail('indentification type must be '.explode(',', $types));
-      }
-    };
-
     return [
-      'id_type' => ['required', 'string', $ontype],
-      'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+      'id_type' => ['required', 'string', function($attribute, $value, $fail) {
+        $types = Identification::$types;
+        if (!in_array(strtolower($this->id_type), $types)) {
+          $fail('Indentification type must be '.implode(', ', $types));
+        }
+      }],
       'id_number' => ['required'],
       'expiry_date' => ['required', 'date_format:d/m/Y', "after:{$now}"],
       'dob' => ['required', 'date_format:d/m/Y', 'after:01/01/1940'],

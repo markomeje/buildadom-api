@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 use App\Models\{User, Business};
-use Illuminate\Support\Facades\DB as Database;
+use Illuminate\Support\Facades\DB;
 use App\Services\VerificationService;
 use Illuminate\Support\Facades\Notification;
 use Propaganistas\LaravelPhone\PhoneNumber;
@@ -21,12 +21,7 @@ class SignupAction
 	 * @return Signup model
 	 */
 	public function handle($data) {
-		return Database::transaction(function() use($data) {
-			$type = strtolower($data['type']);
-      if (!in_array($type, User::$types)) {
-        throw new Exception('Invalid user account type. Type must be either business or individual.');
-      }
-
+		return DB::transaction(function() use($data) {
 			$user = User::create([
 				'firstname' => $data['firstname'],
         'email' => $data['email'],

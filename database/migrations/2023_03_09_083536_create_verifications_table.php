@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->foreignId('user_id')->nullable()->references('id')->on('users');
             $table->dateTime('expiry')->nullable();
-            $table->string('reference')->nullable();
             $table->timestamps();
         });
     }

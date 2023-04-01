@@ -5,6 +5,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rules\Password;
 use App\Rules\EmailRule;
 use App\Models\{User};
 
@@ -30,7 +31,12 @@ class SignupRequest extends FormRequest
   {
     $type = strtolower($this->type);
     return [
-      'type' => ['required', 'string'],
+      'type' => ['required', 'string', function($attribute, $value, $fail) {
+        $types = User::$types;
+        if (in_array(strtolower($this->type), $types) === false) {
+          $fail('User type must be either individual or business');
+        }
+      }],
       'email' => ['required', 'email', 'unique:users', (new EmailRule)],
       'phone' => ['required', 'unique:users', 'phone'],
       'firstname' => ['required', 'string', 'max:50'],
@@ -41,8 +47,8 @@ class SignupRequest extends FormRequest
       'website' => [$type === 'business' ? 'required' : 'nullable', 'max:255'],
       
       'address' => ['required', 'max:255'],
-      'password' => ['required', 'min:6'],
-      'confirm_password' => ['required', 'min:6', 'same:password']
+      'password' => ['required', app()->environment(['production']) ? Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised() : 'min:8'],
+      'confirm_password' => ['required', 'same:password']
     ];
   }
 
@@ -55,7 +61,6 @@ class SignupRequest extends FormRequest
   {
     return [
       'cac_number.required' => 'Please enter your CAC registration number.',
-      'type' => 'Type must be either individual or business',
       'phone.phone' => 'Invalid phone number. Please include country code and try again.'
     ];
   }

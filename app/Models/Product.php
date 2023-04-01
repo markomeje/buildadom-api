@@ -33,9 +33,7 @@ class Product extends Model
    */
   private $status = [
     'active',
-    'processing',
-    'completed',
-    'decline'
+    'pending',
   ];
 
   /**

@@ -57,11 +57,26 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
         Route::prefix('store')->group(function() {
           Route::post('/create', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'create']);
           Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'update']);
-          Route::post('/{id}', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'store']);
+          Route::get('/{id}', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'store']);
+        });
+
+        Route::get('/drivers', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'drivers']);
+
+        Route::prefix('driver')->group(function() {
+          Route::post('/add', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'add']);
+          Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'update']);
+          Route::get('/{id}', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'store']);
+          Route::delete('/delete/{id}', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'delete']);
         });
 
         Route::prefix('image')->group(function() {
           Route::post('/upload', [\App\Http\Controllers\V1\ImageController::class, 'upload']);
+        });
+
+        Route::prefix('product')->group(function() {
+          Route::post('/create', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'create']);
+          Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'update']);
+          Route::get('/{id}', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'product']);
         });
 
         Route::prefix('identification')->group(function() {

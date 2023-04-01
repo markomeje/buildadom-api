@@ -18,13 +18,6 @@ class IdentificationController extends Controller
   public function save(IdentificationRequest $request)
   {
     try {
-      if (!in_array(strtolower($request->id_type), Identification::$types)) {
-        return response()->json([
-          'success' => false,
-          'message' => 'Invalid identification type',
-        ], 406);
-      }
-
       $identification = (new IdentificationService())->save($request->validated());
       return response()->json([
         'success' => true,

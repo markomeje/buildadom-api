@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class Driver extends Model
 {
   use HasFactory;
 
@@ -15,11 +15,10 @@ class Image extends Model
    * @var array<int, string>
    */
   protected $fillable = [
-    'model_id',
-    'role',
-    'model',
-    'type',
-    'url',
-    'user_id'
+    'firstname',
+    'user_id',
+    'phone',
+    'lastname',
+    'status',
   ];
 }

@@ -66,10 +66,11 @@ class ProductsController extends Controller
   public function categories()
   {
     try {
+      $categories = Category::where(['type' => 'product'])->get();
       return response()->json([
         'success' => true,
         'message' => 'Product categories retrieved successfully',
-        'categories' => CategoryResource::collection(Category::where(['type' => 'product'])->get()),
+        'categories' => CategoryResource::collection($categories),
       ], 200);
     } catch (Exception $error) {
       return response()->json([

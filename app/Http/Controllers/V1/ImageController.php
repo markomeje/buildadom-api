@@ -2,43 +2,48 @@
 
 namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ImageRequest;
+use App\Http\Requests\SaveImageRequest;
 use App\Actions\ImageAction;
-use App\Models\{Image, Store};
+use App\Models\{Image, Store, Identification};
 use Storage;
 use Exception;
 
 class ImageController extends Controller
 {
   /**
-   * Get all countries
-   * @param void
+   * Save image file to s3
+   *
+   * @param json
    */
-  public function upload(ImageRequest $request)
+  public function upload(SaveImageRequest $request)
   {
-    $model_id = $request->model_id;
-    switch ($request->model) {
-      case 'store':
-        $found = Store::find($model_id);
-        break;
-  
-      default:
+    try {
+      $model_id = $request->model_id;
+      switch ($request->model) {
+        case 'store':
+          $result = Store::find($model_id);
+          break;
+        case 'identification':
+          $result = Identification::find($model_id);
+          break;
+
+        default:
+          return response()->json([
+            'success' => false,
+            'message' => 'Invalid upload model',
+          ], 500);
+          break;
+      }
+
+      if (empty($result) || !$request->hasfile('image')) {
         return response()->json([
           'success' => false,
-          'message' => 'Invalid upload model',
+          'message' => 'Invalid upload request',
         ], 500);
-        break;
-    }
+      }
 
-    if (!$found || !$request->hasfile('image')) {
-      return response()->json([
-        'success' => false,
-        'message' => 'Invalid upload request',
-      ], 500);
-    }
 
-    try {
-      if($image = (new ImageAction())->handle($request)) {
+      if($image = (new ImageAction())->handle($request->validated())) {
         return response()->json([
           'success' => true,
           'message' => 'Image uploaded successfully',
