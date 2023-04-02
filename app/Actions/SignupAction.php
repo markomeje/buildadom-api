@@ -22,6 +22,7 @@ class SignupAction
 	 */
 	public function handle($data) {
 		return DB::transaction(function() use($data) {
+      $type = $data['type'] ?? '';
 			$user = User::create([
 				'firstname' => $data['firstname'],
         'email' => $data['email'],
