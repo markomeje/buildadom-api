@@ -2,7 +2,7 @@
 
 
 namespace App\Services;
-use App\Models\{Business, User};
+use App\Models\{Business};
 use Exception;
 
 /**
@@ -12,20 +12,18 @@ class BusinessService
 {
 	
 	/**
-	 * Create a verification record
+	 * Create a Business account record
 	 * 
-	 * @return Verification model
-	 * @param info containung the verification code and type
+	 * @return Business
+	 * @param array $data
 	 *
 	 */
-	public function create(array $data, int $user_id): Verification
+	public function create(array $data): Business
 	{
-		Business::create([
-			'user_id' => $user_id,
+		return Business::create([
 			...$data
 		]);
 	}
-
 
 }
 

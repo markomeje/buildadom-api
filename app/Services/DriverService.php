@@ -26,7 +26,7 @@ class DriverService
    *
    * @param array $data int $id
    */
-  public function update(array $data, int $id) : Driver
+  public function update(array $data, int $id): Driver
   {
     if ($Driver = Driver::find($id)) {
       $Driver->update([...$data]);

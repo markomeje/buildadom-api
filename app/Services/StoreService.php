@@ -9,6 +9,10 @@ use \Exception;
 class StoreService
 {
 	
+  /**
+   * Create store
+   * @param array $data
+   */
 	public function create(array $data): Store
 	{
 		$country = $data['country_id'] ?? 0;
@@ -22,6 +26,10 @@ class StoreService
 		]);
 	}
 
+  /**
+   * Update store
+   * @param array $data, int $id
+   */
 	public function update(array $data, $id)
 	{
 		$country = $data['country_id'] ?? 0;

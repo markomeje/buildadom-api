@@ -21,8 +21,9 @@ class SignupAction
 	 * @return Signup model
 	 */
 	public function handle($data) {
-		return DB::transaction(function() use($data) {
-      $type = $data['type'] ?? '';
+		$signup = function() use($data) {
+      $type = strtolower($data['type'] ?? '');
+
 			$user = User::create([
 				'firstname' => $data['firstname'],
         'email' => $data['email'],
@@ -43,9 +44,11 @@ class SignupAction
 				]);
 			}
 
-			(new VerificationService())->send(['user' => $user, 'type' => 'phone']);
+			VerificationService::sendVerificationCode(['user' => $user, 'type' => 'phone']);
 			return $user;
-		});
+		};
+
+    return DB::transaction($signup);
 	}
 }
 

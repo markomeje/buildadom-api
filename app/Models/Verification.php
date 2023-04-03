@@ -28,6 +28,9 @@ class Verification extends Model
    */
   public static $types = ['phone', 'email'];
 
+  /**
+   *
+   */
   public function user($type = 'phone')
   {
       return $this->belongsTo(User::class)->where(['type' => $type]);

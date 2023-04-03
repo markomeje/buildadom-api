@@ -48,6 +48,8 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
       Route::post('/update', [App\Http\Controllers\V1\ResetController::class, 'update']);
     });
 
+    Route::get('/identification/types', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'types']);
+
     Route::middleware(['auth:api'])->group(function() {
       Route::post('/me', [\App\Http\Controllers\V1\UserController::class, 'me']);
       Route::post('/auth/logout', [\App\Http\Controllers\V1\AuthController::class, 'logout']);
@@ -81,7 +83,6 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
 
         Route::prefix('identification')->group(function() {
           Route::post('/save', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'save']);
-          Route::post('/types', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'types']);
         });
       });
     });

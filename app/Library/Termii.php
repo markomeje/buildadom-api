@@ -2,48 +2,25 @@
 
 namespace App\Library;
 use \ManeOlawale\Termii\Client;
+use App\Interfaces\SmsInterface;
 use Exception;
 
-class Termii 
+class Termii implements SmsInterface
 {
-  /**
-   * Sms client
-   */
-  private $client;
 
   /**
+   * Send sms via Termii API client
+   * @param $phone, $message
    *
-   * @return void
    */
-  public function __construct($phone = '', $message = '')
+  public static function send(string $phone, string $message): void
   {
-    $this->phone = $phone;
-    $this->message = $message;
-    $this->client = new Client(env('TERMII_API_KEY'), [
-      'sender_id' => 'Buildadom',
-      'channel' => 'generic',
-      "attempts" => 10,
-      "time_to_live" => 30,
-      'pin_type' => 'ALPHANUMERIC',
-      'message_type' => 'ALPHANUMERIC',
-      'type' => 'plain',
-    ]);
-  }
+    $config = ['sender_id' => 'Buildadom', 'channel' => 'generic', 'attempts' => 10, 'time_to_live' => 30, 'type' => 'plain'];
+    $client = new Client(env('TERMII_API_KEY'), $config);
 
-  /**
-   * Instantiates the sms facade
-   */
-  public static function sms($data = [])
-  {
-    return (new Termii($data['phone'], $data['message']));
-  }
-
-  public function send()
-  {
-    $response = $this->client->sms->send($this->phone, 'Code - '.$this->message);
+    $response = $client->sms->send($phone, 'Code - '.$message);
     $response->onError(function ($response) {
-      $message = $response['message'] ?? 'Sending sms failed. Try again';
-      throw new Exception($message);
+      throw new Exception($response['message']);
     });
   }
 }

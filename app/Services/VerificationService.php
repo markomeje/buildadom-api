@@ -2,10 +2,11 @@
 
 
 namespace App\Services;
-use App\Models\Verification;
-use Illuminate\Support\Facades\DB as Database;
-use App\Notifications\{EmailVerificationNotification, PhoneVerificationNotification};
+use App\Models\{Verification, User};
+use Illuminate\Support\Facades\DB;
+use App\Notifications\{EmailVerificationNotification};
 use App\Library\Termii;
+use App\Actions\SaveVerificationAction;
 use Exception;
 
 
@@ -13,63 +14,66 @@ class VerificationService
 {
 
   /**
-   * Send a verification code
-   * 
-   * @return Verification model
-   * @param info containung the verification code and type
-   * @types 'phone' || 'email'
+   * Verify user by type
+   *
+   * @param array type
    */
-  public function send($data): Verification
+  public function verify(array $data)
   {
-    return Database::transaction(function() use ($data) {
-      $type = strtolower($data['type'] ?? '');
-      if (!in_array($type, Verification::$types)) {
-        throw new Exception('Invalid verification type passed');
+    return DB::transaction(function() use ($data) {
+      $type = strtolower($data['type']);
+      $verification = Verification::where([...$data, 'verified' => false])->first();
+      if (empty($verification)) {
+        return response()->json([
+          'success' => false,
+          'message' => 'Invalid verification code.'
+        ], 403);
       }
 
-      $user = $data['user'];
-      $code = $this->generateUniqueCode();
-      Verification::where(['user_id' => $user->id, 'type' => $type])->delete();
-
-      $verification = Verification::create([ 
-        'code' => $code,
-        'expiry' => now()->addMinutes(10),
-        'type' => $type,
-        'user_id' => $user->id,
-        'verified' => false,
-      ]);
-
-      switch ($type) {
-        case 'phone':
-          //$user->notify(new PhoneVerificationNotification($code));
-          Termii::sms(['message' => $code, 'phone' => $user->phone])->send();
-          break;
-        case 'email':
-          $user->notify(new EmailVerificationNotification($code));
-          break;
-        default:
-          throw new Exception('Invalid verification type passed');
-          break;
+      $verification->update(['code' => null, 'verified' => true]);
+      $user = User::find($verification->user_id);
+      if($type === 'phone') {
+        SaveVerificationAction::handle($user, 'email');
+        return response()->json([
+          'success' => true,
+          'message' => 'An email verification code have been sent to your email.'
+        ], 200);
       }
 
-      return $verification;
+      return response()->json([
+        'success' => true,
+        'message' => 'Operation successful.',
+        'response' => ['done' => true],
+        'user' => ['id' => $user->id, 'name' => $user->fullname(), 'email' => $user->email, 'token' => auth()->login($user)]
+      ], 200);
 
     });
-    
   }
 
   /**
-   * Write code on Method
+   * Verify user by type
    *
-   * @return int
+   * @param array type
    */
-  public function generateUniqueCode()
+  public function resend(array $data)
   {
-    do {
-      $code = random_int(100000, 999999);
-    } while (Verification::where(['code' => $code])->first());
+    return DB::transaction(function() use ($data) {
+      $type = strtolower($data['type']);
+      $verification = Verification::where([...$data, 'verified' => false])->first();
+      if (empty($verification)) {
+        return response()->json(['success' => false, 'message' => 'Invalid verification code.'], 403);
+      }
 
-    return $code;
+      $verification->update(['code' => null, 'verified' => true]);
+      $user = User::find($verification->user_id);
+      if($type === 'phone') {
+        SaveVerificationAction::handle($user, 'email');
+        return response()->json(['success' => true, 'message' => 'An email verification code have been sent to your email.'], 200);
+      }
+
+      return response()->json(['success' => true, 'message' => 'Operation successful.', 'response' => ['done' => true], 'user' => ['id' => $user->id, 'name' => $user->fullname(), 'email' => $user->email, 'token' => auth()->login($user)]], 200);
+
+    });
   }
 
 }

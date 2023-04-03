@@ -33,10 +33,11 @@ class SignupRequest extends FormRequest
     return [
       'type' => ['required', 'string', function($attribute, $value, $fail) {
         $types = User::$types;
-        if (in_array(strtolower($this->type), $types) === false) {
-          $fail('User type must be either individual or business');
+          if (in_array(strtolower($this->type), $types) === false) {
+            $fail('User type must be either individual or business');
+          }
         }
-      }],
+      ],
       'email' => ['required', 'email', 'unique:users', (new EmailRule)],
       'phone' => ['required', 'unique:users', 'phone'],
       'firstname' => ['required', 'string', 'max:50'],
