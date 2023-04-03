@@ -33,7 +33,7 @@ class IdentificationService
     $identification->id_type = empty($data['id_type']) ? $identification->id_type : $data['id_type'];
 
     $identification->update();
-    (new ImageAction())->handle(['role' => 'main', 'model_id' => $identification->id, 'model' => 'identification']);
+    //(new ImageAction())->handle(['role' => 'main', 'model_id' => $identification->id, 'model' => 'identification']);
     return $identification;
   }
 }

@@ -32,7 +32,7 @@ class IdentificationRequest extends FormRequest
           $fail('Indentification type must be '.implode(', ', $types));
         }
       }],
-      'id_number' => ['required'],
+      'id_number' => ['required', 'numeric'],
       'expiry_date' => ['required', 'date_format:d/m/Y', "after:{$now}"],
       'dob' => ['required', 'date_format:d/m/Y', 'after:01/01/1940'],
       'address' => ['required', 'string'],
