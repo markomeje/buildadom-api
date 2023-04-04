@@ -16,11 +16,11 @@ class ImageAction
    */
   public function handle(array $data): Image
   {
-    $upload = function() use ($data) {
+    return DB::transaction(function() use ($data) {
       $file = $data['image'];
-      $filename = str()->uuid();
       $extension = $file->getClientOriginalExtension();
 
+      $filename = str()->uuid();
       $avatar = "{$filename}.{$extension}";
       $disk = Storage::disk('s3');
 
@@ -28,25 +28,16 @@ class ImageAction
       $image = Image::where([...$data, 'user_id' => auth()->id()])->first();
       if (empty($image)) {
         $disk->put($avatar, file_get_contents($file));
-        return Image::create([
-          ...$data,
-          'user_id' => auth()->id(),
-          'url' => $disk->url($avatar)
-        ]);
+        return Image::create(['user_id' => auth()->id(), 'url' => $disk->url($avatar), ...$data]);
       }
 
       $url = explode('/', $image->url);
       $filename = end($url);
-      if($disk->has($filename)) {
-        if(!$disk->delete($filename)) throw new Exception('Could not delete image');
-      }
-
+      if($disk->has($filename)) $disk->delete($filename);
       $disk->put($avatar, file_get_contents($file));
       $image->update([...$data, 'user_id' => auth()->id(), 'url' => $disk->url($avatar)]);
       return $image;
-    };
-
-    return DB::transaction($upload);
+    });
   }
 }
 

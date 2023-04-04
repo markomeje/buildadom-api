@@ -35,7 +35,7 @@ class ImageController extends Controller
           break;
       }
 
-      if (empty($result) || !$request->hasfile('image')) {
+      if (empty($result)) {
         return response()->json([
           'success' => false,
           'message' => 'Invalid upload request',
