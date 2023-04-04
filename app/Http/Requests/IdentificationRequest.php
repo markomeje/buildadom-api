@@ -26,12 +26,7 @@ class IdentificationRequest extends FormRequest
   {
     $now = Carbon::now()->format('d/m/Y');
     return [
-      'id_type' => ['required', 'string', function($attribute, $value, $fail) {
-        $types = Identification::$types;
-        if (!in_array(strtolower($this->id_type), $types)) {
-          $fail('Indentification type must be '.implode(', ', $types));
-        }
-      }],
+      'id_type' => ['required', 'string'],
       'id_number' => ['required', 'numeric'],
       'expiry_date' => ['required', 'date_format:d/m/Y', "after:{$now}"],
       'dob' => ['required', 'date_format:d/m/Y', 'after:01/01/1940'],

@@ -7,20 +7,20 @@ use Storage;
 use Exception;
 
 
-class ImageAction 
+class UploadImageAction
 {
   /**
    * Handle Image upload
    * 
    * @return Image model
    */
-  public function handle(array $data): Image
+  public static function handle(array $data): Image
   {
     return DB::transaction(function() use ($data) {
-      $file = $data['image'];
+      $file = request()->file('image');
       $extension = $file->getClientOriginalExtension();
 
-      $filename = str()->uuid();
+      $filename = str()->random(32);
       $avatar = "{$filename}.{$extension}";
       $disk = Storage::disk('s3');
 
@@ -28,14 +28,13 @@ class ImageAction
       $image = Image::where([...$data, 'user_id' => auth()->id()])->first();
       if (empty($image)) {
         $disk->put($avatar, file_get_contents($file));
-        return Image::create(['user_id' => auth()->id(), 'url' => $disk->url($avatar), ...$data]);
+        $image = Image::create(['user_id' => auth()->id(), 'url' => $disk->url($avatar), ...$data, 'filename' => $filename, 'extension' => $extension]);
+      }else {
+        if($disk->has($avatar)) $disk->delete($avatar);
+        $disk->put($avatar, file_get_contents($file));
+        $image->update([...$data, 'url' => $disk->url($avatar), 'filename' => $filename, 'extension' => $extension]);
       }
 
-      $url = explode('/', $image->url);
-      $filename = end($url);
-      if($disk->has($filename)) $disk->delete($filename);
-      $disk->put($avatar, file_get_contents($file));
-      $image->update([...$data, 'user_id' => auth()->id(), 'url' => $disk->url($avatar)]);
       return $image;
     });
   }

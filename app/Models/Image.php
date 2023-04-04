@@ -19,7 +19,9 @@ class Image extends Model
     'role',
     'model',
     'type',
+    'filename',
     'url',
-    'user_id'
+    'user_id',
+    'extension'
   ];
 }

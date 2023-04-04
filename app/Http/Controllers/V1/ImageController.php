@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SaveImageRequest;
-use App\Actions\ImageAction;
+use App\Http\Requests\UploadImageRequest;
+use App\Actions\UploadImageAction;
 use App\Models\{Image, Store, Identification};
 use Storage;
 use Exception;
@@ -15,35 +15,17 @@ class ImageController extends Controller
    *
    * @param json
    */
-  public function upload(SaveImageRequest $request)
+  public function upload(UploadImageRequest $request)
   {
     try {
-      $model_id = $request->model_id;
-      switch ($request->model) {
-        case 'store':
-          $result = Store::find($model_id);
-          break;
-        case 'identification':
-          $result = Identification::find($model_id);
-          break;
-
-        default:
-          return response()->json([
-            'success' => false,
-            'message' => 'Invalid upload model',
-          ], 500);
-          break;
-      }
-
-      if (empty($result)) {
+      if (empty(self::destination($request->model, $request->model_id))) {
         return response()->json([
           'success' => false,
           'message' => 'Invalid upload request',
         ], 500);
       }
 
-
-      if($image = (new ImageAction())->handle($request->validated())) {
+      if($image = UploadImageAction::handle($request->validated())) {
         return response()->json([
           'success' => true,
           'message' => 'Image uploaded successfully',
@@ -59,6 +41,24 @@ class ImageController extends Controller
       ], 500);
     }
       
+  }
+
+  public static function destination(string $model = '', $model_id = 0)
+  {
+    switch ($model) {
+      case 'store':
+        $result = Store::find($model_id);
+        break;
+      case 'identification':
+        $result = Identification::find($model_id);
+        break;
+
+      default:
+        $result = null;
+        break;
+    }
+
+    return $result;
   }
 }
 
