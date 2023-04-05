@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\IdentificationRequest;
 use App\Services\{IdentificationService, ImageRequest};
 use App\Models\Identification;
-use \Exception;
+use Exception;
 
 
 class IdentificationController extends Controller
@@ -42,6 +42,29 @@ class IdentificationController extends Controller
       'message' => 'All identification types',
       'types' => Identification::$types,
     ], 200);
+  }
+
+  /**
+   * Identification types
+   */
+  public function details()
+  {
+    try {
+      if($identification = Identification::with(['image'])->where(['user_id' => auth()->id()])->first()) {
+        return response()->json([
+          'success' => true,
+          'message' => 'Operation successful',
+          'details' => $identification,
+        ], 200);
+      }
+
+      throw new Exception('Failed to get identification details');
+    } catch (Exception $error) {
+      return response()->json([
+        'success' => false,
+        'message' => $error->getMessage(),
+      ], 500);
+    }
   }
     
 

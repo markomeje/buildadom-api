@@ -83,6 +83,8 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
 
         Route::prefix('identification')->group(function() {
           Route::post('/save', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'save']);
+
+          Route::get('/details', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'details']);
         });
       });
     });
