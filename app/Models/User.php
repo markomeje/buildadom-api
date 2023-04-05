@@ -94,11 +94,11 @@ class User extends Authenticatable implements JWTSubject
   }
 
   /**
-   * A user has may veirifcations
+   * A user may have one veirifcation
    */
-  public function verification()
+  public function verification($type = 'phone')
   {
-    return $this->hasMany(Verification::class);
+    return $this->belongsTo(Verification::class)->where(['type' => $type]);
   }
 
   /**

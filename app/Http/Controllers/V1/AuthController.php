@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Models\{User, Verification};
-use App\Services\VerificationService;
+use App\Actions\SaveVerificationAction;
 
 
 class AuthController extends Controller
@@ -12,9 +12,7 @@ class AuthController extends Controller
 
   public function __construct()
   {
-    $this->middleware('auth:api', [
-      'except' => ['login']
-    ]);
+    $this->middleware('auth:api', ['except' => ['login']]);
   }
 
   /**
@@ -31,24 +29,16 @@ class AuthController extends Controller
       ], 401);
     }
 
-    $verification = Verification::where(['user_id' => $user->id, 'type' => 'phone'])->first();
-    if (empty($verification) || (boolean)($verification->verified ?? false) !== true) {
-      (new VerificationService())->send(['user' => $user, 'type' => 'phone']);
-      return response()->json([
-        'success' => false,
-        'message' => 'A verification code have been sent to your phone number.',
-        'verification' => ['verified' => false, 'type' => 'phone']
-      ], 401);
-    }
-
-    $verification = Verification::where(['user_id' => $user->id, 'type' => 'email'])->first();
-    if (empty($verification) || (boolean)($verification->verified ?? false) !== true) {
-      (new VerificationService())->send(['user' => $user, 'type' => 'email']);
-      return response()->json([
-        'success' => false,
-        'message' => 'A verification code have been sent to your email.',
-        'verification' => ['verified' => false, 'type' => 'email']
-      ], 401);
+    foreach (['phone', 'email'] as $type) {
+      $verification = Verification::where(['type' => $type, 'user_id' => $user->id])->first();
+      if ((boolean)($verification->verified ?? false) !== true) {
+        SaveVerificationAction::handle($user, $type);
+        return response()->json([
+          'success' => false,
+          'message' => "A verification code have been sent to your {$type}.",
+          'verification' => ['type' => $type, 'verified' => false],
+        ], 401);
+      }
     }
 
     $token = auth()->attempt($request->validated());
@@ -63,12 +53,7 @@ class AuthController extends Controller
     return response()->json([
       'success' => true,
       'response' => [
-        'user' => [
-          'id' => $user->id, 
-          'name' => $user->fullname(), 
-          'email' => $user->email, 
-          'token' => $token
-        ]
+        'user' => ['id' => $user->id, 'name' => $user->fullname(), 'email' => $user->email, 'token' => $token]
       ],
       'message' => 'Login successful',
     ], 200);

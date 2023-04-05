@@ -36,7 +36,7 @@ class VerificationService
         SaveVerificationAction::handle($user, 'email');
         return response()->json([
           'success' => true,
-          'message' => 'An email verification code have been sent to your email.'
+          'message' => 'A verification code have been sent to your email.'
         ], 200);
       }
 
