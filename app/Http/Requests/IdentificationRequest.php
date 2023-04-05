@@ -24,12 +24,11 @@ class IdentificationRequest extends FormRequest
    */
   public function rules()
   {
-    $now = Carbon::now()->format('d/m/Y');
     return [
       'id_type' => ['required', 'string'],
       'id_number' => ['required', 'numeric'],
-      'expiry_date' => ['required', 'date_format:d/m/Y', "after:{$now}"],
-      'dob' => ['required', 'date_format:d/m/Y', 'after:01/01/1940'],
+      'expiry_date' => ['required' 'string'],
+      'dob' => ['required', 'string'],
       'address' => ['required', 'string'],
     ];
   }
@@ -43,7 +42,6 @@ class IdentificationRequest extends FormRequest
   {
     return [
       'dob.required' => 'Date of birth is required',
-      'dob.after' => 'Date of birth must be date after 01/01/1940',
     ];
   }
 }
