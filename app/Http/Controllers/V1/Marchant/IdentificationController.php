@@ -50,13 +50,12 @@ class IdentificationController extends Controller
   public function details()
   {
     try {
-      if($identification = Identification::with(['image'])->where(['user_id' => auth()->id()])->first()) {
-        return response()->json([
-          'success' => true,
-          'message' => 'Operation successful',
-          'details' => $identification,
-        ], 200);
-      }
+      $identification = Identification::with(['image'])->where(['user_id' => auth()->id()])->first();
+      return response()->json([
+        'success' => true,
+        'message' => 'Operation successful',
+        'details' => $identification,
+      ], 200);
 
       throw new Exception('Failed to get identification details');
     } catch (Exception $error) {
