@@ -27,7 +27,7 @@ class IdentificationRequest extends FormRequest
     return [
       'id_type' => ['required', 'string'],
       'id_number' => ['required', 'numeric'],
-      'expiry_date' => ['required' 'string'],
+      'expiry_date' => ['required', 'string'],
       'dob' => ['required', 'string'],
       'address' => ['required', 'string'],
     ];
