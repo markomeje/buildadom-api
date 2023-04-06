@@ -2,10 +2,7 @@
 
 
 namespace App\Services;
-use App\Models\{Identification, Country};
-use App\Actions\ImageAction;
-use App\Http\Requests\SaveImageRequest;
-use \Exception;
+use App\Models\Identification;
 
 
 class IdentificationService
@@ -18,7 +15,7 @@ class IdentificationService
    */
   public function save(array $data): Identification
   {
-    $identification = Identification::where(['user_id' => auth()->id()])->first();
+    $identification = self::details();
     if(empty($identification)) {
       return Identification::create([
         'user_id' => auth()->id(),
@@ -29,6 +26,14 @@ class IdentificationService
 
     $identification->update([...$data, 'verified' => false]);
     return $identification;
+  }
+
+  /**
+   * Identification details
+   */
+  public static function details()
+  {
+    return Identification::with(['images'])->where(['user_id' => auth()->id()])->first();
   }
 }
 

@@ -42,12 +42,12 @@ class Identification extends Model
   ];
 
   /**
-   * An ID has one image
+   * An ID may have many image documents
    * @return Image
    */
-  public function image()
+  public function images()
   {
-    return $this->hasOne(Image::class, 'model_id')->where(['model' => 'identification']);
+    return $this->hasMany(Image::class, 'model_id')->where(['model' => 'identification']);
   }
 
   /**

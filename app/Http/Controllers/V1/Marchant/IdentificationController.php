@@ -18,12 +18,13 @@ class IdentificationController extends Controller
   public function save(IdentificationRequest $request)
   {
     try {
+      if (!in_array($request->type, ['individual', 'business'])) throw new Exception('Invalid identification type. Type must be either individual or business.');
       $identification = (new IdentificationService())->save($request->validated());
       return response()->json([
         'success' => true,
         'message' => 'Identification saved successfully',
         'identification' => $identification,
-      ], 201);
+      ], 200);
     } catch (Exception $error) {
       return response()->json([
         'success' => false,
@@ -50,7 +51,7 @@ class IdentificationController extends Controller
   public function details()
   {
     try {
-      $identification = Identification::with(['image'])->where(['user_id' => auth()->id()])->first();
+      $identification = IdentificationService::details();
       return response()->json([
         'success' => true,
         'message' => 'Operation successful',
