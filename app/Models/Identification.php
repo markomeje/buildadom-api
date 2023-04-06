@@ -17,9 +17,14 @@ class Identification extends Model
   protected $fillable = [
     'id_type',
     'id_number',
+    'type',
+    'birth_country',
+    'state',
+    'citizenship_country',
+    'fullname',
     'expiry_date',
     'dob',
-    'confirmed',
+    'verified',
     'user_id',
     'address',
   ];

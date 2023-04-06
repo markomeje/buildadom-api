@@ -24,12 +24,18 @@ class IdentificationRequest extends FormRequest
    */
   public function rules()
   {
+    $business = strtolower($this->type ?? null) === 'business';
     return [
+      'type' => ['required', 'string'],
+      'fullname' => [$business ? 'required' : 'nullable', 'string', 'max:50'],
       'id_type' => ['required', 'string'],
       'id_number' => ['required', 'numeric'],
+      'birth_country' => [$business ? 'required' : 'nullable'],
+      'citizenship_country' => [$business ? 'required' : 'nullable'],
+      'state' => [$business ? 'required' : 'nullable', 'string'],
       'expiry_date' => ['required', 'string'],
       'dob' => ['required', 'string'],
-      'address' => ['required', 'string'],
+      'address' => [$business ? 'nullable' : 'required', 'string'],
     ];
   }
 
@@ -42,6 +48,7 @@ class IdentificationRequest extends FormRequest
   {
     return [
       'dob.required' => 'Date of birth is required',
+      'type.required' => 'Type can be either individual or business',
     ];
   }
 }

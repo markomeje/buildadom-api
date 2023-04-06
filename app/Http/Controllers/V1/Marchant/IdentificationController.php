@@ -21,7 +21,7 @@ class IdentificationController extends Controller
       $identification = (new IdentificationService())->save($request->validated());
       return response()->json([
         'success' => true,
-        'message' => 'Identification added successfully',
+        'message' => 'Identification saved successfully',
         'identification' => $identification,
       ], 201);
     } catch (Exception $error) {

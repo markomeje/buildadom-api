@@ -16,11 +16,16 @@ return new class extends Migration
     Schema::create('identifications', function (Blueprint $table) {
       $table->id();
       $table->string('id_type');
+      $table->string('fullname')->nullable();
       $table->bigInteger('id_number');
+      $table->string('citizenship_country')->nullable();
       $table->string('expiry_date');
+      $table->string('state')->nullable();
       $table->string('dob');
+      $table->string('birth_country')->nullable();
+      $table->string('type');
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
-      $table->string('address');
+      $table->string('address')->nullable();
       $table->boolean('verified')->default(false);
       $table->timestamps();
     });
