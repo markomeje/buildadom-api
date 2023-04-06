@@ -42,6 +42,7 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
 
     Route::get('/countries', [App\Http\Controllers\V1\CountriesController::class, 'countries']);
     Route::get('/cities', [App\Http\Controllers\V1\CitiesController::class, 'cities']);
+    Route::get('/banks', [App\Http\Controllers\V1\BanksController::class, 'banks']);
 
     Route::prefix('reset')->group(function() {
       Route::post('/process', [App\Http\Controllers\V1\ResetController::class, 'process']);
@@ -85,6 +86,12 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
           Route::post('/save', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'save']);
 
           Route::get('/details', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'details']);
+        });
+
+        Route::prefix('account')->group(function() {
+          Route::post('/save', [\App\Http\Controllers\V1\Marchant\AccountController::class, 'save']);
+
+          Route::get('/information', [\App\Http\Controllers\V1\Marchant\AccountController::class, 'information']);
         });
       });
     });
