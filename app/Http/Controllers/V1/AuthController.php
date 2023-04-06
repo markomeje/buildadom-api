@@ -35,7 +35,7 @@ class AuthController extends Controller
         SaveVerificationAction::handle($user, $type);
         return response()->json([
           'success' => false,
-          'message' => "A verification code have been sent to your {$type}.",
+          'message' => "You did not verify your {$type}. A verification code have been sent to your {$type}.",
           'verification' => ['type' => $type, 'verified' => false],
         ], 401);
       }

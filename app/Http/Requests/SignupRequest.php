@@ -29,17 +29,17 @@ class SignupRequest extends FormRequest
    */
   public function rules()
   {
-    $scoped = strtolower($this->type ?? null) === 'business' ? 'required' : 'nullable';
+    $business = strtolower($this->type ?? null) === 'business';
     return [
       'type' => ['required', 'string'],
       'email' => ['required', 'email', 'unique:users', (new EmailRule)],
       'phone' => ['required', 'unique:users', 'phone'],
-      'firstname' => [!$scoped, 'string', 'max:50'],
-      'lastname' => [!$scoped, 'string', 'max:50'],
+      'firstname' => [!$business ? 'required' : 'nullable', 'string', 'max:50'],
+      'lastname' => [!$business ? 'required' : 'nullable', 'string', 'max:50'],
 
-      'business_name' => [$scoped, 'max:255'],
-      'cac_number' => [$scoped, 'max:20'],
-      'website' => [$scoped, 'max:255'],
+      'business_name' => [$business ? 'required' : 'nullable', 'max:255'],
+      'cac_number' => [$business ? 'required' : 'nullable', 'max:20'],
+      'website' => [$business ? 'required' : 'nullable', 'max:255'],
       
       'address' => ['required', 'max:255'],
       'password' => ['required', app()->environment(['production']) ? Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised() : 'min:8'],
