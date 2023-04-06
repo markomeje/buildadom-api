@@ -109,6 +109,14 @@ class User extends Authenticatable implements JWTSubject
     return $this->hasOne(Identification::class);
   }
 
+  /**
+   * A user may hasOne to a business
+   */
+  public function business()
+  {
+    return $this->hasOne(Business::class);
+  }
+
 
 }
 

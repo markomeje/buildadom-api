@@ -19,7 +19,7 @@ class SignupController extends Controller
       (new SignupService())->signup($request->validated());
       return response()->json([
         'success' => true,
-        'message' => 'Signup successful. A verification code have been sent to your phone number.',
+        'message' => 'Signup successful. A verification code have been sent to your phone.',
       ], 201);
     } catch (Exception $error) {
       return response()->json([

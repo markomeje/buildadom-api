@@ -40,11 +40,12 @@ class VerificationService
         ], 200);
       }
 
+      $name = strtolower($user->type) === 'individual' ? $user->fullname() : ($user->business ? $user->business->name : null);
       return response()->json([
         'success' => true,
         'message' => 'Operation successful.',
         'response' => ['done' => true],
-        'user' => ['id' => $user->id, 'name' => $user->fullname(), 'email' => $user->email, 'token' => auth()->login($user)]
+        'user' => ['id' => $user->id, 'name' => $name, 'email' => $user->email, 'token' => auth()->login($user)]
       ], 200);
 
     });
@@ -72,7 +73,6 @@ class VerificationService
       }
 
       return response()->json(['success' => true, 'message' => 'Operation successful.', 'response' => ['done' => true], 'user' => ['id' => $user->id, 'name' => $user->fullname(), 'email' => $user->email, 'token' => auth()->login($user)]], 200);
-
     });
   }
 

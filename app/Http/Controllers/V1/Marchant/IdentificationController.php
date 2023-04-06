@@ -56,8 +56,6 @@ class IdentificationController extends Controller
         'message' => 'Operation successful',
         'details' => $identification,
       ], 200);
-
-      throw new Exception('Failed to get identification details');
     } catch (Exception $error) {
       return response()->json([
         'success' => false,

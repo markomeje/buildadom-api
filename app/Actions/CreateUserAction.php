@@ -18,10 +18,6 @@ class CreateUserAction
   {
     $data['phone'] = (string)(new PhoneNumber($data['phone']));
     $data['password'] = Hash::make($data['password']);
-    $user = User::create([...$data, 'status' => 'active']);
-
-    if(empty($user)) throw new Exception('Unknown error. Please try again.');
-    Role::create(['user_id' => $user->id, 'name' => 'marchant']);
-    return $user;
+    return User::create([...$data, 'status' => 'active']);
   }
 }

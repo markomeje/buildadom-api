@@ -29,23 +29,17 @@ class SignupRequest extends FormRequest
    */
   public function rules()
   {
-    $type = strtolower($this->type);
+    $scoped = strtolower($this->type ?? null) === 'business' ? 'required' : 'nullable';
     return [
-      'type' => ['required', 'string', function($attribute, $value, $fail) {
-        $types = User::$types;
-          if (in_array(strtolower($this->type), $types) === false) {
-            $fail('User type must be either individual or business');
-          }
-        }
-      ],
+      'type' => ['required', 'string'],
       'email' => ['required', 'email', 'unique:users', (new EmailRule)],
       'phone' => ['required', 'unique:users', 'phone'],
-      'firstname' => ['required', 'string', 'max:50'],
-      'lastname' => ['required', 'string', 'max:50'],
+      'firstname' => [!$scoped, 'string', 'max:50'],
+      'lastname' => [!$scoped, 'string', 'max:50'],
 
-      'business_name' => [$type === 'business' ? 'required' : 'nullable', 'max:255'],
-      'cac_number' => [$type === 'business' ? 'required' : 'nullable', 'max:20'],
-      'website' => [$type === 'business' ? 'required' : 'nullable', 'max:255'],
+      'business_name' => [$scoped, 'max:255'],
+      'cac_number' => [$scoped, 'max:20'],
+      'website' => [$scoped, 'max:255'],
       
       'address' => ['required', 'max:255'],
       'password' => ['required', app()->environment(['production']) ? Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised() : 'min:8'],

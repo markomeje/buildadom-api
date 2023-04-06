@@ -50,10 +50,11 @@ class AuthController extends Controller
     }
 
     $user = auth()->user();
+    $name = strtolower($user->type) === 'individual' ? $user->fullname() : ($user->business ? $user->business->name : null);
     return response()->json([
       'success' => true,
       'response' => [
-        'user' => ['id' => $user->id, 'name' => $user->fullname(), 'email' => $user->email, 'token' => $token]
+        'user' => ['id' => $user->id, 'name' => $name, 'email' => $user->email, 'token' => $token]
       ],
       'message' => 'Login successful',
     ], 200);
