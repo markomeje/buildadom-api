@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
 use App\Services\AccountService;
 use App\Models\Account;
-use \Exception;
+use Exception;
 
 
 class AccountController extends Controller
@@ -26,10 +26,7 @@ class AccountController extends Controller
         ], 201);
       }
 
-      return response()->json([
-        'success' => false,
-        'message' => 'Operation failed. Try again.',
-      ], 500);
+      throw new Exception('Operation failed. Try again.');
     } catch (Exception $error) {
       return response()->json([
         'success' => false,

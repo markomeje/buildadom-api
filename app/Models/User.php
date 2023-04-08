@@ -10,113 +10,120 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable implements JWTSubject
 {
-  use HasFactory, Notifiable;
+   use HasFactory, Notifiable;
 
-  /**
+   /**
    * The attributes that are mass assignable.
    *
    * @var array<int, string>
    */
-  protected $fillable = [
-    'firstname',
-    'email',
-    'password',
-    'phone',
-    'lastname',
-    'type',
-    'status',
-    'address'
-  ];
+   protected $fillable = [
+      'firstname',
+      'email',
+      'password',
+      'phone',
+      'lastname',
+      'type',
+      'status',
+      'address'
+   ];
 
-  /**
+   /**
    * The attributes that should be hidden for serialization.
    *
    * @var array<int, string>
    */
-  protected $hidden = [
-    'password',
-  ];
+   protected $hidden = [
+      'password',
+   ];
 
-  /**
+   /**
    * The attributes that should be cast.
    *
    * @var array<string, string>
    */
-  protected $casts = [];
+   protected $casts = [];
 
-  /**
+   /**
    * User types
    *
    * @var array<int, string>
    */
-  public static $types = [
-    'individual',
-    'business'
-  ];
+   public static $types = [
+      'individual',
+      'business'
+   ];
 
-  /**
+   /**
    * Get the user's full name.
    */
-  public function fullname()
-  {
-    return ucwords($this->firstname . ' ' . $this->lastname);
-  }
+   public function fullname()
+   {
+      return ucwords($this->firstname . ' ' . $this->lastname);
+   }
 
-  /**
+   /**
    * Get the identifier that will be stored in the subject claim of the JWT.
    *
    * @return mixed
    */
-  public function getJWTIdentifier()
-  {
-    return $this->getKey();
-  }
+   public function getJWTIdentifier()
+   {
+      return $this->getKey();
+   }
 
-  /**
+   /**
    * Return a key value array, containing any custom claims to be added to the JWT.
    *
    * @return array
    */
-  public function getJWTCustomClaims()
-  {
-    return [];
-  }
+   public function getJWTCustomClaims()
+   {
+      return [];
+   }
 
-  /**
+   /**
    * Route notifications for the Africas Talking channel.
    *
    * @param  \Illuminate\Notifications\Notification  $notification
    * @return string
    */
-  public function routeNotificationForAfricasTalking($notification): string
-  {
-    return $this->phone;
-  }
+   public function routeNotificationForAfricasTalking($notification): string
+   {
+      return $this->phone;
+   }
 
-  /**
+   /**
    * A user may have one veirifcation
    */
-  public function verification($type = 'phone')
-  {
-    return $this->belongsTo(Verification::class)->where(['type' => $type]);
-  }
+   public function verification($type = 'phone')
+   {
+      return $this->belongsTo(Verification::class)->where(['type' => $type]);
+   }
 
-  /**
+   /**
    * A user has one identification record
    */
-  public function identification()
-  {
-    return $this->hasOne(Identification::class);
-  }
+   public function identification()
+   {
+      return $this->hasOne(Identification::class);
+   }
 
-  /**
-   * A user may hasOne to a business
+   /**
+   * A user may have One business account
    */
-  public function business()
-  {
-    return $this->hasOne(Business::class);
-  }
+   public function business()
+   {
+      return $this->hasOne(Business::class);
+   }
 
+   /**
+   * A user may have a store
+   */
+   public function store()
+   {
+      return $this->hasOne(Store::class);
+   }
 
 }
 

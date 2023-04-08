@@ -9,7 +9,7 @@ use Exception;
 use Hash;
 
 
-class SignupService
+class MarchantSignupService
 {
   /**
    * Signup User

@@ -25,13 +25,21 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
   });
 
   Route::domain(env('API_URL'))->group(function() {    
-    Route::post('/signup', [\App\Http\Controllers\V1\SignupController::class, 'signup']);
+    Route::post('/signup', [\App\Http\Controllers\V1\SignupController::class, 'marchant']);
     Route::post('/verification/verify', [App\Http\Controllers\V1\VerificationController::class, 'verify']);
     Route::post('/login', [\App\Http\Controllers\V1\AuthController::class, 'login']);
 
     Route::prefix('stores')->group(function() {
       Route::get('/', [App\Http\Controllers\V1\StoreController::class, 'index']);
       Route::get('/store/{id}', [App\Http\Controllers\V1\StoreController::class, 'store']);
+    });
+
+    Route::prefix('customer')->group(function() {
+      Route::prefix('shipping')->group(function() {
+        Route::post('/create', [App\Http\Controllers\V1\Customer\ShippingController::class, 'create']);
+      });
+
+      Route::post('/signup', [\App\Http\Controllers\V1\SignupController::class, 'customer']);
     });
 
     Route::prefix('products')->group(function() {
@@ -43,24 +51,25 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
     Route::get('/countries', [App\Http\Controllers\V1\CountriesController::class, 'countries']);
     Route::get('/cities', [App\Http\Controllers\V1\CitiesController::class, 'cities']);
     Route::get('/banks', [App\Http\Controllers\V1\BanksController::class, 'banks']);
+    Route::get('/identification/types', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'types']);
 
     Route::prefix('reset')->group(function() {
       Route::post('/process', [App\Http\Controllers\V1\ResetController::class, 'process']);
       Route::post('/update', [App\Http\Controllers\V1\ResetController::class, 'update']);
     });
 
-    Route::get('/identification/types', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'types']);
-
     Route::middleware(['auth:api'])->group(function() {
-      Route::post('/me', [\App\Http\Controllers\V1\UserController::class, 'me']);
-      Route::post('/auth/logout', [\App\Http\Controllers\V1\AuthController::class, 'logout']);
-      Route::post('/auth/refresh', [\App\Http\Controllers\V1\AuthController::class, 'refresh']);
+      Route::prefix('auth')->group(function() {
+        Route::post('/user', [\App\Http\Controllers\V1\UserController::class, 'user']);
+        Route::post('/logout', [\App\Http\Controllers\V1\AuthController::class, 'logout']);
+        Route::post('/refresh', [\App\Http\Controllers\V1\AuthController::class, 'refresh']);
+      });
 
       Route::prefix('marchant')->group(function() {
         Route::prefix('store')->group(function() {
           Route::post('/create', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'create']);
           Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'update']);
-          Route::get('/{id}', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'store']);
+          Route::get('/', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'store']);
         });
 
         Route::get('/drivers', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'drivers']);
