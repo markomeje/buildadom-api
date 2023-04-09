@@ -19,10 +19,10 @@ class StoreController extends Controller
       try {
          $identification = auth()->user()->identification;
          if ((boolean)($identification->verified ?? false) !== true) {
-         return response()->json([
-            'success' => false,
-            'message' => empty($identification) ? 'Please start your ID verification' : 'Please your ID is not verified yet.',
-         ], 403);
+            return response()->json([
+               'success' => false,
+               'message' => empty($identification) ? 'Please start your ID verification' : 'Please your ID is not verified yet.',
+            ], 403);
          }
 
          if($store = (new StoreService())->create($request->validated())) {
@@ -52,7 +52,7 @@ class StoreController extends Controller
    public function store()
    {
       try {
-         if($store = auth()->user()->store) {
+         if($store = Store::with(['images'])->where(['user_id' => auth()->id()])->first()) {
             return response()->json([
                'success' => true,
                'message' => 'Store retrieved successfully',
@@ -74,7 +74,7 @@ class StoreController extends Controller
 
   /**
    * Update Store
-   * @param StoreService $request, $id
+   * @param StoreRequest $request, $id
    */
    public function update($id, StoreRequest $request)
    {
