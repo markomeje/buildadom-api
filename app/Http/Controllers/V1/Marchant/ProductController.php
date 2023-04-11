@@ -92,6 +92,35 @@ class ProductController extends Controller
     }
   }
 
+  /**
+   * Get a all marchant Product
+   */
+   public function products()
+   {
+      $limit = request()->get('limit') ?? 20;
+      try {
+         $products = Product::with(['images'])->where(['user_id' => auth()->id()])->paginate($limit);
+         if ($products->count() <= 0) {
+            return response()->json([
+               'success' => true,
+               'message' => 'No products yet',
+               'products' => [],
+            ], 200);
+         }
+         
+         return response()->json([
+            'success' => true,
+            'message' => 'Products retrieved successfully',
+            'products' => $products,
+         ], 200);
+      } catch (Exception $error) {
+         return response()->json([
+         'success' => false,
+         'message' => $error->getMessage(),
+         ], 500);
+      }
+   }
+
 }
 
 
