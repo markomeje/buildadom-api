@@ -1,7 +1,7 @@
 <?php
 
-
-header("Access-Control-Allow-Origin: ".app()->environment(['production']) ? env('FRONTEND_URL') : '*');
+$origin = app()->environment(['production']) ? env('FRONTEND_URL') : '*';
+header("Access-Control-Allow-Origin: {$origin}");
 header('Access-Control-Allow-Headers: origin, x-requested-with, content-type');
 header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 
