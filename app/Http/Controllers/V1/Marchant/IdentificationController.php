@@ -48,22 +48,22 @@ class IdentificationController extends Controller
   /**
    * Identification types
    */
-  public function details()
-  {
-    try {
-      $identification = IdentificationService::details();
-      return response()->json([
-        'success' => true,
-        'message' => 'Operation successful',
-        'details' => $identification,
-      ], 200);
-    } catch (Exception $error) {
-      return response()->json([
-        'success' => false,
-        'message' => $error->getMessage(),
-      ], 500);
-    }
-  }
+   public function details()
+   {
+      try {
+         $identification = IdentificationService::details();
+         return response()->json([
+            'success' => true,
+            'message' => 'Operation successful',
+            'details' => $identification,
+         ], 200);
+      } catch (Exception $error) {
+         return response()->json([
+         'success' => false,
+         'message' => $error->getMessage(),
+         ], 500);
+      }
+   }
     
 
 }
