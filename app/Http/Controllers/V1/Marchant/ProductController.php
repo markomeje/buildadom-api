@@ -42,28 +42,28 @@ class ProductController extends Controller
    * Get a single Product
    * @param $id
    */
-  public function product($id = 0)
-  {
-    try {
-      if($product = Product::with(['images'])->where(['id' => $id])->first()) {
-        return response()->json([
-          'success' => true,
-          'message' => 'Product retrieved successfully',
-          'product' => $product,
-        ], 201);
-      }
+   public function product($id = 0)
+   {
+      try {
+         if($product = Product::with(['images'])->where(['id' => $id, 'user_id' => auth()->id()])->first()) {
+            return response()->json([
+               'success' => true,
+               'message' => 'Product retrieved successfully',
+               'product' => $product,
+            ], 201);
+         }
 
-      return response()->json([
-        'success' => false,
-        'message' => 'Product not found',
-      ], 404);
-    } catch (Exception $error) {
-      return response()->json([
-        'success' => false,
-        'message' => $error->getMessage(),
-      ], 500);
-    }
-  }
+         return response()->json([
+         'success' => false,
+         'message' => 'Product not found. Try again.',
+         ], 404);
+      } catch (Exception $error) {
+         return response()->json([
+         'success' => false,
+         'message' => $error->getMessage(),
+         ], 500);
+      }
+   }
 
   /**
    * Update Product
