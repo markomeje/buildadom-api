@@ -90,6 +90,7 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
             'Spatie\\Ignition\\' => 16,
             'Spatie\\FlareClient\\' => 19,
             'Spatie\\Backtrace\\' => 17,
+            'Smknstd\\FakerPicsumImages\\' => 26,
         ),
         'R' => 
         array (
@@ -343,6 +344,10 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         array (
             0 => __DIR__ . '/..' . '/spatie/backtrace/src',
         ),
+        'Smknstd\\FakerPicsumImages\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/smknstd/fakerphp-picsum-images/src',
+        ),
         'Ramsey\\Uuid\\' => 
         array (
             0 => __DIR__ . '/..' . '/ramsey/uuid/src',
@@ -365,8 +370,8 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -651,6 +656,7 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'App\\Http\\Controllers\\V1\\CitiesController' => __DIR__ . '/../..' . '/app/Http/Controllers/V1/CitiesController.php',
         'App\\Http\\Controllers\\V1\\CountriesController' => __DIR__ . '/../..' . '/app/Http/Controllers/V1/CountriesController.php',
         'App\\Http\\Controllers\\V1\\Customer\\ShippingController' => __DIR__ . '/../..' . '/app/Http/Controllers/V1/Customer/ShippingController.php',
+        'App\\Http\\Controllers\\V1\\GoogleController' => __DIR__ . '/../..' . '/app/Http/Controllers/V1/GoogleController.php',
         'App\\Http\\Controllers\\V1\\ImageController' => __DIR__ . '/../..' . '/app/Http/Controllers/V1/ImageController.php',
         'App\\Http\\Controllers\\V1\\Marchant\\AccountController' => __DIR__ . '/../..' . '/app/Http/Controllers/V1/Marchant/AccountController.php',
         'App\\Http\\Controllers\\V1\\Marchant\\DriverController' => __DIR__ . '/../..' . '/app/Http/Controllers/V1/Marchant/DriverController.php',
@@ -6096,6 +6102,7 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'SebastianBergmann\\Type\\UnknownType' => __DIR__ . '/..' . '/sebastian/type/src/type/UnknownType.php',
         'SebastianBergmann\\Type\\VoidType' => __DIR__ . '/..' . '/sebastian/type/src/type/VoidType.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
+        'Smknstd\\FakerPicsumImages\\FakerPicsumImagesProvider' => __DIR__ . '/..' . '/smknstd/fakerphp-picsum-images/src/FakerPicsumImagesProvider.php',
         'Spatie\\Backtrace\\Backtrace' => __DIR__ . '/..' . '/spatie/backtrace/src/Backtrace.php',
         'Spatie\\Backtrace\\CodeSnippet' => __DIR__ . '/..' . '/spatie/backtrace/src/CodeSnippet.php',
         'Spatie\\Backtrace\\File' => __DIR__ . '/..' . '/spatie/backtrace/src/File.php',
@@ -6153,6 +6160,11 @@ class ComposerStaticInitf49a985ee79abe6f7d233712cf8763c4
         'Spatie\\Ignition\\ErrorPage\\ErrorPageViewModel' => __DIR__ . '/..' . '/spatie/ignition/src/ErrorPage/ErrorPageViewModel.php',
         'Spatie\\Ignition\\ErrorPage\\Renderer' => __DIR__ . '/..' . '/spatie/ignition/src/ErrorPage/Renderer.php',
         'Spatie\\Ignition\\Ignition' => __DIR__ . '/..' . '/spatie/ignition/src/Ignition.php',
+        'Spatie\\Ignition\\Solutions\\OpenAi\\DummyCache' => __DIR__ . '/..' . '/spatie/ignition/src/Solutions/OpenAi/DummyCache.php',
+        'Spatie\\Ignition\\Solutions\\OpenAi\\OpenAiPromptViewModel' => __DIR__ . '/..' . '/spatie/ignition/src/Solutions/OpenAi/OpenAiPromptViewModel.php',
+        'Spatie\\Ignition\\Solutions\\OpenAi\\OpenAiSolution' => __DIR__ . '/..' . '/spatie/ignition/src/Solutions/OpenAi/OpenAiSolution.php',
+        'Spatie\\Ignition\\Solutions\\OpenAi\\OpenAiSolutionProvider' => __DIR__ . '/..' . '/spatie/ignition/src/Solutions/OpenAi/OpenAiSolutionProvider.php',
+        'Spatie\\Ignition\\Solutions\\OpenAi\\OpenAiSolutionResponse' => __DIR__ . '/..' . '/spatie/ignition/src/Solutions/OpenAi/OpenAiSolutionResponse.php',
         'Spatie\\Ignition\\Solutions\\SolutionProviders\\BadMethodCallSolutionProvider' => __DIR__ . '/..' . '/spatie/ignition/src/Solutions/SolutionProviders/BadMethodCallSolutionProvider.php',
         'Spatie\\Ignition\\Solutions\\SolutionProviders\\MergeConflictSolutionProvider' => __DIR__ . '/..' . '/spatie/ignition/src/Solutions/SolutionProviders/MergeConflictSolutionProvider.php',
         'Spatie\\Ignition\\Solutions\\SolutionProviders\\SolutionProviderRepository' => __DIR__ . '/..' . '/spatie/ignition/src/Solutions/SolutionProviders/SolutionProviderRepository.php',
