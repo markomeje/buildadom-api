@@ -15,24 +15,12 @@ class DatabaseSeeder extends Seeder
   public function run()
   {
 
-    User::factory(20)->create()->each(function($user) {
-      Store::create([
-        'name' => fake()->sentence(2),
-        'country_id' => rand(1, Country::count()),
-        'city' => fake()->city(),
-        'description' => fake()->text(),
-        'address' => fake()->address(),
-        'active' => true,
-        'user_id' => $user->id,
-      ]);
-    });
-
-    //$this->call([
+    $this->call([
       //UserSeeder::class,
       //CountrySeeder::class,
       //CategorySeeder::class,
       //StoreSeeder::class,
-    //   ProductSeeder::class,
-    // ]);
+      ProductSeeder::class,
+    ]);
   }
 }
