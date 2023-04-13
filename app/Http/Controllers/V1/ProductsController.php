@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
 use App\Models\{Product, Category};
 use App\Http\Resources\{CategoryResource, ProductResource};
-use \Exception;
+use Exception;
 
 
 class ProductsController extends Controller
@@ -19,8 +19,8 @@ class ProductsController extends Controller
     try {
       $limit = request()->get('limit') ?? 24;
       $category = request()->get('category') ?? 0;
-      $products = empty($category) ? Product::with(['images'])->paginate($limit) : Product::with(['images'])->where(['category_id' => $category])->paginate($limit);
 
+      $products = empty($category) ? Product::with('images', 'category')->paginate($limit) : Product::with('images', 'category')->where(['category_id' => $category])->paginate($limit);
       if (empty($products->count())) {
         return response()->json([
           'success' => true,

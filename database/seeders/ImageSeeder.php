@@ -18,6 +18,6 @@ class ImageSeeder extends Seeder
     //DB::table('products')->truncate();
     DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-    Image::factory()->count(3490)->create();
+    Image::factory()->count(2145)->create();
   }
 }
