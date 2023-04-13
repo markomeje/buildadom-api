@@ -25,7 +25,7 @@ class StoreFactory extends Factory
       'description' => fake()->text(),
       'address' => fake()->address(),
       'active' => true,
-      'user_id' => rand(1, User::count()),
+      'user_id' => rand(2, User::count()),
     ];
   }
 }

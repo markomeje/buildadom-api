@@ -18,13 +18,13 @@ class ProductFactory extends Factory
   {
     return [
       'name' => fake()->sentence(2),
-      'store_id' => rand(1, Store::count()),
+      'store_id' => rand(3, Store::count()),
       'description' => fake()->text(),
       'category_id' => rand(1, Category::count()),
       'price' => rand(1400, 9600),
       'quantity' => rand(10, 45),
       'status' => 'active',
-      'user_id' => rand(1, User::count()),
+      'user_id' => rand(2, User::count()),
       'attributes' => implode('|', [fake()->word(), fake()->word(), fake()->word()])
     ];
   }

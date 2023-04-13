@@ -18,10 +18,21 @@ class ProductsController extends Controller
   {
     try {
       $limit = request()->get('limit') ?? 24;
+      $category = request()->get('category') ?? 0;
+      $products = empty($category) ? Product::with(['images'])->paginate($limit) : Product::with(['images'])->where(['category_id' => $category])->paginate($limit);
+
+      if (empty($products->count())) {
+        return response()->json([
+          'success' => true,
+          'message' => 'No products available',
+          'products' => [],
+        ], 200);
+      }
+
       return response()->json([
-        'success' => false,
+        'success' => true,
         'message' => 'Products retrieved successfully',
-        'products' => ProductResource::collection(Product::with(['images'])->paginate($limit)),
+        'products' => ProductResource::collection($products),
       ], 200);
     } catch (Exception $error) {
       return response()->json([
