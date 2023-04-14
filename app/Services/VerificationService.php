@@ -36,7 +36,7 @@ class VerificationService
         SaveVerificationAction::handle($user, 'email');
         return response()->json([
           'success' => true,
-          'message' => 'A verification code have been sent to your email.'
+          'message' => 'Phone number verification was successful. Another verification code have been sent to your email. Enter the code to verify your email.'
         ], 200);
       }
 

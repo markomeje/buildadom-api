@@ -23,7 +23,7 @@ class UploadImageRequest extends FormRequest
   public function rules()
   {
     return [
-      'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+      'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5048'],
       'model' => ['required', 'string'],
       'model_id' => ['required', 'string'],
       'role' => ['required', 'string']
