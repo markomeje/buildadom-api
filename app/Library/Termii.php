@@ -15,10 +15,10 @@ class Termii implements SmsInterface
    */
   public static function send(string $phone, string $message): void
   {
-    $config = ['sender_id' => 'Buildadom', 'channel' => 'generic', 'attempts' => 10, 'time_to_live' => 30, 'type' => 'plain'];
-    $client = new Client(env('TERMII_API_KEY'), $config);
+    $senderId = env('TERMII_SENDER_ID');
+    $config = ['sender_id' => 'N-Alert', 'channel' => 'dnd', 'attempts' => 10, 'time_to_live' => 30, 'type' => 'plain'];
 
-    $response = $client->sms->send($phone, 'Code - '.$message);
+    $response = (new Client(env('TERMII_API_KEY'), $config))->sms->send($phone, "Your {$senderId} confirmation code is {$message}");
     $response->onError(function ($response) {
       throw new Exception($response['message']);
     });
