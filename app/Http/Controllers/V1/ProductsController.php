@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
-use App\Models\{Product, Category};
+use App\Models\{Product, Category, Store};
 use App\Http\Resources\{CategoryResource, ProductResource};
 use Exception;
 
@@ -12,7 +12,6 @@ class ProductsController extends Controller
 
   /**
    * Get a all Products
-   * @param $limit
    */
   public function index()
   {

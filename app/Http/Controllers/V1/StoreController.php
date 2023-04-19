@@ -19,8 +19,8 @@ class StoreController extends Controller
       return response()->json([
         'success' => false,
         'message' => 'Stores retrieved successfully',
-        'stores' => Store::with(['images'])->paginate($limit),
-      ], 201);
+        'stores' => Store::with(['images', 'products'])->paginate($limit),
+      ], 200);
     } catch (Exception $error) {
       return response()->json([
         'success' => false,
@@ -55,7 +55,6 @@ class StoreController extends Controller
       ], 500);
     }
   }
-
 }
 
 

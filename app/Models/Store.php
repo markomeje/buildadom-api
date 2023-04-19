@@ -24,30 +24,39 @@ class Store extends Model
       'country_id',
    ];
 
-   /**
+  /**
    * A store has many images
    * @return hasMany
    */
-   public function images()
-   {
-      return $this->hasMany(Image::class, 'model_id')->where(['model' => 'store']);
-   }
+  public function images()
+  {
+    return $this->hasMany(Image::class, 'model_id')->where(['model' => 'store']);
+  }
 
    /**
    * A store belongs to a country
    * @return Country
    */
-   public function country()
-   {
-      return $this->belongsTo(Country::class, 'country_id');
-   }
+  public function country()
+  {
+    return $this->belongsTo(Country::class, 'country_id');
+  }
 
    /**
    * A store belongs to a user
    * @return User
    */
-   public function user()
-   {
-      return $this->belongsTo(User::class, 'user_id');
-   }
+  public function user()
+  {
+    return $this->belongsTo(User::class, 'user_id');
+  }
+
+  /**
+   * A store has many products
+   * @return hasMany
+   */
+  public function products()
+  {
+    return $this->hasMany(Product::class);
+  }
 }
