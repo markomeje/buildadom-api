@@ -1,7 +1,7 @@
 <?php
 
 $origin = request()->headers->get('origin');
-$origin = app()->environment(['production']) ? (in_array($origin, ['http://localhost:3000', env('FRONTEND_URL')]) ? $origin : '') : '*';
+$origin = app()->environment(['production']) ? (in_array($origin, ['http://localhost:3000', env('FRONTEND_URL'), 'http://localhost:6100']) ? $origin : '') : '*';
 
 header("Access-Control-Allow-Origin: {$origin}");
 header('Access-Control-Allow-Headers: origin, x-requested-with, content-type');
@@ -32,8 +32,12 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
       Route::post('/login', [\App\Http\Controllers\V1\AuthController::class, 'login']);
 
       Route::prefix('stores')->group(function() {
-         Route::get('/', [App\Http\Controllers\V1\StoreController::class, 'index']);
-         Route::get('/store/{id}', [App\Http\Controllers\V1\StoreController::class, 'store']);
+        Route::get('/', [App\Http\Controllers\V1\StoreController::class, 'index']);
+        Route::get('/store/{id}', [App\Http\Controllers\V1\StoreController::class, 'store']);
+      });
+
+      Route::prefix('admin')->group(function() {
+        Route::get('/identifications', [\App\Http\Controllers\V1\Admin\IdentificationController::class, 'index']);
       });
 
       Route::prefix('customer')->group(function() {

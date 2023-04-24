@@ -26,11 +26,11 @@ class StoreController extends Controller
          }
 
          if($store = (new StoreService())->create($request->validated())) {
-         return response()->json([
-            'success' => true,
-            'message' => 'Store created successfully',
-            'store' => $store,
-         ], 201);
+           return response()->json([
+              'success' => true,
+              'message' => 'Store created successfully',
+              'store' => $store,
+           ], 201);
          }
 
          return response()->json([
@@ -49,49 +49,49 @@ class StoreController extends Controller
    * Get a Marchant Store
    * @param $id
    */
-   public function store()
-   {
-      try {
-         if($store = Store::with(['images'])->where(['user_id' => auth()->id()])->first()) {
-            return response()->json([
-               'success' => true,
-               'message' => 'Store retrieved successfully',
-               'store' => $store,
-            ], 201);
-         }
-
-         return response()->json([
-         'success' => false,
-         'message' => 'No store yet. Create one.',
-         ], 404);
-      } catch (Exception $error) {
-         return response()->json([
-         'success' => false,
-         'message' => $error->getMessage(),
-         ], 500);
+  public function store()
+  {
+    try {
+      if($store = Store::with(['images'])->where(['user_id' => auth()->id()])->first()) {
+        return response()->json([
+          'success' => true,
+          'message' => 'Store retrieved successfully',
+          'store' => $store,
+        ], 201);
       }
-   }
+
+      return response()->json([
+       'success' => false,
+       'message' => 'No store yet. Create one.',
+      ], 404);
+    } catch (Exception $error) {
+       return response()->json([
+       'success' => false,
+       'message' => $error->getMessage(),
+       ], 500);
+    }
+  }
 
   /**
    * Update Store
    * @param StoreRequest $request, $id
    */
-   public function update($id, StoreRequest $request)
-   {
-      try {
-         $store = (new StoreService())->update($request->validated(), $id);
-         return response()->json([
-         'success' => true,
-         'message' => 'Store updated successfully',
-         'store' => $store,
-         ], 201);
-      } catch (Exception $error) {
-         return response()->json([
-         'success' => false,
-         'message' => $error->getMessage(),
-         ], 500);
-      }
-   }
+  public function update($id, StoreRequest $request)
+  {
+    try {
+      $store = (new StoreService())->update($request->validated(), $id);
+      return response()->json([
+       'success' => true,
+       'message' => 'Store updated successfully',
+       'store' => $store,
+      ], 201);
+    } catch (Exception $error) {
+      return response()->json([
+       'success' => false,
+       'message' => $error->getMessage(),
+      ], 500);
+    }
+  }
 
 }
 
