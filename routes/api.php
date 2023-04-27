@@ -54,10 +54,15 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
         Route::get('/product/{id}', [App\Http\Controllers\V1\ProductsController::class, 'product']);
       });
 
+      Route::prefix('categories')->group(function() {
+        Route::get('/products', [App\Http\Controllers\V1\CategoryController::class, 'products']);
+      });
+
       Route::get('/countries', [App\Http\Controllers\V1\CountriesController::class, 'countries']);
       Route::get('/cities', [App\Http\Controllers\V1\CitiesController::class, 'cities']);
       Route::get('/banks', [App\Http\Controllers\V1\BanksController::class, 'banks']);
       Route::get('/identification/types', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'types']);
+      Route::get('/currencies', [App\Http\Controllers\V1\CurrencyController::class, 'index']);
 
       Route::prefix('reset')->group(function() {
          Route::post('/process', [App\Http\Controllers\V1\ResetController::class, 'process']);

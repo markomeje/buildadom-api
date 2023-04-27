@@ -15,7 +15,7 @@ class IdentificationController extends Controller
   public function index()
   {
     try {
-      $identifications = Identification::paginate(12);
+      $identifications = Identification::with(['image', 'citizenship', 'country'])->latest()->paginate(12);
       return response()->json([
         'success' => true,
         'message' => 'identifications fetched successfully',

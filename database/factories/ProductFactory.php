@@ -25,7 +25,8 @@ class ProductFactory extends Factory
       'quantity' => rand(10, 45),
       'status' => 'active',
       'user_id' => rand(2, User::count()),
-      'attributes' => implode('|', [fake()->word(), fake()->word(), fake()->word()])
+      'attributes' => implode('|', [fake()->word(), fake()->word(), fake()->word()]),
+      'currency_id' => 1,
     ];
   }
 }

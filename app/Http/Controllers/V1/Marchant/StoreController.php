@@ -14,36 +14,36 @@ class StoreController extends Controller
    * Store
    * @param $request, StoreService
    */
-   public function create(StoreRequest $request)
-   {
-      try {
-         $identification = auth()->user()->identification;
-         if ((boolean)($identification->verified ?? false) !== true) {
-            return response()->json([
-               'success' => false,
-               'message' => empty($identification) ? 'Please start your ID verification' : 'Please your ID is not verified yet.',
-            ], 403);
-         }
-
-         if($store = (new StoreService())->create($request->validated())) {
-           return response()->json([
-              'success' => true,
-              'message' => 'Store created successfully',
-              'store' => $store,
-           ], 201);
-         }
-
-         return response()->json([
-         'success' => false,
-         'message' => 'Operation failed. Try again.',
-         ], 500);
-      } catch (Exception $error) {
-         return response()->json([
-         'success' => false,
-         'message' => $error->getMessage(),
-         ], 500);
+  public function create(StoreRequest $request)
+  {
+    try {
+      $identification = auth()->user()->identification;
+      if ((boolean)($identification->verified ?? false) !== true) {
+        return response()->json([
+          'success' => false,
+          'message' => empty($identification) ? 'Please start your ID verification' : 'Please your ID is not verified yet.',
+        ], 403);
       }
-   }
+
+      if($store = (new StoreService())->create($request->validated())) {
+        return response()->json([
+          'success' => true,
+          'message' => 'Store created successfully',
+          'store' => $store,
+        ], 201);
+      }
+
+      return response()->json([
+        'success' => false,
+        'message' => 'Operation failed. Try again.',
+      ], 500);
+    } catch (Exception $error) {
+      return response()->json([
+        'success' => false,
+        'message' => $error->getMessage(),
+      ], 500);
+    }
+  }
 
   /**
    * Get a Marchant Store

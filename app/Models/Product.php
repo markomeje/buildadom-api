@@ -24,6 +24,7 @@ class Product extends Model
     'quantity',
     'user_id',
     'attributes',
+    'currency_id'
   ];
 
   /**
@@ -42,7 +43,7 @@ class Product extends Model
    */
   public function images()
   {
-    return $this->hasMany(Image::class, 'model_id')->where(['model' => 'product']);
+    return $this->hasMany(Image::class, 'model_id')->where(['model' => 'product'])->take(2);
   }
 
   /**

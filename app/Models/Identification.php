@@ -45,9 +45,9 @@ class Identification extends Model
    * An ID may have many image documents
    * @return Image
    */
-  public function images()
+  public function image()
   {
-    return $this->hasMany(Image::class, 'model_id')->where(['model' => 'identification']);
+    return $this->hasOne(Image::class, 'model_id')->where(['model' => 'identification']);
   }
 
   /**
@@ -57,6 +57,22 @@ class Identification extends Model
   public function user()
   {
     return $this->belongsTo(User::class, 'user_id');
+  }
+
+  /**
+   * An ID belongs to a citizenship country
+   */
+  public function citizenship()
+  {
+    return $this->belongsTo(Country::class, 'citizenship_country');
+  }
+
+  /**
+   * An ID belongs to a birth country
+   */
+  public function country()
+  {
+    return $this->belongsTo(Country::class, 'birth_country');
   }
 }
 

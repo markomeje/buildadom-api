@@ -21,6 +21,7 @@ return new class extends Migration
       $table->string('status')->default('active');
       $table->foreignId('category_id')->nullable()->references('id')->on('categories');
       $table->float('price');
+      $table->foreignId('currency_id')->nullable()->references('id')->on('currencies');
       $table->integer('quantity');
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
       $table->string('attributes')->nullable();

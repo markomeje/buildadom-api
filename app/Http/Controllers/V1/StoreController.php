@@ -13,13 +13,13 @@ class StoreController extends Controller
    * Get a all Stores
    * @param $limit
    */
-  public function index($limit = 12)
+  public function index()
   {
     try {
       return response()->json([
         'success' => false,
         'message' => 'Stores retrieved successfully',
-        'stores' => Store::with(['images', 'products'])->paginate($limit),
+        'stores' => Store::with(['images', 'products'])->paginate(request()->get('limit') ?? 12),
       ], 200);
     } catch (Exception $error) {
       return response()->json([
@@ -36,7 +36,7 @@ class StoreController extends Controller
   public function store($id = 0)
   {
     try {
-      if($store = Store::find($id)) {
+      if($store = Store::with(['images'])->find($id)) {
         return response()->json([
           'success' => true,
           'message' => 'Store retrieved successfully',

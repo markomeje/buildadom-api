@@ -26,11 +26,25 @@ class ProductRequest extends FormRequest
     return [
       'name' => ['required', 'string', 'max:255'],
       'description' => ['required', 'string', 'max:500'],
-      'store_id' => ['required', 'string'],
+      'store_id' => ['required', 'exists:stores,id'],
       'price' => ['required', 'integer'],
-      'category_id' => ['required'],
+      'category_id' => ['required', 'exists:categories,id'],
       'quantity' => ['required', 'integer'],
-      'attributes' => ['nullable']
+      'attributes' => ['nullable'],
+      'currency_id' => ['required', 'exists:countries,id']
     ];
   }
+
+  /**
+   * Custom message for validation
+   *
+   * @return array
+   */
+  public function messages()
+  {
+    return [
+      'currency_id.required' => 'Please select currency',
+    ];
+  }
+
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1\Marchant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Services\ProductService;
-use App\Models\Product;
+use App\Models\{Product, Category};
 use \Exception;
 
 
@@ -42,28 +42,28 @@ class ProductController extends Controller
    * Get a single Product
    * @param $id
    */
-   public function product($id = 0)
-   {
-      try {
-         if($product = Product::with(['images'])->where(['id' => $id, 'user_id' => auth()->id()])->first()) {
-            return response()->json([
-               'success' => true,
-               'message' => 'Product retrieved successfully',
-               'product' => $product,
-            ], 201);
-         }
-
-         return response()->json([
-         'success' => false,
-         'message' => 'Product not found. Try again.',
-         ], 404);
-      } catch (Exception $error) {
-         return response()->json([
-         'success' => false,
-         'message' => $error->getMessage(),
-         ], 500);
+  public function product($id = 0)
+  {
+    try {
+      if($product = Product::with(['images', 'category'])->where(['id' => $id, 'user_id' => auth()->id()])->first()) {
+        return response()->json([
+          'success' => true,
+          'message' => 'Product retrieved successfully',
+          'product' => $product,
+        ], 201);
       }
-   }
+
+      return response()->json([
+       'success' => false,
+       'message' => 'Product not found. Try again.',
+      ], 404);
+    } catch (Exception $error) {
+      return response()->json([
+        'success' => false,
+        'message' => $error->getMessage(),
+      ], 500);
+    }
+  }
 
   /**
    * Update Product
@@ -95,31 +95,30 @@ class ProductController extends Controller
   /**
    * Get a all marchant Product
    */
-   public function products()
-   {
-      $limit = request()->get('limit') ?? 20;
-      try {
-         $products = Product::with(['images'])->where(['user_id' => auth()->id()])->paginate($limit);
-         if ($products->count() <= 0) {
-            return response()->json([
-               'success' => true,
-               'message' => 'No products yet',
-               'products' => [],
-            ], 200);
-         }
-         
-         return response()->json([
-            'success' => true,
-            'message' => 'Products retrieved successfully',
-            'products' => $products,
-         ], 200);
-      } catch (Exception $error) {
-         return response()->json([
-         'success' => false,
-         'message' => $error->getMessage(),
-         ], 500);
+  public function products()
+  {
+    try {
+      $products = Product::with(['category', 'images'])->where(['user_id' => auth()->id()])->paginate(request()->get('limit') ?? 20);
+
+      $data = [];
+      if($products->count() > 0) {
+        foreach ($products as $product) {
+          $data[$product->category->name][] = $product;
+        }
       }
-   }
+
+      return response()->json([
+        'success' => true,
+        'message' => 'Products retrieved successfully',
+        'products' => $data,
+      ], 200);
+    } catch (Exception $error) {
+      return response()->json([
+       'success' => false,
+       'message' => $error->getMessage(),
+      ], 500);
+    }
+  }
 
 }
 

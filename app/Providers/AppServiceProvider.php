@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Pagination\{Paginator, LengthAwarePaginator};
+use Illuminate\Database\Eloquent\Collection;
 use \Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,9 +17,7 @@ class AppServiceProvider extends ServiceProvider
    * @return void
    */
   public function register()
-  {
-    //
-  }
+  {}
 
   /**
    * Bootstrap any application services.
@@ -29,6 +30,14 @@ class AppServiceProvider extends ServiceProvider
     Validator::extend('olderthan', function ($attribute, $value, $parameters, $validator) {
       $minAge = !empty($parameters) ? (int)$parameters[0] : 13;
       return Carbon::now()->diff(new Carbon($value))->y >= $minAge;
+    });
+
+    Schema::defaultStringLength(191);
+    Collection::macro('paginate', function($perPage, $total = null, $page = null, $pageName = 'page') {
+      $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
+      return new LengthAwarePaginator(
+        $this->forPage($page, $perPage), $total ?: $this->count(), $perPage, $page, ['path' => LengthAwarePaginator::resolveCurrentPath(), 'pageName' => $pageName]
+      );
     });
   }
 }
