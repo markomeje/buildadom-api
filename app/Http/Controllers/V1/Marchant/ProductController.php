@@ -99,7 +99,6 @@ class ProductController extends Controller
   {
     try {
       $products = Product::with(['category', 'images'])->where(['user_id' => auth()->id()])->paginate(request()->get('limit') ?? 20);
-
       $data = [];
       if($products->count() > 0) {
         foreach ($products as $product) {

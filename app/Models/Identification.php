@@ -70,7 +70,7 @@ class Identification extends Model
   /**
    * An ID belongs to a birth country
    */
-  public function country()
+  public function birth()
   {
     return $this->belongsTo(Country::class, 'birth_country');
   }

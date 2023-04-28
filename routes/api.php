@@ -37,15 +37,18 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
       });
 
       Route::prefix('admin')->group(function() {
-        Route::get('/identifications', [\App\Http\Controllers\V1\Admin\IdentificationController::class, 'index']);
+        Route::prefix('identifications')->group(function() {
+          Route::get('/', [\App\Http\Controllers\V1\Admin\IdentificationController::class, 'index']);
+          Route::get('/identification/{id}', [\App\Http\Controllers\V1\Admin\IdentificationController::class, 'identification']);
+        });
       });
 
       Route::prefix('customer')->group(function() {
-         Route::prefix('shipping')->group(function() {
-         Route::post('/create', [App\Http\Controllers\V1\Customer\ShippingController::class, 'create']);
-         });
+        Route::prefix('shipping')->group(function() {
+        Route::post('/create', [App\Http\Controllers\V1\Customer\ShippingController::class, 'create']);
+        });
 
-         Route::post('/signup', [\App\Http\Controllers\V1\SignupController::class, 'customer']);
+        Route::post('/signup', [\App\Http\Controllers\V1\SignupController::class, 'customer']);
       });
 
       Route::prefix('products')->group(function() {
@@ -54,9 +57,7 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
         Route::get('/product/{id}', [App\Http\Controllers\V1\ProductsController::class, 'product']);
       });
 
-      Route::prefix('categories')->group(function() {
-        Route::get('/products', [App\Http\Controllers\V1\CategoryController::class, 'products']);
-      });
+      Route::get('/categories/products', [App\Http\Controllers\V1\CategoryController::class, 'products']);
 
       Route::get('/countries', [App\Http\Controllers\V1\CountriesController::class, 'countries']);
       Route::get('/cities', [App\Http\Controllers\V1\CitiesController::class, 'cities']);

@@ -19,7 +19,7 @@ class StoreController extends Controller
       return response()->json([
         'success' => false,
         'message' => 'Stores retrieved successfully',
-        'stores' => Store::with(['images', 'products'])->paginate(request()->get('limit') ?? 12),
+        'stores' => Store::with(['images', 'products'])->latest()->inRandomOrder()->paginate(request()->get('limit') ?? 12),
       ], 200);
     } catch (Exception $error) {
       return response()->json([
@@ -36,7 +36,7 @@ class StoreController extends Controller
   public function store($id = 0)
   {
     try {
-      if($store = Store::with(['images'])->find($id)) {
+      if($store = Store::with(['images', 'products'])->find($id)) {
         return response()->json([
           'success' => true,
           'message' => 'Store retrieved successfully',

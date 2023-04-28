@@ -8,7 +8,7 @@ use App\Models\Category;
 class CategoryController extends Controller
 {
   /**
-   * Get all products
+   * Get all products grouped by category
    * @param json
    */
   public function products()
@@ -24,4 +24,5 @@ class CategoryController extends Controller
       'products' => $products,
     ], 200);
   }
+
 }
