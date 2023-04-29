@@ -40,6 +40,8 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
         Route::prefix('identifications')->group(function() {
           Route::get('/', [\App\Http\Controllers\V1\Admin\IdentificationController::class, 'index']);
           Route::get('/identification/{id}', [\App\Http\Controllers\V1\Admin\IdentificationController::class, 'identification']);
+
+          Route::post('/verify/{id}', [\App\Http\Controllers\V1\Admin\IdentificationController::class, 'verify']);
         });
       });
 

@@ -15,7 +15,7 @@ class IdentificationController extends Controller
   public function index()
   {
     try {
-      $identifications = Identification::with(['image', 'citizenship', 'birth', 'user'])->latest()->paginate(request()->get('limit') ?? 45);
+      $identifications = Identification::with(['image', 'citizenship', 'birth', 'user'])->where('user_id', '<=', 25)->latest()->inRandomOrder()->paginate(request()->get('limit') ?? 45);
       return response()->json([
         'success' => true,
         'message' => 'identifications fetched successfully',
@@ -40,7 +40,7 @@ class IdentificationController extends Controller
         return response()->json([
           'success' => false,
           'message' => 'Identification document not uploaded yet.',
-        ], 403);
+        ], 200);
       }
 
       $identification->verified = true;
