@@ -3,7 +3,7 @@
 $origin = request()->headers->get('origin');
 $origin = app()->environment(['production']) ? (in_array($origin, ['http://localhost:3000', env('FRONTEND_URL'), 'http://localhost:6100', 'https://buildadom-admin.netlify.app']) ? $origin : '') : '*';
 
-header("Access-Control-Allow-Origin: {$origin}");
+header("Access-Control-Allow-Origin: *");
 header('Access-Control-Allow-Headers: origin, x-requested-with, content-type');
 header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 

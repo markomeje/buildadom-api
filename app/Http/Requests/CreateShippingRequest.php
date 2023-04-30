@@ -27,7 +27,7 @@ class CreateShippingRequest extends FormRequest
       'street_address' => ['required', 'string', 'max:255'],
       'city' => ['required', 'string', 'max:50'],
       'state' => ['required', 'string', 'max:50'],
-      'country_id' => ['required'],
+      'country_id' => ['required', 'exists:countries,id'],
       'phone' => ['required', 'unique:users', 'phone'],
       'email' => ['required', 'email', 'unique:users', (new EmailRule)],
       'firstname' => ['required', 'string', 'max:255'],
