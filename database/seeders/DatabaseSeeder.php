@@ -1,7 +1,6 @@
 <?php
 
 namespace Database\Seeders;
-use App\Models\{User, Product, Store, Country};
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,11 +15,9 @@ class DatabaseSeeder extends Seeder
   {
 
     $this->call([
-      //UserSeeder::class,
-      //CountrySeeder::class,
-      //CategorySeeder::class,
-      //StoreSeeder::class,
-      ProductSeeder::class,
+      CountrySeeder::class,
+      CategorySeeder::class,
+      CurrencySeeder::class,
     ]);
   }
 }

@@ -15,7 +15,7 @@ class StoreSeeder extends Seeder
   public function run()
   {
     DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-    //DB::table('stores')->truncate();
+    DB::table('stores')->truncate();
     DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
     Store::factory()->count(520)->create();

@@ -19,9 +19,9 @@ class ImageFactory extends Factory
     return [
       'model' => $faker->randomElement(['store', 'product']),
       'url' => $faker->imageUrl($width = 1260, $height = 960),
-      'model_id' => rand(1, Product::count()),
+      'model_id' => $faker->randomElement([...Product::all()->pluck('id')->toArray(), ...Store::all()->pluck('id')->toArray()]),
       'role' => $faker->randomElement(['main', 'cover', 'others']),
-      'user_id' => null,
+      'user_id' => $faker->randomElement(User::all()->pluck('id')->toArray()),
     ];
   }
 }

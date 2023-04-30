@@ -3,7 +3,7 @@
 namespace Database\Factories;
 use App\Models\{Country, User};
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
+use Faker\Factory as Faker;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -18,14 +18,15 @@ class StoreFactory extends Factory
    */
   public function definition()
   {
+    $faker = Faker::create();
     return [
       'name' => fake()->sentence(2),
-      'country_id' => rand(1, Country::count()),
+      'country_id' => $faker->randomElement(Country::all()->pluck('id')->toArray()),
       'city' => fake()->city(),
       'description' => fake()->text(),
       'address' => fake()->address(),
       'active' => true,
-      'user_id' => rand(2, User::count()),
+      'user_id' => $faker->randomElement(User::all()->pluck('id')->toArray()),
     ];
   }
 }

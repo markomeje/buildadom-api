@@ -16,10 +16,36 @@ class ProductsController extends Controller
   public function index()
   {
     try {
-      $limit = request()->get('limit') ?? 24;
-      $category = request()->get('category') ?? 0;
+      $products = Product::with(['images', 'category'])->latest()->paginate(request()->get('limit') ?? 24);
+      if (empty($products->count())) {
+        return response()->json([
+          'success' => true,
+          'message' => 'No products available',
+          'products' => [],
+        ], 200);
+      }
 
-      $products = empty($category) ? Product::with('images', 'category')->latest()->paginate($limit) : Product::with('images', 'category')->latest()->where(['category_id' => $category])->paginate($limit);
+      return response()->json([
+        'success' => true,
+        'message' => 'Products retrieved successfully',
+        'products' => ProductResource::collection($products),
+      ], 200);
+    } catch (Exception $error) {
+      return response()->json([
+        'success' => false,
+        'message' => $error->getMessage(),
+      ], 500);
+    }
+  }
+
+  /**
+   * Get Products by category
+   */
+  public function category($category_id = 0)
+  {
+    try {
+      $products = Product::with(['images', 'category'])->latest()->where(['category_id' => $category_id])->paginate(request()->get('limit') ?? 24);
+
       if (empty($products->count())) {
         return response()->json([
           'success' => true,

@@ -57,6 +57,8 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
         Route::get('/', [App\Http\Controllers\V1\ProductsController::class, 'index']);
         Route::get('/categories', [App\Http\Controllers\V1\ProductsController::class, 'categories']);
         Route::get('/product/{id}', [App\Http\Controllers\V1\ProductsController::class, 'product']);
+
+        Route::get('/category/{id}', [App\Http\Controllers\V1\ProductsController::class, 'category']);
       });
 
       Route::get('/categories/products', [App\Http\Controllers\V1\CategoryController::class, 'products']);
