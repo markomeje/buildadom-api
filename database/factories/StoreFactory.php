@@ -25,7 +25,6 @@ class StoreFactory extends Factory
       'city' => fake()->city(),
       'description' => fake()->text(),
       'address' => fake()->address(),
-      'active' => true,
       'user_id' => $faker->randomElement(User::all()->pluck('id')->toArray()),
     ];
   }

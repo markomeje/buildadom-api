@@ -28,7 +28,7 @@ class StoreRequest extends FormRequest
     return [
       'name' => ['required', 'string', 'max:255', 'unique:stores'],
       'description' => ['required', 'string', 'max:500'],
-      'country_id' => ['required', 'string'],
+      'country_id' => ['required', 'string', 'exists:countries,id'],
       'address' => ['required', 'string', 'max:255'],
       'city' => ['required', 'string', 'max:255']
     ];

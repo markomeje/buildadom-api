@@ -18,7 +18,7 @@ class Product extends Model
     'name',
     'description',
     'store_id',
-    'status',
+    'published',
     'category_id',
     'price',
     'quantity',
@@ -36,6 +36,14 @@ class Product extends Model
     'active',
     'pending',
   ];
+
+  /**
+   * Scope published products
+   */
+  public function scopePublished($query)
+  {
+    return $query->where(['published' => true]);
+  }
 
   /**
    * A product has many images

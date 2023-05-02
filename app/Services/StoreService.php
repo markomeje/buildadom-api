@@ -15,13 +15,9 @@ class StoreService
    */
 	public function create(array $data): Store
 	{
-		$country = $data['country_id'] ?? 0;
-		if (empty(Country::find($country))) {
-			throw new Exception('Invalid country selected');
-		}
-
 		return Store::create([
 			'user_id' => auth()->id(),
+      'published' => false,
 			...$data
 		]);
 	}
@@ -32,18 +28,20 @@ class StoreService
    */
 	public function update(array $data, $id)
 	{
-		$country = $data['country_id'] ?? 0;
-		if (empty(Country::find($country))) {
-			throw new Exception('Invalid country selected');
-		}
-
-		if ($store = Store::find($id)) {
-      $store->update($data);
-      return $store;
-		}else {
-      throw new Exception('Store not found.');
-    }
+    return Store::findOrFail($id)->update($data);
 	}
+
+  /**
+   * Get store
+   * @param array $data, int $id
+   */
+  public static function where(array $data, $id)
+  {
+    return Store::with(['images'])->where([
+      ...$data,
+      'id' => $id
+    ])->first();
+  }
 }
 
 

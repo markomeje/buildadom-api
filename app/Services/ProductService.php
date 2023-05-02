@@ -13,11 +13,11 @@ class ProductService
    *
    * @param array $data
    */
-  public function create(array $data): Product
+  public function create(array $data)
   {
     return Product::create([
       'user_id' => auth()->id(),
-      'status' => 'pending',
+      'published' => false,
       ...$data
     ]);
   }
@@ -27,14 +27,21 @@ class ProductService
    *
    * @param array $data int $id
    */
-  public function update(array $data, int $id) : Product
+  public function update(int $id, array $data)
   {
-    if ($product = Product::find($id)) {
-      $product->update([...$data]);
-      return $product;
-    }else {
-      throw new Exception("Product with id {$id} was not found.");
-    }
+    return Product::findOrFail($id)->update($data);
+  }
+
+  /**
+   * Get Product
+   * @param array $data, int $id
+   */
+  public static function where(array $data, $id)
+  {
+    return Product::with(['images', 'category'])->where([
+      ...$data,
+      'id' => $id
+    ])->first();
   }
 }
 

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StoreResource;
 use App\Models\Store;
 use \Exception;
 
 
-class StoreController extends Controller
+class StoresController extends Controller
 {
 
   /**
@@ -16,10 +17,11 @@ class StoreController extends Controller
   public function index()
   {
     try {
+      $stores = Store::with(['images', 'products'])->latest()->inRandomOrder()->published()->paginate(request()->get('limit') ?? 12);
       return response()->json([
-        'success' => false,
-        'message' => 'Stores retrieved successfully',
-        'stores' => Store::with(['images', 'products'])->latest()->inRandomOrder()->paginate(request()->get('limit') ?? 12),
+        'success' => true,
+        'message' => $stores->count() > 0 ? 'Stores retrieved successfully' : 'No published stores available',
+        'stores' => $stores,
       ], 200);
     } catch (Exception $error) {
       return response()->json([

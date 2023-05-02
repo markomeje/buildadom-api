@@ -32,8 +32,8 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
       Route::post('/login', [\App\Http\Controllers\V1\AuthController::class, 'login']);
 
       Route::prefix('stores')->group(function() {
-        Route::get('/', [App\Http\Controllers\V1\StoreController::class, 'index']);
-        Route::get('/store/{id}', [App\Http\Controllers\V1\StoreController::class, 'store']);
+        Route::get('/', [App\Http\Controllers\V1\StoresController::class, 'index']);
+        Route::get('/store/{id}', [App\Http\Controllers\V1\StoresController::class, 'store']);
       });
 
       Route::prefix('admin')->group(function() {
@@ -82,10 +82,13 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
          });
 
          Route::prefix('marchant')->group(function() {
+
             Route::prefix('store')->group(function() {
-               Route::post('/create', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'create']);
-               Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'update']);
-               Route::get('/', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'store']);
+              Route::post('/create', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'create']);
+              Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'update']);
+              Route::get('/', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'store']);
+
+              Route::post('/publish/{id}', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'publish']);
             });
 
             Route::get('/drivers', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'drivers']);
@@ -102,10 +105,13 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
             });
 
             Route::get('/products', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'products']);
+
             Route::prefix('product')->group(function() {
                Route::post('/create', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'create']);
                Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'update']);
                Route::get('/{id}', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'product']);
+
+               Route::post('/publish/{id}', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'publish']);
             });
 
             Route::prefix('identification')->group(function() {

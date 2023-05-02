@@ -25,9 +25,7 @@ class ProductFactory extends Factory
       'category_id' => $faker->randomElement(Category::all()->pluck('id')->toArray()),
       'price' => rand(1400, 9600),
       'quantity' => rand(10, 45),
-      'status' => 'active',
       'user_id' => $faker->randomElement(User::all()->pluck('id')->toArray()),
-      'attributes' => null,
       'currency_id' => 1,
     ];
   }

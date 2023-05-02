@@ -50,13 +50,13 @@ class ProductController extends Controller
           'success' => true,
           'message' => 'Product retrieved successfully',
           'product' => $product,
-        ], 201);
+        ], 200);
       }
 
       return response()->json([
        'success' => false,
        'message' => 'Product not found. Try again.',
-      ], 404);
+      ], 200);
     } catch (Exception $error) {
       return response()->json([
         'success' => false,
@@ -72,7 +72,7 @@ class ProductController extends Controller
   public function update($id, ProductRequest $request)
   {
     try {
-      if($product = (new ProductService())->update($request->validated(), $id)) {
+      if($product = (new ProductService())->update($id, $request->validated())) {
         return response()->json([
           'success' => true,
           'message' => 'Product updated successfully',
@@ -84,6 +84,49 @@ class ProductController extends Controller
         'success' => true,
         'message' => 'Operation failed. Try again.',
       ], 500);
+    } catch (Exception $error) {
+      return response()->json([
+        'success' => false,
+        'message' => $error->getMessage(),
+      ], 500);
+    }
+  }
+
+  /**
+   * Publish Product
+   * @param $id
+   */
+  public function publish($id = 0)
+  {
+    try {
+      $product = ProductService::where(['user_id' => auth()->id()], $id);
+      if (empty($product)) {
+        return response()->json([
+          'success' => false,
+          'message' => 'Product not found. Try again.',
+          $product
+        ], 200);
+      }
+
+      if (empty($product->images) || $product->images()->count() < 1) {
+        return response()->json([
+          'success' => false,
+          'message' => 'Please upload a product image inorder to publish.',
+        ], 200);
+      }
+
+      if((new ProductService())->update($id, ['published' => true])) {
+        return response()->json([
+          'success' => true,
+          'message' => 'Product published successfully',
+          'product' => $product,
+        ], 201);
+      }
+
+      return response()->json([
+        'success' => false,
+        'message' => 'Product publishing failed. Try again.',
+      ], 200);
     } catch (Exception $error) {
       return response()->json([
         'success' => false,
