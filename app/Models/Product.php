@@ -71,4 +71,12 @@ class Product extends Model
     return $this->belongsTo(User::class, 'user_id');
   }
 
+  /**
+   * A product belongs to a currency
+   */
+  public function currency()
+  {
+    return $this->belongsTo(Currency::class);
+  }
+
 }
