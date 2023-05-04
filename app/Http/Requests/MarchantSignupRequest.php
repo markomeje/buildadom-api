@@ -39,7 +39,7 @@ class MarchantSignupRequest extends FormRequest
 
          'business_name' => [$business ? 'required' : 'nullable', 'max:255'],
          'cac_number' => [$business ? 'required' : 'nullable', 'max:20'],
-         'website' => [$business ? 'required' : 'nullable', 'max:255'],
+         'website' => ['nullable', 'max:255'],
          
          'address' => ['required', 'max:255'],
          'password' => ['required', app()->environment(['production']) ? Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised() : 'min:8'],
