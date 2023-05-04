@@ -26,6 +26,7 @@ class UploadImageAction
 
       unset($data['image']);
       $image = Image::where(['id' => ($data['id'] ?? 0), 'user_id' => auth()->id()])->first();
+      unset($data['id']);
       if (empty($image)) {
         $disk->put($avatar, file_get_contents($file));
         $image = Image::create(['user_id' => auth()->id(), 'url' => $disk->url($avatar), ...$data, 'filename' => $filename, 'extension' => $extension]);

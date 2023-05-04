@@ -105,28 +105,28 @@ class ProductController extends Controller
           'success' => false,
           'message' => 'Product not found. Try again.',
           $product
-        ], 200);
+        ], 404);
       }
 
       if (empty($product->images) || $product->images()->count() < 1) {
         return response()->json([
           'success' => false,
           'message' => 'Please upload a product image inorder to publish.',
-        ], 200);
+        ], 401);
       }
 
-      if((new ProductService())->update($id, ['published' => true])) {
+      if((new ProductService())->update($id, ['published' => request()->post('published') ?? false])) {
         return response()->json([
           'success' => true,
           'message' => 'Product published successfully',
           'product' => $product,
-        ], 201);
+        ], 200);
       }
 
       return response()->json([
         'success' => false,
         'message' => 'Product publishing failed. Try again.',
-      ], 200);
+      ], 500);
     } catch (Exception $error) {
       return response()->json([
         'success' => false,
