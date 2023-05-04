@@ -106,7 +106,7 @@ class StoreController extends Controller
           'success' => false,
           'message' => 'Merchant Store not found.',
           'store' => $store,
-        ], 200);
+        ], 404);
       }
 
       $images = $store->images;
@@ -114,7 +114,7 @@ class StoreController extends Controller
         return response()->json([
           'success' => false,
           'message' => 'Please upload at least a store logo inorder to publish ypur store.',
-        ], 200);
+        ], 401);
       }
 
       foreach ($images as $image) {
@@ -122,7 +122,7 @@ class StoreController extends Controller
           return response()->json([
             'success' => false,
             'message' => 'Please upload a store logo inorder to publish your store.',
-          ], 200);
+          ], 401);
         }
       }
 
@@ -130,14 +130,14 @@ class StoreController extends Controller
         return response()->json([
           'success' => false,
           'message' => 'Please upload and publish at least a product in this store inorder to publish your store.',
-        ], 200);
+        ], 401);
       }
 
       if (empty($store->products()->published()->count())) {
         return response()->json([
           'success' => false,
           'message' => 'Please upload and publish at least a product in this store inorder to publish your store.',
-        ], 200);
+        ], 401);
       }
 
       if((new StoreService())->update(['published' => request()->post('published') ?? false], $id)) {
@@ -151,7 +151,7 @@ class StoreController extends Controller
       return response()->json([
         'success' => false,
         'message' => 'Store publishing failed. Try again.',
-      ], 200);
+      ], 500);
     } catch (Exception $error) {
       return response()->json([
         'success' => false,
