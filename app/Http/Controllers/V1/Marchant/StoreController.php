@@ -140,7 +140,7 @@ class StoreController extends Controller
         ], 200);
       }
 
-      if((new StoreService())->update(['published' => true], $id)) {
+      if((new StoreService())->update(['published' => request()->post('published') ?? false], $id)) {
         return response()->json([
           'success' => true,
           'message' => 'Store published successfully',
