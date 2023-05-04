@@ -25,7 +25,7 @@ class UploadImageAction
       $disk = Storage::disk('s3');
 
       unset($data['image']);
-      $image = Image::where(['model' => $data['model'], 'model_id' => $data['model_id'], 'user_id' => auth()->id()])->first();
+      $image = Image::where(['id' => ($data['id'] ?? 0), 'user_id' => auth()->id()])->first();
       if (empty($image)) {
         $disk->put($avatar, file_get_contents($file));
         $image = Image::create(['user_id' => auth()->id(), 'url' => $disk->url($avatar), ...$data, 'filename' => $filename, 'extension' => $extension]);
