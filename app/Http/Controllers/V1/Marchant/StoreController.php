@@ -93,6 +93,73 @@ class StoreController extends Controller
     }
   }
 
+  /**
+   * Publish Store
+   * @param $id
+   */
+  public function publish($id = 0)
+  {
+    try {
+      $store = StoreService::where(['user_id' => auth()->id()], $id);
+      if (empty($store)) {
+        return response()->json([
+          'success' => false,
+          'message' => 'Merchant Store not found.',
+          'store' => $store,
+        ], 200);
+      }
+
+      $images = $store->images;
+      if (empty($images->count())) {
+        return response()->json([
+          'success' => false,
+          'message' => 'Please upload at least a store logo inorder to publish ypur store.',
+        ], 200);
+      }
+
+      foreach ($images as $image) {
+        if (empty($image->where(['role' => 'logo'])->first())) {
+          return response()->json([
+            'success' => false,
+            'message' => 'Please upload a store logo inorder to publish your store.',
+          ], 200);
+        }
+      }
+
+      if ($store->products()->count() < 1) {
+        return response()->json([
+          'success' => false,
+          'message' => 'Please upload and publish at least a product in this store inorder to publish your store.',
+        ], 200);
+      }
+
+      if (empty($store->products()->published()->count())) {
+        return response()->json([
+          'success' => false,
+          'message' => 'Please upload and publish at least a product in this store inorder to publish your store.',
+        ], 200);
+      }
+
+      if((new StoreService())->update(['published' => true], $id)) {
+        return response()->json([
+          'success' => true,
+          'message' => 'Store published successfully',
+          'store' => $store,
+        ], 200);
+      }
+
+      return response()->json([
+        'success' => false,
+        'message' => 'Store publishing failed. Try again.',
+      ], 200);
+    } catch (Exception $error) {
+      return response()->json([
+        'success' => false,
+        'message' => $error->getMessage(),
+      ], 500);
+    }
+  }
+
 }
 
 

@@ -23,6 +23,7 @@ return new class extends Migration
       $table->float('price');
       $table->foreignId('currency_id')->nullable()->references('id')->on('currencies');
       $table->integer('quantity');
+      $table->boolean('published')->default(false);
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
       $table->string('attributes')->nullable();
       $table->timestamps();

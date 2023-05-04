@@ -16,19 +16,11 @@ class ProductsController extends Controller
   public function index()
   {
     try {
-      $products = Product::with(['images', 'category'])->latest()->paginate(request()->get('limit') ?? 24);
-      if (empty($products->count())) {
-        return response()->json([
-          'success' => true,
-          'message' => 'No products available',
-          'products' => [],
-        ], 200);
-      }
-
+      $products = Product::with(['images', 'category'])->latest()->inRandomOrder()->published()->paginate(request()->get('limit') ?? 24);
       return response()->json([
         'success' => true,
-        'message' => 'Products retrieved successfully',
-        'products' => ProductResource::collection($products),
+        'message' => $products->count() > 0 ? 'Products retrieved successfully' : 'No published products available',
+        'products' => $products,
       ], 200);
     } catch (Exception $error) {
       return response()->json([
@@ -44,19 +36,11 @@ class ProductsController extends Controller
   public function category($category_id = 0)
   {
     try {
-      $products = Product::with(['images', 'category'])->latest()->where(['category_id' => $category_id])->paginate(request()->get('limit') ?? 24);
-
-      if (empty($products->count())) {
-        return response()->json([
-          'success' => true,
-          'message' => 'No products available',
-          'products' => [],
-        ], 200);
-      }
+      $products = Product::with(['images', 'category'])->latest()->where(['category_id' => $category_id])->published()->paginate(request()->get('limit') ?? 24);
 
       return response()->json([
         'success' => true,
-        'message' => 'Products retrieved successfully',
+        'message' => empty($products->count()) ? 'No published products available' : 'Products retrieved successfully',
         'products' => ProductResource::collection($products),
       ], 200);
     } catch (Exception $error) {
@@ -87,7 +71,7 @@ class ProductsController extends Controller
       return response()->json([
         'success' => false,
         'message' => 'Product not found. Try again.',
-      ], 404);
+      ], 200);
     } catch (Exception $error) {
       return response()->json([
         'success' => false,

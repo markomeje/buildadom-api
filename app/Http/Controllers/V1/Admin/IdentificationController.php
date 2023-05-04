@@ -18,7 +18,7 @@ class IdentificationController extends Controller
       $identifications = Identification::with(['image', 'citizenship', 'birth', 'user'])->latest()->paginate(request()->get('limit') ?? 45);
       return response()->json([
         'success' => true,
-        'message' => 'identifications fetched successfully',
+        'message' => 'IDs fetched successfully',
         'identifications' => $identifications,
       ], 200);
     } catch (Exception $error) {
@@ -39,7 +39,7 @@ class IdentificationController extends Controller
       if (empty($identification->image)) {
         return response()->json([
           'success' => false,
-          'message' => 'Identification document not uploaded yet.',
+          'message' => 'ID document not uploaded yet.',
         ], 200);
       }
 
@@ -47,14 +47,14 @@ class IdentificationController extends Controller
       if($identification->update()) {
         return response()->json([
           'success' => true,
-          'message' => 'Identification verified successfully',
+          'message' => 'ID verified successfully',
           'identification' => $identification,
         ], 200);
       }
 
       return response()->json([
         'success' => true,
-        'message' => 'Identification record not found',
+        'message' => 'ID record not found',
         'identification' => null,
       ], 404);
     } catch (Exception $error) {
@@ -74,14 +74,14 @@ class IdentificationController extends Controller
       if($identification = Identification::with(['image', 'citizenship', 'birth', 'user'])->where(['id' => $id])->first()) {
         return response()->json([
           'success' => true,
-          'message' => 'Identification fetched successfully',
+          'message' => 'ID fetched successfully',
           'identification' => $identification,
         ], 200);
       }
 
       return response()->json([
         'success' => true,
-        'message' => 'Identification record not found',
+        'message' => 'ID record not found',
         'identification' => null,
       ], 404);
     } catch (Exception $error) {

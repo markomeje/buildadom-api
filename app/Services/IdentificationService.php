@@ -33,7 +33,7 @@ class IdentificationService
    */
   public static function details()
   {
-    return Identification::with(['images'])->where(['user_id' => auth()->id()])->first();
+    return Identification::with(['image'])->where(['user_id' => auth()->id()])->first();
   }
 }
 

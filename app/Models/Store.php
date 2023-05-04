@@ -9,20 +9,28 @@ class Store extends Model
 {
   use HasFactory;
 
-   /**
+  /**
    * The attributes that are mass assignable.
    *
    * @var array<int, string>
    */
-   protected $fillable = [
-      'name',
-      'description',
-      'address',
-      'user_id',
-      'city',
-      'status',
-      'country_id',
-   ];
+  protected $fillable = [
+    'name',
+    'description',
+    'address',
+    'user_id',
+    'city',
+    'country_id',
+    'published'
+  ];
+
+  /**
+   * Scope published stores
+   */
+  public function scopePublished($query)
+  {
+    return $query->where(['published' => true]);
+  }
 
   /**
    * A store has many images

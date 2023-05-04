@@ -18,8 +18,8 @@ return new class extends Migration
       $table->text('name');
       $table->foreignId('country_id')->nullable()->references('id')->on('countries');
       $table->text('description');
+      $table->boolean('published')->default(false);
       $table->string('address');
-      $table->boolean('active')->default(false);
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
       $table->string('city')->nullable();
       $table->timestamps();

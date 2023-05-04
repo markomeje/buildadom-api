@@ -31,7 +31,7 @@ class ProductRequest extends FormRequest
       'category_id' => ['required', 'exists:categories,id'],
       'quantity' => ['required', 'integer'],
       'attributes' => ['nullable'],
-      'currency_id' => ['required', 'exists:countries,id']
+      'currency_id' => ['required', 'exists:currencies,id']
     ];
   }
 
@@ -44,6 +44,9 @@ class ProductRequest extends FormRequest
   {
     return [
       'currency_id.required' => 'Please select currency',
+      'store_id.exists' => 'The selected store does not exist.',
+      'currency_id.exists' => 'The selected currency does not exist.',
+      'category_id.exists' => 'The selected category does not exist.',
     ];
   }
 
