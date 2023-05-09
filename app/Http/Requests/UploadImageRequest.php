@@ -27,7 +27,7 @@ class UploadImageRequest extends FormRequest
       'model' => ['required', 'string'],
       'model_id' => ['required', 'string'],
       'role' => ['required', 'string'],
-      'id' => ['required', 'numeric']
+      'id' => ['required']
     ];
   }
 
