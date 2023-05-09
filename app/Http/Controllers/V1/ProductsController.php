@@ -60,7 +60,7 @@ class ProductsController extends Controller
     try {
       if($product = Product::with(['images', 'currency', 'category'])->where(['id' => $id])->first()) {
         $attributes = $product->attributes;
-        $product->attributes = empty($attributes) ? 0 : explode('|', $attributes);
+        $product->attributes = empty($attributes) ? null : explode('|', $attributes);
         return response()->json([
           'success' => true,
           'message' => 'Product retrieved successfully',
