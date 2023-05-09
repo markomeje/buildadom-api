@@ -45,7 +45,7 @@ class ProductController extends Controller
   public function product($id = 0)
   {
     try {
-      if($product = Product::with(['images', 'category'])->where(['id' => $id, 'user_id' => auth()->id()])->first()) {
+      if($product = Product::with(['images', 'category', 'currency'])->where(['id' => $id, 'user_id' => auth()->id()])->first()) {
         return response()->json([
           'success' => true,
           'message' => 'Product retrieved successfully',
