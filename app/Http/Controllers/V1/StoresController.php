@@ -17,9 +17,7 @@ class StoresController extends Controller
   public function index()
   {
     try {
-      $stores = Store::published()->with(['images', 'products' => function($query) {
-        return $query->with(['images', 'category', 'currency']);
-      }])->latest()->inRandomOrder()->paginate(request()->get('limit') ?? 12);
+      $stores = Store::published()->with(['images', 'products'])->latest()->inRandomOrder()->paginate(request()->get('limit') ?? 12);
       return response()->json([
         'success' => true,
         'message' => $stores->count() > 0 ? 'Stores retrieved successfully' : 'No published stores available',

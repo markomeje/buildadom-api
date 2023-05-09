@@ -142,16 +142,8 @@ class ProductController extends Controller
   {
     try {
       $products = Product::with(['images', 'category', 'currency'])->where(['user_id' => auth()->id()])->latest()->paginate(request()->get('limit') ?? 20)->groupBy(function($product) {
-          return $product->category->name;
-        });
-
-      // $data = [];
-      // if($products->count() > 0) {
-      //   foreach ($products as $product) {
-      //     $category = empty($product->category) ? '' : $product->category->name;
-      //     $data[$category][] = $product->with(['images', 'category', 'currency'])->get();
-      //   }
-      // }
+        return $product->category->name;
+      });
 
       return response()->json([
         'success' => true,
