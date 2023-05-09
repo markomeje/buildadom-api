@@ -118,7 +118,7 @@ class ProductController extends Controller
       if((new ProductService())->update($id, ['published' => request()->post('published') ?? false])) {
         return response()->json([
           'success' => true,
-          'message' => 'Product published successfully',
+          'message' => 'Operation successful',
           'product' => $product,
         ], 200);
       }
