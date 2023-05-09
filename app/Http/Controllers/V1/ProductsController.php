@@ -58,7 +58,7 @@ class ProductsController extends Controller
   public function product($id = 0)
   {
     try {
-      if($product = Product::find($id)) {
+      if($product = Product::with(['images', 'currency', 'category'])->where(['id' => $id])->first()) {
         $attributes = $product->attributes;
         $product->attributes = empty($attributes) ? null : explode('|', $attributes);
         return response()->json([
