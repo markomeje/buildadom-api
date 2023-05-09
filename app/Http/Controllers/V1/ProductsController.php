@@ -16,7 +16,7 @@ class ProductsController extends Controller
   public function index()
   {
     try {
-      $products = Product::with(['images', 'category'])->latest()->inRandomOrder()->published()->paginate(request()->get('limit') ?? 24);
+      $products = Product::published()->with(['images', 'category', 'currency'])->latest()->inRandomOrder()->paginate(request()->get('limit') ?? 24);
       return response()->json([
         'success' => true,
         'message' => $products->count() > 0 ? 'Products retrieved successfully' : 'No published products available',
@@ -60,7 +60,7 @@ class ProductsController extends Controller
     try {
       if($product = Product::with(['images', 'currency', 'category'])->where(['id' => $id])->first()) {
         $attributes = $product->attributes;
-        $product->attributes = empty($attributes) ? 0 : explode('|', $attributes);
+        $product->attributes = empty($attributes) ? null : explode('|', $attributes);
         return response()->json([
           'success' => true,
           'message' => 'Product retrieved successfully',

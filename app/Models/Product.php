@@ -51,7 +51,7 @@ class Product extends Model
    */
   public function images()
   {
-    return $this->hasMany(Image::class, 'model_id')->where(['model' => 'product'])->take(2);
+    return $this->hasMany(Image::class, 'model_id')->where(['model' => 'product']);
   }
 
   /**

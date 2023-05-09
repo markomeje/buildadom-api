@@ -118,7 +118,7 @@ class ProductController extends Controller
       if((new ProductService())->update($id, ['published' => request()->post('published') ?? false])) {
         return response()->json([
           'success' => true,
-          'message' => 'Product published successfully',
+          'message' => 'Operation successful',
           'product' => $product,
         ], 200);
       }
@@ -141,20 +141,14 @@ class ProductController extends Controller
   public function products()
   {
     try {
-      $products = Product::with(['images', 'category', 'currency'])->where(['user_id' => auth()->id()])->latest()->paginate(request()->get('limit') ?? 20);
-
-      $data = [];
-      if($products->count() > 0) {
-        foreach ($products as $product) {
-          $category = empty($product->category) ? '' : $product->category->name;
-          $data[$category][] = $product;
-        }
-      }
+      $products = Product::with(['images', 'category', 'currency'])->where(['user_id' => auth()->id()])->latest()->paginate(request()->get('limit') ?? 20)->groupBy(function($product) {
+        return $product->category->name;
+      });
 
       return response()->json([
         'success' => true,
         'message' => 'Products retrieved successfully',
-        'products' => $data,
+        'products' => $products,
       ], 200);
     } catch (Exception $error) {
       return response()->json([
