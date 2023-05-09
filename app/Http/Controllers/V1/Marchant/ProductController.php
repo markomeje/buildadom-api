@@ -54,8 +54,8 @@ class ProductController extends Controller
       }
 
       return response()->json([
-       'success' => false,
-       'message' => 'Product not found. Try again.',
+        'success' => false,
+        'message' => 'Product not found. Try again.',
       ], 200);
     } catch (Exception $error) {
       return response()->json([
@@ -141,11 +141,13 @@ class ProductController extends Controller
   public function products()
   {
     try {
-      $products = Product::with(['category', 'images', 'currency'])->where(['user_id' => auth()->id()])->paginate(request()->get('limit') ?? 20);
+      $products = Product::with(['images', 'category', 'currency'])->where(['user_id' => auth()->id()])->latest()->paginate(request()->get('limit') ?? 20);
+
       $data = [];
       if($products->count() > 0) {
         foreach ($products as $product) {
-          $data[$product->category->name][] = $product;
+          $category = empty($product->category) ? '' : $product->category->name;
+          $data[$category][] = $product;
         }
       }
 
