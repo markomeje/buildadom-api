@@ -38,7 +38,7 @@ class Store extends Model
    */
   public function images()
   {
-    return $this->hasMany(Image::class, 'model_id')->where(['model' => 'store'])->take(2);
+    return $this->hasMany(Image::class, 'model_id')->where(['model' => 'store']);
   }
 
    /**
