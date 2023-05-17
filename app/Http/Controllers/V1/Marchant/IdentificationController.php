@@ -18,7 +18,17 @@ class IdentificationController extends Controller
   public function save(IdentificationRequest $request)
   {
     try {
-      if (!in_array($request->type, ['individual', 'business'])) throw new Exception('Invalid identification type. Type must be either individual or business.');
+      if (!in_array($request->type, ['individual', 'business'])) {
+        throw new Exception('Invalid identification type. Type must be either individual or business.');
+      }
+
+      if (strtolower(auth()->user()->type) === 'business' && strtolower($request->type) !== 'business') {
+        return response()->json([
+          'success' => false,
+          'message' => 'User type and ID type must be same.',
+        ], 403);
+      }
+
       $identification = (new IdentificationService())->save($request->validated());
       return response()->json([
         'success' => true,
