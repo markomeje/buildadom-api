@@ -35,7 +35,7 @@ class Identification extends Model
    * @var array<int, string>
    */
   public static $types = [
-    'drivers liscence', 
+    'drivers license',
     'voters card', 
     'international passport', 
     'national identity card'

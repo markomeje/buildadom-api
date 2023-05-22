@@ -29,7 +29,7 @@ class DriverService
   public function update(array $data, int $id): Driver
   {
     if ($Driver = Driver::find($id)) {
-      $Driver->update([...$data]);
+      $Driver->update($data);
       return $Driver;
     }else {
       throw new Exception("Driver with id {$id} was not found.");

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
-
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DriverRequest extends FormRequest
@@ -26,7 +26,7 @@ class DriverRequest extends FormRequest
     return [
       'firstname' => ['required', 'string', 'max:255'],
       'lastname' => ['required', 'string', 'max:255'],
-      'phone' => ['required', 'unique:drivers', 'phone'],
+      'phone' => ['required', 'phone', Rule::unique('drivers')->ignore($this->request->id)],
     ];
   }
 
