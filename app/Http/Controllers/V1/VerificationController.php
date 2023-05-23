@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 use App\Http\Requests\VerificationRequest;
+use App\Http\Requests\ResendCodeRequest;
 use App\Services\VerificationService;
 use App\Http\Controllers\Controller;
 use Exception;
@@ -37,10 +38,10 @@ class VerificationController extends Controller
   * Verify email or phone
   * @param json
   */
-  public function resend($request)
+  public function resend(ResendCodeRequest $request)
   {
     try {
-      if($verification = (new VerificationService())->verify($request->validated())) {
+      if($verification = VerificationService::resend($request->validated())) {
         return $verification;
       }
 

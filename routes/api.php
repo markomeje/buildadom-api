@@ -29,6 +29,8 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
    Route::domain(env('API_URL'))->group(function() {    
       Route::post('/signup', [\App\Http\Controllers\V1\SignupController::class, 'marchant']);
       Route::post('/verification/verify', [App\Http\Controllers\V1\VerificationController::class, 'verify']);
+      Route::post('/verification/code/resend', [App\Http\Controllers\V1\VerificationController::class, 'resend']);
+
       Route::post('/login', [\App\Http\Controllers\V1\AuthController::class, 'login']);
 
       Route::prefix('stores')->group(function() {
