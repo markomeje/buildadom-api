@@ -53,6 +53,13 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
         });
 
         Route::post('/signup', [\App\Http\Controllers\V1\SignupController::class, 'customer']);
+
+        Route::post('/google', [\App\Http\Controllers\V1\SignupController::class, 'customer']);
+
+        Route::prefix('google')->group(function() {
+          Route::post('/auth', [App\Http\Controllers\V1\ProductsController::class, 'index']);
+          Route::post('/callback', [App\Http\Controllers\V1\ProductsController::class, 'index']);
+        });
       });
 
       Route::prefix('products')->group(function() {

@@ -26,7 +26,7 @@ class DriverRequest extends FormRequest
     return [
       'firstname' => ['required', 'string', 'max:255'],
       'lastname' => ['required', 'string', 'max:255'],
-      'phone' => ['required', 'phone', Rule::unique('drivers')->ignore($this->request->id)],
+      'phone' => ['required', 'phone', Rule::unique('drivers')->ignore($this->id)],
     ];
   }
 
