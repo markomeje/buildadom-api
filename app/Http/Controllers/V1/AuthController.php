@@ -23,22 +23,25 @@ class AuthController extends Controller
    {
       $user = User::where(['email' => $request->email])->first();
       if (empty($user)) {
-         return response()->json([
-         'success' => false,
-         'message' => 'Invalid account details.',
-         ], 401);
+        return response()->json([
+          'success' => false,
+          'message' => 'Invalid account details.',
+        ], 401);
       }
 
-      foreach (['phone', 'email'] as $type) {
-         $verification = Verification::where(['type' => $type, 'user_id' => $user->id])->first();
-         if ((boolean)($verification->verified ?? false) !== true) {
-         SaveVerificationAction::handle($user, $type);
-         return response()->json([
-            'success' => false,
-            'message' => "You did not verify your {$type}. A verification code have been sent to your {$type}.",
-            'verification' => ['type' => $type, 'verified' => false],
-         ], 401);
-         }
+      $role = $user->role ? $user->role->name : null;
+      if(strtolower($role) === 'marchant') {
+        foreach (['phone', 'email'] as $type) {
+          $verification = Verification::where(['type' => $type, 'user_id' => $user->id])->first();
+          if ((boolean)($verification->verified ?? false) !== true) {
+            SaveVerificationAction::handle($user, $type);
+            return response()->json([
+              'success' => false,
+              'message' => "You did not verify your {$type}. A verification code have been sent to your {$type}.",
+              'verification' => ['type' => $type, 'verified' => false],
+            ], 401);
+          }
+        }
       }
 
       $token = auth()->attempt($request->validated());

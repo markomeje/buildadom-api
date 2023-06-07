@@ -17,7 +17,7 @@ class CustomerSignupService
    public function signup(array $data): void
    {
       DB::transaction(function() use($data) {
-         $user = CreateUserAction::handle(['email' => $data['email'], 'phone' => $data['phone'], 'type' => 'customer', 'address' => '', 'firstname' => $data['firstname'], 'lastname' => $data['lastname'], 'password' => $data['password'], 'status' => 'active']);
+         $user = CreateUserAction::handle(['email' => $data['email'], 'phone' => $data['phone'], 'type' => 'individual', 'address' => '', 'firstname' => $data['firstname'], 'lastname' => $data['lastname'], 'password' => $data['password'], 'status' => 'active']);
 
          Role::create(['name' => 'customer', 'user_id' => $user->id]);
          $user->notify(new CustomerSignupNotification());
