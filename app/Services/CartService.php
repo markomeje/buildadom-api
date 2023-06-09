@@ -31,7 +31,7 @@ class CartService
   public function add(array $data): JsonResponse
   {
     try {
-      $cart = $this->cart->create([
+      $cart = $this->cart->updateOrCreate(['product_id' => $data['product_id']], [
         ...$data,
         'status' => CartStatusEnum::ACTIVE->value,
         'user_id' => auth()->id()
@@ -60,7 +60,6 @@ class CartService
   {
     try {
       $items = $this->cart->latest()->where(['user_id' => auth()->id()])->get();
-
       return response()->json([
         'success' => true,
         'items' => $items,
