@@ -50,7 +50,7 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
       Route::prefix('customer')->group(function() {
 
         Route::middleware(['auth:api'])->prefix('cart')->group(function() {
-          Route::any('/add', [App\Http\Controllers\V1\Customer\CartController::class, 'add']);
+          Route::post('/add', [App\Http\Controllers\V1\Customer\CartController::class, 'add']);
           Route::get('/items', [App\Http\Controllers\V1\Customer\CartController::class, 'items']);
         });
 
