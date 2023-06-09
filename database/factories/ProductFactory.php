@@ -27,6 +27,7 @@ class ProductFactory extends Factory
       'quantity' => rand(10, 45),
       'user_id' => $faker->randomElement(User::all()->pluck('id')->toArray()),
       'currency_id' => 1,
+      'unit_id' => rand(3, 78),
     ];
   }
 }
