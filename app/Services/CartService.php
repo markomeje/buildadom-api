@@ -59,7 +59,9 @@ class CartService
   public function items(): JsonResponse
   {
     try {
-      $items = $this->cart->with(['product'])->latest()->where(['user_id' => auth()->id()])->get();
+      $items = $this->cart->with(['product' => function($query) {
+        return  $query->with(['images']);
+      }])->latest()->where(['user_id' => auth()->id()])->get();
       return response()->json([
         'success' => true,
         'items' => $items,
