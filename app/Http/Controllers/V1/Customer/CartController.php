@@ -21,7 +21,9 @@ class CartController extends Controller
   }
 
   /**
+   * Add to cart
    *
+   * @param CreateCartRequest $request
    */
   public function add(CreateCartRequest $request): JsonResponse
   {
@@ -34,6 +36,16 @@ class CartController extends Controller
   public function items(): JsonResponse
   {
     return $this->cart->items();
+  }
+
+  /**
+   * Delete from cart
+   *
+   * @param CreateCartRequest $request
+   */
+  public function delete($id): JsonResponse
+  {
+    return $this->cart->delete($id);
   }
 
 }

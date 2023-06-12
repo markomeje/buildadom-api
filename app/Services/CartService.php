@@ -59,10 +59,32 @@ class CartService
   public function items(): JsonResponse
   {
     try {
-      $items = $this->cart->latest()->where(['user_id' => auth()->id()])->get();
+      $items = $this->cart->with(['product'])->latest()->where(['user_id' => auth()->id()])->get();
       return response()->json([
         'success' => true,
         'items' => $items,
+        'message' => 'Operation successful'
+      ]);
+    } catch (Exception $e) {
+      return response()->json([
+        'success' => false,
+        'message' => $e->getMessage()
+      ], 500);
+    }
+  }
+
+  /**
+   * Delete cart item
+   *
+   * @return JsonResponse
+   *
+   */
+  public function delete(int $id): JsonResponse
+  {
+    try {
+      $deleted = $this->cart->findOrFail($id)->delete();
+      return response()->json([
+        'success' => $deleted,
         'message' => 'Operation successful'
       ]);
     } catch (Exception $e) {

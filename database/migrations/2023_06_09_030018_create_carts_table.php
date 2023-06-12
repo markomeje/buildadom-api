@@ -18,7 +18,6 @@ return new class extends Migration
       $table->id();
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
       $table->enum('status', CartStatusEnum::array())->default(CartStatusEnum::ACTIVE->value);
-      $table->string('quantity');
       $table->foreignId('product_id')->nullable()->references('id')->on('products');
       $table->timestamps();
     });

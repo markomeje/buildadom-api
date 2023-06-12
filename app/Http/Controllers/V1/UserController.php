@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
+use App\Models\Image;
 
 
 class UserController extends Controller
@@ -20,19 +21,21 @@ class UserController extends Controller
       ]);
     }
 
+    $user = auth()->user();
+    $name = strtolower($user->type) === 'individual' ? $user->fullname() : ($user->business ? $user->business->name : null);
     return response()->json([
-      'success' => true,
-      'user' => [
-        'id' => $user->id, 
-        'name' => $user->fullname(), 
-        'email' => $user->email, 
-        'token' => $token
-      ],
-      'authorisation' => [
-        'token' => $token,
-        'type' => 'bearer',
-      ],
-      'message' => 'User retireved successfully',
-    ]);
+       'success' => true,
+       'response' => [
+       'user' => [
+          'id' => $user->id,
+          'name' => $name,
+          'email' => $user->email,
+          'profile_pic' => Image::where(['model_id' => auth()->id(), 'model' => 'profile'])->first(),
+          'address' => $user->address,
+          'type' => $user->type,
+        ]
+       ],
+       'message' => 'Operation successful',
+    ], 200);
   }
 }

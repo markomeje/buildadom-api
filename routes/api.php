@@ -10,6 +10,8 @@ header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\V1\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -26,8 +28,14 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
       Route::post('/create', [\App\Http\Controllers\V1\OnboardingController::class, 'create']);
    });
 
-   Route::domain(env('API_URL'))->group(function() {    
+   Route::domain(env('API_URL'))->group(function() {
+
+      Route::middleware(['auth:api'])->prefix('user')->group(function() {
+        Route::get('/me', [UserController::class, 'me']);
+      });
+
       Route::post('/signup', [\App\Http\Controllers\V1\SignupController::class, 'marchant']);
+
       Route::post('/verification/verify', [App\Http\Controllers\V1\VerificationController::class, 'verify']);
       Route::post('/verification/code/resend', [App\Http\Controllers\V1\VerificationController::class, 'resend']);
 
@@ -52,6 +60,7 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
         Route::middleware(['auth:api'])->prefix('cart')->group(function() {
           Route::post('/add', [App\Http\Controllers\V1\Customer\CartController::class, 'add']);
           Route::get('/items', [App\Http\Controllers\V1\Customer\CartController::class, 'items']);
+          Route::delete('/delete/{id}', [App\Http\Controllers\V1\Customer\CartController::class, 'delete']);
         });
 
         Route::post('/signup', [App\Http\Controllers\V1\SignupController::class, 'customer']);
