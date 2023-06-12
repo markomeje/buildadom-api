@@ -18,9 +18,9 @@ return new class extends Migration
          $table->string('street_address');
          $table->foreignId('user_id')->nullable()->references('id')->on('users');
          $table->string('city');
-         $table->foreignId('order_id')->nullable()->references('id')->on('orders');
          $table->foreignId('country_id')->nullable()->references('id')->on('countries');
-         $table->string('state');
+         $table->bigInteger('shipping_fee')->nullable();
+         $table->string('state')->default('pending');
          $table->string('zip_code');
          $table->string('status')->default('');
          $table->timestamps();

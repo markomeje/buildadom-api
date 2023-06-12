@@ -26,15 +26,15 @@ class UserController extends Controller
     return response()->json([
        'success' => true,
        'response' => [
-       'user' => [
-          'id' => $user->id,
-          'name' => $name,
-          'email' => $user->email,
-          'profile_pic' => Image::where(['model_id' => auth()->id(), 'model' => 'profile'])->first(),
-          'address' => $user->address,
-          'type' => $user->type,
-        ]
-       ],
+         'user' => [
+            'id' => $user->id,
+            'name' => $name,
+            'email' => $user->email,
+            'profile_pic' => Image::where(['model_id' => auth()->id(), 'model' => 'profile'])->first(),
+            'address' => $user->address,
+            'type' => $user->type,
+          ]
+        ],
        'message' => 'Operation successful',
     ], 200);
   }

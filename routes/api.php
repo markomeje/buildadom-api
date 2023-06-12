@@ -56,24 +56,28 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
       });
 
       Route::prefix('customer')->group(function() {
+        Route::post('/signup', [App\Http\Controllers\V1\SignupController::class, 'customer']);
 
-        Route::middleware(['auth:api'])->prefix('cart')->group(function() {
-          Route::post('/add', [App\Http\Controllers\V1\Customer\CartController::class, 'add']);
-          Route::get('/items', [App\Http\Controllers\V1\Customer\CartController::class, 'items']);
-          Route::delete('/delete/{id}', [App\Http\Controllers\V1\Customer\CartController::class, 'delete']);
+        Route::prefix('shipping')->group(function() {
+          Route::post('/create', [App\Http\Controllers\V1\Customer\ShippingController::class, 'create']);
+          Route::get('/details', [App\Http\Controllers\V1\Customer\ShippingController::class, 'details'])->middleware(['auth:api']);
         });
 
-        Route::post('/signup', [App\Http\Controllers\V1\SignupController::class, 'customer']);
+        Route::middleware(['auth:api'])->group(function() {
+          Route::prefix('cart')->group(function() {
+            Route::post('/add', [App\Http\Controllers\V1\Customer\CartController::class, 'add']);
+            Route::get('/items', [App\Http\Controllers\V1\Customer\CartController::class, 'items']);
+            Route::delete('/delete/{id}', [App\Http\Controllers\V1\Customer\CartController::class, 'delete']);
+           });
+
+        });
 
         Route::prefix('google')->group(function() {
           Route::post('/auth', [App\Http\Controllers\V1\GoogleController::class, 'login']);
           Route::post('/callback', [App\Http\Controllers\V1\GoogleController::class, 'callback']);
         });
 
-        Route::prefix('shipping')->group(function() {
-          Route::post('/create', [App\Http\Controllers\V1\Customer\ShippingController::class, 'create']);
-          Route::post('/signup', [\App\Http\Controllers\V1\SignupController::class, 'customer']);
-        });
+
       });
 
       Route::prefix('products')->group(function() {

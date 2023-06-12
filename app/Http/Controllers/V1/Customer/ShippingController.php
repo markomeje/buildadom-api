@@ -17,22 +17,12 @@ class ShippingController extends Controller
    public function create(CreateShippingRequest $request)
    {
       try {
-         if($shipping = (new ShippingService())->create($request->validated())) {
-            $user = $shipping->user;
-            return response()->json([
-               'success' => true,
-               'message' => 'Shipping created successfully',
-               'shipping' => $shipping,
-               'user' => ['id' => $user->id, 'name' => $user->fullname(), 'email' => $user->email, 'token' => auth()->login($user)]
-            ], 201);
-         }
-
-         throw new Exception('Operation failed. Try again.');
+        return (new ShippingService())->create($request->validated());
       } catch (Exception $error) {
-         return response()->json([
+        return response()->json([
          'success' => false,
          'message' => $error->getMessage(),
-         ], 500);
+        ], 500);
       }
    }
 
@@ -42,12 +32,12 @@ class ShippingController extends Controller
    public function details()
    {
       try {
-         $shipping = ShippingService::details();
-         return response()->json([
-         'success' => true,
-         'message' => 'Shipping details retrieved successfully',
-         'shipping' => $shipping,
-         ], 200);
+        $shipping = ShippingService::details();
+        return response()->json([
+          'success' => true,
+          'message' => 'Shipping details retrieved successfully',
+          'shipping' => $shipping,
+        ], 200);
       } catch (Exception $error) {
          return response()->json([
          'success' => false,
