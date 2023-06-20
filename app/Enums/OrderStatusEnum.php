@@ -2,10 +2,10 @@
 
 namespace App\Enums;
 
-enum CartStatusEnum: string
+enum OrderStatusEnum: string
 {
   case ACTIVE = 'active';
-  case FULFILLED = 'fulfilled';
+  case PASSIVE = 'passive';
 
   public static function array(): array
   {

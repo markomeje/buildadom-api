@@ -15,14 +15,10 @@ class Order extends Model
    * @var array<int, string>
    */
   protected $fillable = [
-    'firstname',
-    'email',
-    'lastname',
-    'type',
-    'business_name',
-    'location',
-    'phone',
-    'materials',
+    'user_id',
+    'status',
+    'tracking_number',
+    'total_amount'
   ];
 
   /**

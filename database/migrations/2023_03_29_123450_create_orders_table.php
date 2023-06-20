@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\OrderStatusEnum;
 
 return new class extends Migration
 {
@@ -15,15 +16,11 @@ return new class extends Migration
   {
     Schema::create('orders', function (Blueprint $table) {
       $table->id();
-      $table->string('number');
-      $table->string('status')->default('pending');
-      $table->float('total');
-      $table->integer('quantity');
-      $table->boolean('paid')->default(false);
+      $table->string('tracking_number');
+      $table->enum('status', OrderStatusEnum::array())->default(OrderStatusEnum::PASSIVE->value);
+      $table->decimal('total_amount', 28, 2);
       $table->string('notes')->nullable();
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
-      $table->foreignId('product_id')->nullable()->references('id')->on('products');
-      $table->foreignId('store_id')->nullable()->references('id')->on('stores');
       $table->timestamps();
     });
   }

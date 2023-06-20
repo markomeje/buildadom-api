@@ -3,7 +3,9 @@
 
 namespace App\Services;
 use App\Enums\CartStatusEnum;
+use App\Enums\OrderStatusEnum;
 use Illuminate\Http\JsonResponse;
+use App\Models\Product;
 use App\Models\Cart;
 use Exception;
 
@@ -16,9 +18,11 @@ class CartService
   /**
    * @param CartService $cart
    */
-  public function __construct(public Cart $cart)
+  public function __construct(public Cart $cart, public OrderService $orderService, public Product $product)
   {
     $this->cart = $cart;
+    $this->orderService = $orderService;
+    $this->product = $product;
   }
 
   /**
@@ -31,10 +35,13 @@ class CartService
   public function add(array $data): JsonResponse
   {
     try {
-      $cart = $this->cart->updateOrCreate(['product_id' => $data['product_id']], [
+      $product = $this->product->findOrFail($data['product_id']);
+      $order = $this->orderService->save($product->price);
+      $cart = $this->cart->create([
         ...$data,
+        'order_id' => $order->id,
         'status' => CartStatusEnum::ACTIVE->value,
-        'user_id' => auth()->id()
+        'user_id' => auth()->id(),
       ]);
 
       return response()->json([
@@ -62,6 +69,7 @@ class CartService
       $items = $this->cart->with(['product' => function($query) {
         return  $query->with(['images']);
       }])->latest()->where(['user_id' => auth()->id()])->get();
+
       return response()->json([
         'success' => true,
         'items' => $items,

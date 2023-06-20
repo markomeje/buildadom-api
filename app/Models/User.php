@@ -17,16 +17,16 @@ class User extends Authenticatable implements JWTSubject
    *
    * @var array<int, string>
    */
-   protected $fillable = [
-      'firstname',
-      'email',
-      'password',
-      'phone',
-      'lastname',
-      'type',
-      'status',
-      'address'
-   ];
+  protected $fillable = [
+    'firstname',
+    'email',
+    'password',
+    'phone',
+    'lastname',
+    'type',
+    'status',
+    'address'
+  ];
 
    /**
    * The attributes that should be hidden for serialization.
@@ -123,6 +123,14 @@ class User extends Authenticatable implements JWTSubject
    public function store()
    {
       return $this->hasOne(Store::class);
+   }
+
+   /**
+   * A user may have a role
+   */
+   public function role()
+   {
+      return $this->hasOne(Role::class);
    }
 
 }

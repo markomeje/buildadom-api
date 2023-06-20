@@ -3,36 +3,54 @@
 
 namespace App\Services;
 use App\Models\Order;
+use App\Enums\OrderStatusEnum;
 
 
 class OrderService
 {
+
   /**
-   * Save Order data
+   * @param Order $order
+   */
+  public function __construct(public Order $order)
+  {
+    $this->order = $order;
+  }
+
+  /**
+   * Fetch save order
    *
    * @return Order
    * @param array
    */
-  public function save(array $data): Order
+  public function save(float $price = 0.0): Order
   {
-    $order = self::information();
-    if(empty($order)) {
-      return Order::create([
-        'user_id' => auth()->id(),
-        ...$data,
-      ]);
-    }
+    $order = $this->order->where(['user_id' => auth()->id(), 'status' => OrderStatusEnum::PASSIVE->value])->first();
 
-    $order->update([...$data]);
-    return $order;
+    $tracking_number = $this->generateUniqueTrackingNumber();
+    return empty($order) ? $this->order->create(['status' => OrderStatusEnum::PASSIVE->value, 'tracking_number' => $tracking_number, 'total_amount' => $price, 'user_id' => auth()->id()]) : $order->update(['total_amount' => ($order->total_amount + $price)]);
+  }
+
+  /**
+   * Generate random unique 11 digit code
+   *
+   * @return string
+   */
+  public function generateUniqueTrackingNumber(): string
+  {
+    do {
+      $number = strtoupper(str()->random(15));
+    } while ($this->order->where(['tracking_number' => $number])->first());
+
+    return $number;
   }
 
   /**
    * Order details
    */
-  public static function information()
+  public function details()
   {
-    return Order::where(['user_id' => auth()->id()])->first();
+    return $this->order->where(['user_id' => auth()->id()])->get();
   }
 }
 
