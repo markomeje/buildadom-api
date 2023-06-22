@@ -14,9 +14,6 @@ class CitiesController extends Controller
   public function cities()
   {
     try {
-
-
-
       $country_code = strtoupper(request()->get('country_code') ?? 'NG');
       $url = "https://laravel-world.com/api/states?filters[country_code]={$country_code}&fields=cities";
       $response = Http::get($url);
