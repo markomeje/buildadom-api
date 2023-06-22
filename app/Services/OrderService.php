@@ -23,7 +23,7 @@ class OrderService
    * @return Order
    * @param array
    */
-  public function save(float $price = 0.0): Order
+  public function save(float $price = 0.0)
   {
     $order = $this->order->where(['user_id' => auth()->id(), 'status' => OrderStatusEnum::PASSIVE->value])->first();
 

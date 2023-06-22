@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
@@ -22,14 +23,12 @@ class Order extends Model
   ];
 
   /**
-   * Order status
-   *
-   * @var array<string>
+   * An order may have many cart items
+   * @return HasMany
    */
-  private $status = [
-    'pending',
-    'processing',
-    'completed',
-    'decline'
-  ];
+  public function cartItems(): HasMany
+  {
+    return $this->hasMany(Cart::class);
+  }
+
 }
