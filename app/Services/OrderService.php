@@ -27,8 +27,13 @@ class OrderService
   {
     $order = $this->order->where(['user_id' => auth()->id(), 'status' => OrderStatusEnum::PASSIVE->value])->first();
 
-    $tracking_number = $this->generateUniqueTrackingNumber();
-    return empty($order) ? $this->order->create(['status' => OrderStatusEnum::PASSIVE->value, 'tracking_number' => $tracking_number, 'total_amount' => $price, 'user_id' => auth()->id()]) : $order->update(['total_amount' => ($order->total_amount + $price)]);
+    if(empty($order)) {
+      $tracking_number = $this->generateUniqueTrackingNumber();
+      return $this->order->create(['status' => OrderStatusEnum::PASSIVE->value, 'tracking_number' => $tracking_number, 'total_amount' => $price, 'user_id' => auth()->id()]);
+    }
+
+    $order->update(['total_amount' => ($order->total_amount + $price)]);
+    return $order;
   }
 
   /**
