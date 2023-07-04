@@ -60,7 +60,12 @@ class VerificationService
   {
     return DB::transaction(function() use ($data) {
       $type = strtolower($data['type']);
-      SaveVerificationAction::handle(User::findOrFail($data['user_id']), $type);
+      $user = User::where(['id' => $data['user']])->orWhere(['email' => $data['user']])->first();
+      if (empty($user)) {
+        throw new Exception('Invalid user. Try again.');
+      }
+
+      SaveVerificationAction::handle($user, $type);
       return response()->json([
         'success' => true,
         'message' => "Verification code have been resent to your {$type}.",

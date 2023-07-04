@@ -28,7 +28,7 @@ class ResendCodeRequest extends FormRequest
   public function rules()
   {
     return [
-      'user_id' => ['required', 'exists:users,id'],
+      'user' => ['required'],
       'type' => ['required', 'string']
     ];
   }
