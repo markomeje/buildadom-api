@@ -2,10 +2,10 @@
 
 namespace App\Enums;
 
-enum PaymentStatusEnum: int
+enum PaymentStatusEnum: string
 {
-  case PAID = 1;
-  case NOT_PAID = 0;
+  case PAID = 'paid';
+  case INITIALIZED = 'initialized';
 
   public static function array(): array
   {

@@ -5,8 +5,9 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.2.0",
         "africastalking/africastalking": "^3.0",
+        "digikraaft/laravel-paystack-webhooks": "^2.1",
         "guzzlehttp/guzzle": "^7.5",
         "halaxa/json-machine": "^1.1",
         "laravel-notification-channels/africastalking": "^3.1.0",
@@ -17,7 +18,8 @@
         "mane-olawale/termii": "^1.2",
         "php-open-source-saver/jwt-auth": "^2.0",
         "propaganistas/laravel-phone": "^5.0",
-        "smknstd/fakerphp-picsum-images": "^1.0"
+        "smknstd/fakerphp-picsum-images": "^1.0",
+        "yabacon/paystack-php": "^2.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

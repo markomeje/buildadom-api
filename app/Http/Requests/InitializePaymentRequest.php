@@ -5,7 +5,7 @@ use Illuminate\Validation\Rules\Password;
 use App\Rules\EmailRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CustomerPaymentRequest extends FormRequest
+class InitializePaymentRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
@@ -25,10 +25,8 @@ class CustomerPaymentRequest extends FormRequest
   public function rules()
   {
     return [
-      'type' => ['required', 'string', 'unique:users'],
-      'amount' => ['required', 'unique:users'],
-      'firstname' => ['required', 'string', 'max:50'],
-      'lastname' => ['required', 'string', 'max:50'],
+      'order_id' => ['required', 'exists:orders,id'],
+      'amount' => ['required', 'gt:0'],
     ];
   }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V1\Marchant;
+namespace App\Http\Controllers\V1\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRequest;
 use App\Services\StoreService;

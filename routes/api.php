@@ -68,15 +68,14 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
           Route::post('/add', [App\Http\Controllers\V1\Customer\CartController::class, 'add']);
           Route::get('/items', [App\Http\Controllers\V1\Customer\CartController::class, 'items']);
           Route::delete('/delete/{id}', [App\Http\Controllers\V1\Customer\CartController::class, 'delete']);
-         });
+        });
+
+        Route::prefix('payment')->group(function() {
+          Route::post('/initialize', [App\Http\Controllers\V1\Customer\PaymentController::class, 'initialize']);
+          Route::post('/verify', [App\Http\Controllers\V1\Customer\PaymentController::class, 'verify']);
+        });
 
       });
-
-      Route::prefix('google')->group(function() {
-        Route::post('/auth', [App\Http\Controllers\V1\GoogleController::class, 'login']);
-        Route::post('/callback', [App\Http\Controllers\V1\GoogleController::class, 'callback']);
-      });
-
 
     });
 
