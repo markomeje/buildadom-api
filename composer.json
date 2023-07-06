@@ -5,7 +5,7 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.1.2",
+        "php": "^8.2.5",
         "africastalking/africastalking": "^3.0",
         "digikraaft/laravel-paystack-webhooks": "^2.1",
         "guzzlehttp/guzzle": "^7.5",
