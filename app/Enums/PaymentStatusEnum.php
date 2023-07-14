@@ -6,6 +6,7 @@ enum PaymentStatusEnum: string
 {
   case PAID = 'paid';
   case INITIALIZED = 'initialized';
+  case PENDING = 'pending';
 
   public static function array(): array
   {

@@ -6,6 +6,7 @@ use App\Enums\PaymentStatusEnum;
 use Illuminate\Http\JsonResponse;
 use App\Models\Payment;
 use App\Integrations\Paystack;
+use Illuminate\Support\Facades\Log;
 use Exception;
 
 
@@ -105,22 +106,35 @@ class PaymentService
         ]);
       }
 
+      $paid = strtolower(PaymentStatusEnum::PAID->value);
+      if ($payment->status === $paid) {
+        return response()->json([
+          'success' => true,
+          'payment' => $this->getPaymentDetails($reference),
+          'message' => 'Payment already verified.'
+        ]);
+      }
+
       $paystack = $this->paystack->verify($reference);
-      if (strtolower($paystack->data->status ?? '') === 'success') {
-        $payment->status = PaymentStatusEnum::PAID->value;
+      $status = strtolower($paystack->data->status ?? '');
+      if ($status === 'success') {
+        $payment->status = $paid;
         $payment->authorization_code = $paystack->data->authorization->authorization_code;
         $payment->update();
 
         return response()->json([
           'success' => true,
           'payment' => $this->getPaymentDetails($reference),
-          'message' => 'Operation successful'
+          'message' => 'Payment successful'
         ]);
       }
 
+      $payment->status = $status;
+      $payment->update();
+
       return response()->json([
         'success' => false,
-        'message' => 'Operation failed'
+        'message' => "Payment {$status}"
       ]);
     } catch (Exception $e) {
       return response()->json([
@@ -139,6 +153,41 @@ class PaymentService
   public function getPaymentDetails($reference = '')
   {
     return $this->payment->where(['reference' => $reference])->first();
+  }
+
+  public function webhook()
+  {
+    // Retrieve the request's body and parse it as JSON
+    $event = \Yabacon\Paystack\Event::capture();
+    http_response_code(200);
+
+    Log::info('Invalid apyment', ['id' => 234]);
+    //log()->info($event->obj);
+    return false;
+
+    // $keys = ['live' => env('PAYSTACK_SECRET_KEY'), 'test' => env('PAYSTACK_SECRET_KEY')];
+    // $owner = $event->discoverOwner($keys);
+    // if(!$owner){
+    //   log()->info('Unauthorised webhook access');
+    //   die();
+    // }
+
+    // log()->info($event->raw);
+
+    // $obj = $event->obj;
+    // $payment = '';
+
+    // log()->info($event->raw);
+    // switch($obj->event){
+    //   // charge.success
+    //   case 'charge.success':
+    //     if('success' === $obj->data->status){
+    //       // TIP: you may still verify the transaction
+    //       // via an API call before giving value.
+    //     }
+
+    //     break;
+    // }
   }
 
 

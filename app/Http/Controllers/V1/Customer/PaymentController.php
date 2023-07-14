@@ -22,9 +22,9 @@ class PaymentController extends Controller
   }
 
   /**
-   * Add to Payment
    *
    * @param InitializePaymentRequest $request
+   * @return JsonResponse
    */
   public function initialize(InitializePaymentRequest $request): JsonResponse
   {
@@ -32,13 +32,20 @@ class PaymentController extends Controller
   }
 
   /**
-   * Verify Payment
    *
    * @return JsonResponse
    */
-  public function verify(Request $request)
+  public function verify(Request $request): JsonResponse
   {
     return $this->payment->verify($request->get('reference'));
+  }
+
+  /**
+   * Paystack webhook
+   */
+  public function webhook()
+  {
+    return $this->payment->webhook();
   }
 
 }

@@ -5,9 +5,8 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.2.5|^8.1.0",
+        "php": ">=8.0.1",
         "africastalking/africastalking": "^3.0",
-        "digikraaft/laravel-paystack-webhooks": "^2.1",
         "guzzlehttp/guzzle": "^7.5",
         "halaxa/json-machine": "^1.1",
         "laravel-notification-channels/africastalking": "^3.1.0",
@@ -67,11 +66,13 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
+        "platform-check": false,
+
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }

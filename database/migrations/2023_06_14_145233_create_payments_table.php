@@ -22,7 +22,9 @@ return new class extends Migration
       $table->foreignId('order_id')->nullable()->references('id')->on('orders');
       $table->string('type')->nullable();
       $table->string('reference')->unique();
+
       $table->string('authorization_code')->nullable();
+      $table->text('payload')->nullable();
       $table->timestamps();
     });
   }
