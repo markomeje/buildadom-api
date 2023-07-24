@@ -9,7 +9,7 @@ enum CartStatusEnum: string
 
   public static function array(): array
   {
-    return array_column(self::cases(), 'name');
+    return array_column(self::cases(), 'value');
   }
 
 }

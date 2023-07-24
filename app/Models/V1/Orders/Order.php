@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Models;
-
+namespace App\Models\V1\Orders;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,16 +18,20 @@ class Order extends Model
     'user_id',
     'status',
     'tracking_number',
-    'total_amount'
+    'product_id',
+    'total_amount',
+    'store_id',
+    'notes',
+    'quantity',
+    'order_ref'
   ];
 
   /**
-   * An order may have many cart items
    * @return HasMany
    */
-  public function cartItems(): HasMany
+  public function orderItems(): HasMany
   {
-    return $this->hasMany(Cart::class);
+    return $this->hasMany(orderItem::class);
   }
 
 }

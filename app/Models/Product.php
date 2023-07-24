@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -77,6 +78,22 @@ class Product extends Model
   public function currency()
   {
     return $this->belongsTo(Currency::class);
+  }
+
+  /**
+   * @return BelongsTo
+   */
+  public function unit(): BelongsTo
+  {
+    return $this->belongsTo(Unit::class);
+  }
+
+  /**
+   * @return BelongsTo
+   */
+  public function store(): BelongsTo
+  {
+    return $this->belongsTo(Store::class);
   }
 
 }

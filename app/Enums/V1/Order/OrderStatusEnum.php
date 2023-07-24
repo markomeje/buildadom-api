@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Enums;
+namespace App\Enums\V1\Order;
 
 enum OrderStatusEnum: string
 {
   case ACTIVE = 'active';
-  case PASSIVE = 'passive';
+  case PENDING = 'pending';
 
   public static function array(): array
   {
-    return array_column(self::cases(), 'name');
+    return array_column(self::cases(), 'value');
   }
 
 }

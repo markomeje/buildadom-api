@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use App\Enums\CartStatusEnum;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -14,12 +13,14 @@ return new class extends Migration
    */
   public function up()
   {
-    Schema::create('carts', function (Blueprint $table) {
+    Schema::create('order_items', function (Blueprint $table) {
       $table->id();
-      $table->foreignId('user_id')->nullable()->references('id')->on('users');
-      $table->bigInteger('quantity')->default(1);
-      $table->enum('status', CartStatusEnum::array())->default(CartStatusEnum::ACTIVE->value);
       $table->foreignId('product_id')->nullable()->references('id')->on('products');
+      $table->decimal('amount', 28, 2);
+      $table->foreignId('user_id')->nullable()->references('id')->on('users');
+      $table->bigInteger('quantity')->nullable();
+      $table->foreignId('store_id')->nullable()->references('id')->on('stores');
+      $table->foreignId('order_id')->nullable()->references('id')->on('orders');
       $table->timestamps();
     });
   }
@@ -31,6 +32,6 @@ return new class extends Migration
    */
   public function down()
   {
-    Schema::dropIfExists('carts');
+    Schema::dropIfExists('order_items');
   }
 };

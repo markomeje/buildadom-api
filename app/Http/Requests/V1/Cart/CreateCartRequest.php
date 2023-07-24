@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
-
+namespace App\Http\Requests\V1\Cart;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateCartRequest extends FormRequest
@@ -25,6 +24,7 @@ class CreateCartRequest extends FormRequest
   {
     return [
       'product_id' => ['required', 'exists:products,id'],
+      'quantity' => ['nullable', 'integer']
     ];
   }
 }

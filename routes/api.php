@@ -12,7 +12,13 @@ header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\UserController;
+use App\Http\Controllers\V1\SignupController;
+use App\Http\Controllers\V1\Customer\Cart\CartController;
+use App\Http\Controllers\V1\Customer\Orders\OrderController;
+use App\Http\Controllers\V1\Customer\Orders\OrderItemController;
+use App\Http\Controllers\V1\Marchant\OrderTrackingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +34,7 @@ use App\Http\Controllers\V1\UserController;
 Route::middleware(['accept.json'])->prefix('v1')->group(function() {
 
   Route::domain(env('ONBOARDING_URL'))->group(function() {
-    Route::post('/create', [\App\Http\Controllers\V1\OnboardingController::class, 'create']);
+    Route::post('/create', [OnboardingController::class, 'create']);
   });
 
   Route::domain(env('API_URL'))->group(function() {
@@ -36,12 +42,12 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
       Route::get('/me', [UserController::class, 'me']);
     });
 
-    Route::post('/signup', [\App\Http\Controllers\V1\SignupController::class, 'marchant']);
+    Route::post('/signup', [SignupController::class, 'marchant']);
 
     Route::post('/verification/verify', [App\Http\Controllers\V1\VerificationController::class, 'verify']);
     Route::post('/verification/code/resend', [App\Http\Controllers\V1\VerificationController::class, 'resend']);
 
-    Route::post('/login', [\App\Http\Controllers\V1\AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login']);
 
     Route::prefix('stores')->group(function() {
       Route::get('/', [App\Http\Controllers\V1\StoresController::class, 'index']);
@@ -59,7 +65,6 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
 
     Route::prefix('customer')->group(function() {
       Route::post('/signup', [App\Http\Controllers\V1\SignupController::class, 'customer']);
-
       Route::prefix('shipping')->group(function() {
         Route::post('/create', [App\Http\Controllers\V1\Customer\ShippingController::class, 'create']);
         Route::get('/details', [App\Http\Controllers\V1\Customer\ShippingController::class, 'details'])->middleware(['auth:api']);
@@ -67,21 +72,26 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
 
       Route::middleware(['auth:api'])->group(function() {
         Route::prefix('cart')->group(function() {
-          Route::post('/add', [App\Http\Controllers\V1\Customer\CartController::class, 'add']);
-          Route::get('/items', [App\Http\Controllers\V1\Customer\CartController::class, 'items']);
-          Route::delete('/delete/{id}', [App\Http\Controllers\V1\Customer\CartController::class, 'delete']);
+          Route::post('/add', [CartController::class, 'add']);
+          Route::get('/items', [CartController::class, 'items']);
+          Route::delete('/delete/{id}', [CartController::class, 'delete']);
+        });
+
+        Route::prefix('order')->group(function() {
+          Route::post('/save', [OrderController::class, 'save']);
+          Route::get('/details/{id}', [OrderController::class, 'details']);
+          Route::get('/all', [OrderController::class, 'orders']);
         });
 
         Route::prefix('payment')->group(function() {
           Route::post('/initialize', [App\Http\Controllers\V1\Customer\PaymentController::class, 'initialize']);
           Route::post('/verify', [App\Http\Controllers\V1\Customer\PaymentController::class, 'verify']);
-
           Route::post('/webhook', [App\Http\Controllers\V1\Customer\PaymentController::class, 'webhook']);
         });
-
       });
-
     });
+
+    Route::get('/order/status', [OrderTrackingController::class, 'status']);
 
     Route::prefix('products')->group(function() {
       Route::get('/', [App\Http\Controllers\V1\ProductsController::class, 'index']);
@@ -111,50 +121,53 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
           Route::post('/refresh', [\App\Http\Controllers\V1\AuthController::class, 'refresh']);
        });
 
-       Route::prefix('marchant')->group(function() {
+      Route::prefix('marchant')->group(function() {
+        Route::prefix('order')->group(function() {
+          Route::post('/track', [OrderTrackingController::class, 'track']);
+          Route::get('/items', [OrderItemController::class, 'items']);
+        });
 
-          Route::prefix('store')->group(function() {
-            Route::post('/create', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'create']);
-            Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'update']);
-            Route::get('/', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'store']);
+        Route::prefix('store')->group(function() {
+          Route::post('/create', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'create']);
+          Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'update']);
+          Route::get('/', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'store']);
+          Route::post('/publish/{id}', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'publish']);
+        });
 
-            Route::post('/publish/{id}', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'publish']);
-          });
+        Route::get('/drivers', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'drivers']);
 
-          Route::get('/drivers', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'drivers']);
+        Route::prefix('driver')->group(function() {
+          Route::post('/add', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'add']);
+          Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'update']);
+          Route::get('/{id}', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'store']);
+          Route::delete('/delete/{id}', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'delete']);
+        });
 
-          Route::prefix('driver')->group(function() {
-             Route::post('/add', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'add']);
-             Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'update']);
-             Route::get('/{id}', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'store']);
-             Route::delete('/delete/{id}', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'delete']);
-          });
+        Route::prefix('image')->group(function() {
+          Route::post('/upload', [\App\Http\Controllers\V1\ImageController::class, 'upload']);
+        });
 
-          Route::prefix('image')->group(function() {
-             Route::post('/upload', [\App\Http\Controllers\V1\ImageController::class, 'upload']);
-          });
+        Route::get('/products', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'products']);
 
-          Route::get('/products', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'products']);
+        Route::prefix('product')->group(function() {
+          Route::post('/create', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'create']);
+          Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'update']);
+          Route::get('/{id}', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'product']);
 
-          Route::prefix('product')->group(function() {
-             Route::post('/create', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'create']);
-             Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'update']);
-             Route::get('/{id}', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'product']);
+          Route::post('/publish/{id}', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'publish']);
+        });
 
-             Route::post('/publish/{id}', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'publish']);
-          });
+        Route::prefix('identification')->group(function() {
+          Route::post('/save', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'save']);
 
-          Route::prefix('identification')->group(function() {
-             Route::post('/save', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'save']);
+          Route::get('/details', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'details']);
+        });
 
-             Route::get('/details', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'details']);
-          });
+        Route::prefix('account')->group(function() {
+          Route::post('/save', [\App\Http\Controllers\V1\Marchant\AccountController::class, 'save']);
 
-          Route::prefix('account')->group(function() {
-             Route::post('/save', [\App\Http\Controllers\V1\Marchant\AccountController::class, 'save']);
-
-             Route::get('/information', [\App\Http\Controllers\V1\Marchant\AccountController::class, 'information']);
-          });
+          Route::get('/information', [\App\Http\Controllers\V1\Marchant\AccountController::class, 'information']);
+        });
        });
     });
   });

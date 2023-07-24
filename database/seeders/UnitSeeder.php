@@ -18,7 +18,7 @@ class UnitSeeder extends Seeder
     DB::table('units')->truncate();
     DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-    $units = ['Kg', 'Meters', 'Inches'];
+    $units = ['Kg', 'Meters', 'Inches', 'Bag'];
 
     foreach ($units as $unit) {
       Unit::create([
