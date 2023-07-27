@@ -13,12 +13,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\V1\AuthController;
+use App\Http\Controllers\V1\UnitController;
 use App\Http\Controllers\V1\UserController;
 use App\Http\Controllers\V1\SignupController;
 use App\Http\Controllers\V1\Customer\Cart\CartController;
 use App\Http\Controllers\V1\Customer\Orders\OrderController;
-use App\Http\Controllers\V1\Customer\Orders\OrderItemController;
 use App\Http\Controllers\V1\Marchant\OrderTrackingController;
+use App\Http\Controllers\V1\Customer\Orders\OrderItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,6 +93,7 @@ Route::middleware(['accept.json'])->prefix('v1')->group(function() {
     });
 
     Route::get('/order/status', [OrderTrackingController::class, 'status']);
+    Route::get('/units', [UnitController::class, 'units']);
 
     Route::prefix('products')->group(function() {
       Route::get('/', [App\Http\Controllers\V1\ProductsController::class, 'index']);

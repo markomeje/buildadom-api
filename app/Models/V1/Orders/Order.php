@@ -29,7 +29,7 @@ class Order extends Model
   /**
    * @return HasMany
    */
-  public function orderItems(): HasMany
+  public function items(): HasMany
   {
     return $this->hasMany(orderItem::class);
   }

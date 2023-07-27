@@ -43,7 +43,6 @@ class OrderService extends BaseService
         collect($items->toArray())->each(function ($cart) {
           $this->saveLatestOrderDetails($this->product->findOrFail($cart['product_id']), $cart['quantity']);
         });
-
         $this->cart->where(['user_id' => auth()->id()])->update(['status' => CartStatusEnum::FULFILLED->value]);
       });
 
@@ -59,7 +58,7 @@ class OrderService extends BaseService
   public function fetchLatestPendingOrder(): ?Order
   {
     try {
-      return $this->order->latest()->where(['user_id' => auth()->id(), 'status' => OrderStatusEnum::PENDING->value])->first();
+      return $this->order->with(['items'])->latest()->where(['user_id' => auth()->id(), 'status' => OrderStatusEnum::PENDING->value])->first();
     } catch (Exception $e) {
       throw new Exception($e->getMessage());
     }
@@ -107,7 +106,7 @@ class OrderService extends BaseService
   public function details(int $id): JsonResponse
   {
     try {
-      $order = $this->order->where(['id' => $id, 'user_id' => auth()->id()])->first();
+      $order = $this->order->with(['items'])->where(['id' => $id, 'user_id' => auth()->id()])->first();
       return $this->successResponse(['order' => $order]);
     } catch (Exception $e) {
       return $this->errorResponse($e->getMessage());
@@ -120,7 +119,7 @@ class OrderService extends BaseService
   public function orders(): JsonResponse
   {
     try {
-      $orders = $this->order->where(['user_id' => auth()->id()])->get();
+      $orders = $this->order->with(['items'])->where(['user_id' => auth()->id()])->get();
       return $this->successResponse(['orders' => $orders]);
     } catch (Exception $e) {
       return $this->errorResponse($e->getMessage());

@@ -25,7 +25,8 @@ class Product extends Model
     'quantity',
     'user_id',
     'attributes',
-    'currency_id'
+    'currency_id',
+    'unit_id'
   ];
 
   /**

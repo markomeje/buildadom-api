@@ -31,7 +31,8 @@ class ProductRequest extends FormRequest
       'category_id' => ['required', 'exists:categories,id'],
       'quantity' => ['required', 'integer'],
       'attributes' => ['nullable'],
-      'currency_id' => ['required', 'exists:currencies,id']
+      'currency_id' => ['required', 'exists:currencies,id'],
+      'unit_id' => ['required', 'exists:units,id'],
     ];
   }
 
