@@ -19,8 +19,11 @@ class OrderService extends BaseService
 
   /**
    * @param Order $order
+   * @param Cart $cart
+   * @param Product $product
+   * @param OrderItemService $orderItemService
    */
-  public function __construct(public Order $order, Cart $cart, public OrderItemService $orderItemService, public Product $product)
+  public function __construct(public Order $order, public Cart $cart, public OrderItemService $orderItemService, public Product $product)
   {
     $this->order = $order;
     $this->cart = $cart;
@@ -43,6 +46,7 @@ class OrderService extends BaseService
         collect($items->toArray())->each(function ($cart) {
           $this->saveLatestOrderDetails($this->product->findOrFail($cart['product_id']), $cart['quantity']);
         });
+
         $this->cart->where(['user_id' => auth()->id()])->update(['status' => CartStatusEnum::FULFILLED->value]);
       });
 

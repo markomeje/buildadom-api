@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\Business\BusinessProfile;
+use Illuminate\Notifications\Notifiable;
+use App\Models\Notification\InappNotification;
+use App\Models\Verification\PhoneVerification;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-// use Illuminate\Notifications\Notification;
 
 class User extends Authenticatable implements JWTSubject
 {
-   use HasFactory, Notifiable;
+  use HasFactory, Notifiable;
 
    /**
    * The attributes that are mass assignable.
@@ -33,54 +35,44 @@ class User extends Authenticatable implements JWTSubject
    *
    * @var array<int, string>
    */
-   protected $hidden = [
-      'password',
-   ];
+  protected $hidden = [
+    'password',
+  ];
 
    /**
    * The attributes that should be cast.
    *
    * @var array<string, string>
    */
-   protected $casts = [];
-
-   /**
-   * User types
-   *
-   * @var array<int, string>
-   */
-   public static $types = [
-      'individual',
-      'business'
-   ];
+  protected $casts = [];
 
    /**
    * Get the user's full name.
    */
-   public function fullname()
-   {
-      return ucwords($this->firstname . ' ' . $this->lastname);
-   }
+  public function fullname()
+  {
+    return ucwords($this->firstname . ' ' . $this->lastname);
+  }
 
    /**
    * Get the identifier that will be stored in the subject claim of the JWT.
    *
    * @return mixed
    */
-   public function getJWTIdentifier()
-   {
-      return $this->getKey();
-   }
+  public function getJWTIdentifier()
+  {
+    return $this->getKey();
+  }
 
    /**
    * Return a key value array, containing any custom claims to be added to the JWT.
    *
    * @return array
    */
-   public function getJWTCustomClaims()
-   {
-      return [];
-   }
+  public function getJWTCustomClaims()
+  {
+    return [];
+  }
 
    /**
    * Route notifications for the Africas Talking channel.
@@ -88,50 +80,60 @@ class User extends Authenticatable implements JWTSubject
    * @param  \Illuminate\Notifications\Notification  $notification
    * @return string
    */
-   public function routeNotificationForAfricasTalking($notification): string
-   {
-      return $this->phone;
-   }
+  public function routeNotificationForAfricasTalking($notification): string
+  {
+    return $this->phone;
+  }
 
    /**
    * A user may have one veirifcation
    */
-   public function verification($type = 'phone')
-   {
-      return $this->belongsTo(Verification::class)->where(['type' => $type]);
-   }
+  public function phoneVerification()
+  {
+    return $this->belongsTo(PhoneVerification::class);
+  }
 
    /**
    * A user has one identification record
    */
-   public function identification()
-   {
-      return $this->hasOne(Identification::class);
-   }
+  public function identification()
+  {
+    return $this->hasOne(Identification::class);
+  }
 
-   /**
-   * A user may have One business account
+  /**
+   * Override notifications() method in HasDatabaseNotifications trait.
+   *
+   *
+  */
+  public function notifications()
+  {
+    return $this->morphMany(InappNotification::class, 'notifiable')->orderBy('created_at', 'desc');
+  }
+
+  /**
+   * A user may have One business profile
    */
-   public function business()
-   {
-      return $this->hasOne(Business::class);
-   }
+  public function businessProfile()
+  {
+    return $this->hasOne(BusinessProfile::class);
+  }
 
    /**
    * A user may have a store
    */
-   public function store()
-   {
-      return $this->hasOne(Store::class);
-   }
+  public function store()
+  {
+    return $this->hasOne(Store::class);
+  }
 
    /**
-   * A user may have a role
+   * A user may have a many roles
    */
-   public function role()
-   {
-      return $this->hasOne(Role::class);
-   }
+  public function roles()
+  {
+    return $this->hasMany(UserRole::class);
+  }
 
 }
 

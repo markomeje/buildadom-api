@@ -13,7 +13,7 @@ class OrderController extends Controller
 {
 
   /**
-   * @param OrderService $OrderService
+   * @param OrderService $orderService
    */
   public function __construct(public OrderService $orderService)
   {

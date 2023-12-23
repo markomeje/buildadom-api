@@ -7,8 +7,10 @@
     "require": {
         "php": ">=8.0.1",
         "africastalking/africastalking": "^3.0",
+        "aws/aws-sdk-php": "^3.277",
         "guzzlehttp/guzzle": "^7.5",
         "halaxa/json-machine": "^1.1",
+        "laracraft-tech/laravel-useful-additions": "*",
         "laravel-notification-channels/africastalking": "^3.1.0",
         "laravel/framework": "^9.19",
         "laravel/socialite": "^5.6",

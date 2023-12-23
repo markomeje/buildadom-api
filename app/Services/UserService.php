@@ -2,9 +2,9 @@
 
 
 namespace App\Services;
-use App\Models\{User, Country};
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Propaganistas\LaravelPhone\PhoneNumber;
-use \Exception;
 
 
 class UserService
@@ -22,3 +22,5 @@ class UserService
       'password' => Hash::make($data['password'])
     ]);
   }
+
+}
