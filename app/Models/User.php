@@ -6,6 +6,7 @@ use App\Models\Business\BusinessProfile;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Notification\InappNotification;
 use App\Models\Verification\PhoneVerification;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -46,12 +47,38 @@ class User extends Authenticatable implements JWTSubject
    */
   protected $casts = [];
 
-   /**
+  /**
    * Get the user's full name.
+   *
+   * @return Attribute
    */
-  public function fullname()
+  public function fullname(): Attribute
   {
-    return ucwords($this->firstname . ' ' . $this->lastname);
+      return Attribute::make(
+          get: fn() => ucfirst($this->firstname) . ' ' . ucfirst($this->lastname),
+      );
+  }
+
+  /**
+   *
+   * @return Attribute
+   */
+  protected function email(): Attribute
+  {
+      return Attribute::make(
+          set: fn($value) => strtolower($value)
+      );
+  }
+
+  /**
+   *
+   * @return Attribute
+   */
+  protected function cellphone(): Attribute
+  {
+      return Attribute::make(
+          set: fn($value) => GeneralHelper::getOnlyNumbers($value)
+      );
   }
 
    /**

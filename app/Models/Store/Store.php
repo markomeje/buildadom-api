@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Store;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Store extends Model
 {
@@ -34,7 +35,7 @@ class Store extends Model
 
   /**
    * A store has many images
-   * @return hasMany
+   * @return HasMany
    */
   public function images()
   {

@@ -12,7 +12,10 @@ use App\Facades\V1\SmsSenderFacade;
 use App\Models\Verification\emailVerification;
 use App\Notifications\EmailVerificationNotification;
 
-
+/**
+ * Ideally, all services must return a json response when called in the controller
+ *
+ */
 class EmailVerificationService extends BaseService
 {
 
@@ -33,7 +36,7 @@ class EmailVerificationService extends BaseService
   {
     try {
       $code = $this->generateRandomDigits();
-      $emailVerification = $this->createEmailVerificationDetail($code, $user);
+      $emailVerification = $this->saveVerificationDetail($code, $user);
 
       $user->notify(new EmailVerificationNotification($code));
       return Responser::send(JsonResponse::HTTP_CREATED, [$emailVerification], 'Email verification code has been sent.');
@@ -51,8 +54,14 @@ class EmailVerificationService extends BaseService
       $code = $this->generateRandomDigits();
       $user = $this->user->find(auth()->id());
 
-      $this->createEmailVerificationDetail($code, $user);
+      $emailVerification = $this->getVerificationDetails();
+      if(!empty($emailVerification)) {
+        if($this->isVerified($emailVerification)) {
+          return Responser::send(JsonResponse::HTTP_OK, [], 'Your email is already verified.');
+        }
+      }
 
+      $this->saveVerificationDetail($code, $user);
       $user->notify(new EmailVerificationNotification($code));
       return Responser::send(JsonResponse::HTTP_CREATED, [], 'Your email verification code has been resent.');
     } catch (Exception $e) {
@@ -60,9 +69,9 @@ class EmailVerificationService extends BaseService
     }
   }
 
-  public function emailVerificationHasExpired(emailVerification $verification): bool
+  public function verificationExpired(EmailVerification $emailVerification): bool
   {
-    return $verification->expiry < now();
+    return $emailVerification->expiry < now();
   }
 
   /**
@@ -72,12 +81,12 @@ class EmailVerificationService extends BaseService
   public function verify(Request $request): JsonResponse
   {
     try {
-      $emailVerification = $this->getUserLatestEmailVerificationDetails();
+      $emailVerification = $this->getVerificationDetails();
       if(empty($emailVerification)) {
         return Responser::send(JsonResponse::HTTP_NOT_ACCEPTABLE, [], 'Invalid email verification.');
       }
 
-      if($this->emailIsVerified($emailVerification)) {
+      if($this->isVerified($emailVerification)) {
         return Responser::send(JsonResponse::HTTP_OK, [], 'Your email is already verified.');
       }
 
@@ -85,7 +94,7 @@ class EmailVerificationService extends BaseService
         return Responser::send(JsonResponse::HTTP_FORBIDDEN, [], 'Invalid verification code.');
       }
 
-      if($this->emailVerificationHasExpired($emailVerification)) {
+      if($this->verificationExpired($emailVerification)) {
         return Responser::send(JsonResponse::HTTP_FORBIDDEN, [], 'Expired verification code. Request another');
       }
 
@@ -101,25 +110,40 @@ class EmailVerificationService extends BaseService
     }
   }
 
-  private function getUserLatestEmailVerificationDetails(): ?emailVerification
+  private function getVerificationDetails(): ?emailVerification
   {
-    return $this->emailVerification->where(['user_id' => auth()->id()])->latest()->first();
+    return $this->emailVerification->where(['user_id' => auth()->id()])->first();
   }
 
   /**
+   * Save email verification detail
    *
-   * @return emailVerification
+   * @param int $code
+   * @param User $user
+   *
+   * @return mixed
    */
-  private function createEmailVerificationDetail(int $code, User $user)
+  private function saveVerificationDetail(int $code, User $user)
   {
-    return $this->emailVerification->create([
+    $emailVerificationDetails = $this->getVerificationDetails();
+    $expiry = now()->addMinutes(5);
+
+    if(empty($emailVerificationDetails)) {
+      return $this->emailVerification->create([
+        'code' => $code,
+        'user_id' => $user->id,
+        'expiry' => $expiry,
+      ]);
+    }
+
+    return $emailVerificationDetails->update([
       'code' => $code,
-      'user_id' => $user->id,
-      'expiry' => now()->addMinutes(5),
+      'expiry' => $expiry,
+      'verified' => false,
     ]);
   }
 
-  public function emailIsVerified(EmailVerification $emailVerification): bool
+  public function isVerified(EmailVerification $emailVerification): bool
   {
     return (bool)$emailVerification->verified === true;
   }

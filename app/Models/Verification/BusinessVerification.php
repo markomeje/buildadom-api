@@ -3,6 +3,8 @@
 namespace App\Models\Verification;
 
 use App\Models\User;
+use App\Models\Country;
+use App\Models\UploadedFile;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,27 +31,12 @@ class BusinessVerification extends Model
     'verified',
     'user_id',
     'address',
+    'uploaded_document'
   ];
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array<int, string>
-   */
-  public static $types = [
-    'drivers license',
-    'voters card',
-    'international passport',
-    'national identity card'
-  ];
-
-  /**
-   * An ID may have many image documents
-   * @return Image
-   */
-  public function image()
+  public function document()
   {
-    return $this->hasOne(Image::class, 'model_id')->where(['model' => 'identification']);
+    return $this->morphMany(UploadedFile::class, 'uploadable');
   }
 
   /**
@@ -64,7 +51,7 @@ class BusinessVerification extends Model
   /**
    * An ID belongs to a citizenship country
    */
-  public function citizenship()
+  public function citizenshipCountry()
   {
     return $this->belongsTo(Country::class, 'citizenship_country');
   }
@@ -72,7 +59,7 @@ class BusinessVerification extends Model
   /**
    * An ID belongs to a birth country
    */
-  public function birth()
+  public function birthCountry()
   {
     return $this->belongsTo(Country::class, 'birth_country');
   }
