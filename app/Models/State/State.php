@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\State;
 
+use App\Models\City\City;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Category extends Model
+class State extends Model
 {
   use HasFactory;
 
@@ -16,15 +17,19 @@ class Category extends Model
    * @var array<int, string>
    */
   protected $fillable = [
+    'country_id',
     'name',
+    'latitude',
+    'longitude',
+    'status',
   ];
 
   /**
-   * A Category may have many products
    * @return HasMany
    */
-  public function products()
+  public function cities(): HasMany
   {
-    return $this->hasMany(Product::class);
+    return $this->hasMany(City::class, 'state_id');
   }
+
 }

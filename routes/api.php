@@ -1,17 +1,7 @@
 <?php
 
-// $origin = request()->headers->get('origin');
-// $origin = app()->environment(['production']) ? (in_array($origin, ['http://localhost:3000', env('FRONTEND_URL'), 'http://localhost:6100', 'https://buildadom-admin.netlify.app']) ? $origin : '') : '*';
 
-// header("Access-Control-Allow-Origin: *");
-// header('Access-Control-Allow-Headers: origin, x-requested-with, content-type');
-// header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
-
-//dd(password_hash('12345678!', PASSWORD_DEFAULT));
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\UnitController;
 use App\Http\Controllers\V1\UserController;
@@ -34,13 +24,11 @@ use App\Http\Controllers\V1\Customer\Orders\OrderItemController;
 
 
 Route::middleware(['accept.json'])->domain(env('API_URL'))->prefix('v1')->group(function() {
-  Route::prefix('/provider')->name('provider.')->group(base_path('routes/v1/provider.php'));
   Route::prefix('/admin')->name('admin.')->group(base_path('routes/v1/admin.php'));
   Route::prefix('/merchant')->name('merchant.')->group(base_path('routes/v1/merchant.php'));
   Route::prefix('/customer')->name('customer.')->group(base_path('routes/v1/customer.php'));
-  Route::prefix('/general')->name('general.')->group(base_path('routes/v1/general.php'));
-
   Route::prefix('/auth')->name('auth.')->group(base_path('routes/v1/auth.php'));
+  Route::prefix('/')->group(base_path('routes/v1/general.php'));
 });
 
 Route::middleware(['accept.json'])->domain(env('API_URL'))->prefix('v0')->group(function() {

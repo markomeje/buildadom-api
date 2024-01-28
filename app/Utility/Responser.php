@@ -9,12 +9,13 @@ class Responser
 {
   /**
    * Return a new JSON response with mixed(object|JsonSerializable) data
+   *
    * @param int $status
    * @param mixed $data
    *
    * @return JsonResponse
    */
-  public static function send(int $status, mixed $data = [], string $message): JsonResponse
+  public static function send(int $status, mixed $data = null, string $message): JsonResponse
   {
     return new JsonResponse([
         'status' => $status,

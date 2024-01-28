@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Seeders;
+use App\Enums\CurrencyTypeEnum;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 use App\Models\Currency;
@@ -19,7 +20,7 @@ class CurrencySeeder extends Seeder
     DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
     $currencies = [
-      ['code' =>'NGN' , 'name' => 'Naira', 'symbol' => '₦'],
+      ['code' => 'NGN' , 'name' => 'Nigerian Naira', 'symbol' => '₦', 'type' => CurrencyTypeEnum::FIAT->value],
     ];
 
     foreach ($currencies as $currency) {

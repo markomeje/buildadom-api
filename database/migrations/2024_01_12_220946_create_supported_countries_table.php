@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\Enums\Country\SupportedCountryStatusEnum;
 
 return new class extends Migration
 {
@@ -13,12 +14,10 @@ return new class extends Migration
    */
   public function up()
   {
-    Schema::create('orders', function (Blueprint $table) {
+    Schema::create('supported_countries', function (Blueprint $table) {
       $table->id();
-      $table->string('tracking_number');
-      $table->string('status');
-      $table->decimal('total_amount', 28, 2);
-      $table->foreignId('user_id')->nullable()->references('id')->on('users');
+      $table->foreignId('country_id')->nullable()->references('id')->on('countries');
+      $table->string('status')->default(SupportedCountryStatusEnum::ACTIVE->value);
       $table->timestamps();
     });
   }
@@ -30,7 +29,6 @@ return new class extends Migration
    */
   public function down()
   {
-    Schema::dropIfExists('orders');
+    Schema::dropIfExists('supported_countries');
   }
-
 };
