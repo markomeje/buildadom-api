@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
-use App\Enums\State\StateStatusEnum;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -18,7 +17,6 @@ return new class extends Migration
     Schema::create('states', function (Blueprint $table) {
       $table->id();
       $table->foreignId('country_id')->nullable()->references('id')->on('countries');
-      $table->string('status')->default(StateStatusEnum::ACTIVE->value);
       $table->string('name');
       $table->string('latitude')->nullable();
       $table->string('longitude')->nullable();

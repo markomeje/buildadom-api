@@ -1,48 +1,29 @@
 <?php
 
 namespace App\Http\Controllers\V1\Kyc;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Services\V1\Verification\BusinessVerificationService;
-use App\Http\Requests\Verification\BusinessVerificationRequest;
+use App\Http\Requests\V1\Kyc\InitializeKycVerificationRequest;
+use App\Services\V1\Kyc\KycVerificationService;
+use Illuminate\Http\JsonResponse;
 
 class KycVerificationController extends Controller
 {
 
   /**
-   * @param BusinessVerificationService $businessVerificationService
+   * @param KycVerificationService $kycVerification
    */
-  public function __construct(private BusinessVerificationService $businessVerificationService)
+  public function __construct(private KycVerificationService $kycVerification)
   {
-    $this->businessVerificationService = $businessVerificationService;
+    $this->kycVerification = $kycVerification;
   }
 
   /**
    *
-   * @param BusinessVerificationRequest $request
+   * @param InitializeKycVerificationRequest $request
    * @param JsonResponse
    */
-  public function begin(BusinessVerificationRequest $request): JsonResponse
+  public function initialize(InitializeKycVerificationRequest $request): JsonResponse
   {
-    return $this->businessVerificationService->save($request);
-  }
-
-  /**
-   *
-   * @param JsonResponse
-   */
-  public function details(): JsonResponse
-  {
-    return $this->businessVerificationService->details();
+    return $this->kycVerification->initialize($request);
   }
 }
-
-
-
-
-
-
-
-
-
-

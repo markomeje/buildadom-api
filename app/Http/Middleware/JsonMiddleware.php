@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Middleware;
-use Illuminate\Http\Request;
+use App\Utility\Responser;
 use Closure;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class JsonMiddleware
 {
@@ -15,10 +17,7 @@ class JsonMiddleware
   public function handle(Request $request, Closure $next)
   {
     if(!in_array(strtolower($request->headers->get('accept')), ['application/json'])) {
-      return response()->json([
-        'status' => false,
-        'message' => 'Please add `Accept: application/json` header.'
-      ], 501);
+      return Responser::send(JsonResponse::HTTP_NOT_IMPLEMENTED, ['headers' => $request->headers], 'Please add `Accept: application/json` header.');
     }
 
     return $next($request);

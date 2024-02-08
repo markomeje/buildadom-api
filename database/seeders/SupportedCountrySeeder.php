@@ -1,10 +1,11 @@
 <?php
 
 namespace Database\Seeders;
+use App\Enums\Country\SupportedCountryStatusEnum;
 use App\Models\Country\Country;
+use App\Models\Country\SupportedCountry;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use App\Models\Country\SupportedCountry;
 
 class SupportedCountrySeeder extends Seeder
 {
@@ -26,13 +27,13 @@ class SupportedCountrySeeder extends Seeder
       ->orWhere(['iso2' => 'GH'])
       ->get();
 
-    if(count($countries)) {
+    if($countries->count() > 0) {
       foreach ($countries as $country) {
         SupportedCountry::create([
-          'country_id' => $country->id
+          'country_id' => $country->id,
+          'status' => SupportedCountryStatusEnum::ACTIVE->value
         ]);
       }
     }
-
   }
 }

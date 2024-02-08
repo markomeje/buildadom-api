@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
       CountrySeeder::class,
       CategorySeeder::class,
       CurrencySeeder::class,
-      UnitSeeder::class,
+      DocumentTypeSeeder::class,
+      // UnitSeeder::class,
     ]);
   }
 }

@@ -9,9 +9,9 @@ use App\Http\Requests\Email\EmailVerificationRequest;
 class EmailVerificationController extends Controller
 {
 
-  public function __construct(private EmailVerificationService $emailVerificationService)
+  public function __construct(private EmailVerificationService $emailVerification)
   {
-    $this->emailVerificationService = $emailVerificationService;
+    $this->emailVerification = $emailVerification;
   }
 
   /**
@@ -22,28 +22,16 @@ class EmailVerificationController extends Controller
    */
   public function verify(EmailVerificationRequest $request): JsonResponse
   {
-    return $this->emailVerificationService->verify($request);
+    return $this->emailVerification->verify($request);
   }
 
   /**
-   * Resend phone number verification code
+   * Resend email verification code
    *
    * @param JsonResponse
    */
   public function resend(): JsonResponse
   {
-    return $this->emailVerificationService->resend();
+    return $this->emailVerification->resend();
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-

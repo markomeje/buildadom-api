@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Enums;
-
+namespace App\Enums\Cart;
 use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum CartStatusEnum: string
@@ -9,5 +8,7 @@ enum CartStatusEnum: string
 
   use UsefulEnums;
   case FULFILLED = 'fulfilled';
+  case PENDING = 'pending';
+  case ACTIVE = 'active';
 
 }

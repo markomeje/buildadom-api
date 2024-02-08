@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\V1\Order;
+namespace App\Enums\Order;
 use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum OrderTrackingStatusEnum: string

@@ -1,10 +1,10 @@
 <?php
 
 namespace Database\Seeders;
-use App\Enums\CurrencyTypeEnum;
-use Illuminate\Support\Facades\DB;
+use App\Enums\Currency\CurrencyTypeEnum;
+use App\Models\Currency\Currency;
 use Illuminate\Database\Seeder;
-use App\Models\Currency;
+use Illuminate\Support\Facades\DB;
 
 class CurrencySeeder extends Seeder
 {

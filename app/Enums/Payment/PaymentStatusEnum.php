@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\V1;
+namespace App\Enums\Payment;
 
 use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 

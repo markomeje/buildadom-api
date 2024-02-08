@@ -2,19 +2,19 @@
 
 
 namespace App\Services\V1\Phone;
-use Exception;
-use App\Models\User;
-use App\Utility\Responser;
-use Illuminate\Http\Request;
-use App\Services\BaseService;
-use Illuminate\Http\JsonResponse;
 use App\Facades\V1\SmsSenderFacade;
 use App\Models\Phone\PhoneVerification;
+use App\Models\User;
+use App\Services\BaseService;
+use App\Utility\Help;
+use App\Utility\Responser;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 
 class PhoneVerificationService extends BaseService
 {
-
   /**
    * @param PhoneVerification $phoneVerification
    * @param User $user
@@ -31,18 +31,23 @@ class PhoneVerificationService extends BaseService
   public function send(User $user): JsonResponse
   {
     try {
-      $code = $this->generateRandomDigits();
-      $message = $this->getPhoneVerificationMessage($code);
-      $phoneVerification = $this->createPhoneVerificationDetail($code, $user);
+      $code = Help::generateRandomDigits();
+      $message = $this->getMessage($code);
+
+      PhoneVerification::create([
+        'code' => $code,
+        'user_id' => $user->id,
+        'expiry' => now()->addMinutes(5),
+      ]);
 
       SmsSenderFacade::push($user, $message);
-      return Responser::send(JsonResponse::HTTP_CREATED, [$phoneVerification], 'Phone verification code has been sent.');
+      return Responser::send(JsonResponse::HTTP_CREATED, [], 'Phone verification code has been sent.');
     } catch (Exception $e) {
       return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 
-  private function getPhoneVerificationMessage(int $code): string
+  private function getMessage(int $code): string
   {
     $sender_id = config('services.termii.sender_id');
     $message = "Your {$sender_id} phone number verification code is {$code}";
@@ -56,7 +61,7 @@ class PhoneVerificationService extends BaseService
   {
     try {
       $code = $this->generateRandomDigits();
-      $message = $this->getPhoneVerificationMessage($code);
+      $message = $this->getMessage($code);
       $user = $this->user->find(auth()->id());
 
       $this->createPhoneVerificationDetail($code, $user);
@@ -110,7 +115,7 @@ class PhoneVerificationService extends BaseService
 
   private function getUserLatestPhoneVerificationDetails(): ?PhoneVerification
   {
-    return $this->phoneVerification->where(['user_id' => auth()->id()])->latest()->first();
+    return PhoneVerification::where(['user_id' => auth()->id()])->latest()->first();
   }
 
   /**
@@ -119,7 +124,7 @@ class PhoneVerificationService extends BaseService
    */
   private function createPhoneVerificationDetail(int $code, User $user)
   {
-    return $this->phoneVerification->create([
+    return PhoneVerification::create([
       'code' => $code,
       'user_id' => $user->id,
       'expiry' => now()->addMinutes(5),
@@ -132,15 +137,3 @@ class PhoneVerificationService extends BaseService
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

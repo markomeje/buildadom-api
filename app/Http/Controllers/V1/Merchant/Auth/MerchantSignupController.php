@@ -10,9 +10,9 @@ use App\Http\Requests\V1\Merchant\Auth\MerchantSignupRequest;
 class MerchantSignupController extends Controller
 {
 
-  public function __construct(private MerchantSignupService $merchantSignupService)
+  public function __construct(private MerchantSignupService $merchantSignup)
   {
-    $this->merchantSignupService = $merchantSignupService;
+    $this->merchantSignup = $merchantSignup;
   }
 
   /**
@@ -22,7 +22,7 @@ class MerchantSignupController extends Controller
    */
   public function signup(MerchantSignupRequest $request)
   {
-    return $this->merchantSignupService->signup($request);
+    return $this->merchantSignup->signup($request);
   }
 
 }

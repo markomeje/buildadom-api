@@ -1,16 +1,14 @@
 <?php
 
 namespace Database\Seeders;
+use App\Enums\Currency\CurrencyTypeEnum;
 use \JsonMachine\Items;
+use App\Models\Currency\Currency;
 use App\Models\City\City;
 use App\Models\State\State;
 use App\Models\Country\Country;
 use Illuminate\Database\Seeder;
-use App\Models\Currency\Currency;
-use Illuminate\Support\Facades\DB;
-use App\Enums\State\StateStatusEnum;
-use App\Enums\Currency\CurrencyTypeEnum;
-use App\Enums\Currency\CurrencyStatusEnum;
+use DB;
 
 class CountrySeeder extends Seeder
 {
@@ -91,7 +89,6 @@ class CountrySeeder extends Seeder
     return State::create([
       'country_id' => $country_id,
       'name' => $state->name,
-      'status' => StateStatusEnum::ACTIVE->value,
       'latitude' => $state->latitude,
       'longitude' => $state->longitude,
     ]);
@@ -109,7 +106,6 @@ class CountrySeeder extends Seeder
     Currency::updateOrCreate(['code' => $currency_code], [
       'country_id' => $country_id,
       'type' => CurrencyTypeEnum::FIAT->value,
-      'status' => CurrencyStatusEnum::ACTIVE->value,
       'code' => $currency_code,
       'name' => $currencies[$currency_code] ?? ''
     ]);
@@ -127,7 +123,6 @@ class CountrySeeder extends Seeder
       'country_id' => $country_id,
       'state_id' => $state->id ?? null,
       'name' => $city->name,
-      'status' => StateStatusEnum::ACTIVE->value,
       'latitude' => $city->latitude,
       'longitude' => $city->longitude,
     ]);

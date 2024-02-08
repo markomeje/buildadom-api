@@ -1,24 +1,22 @@
 <?php
 
-
 namespace App\Services\V1\Merchant\Auth;
-use DB;
-use Hash;
-use Exception;
+use App\Enums\User\UserRoleEnum;
+use App\Enums\User\UserStatusEnum;
 use App\Models\User;
 use App\Models\UserRole;
-use App\Utility\Responser;
-use Illuminate\Http\Request;
 use App\Services\BaseService;
-use App\Helpers\UtilityHelper;
-use App\Enums\User\UserRoleEnum;
-use Illuminate\Http\JsonResponse;
-use App\Enums\User\UserStatusEnum;
+use App\Services\V1\Email\EmailVerificationService;
+use App\Services\V1\Phone\PhoneVerificationService;
 use App\Traits\UserTypeCheckerTrait;
 use App\Traits\V1\Business\BusinessProfileTrait;
-use App\Notifications\EmailVerificationNotification;
-use App\Services\V1\Verification\EmailVerificationService;
-use App\Services\V1\Verification\PhoneVerificationService;
+use App\Utility\Help;
+use App\Utility\Responser;
+use DB;
+use Exception;
+use Hash;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 
 class MerchantSignupService extends BaseService
@@ -26,10 +24,10 @@ class MerchantSignupService extends BaseService
 
   use UserTypeCheckerTrait, BusinessProfileTrait;
 
-  public function __construct(private PhoneVerificationService $phoneVerificationService, private EmailVerificationService $emailVerificationService)
+  public function __construct(private PhoneVerificationService $phoneVerification, private EmailVerificationService $emailVerification)
   {
-    $this->phoneVerificationService = $phoneVerificationService;
-    $this->emailVerificationService = $emailVerificationService;
+    $this->phoneVerification = $phoneVerification;
+    $this->emailVerification = $emailVerification;
   }
 
   /**
@@ -43,7 +41,7 @@ class MerchantSignupService extends BaseService
     try {
       DB::beginTransaction();
       $type = strtolower($request->type);
-      $phone = UtilityHelper::formatPhoneNumber($request->phone);
+      $phone = Help::formatPhoneNumber($request->phone);
       $password = Hash::make($request->password);
 
       $user = User::create([
@@ -68,8 +66,8 @@ class MerchantSignupService extends BaseService
         'user_id' => $user->id
       ]);
 
-      $this->phoneVerificationService->send($user);
-      $this->emailVerificationService->send($user);
+      $this->phoneVerification->send($user);
+      $this->emailVerification->send($user);
 
       DB::commit();
       return Responser::send(JsonResponse::HTTP_CREATED, [
@@ -78,7 +76,7 @@ class MerchantSignupService extends BaseService
       ], 'Signup successful. Verification detials has been sent.');
     } catch (Exception $e) {
       DB::rollback();
-      return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], 'Oooops! singup failed. Try again.');
     }
   }
 

@@ -1,32 +1,24 @@
 <?php
 
-use App\Http\Controllers\V1\AuthController;
-use App\Http\Controllers\V1\ImageController;
 use App\Http\Controllers\Api\V1\UserController;
-use App\Http\Controllers\V1\OrderTrackingController;
-use App\Http\Controllers\V1\Merchant\StoreController;
+use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\Customer\Orders\OrderItemController;
+use App\Http\Controllers\V1\ImageController;
 use App\Http\Controllers\V1\Merchant\Auth\MerchantSignupController;
+use App\Http\Controllers\V1\Merchant\StoreController;
+use App\Http\Controllers\V1\OrderTrackingController;
+use Illuminate\Support\Facades\Route;
+
 
 
 
 Route::middleware(['guest'])->group(function() {
   Route::post('/signup', [MerchantSignupController::class, 'signup']);
 
-  Route::prefix('/verification')->group(function() {
-    Route::prefix('/email')->group(function() {
-      Route::post('/verify', [UserController::class, 'user']);
-    });
-
-    Route::prefix('/phone')->group(function() {
-      Route::post('/verify', [UserController::class, 'verify']);
-      Route::post('/resend-code', [PhoneVerificationController::class, 'resend']);
-    });
+  Route::prefix('/login')->group(function() {
+    Route::post('/', [MerchantSignupController::class, 'login']);
   });
 
-  Route::prefix('email')->group(function() {
-    Route::post('/verify', [UserController::class, 'user']);
-  });
 });
 
 // Route::middleware(['auth:api'])->group(function() {

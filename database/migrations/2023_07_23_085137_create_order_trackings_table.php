@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Enums\Order\OrderTrackingStatusEnum;
 use Illuminate\Database\Migrations\Migration;
-use App\Enums\V1\Order\OrderTrackingStatusEnum;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -16,7 +16,7 @@ return new class extends Migration
   {
     Schema::create('order_trackings', function (Blueprint $table) {
       $table->id();
-      $table->enum('status', OrderTrackingStatusEnum::array())->default(OrderTrackingStatusEnum::PENDING->value);
+      $table->string('status')->default(OrderTrackingStatusEnum::PENDING->value);
       $table->foreignId('order_item_id')->nullable()->references('id')->on('order_items');
       $table->timestamps();
     });

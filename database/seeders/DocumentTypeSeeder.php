@@ -15,7 +15,7 @@ class DocumentTypeSeeder extends Seeder
    */
   public function run()
   {
-    $this->command->info('Document Type Seeder started.');
+    $this->command->info('Seeding Document Types started.');
     DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
     DB::table('document_types')->truncate();
     DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
@@ -25,38 +25,33 @@ class DocumentTypeSeeder extends Seeder
         'name' => 'Drivers Liscence' ,
         'description' => 'National Drivers Liscence',
         'code' => 'DRIVERS_LISCENCE',
-        'status' => DocumentTypeStatusEnum::ACTIVE->value,
         'double_sided' => true,
       ],
       [
         'name' => 'Voters Card' ,
         'description' => 'National Voters Card',
         'code' => 'VOTERS_CARD',
-        'status' => DocumentTypeStatusEnum::ACTIVE->value,
         'double_sided' => true,
       ],
       [
         'name' => 'International Passport' ,
         'description' => 'International Passport',
         'code' => 'INTERNATIONAL_PASSPORT',
-        'status' => DocumentTypeStatusEnum::ACTIVE->value,
         'double_sided' => true,
       ],
       [
         'name' => 'National Identity Card' ,
         'description' => 'National Identity Card',
         'code' => 'NATIONAL_IDENTITY_CARD',
-        'status' => DocumentTypeStatusEnum::ACTIVE->value,
         'double_sided' => true,
       ],
     ];
 
     foreach ($documents as $document) {
       DocumentType::updateOrCreate([
-        'name' => $document['name'],
+        'code' => $document['code'],
       ], $document);
     }
-
     $this->command->info('Document Type Seeder completed successfully.');
   }
 }

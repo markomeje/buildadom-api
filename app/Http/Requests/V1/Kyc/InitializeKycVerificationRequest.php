@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Verification;
+namespace App\Http\Requests\V1\Kyc;
 use App\Utility\Responser;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 
-class SaveKycVerificationRequest extends FormRequest
+class InitializeKycVerificationRequest extends FormRequest
 {
 
   /**
@@ -29,12 +29,11 @@ class SaveKycVerificationRequest extends FormRequest
   public function rules()
   {
     return [
-      'id_number' => ['required', 'srting', 'max:50'],
+      'document_number' => ['required', 'string', 'max:50'],
       'fullname' => ['required', 'string', 'max:50'],
-      'document_type_id' => ['required', 'int', Rule::exists('documents_types', 'id')],
+      'document_type_id' => ['required', 'int', Rule::exists('document_types', 'id')],
       'birth_country' => ['required', 'int', Rule::exists('supported_countries', 'id')],
       'citizenship_country' => ['required', 'int', Rule::exists('supported_countries', 'id')],
-      'state' => ['nullable', 'string', 'max:50'],
       'document_expiry_date' => ['required', 'string', 'date'],
       'birth_date' => ['required', 'string', 'date'],
       'address' => ['required', 'string'],

@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Enums\Document\DocumentTypeStatusEnum;
 
 return new class extends Migration
 {
@@ -19,7 +18,6 @@ return new class extends Migration
       $table->string('name')->unique();
       $table->string('description');
       $table->string('code')->unique();
-      $table->string('status')->default(DocumentTypeStatusEnum::ACTIVE->value);
       $table->boolean('double_sided')->default(true);
       $table->timestamps();
     });

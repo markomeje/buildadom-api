@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\Country\CountryStatusEnum;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -30,10 +29,9 @@ return new class extends Migration
       $table->string('flag_url')->nullable();
       $table->string('iso3');
       $table->string('iso2');
-      $table->string('status')->default(CountryStatusEnum::ACTIVE->value);
       $table->timestamps();
     });
-  } 
+  }
 
   /**
    * Reverse the migrations.

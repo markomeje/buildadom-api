@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Models\Kyc;
+use App\Models\Country\SupportedCountry;
 use App\Models\User;
-use App\Models\City\City;
-use App\Models\UploadedFile;
-use App\Models\SupportedCountry;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class KycVerification extends Model
 {
@@ -20,30 +19,20 @@ class KycVerification extends Model
    */
   protected $fillable = [
     'document_type_id',
-    'id_number',
+    'document_number',
     'birth_country',
-    'city_id',
     'citizenship_country',
     'fullname',
     'document_expiry_date',
     'birth_date',
-    'verified',
+    'status',
     'user_id',
     'address',
   ];
 
-  public $casts = [
-    'verified' => 'boolean'
-  ];
-
-  public function document()
-  {
-    return $this->morphMany(UploadedFile::class, 'uploadable');
-  }
+  public $casts = [];
 
   /**
-   * A kyc verification belongs to a user
-   *
    * @return BelongsTo
    */
   public function user(): BelongsTo
@@ -52,8 +41,6 @@ class KycVerification extends Model
   }
 
   /**
-   * An kyc verification belongs to a citizenship country
-   *
    * @return BelongsTo
    */
   public function citizenshipCountry(): BelongsTo
@@ -62,8 +49,14 @@ class KycVerification extends Model
   }
 
   /**
-   * An kyc verification belongs to a birth country
-   *
+   * @return HasMany
+   */
+  public function documents(): HasMany
+  {
+    return $this->hasMany(KycDocument::class, 'kyc_verification_id');
+  }
+
+  /**
    * @return BelongsTo
    */
   public function birthCountry(): BelongsTo
@@ -71,22 +64,4 @@ class KycVerification extends Model
     return $this->belongsTo(SupportedCountry::class, 'birth_country');
   }
 
-  /**
-   * An kyc verification belongs to a user
-   *
-   * @return BelongsTo
-   */
-  public function city(): BelongsTo
-  {
-    return $this->belongsTo(City::class, 'city_id');
-  }
-
 }
-
-
-
-
-
-
-
-

@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Models\Business\BusinessProfile;
-use Illuminate\Notifications\Notifiable;
 use App\Models\Notification\InappNotification;
 use App\Models\Verification\PhoneVerification;
+use App\Utility\Help;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -77,7 +78,7 @@ class User extends Authenticatable implements JWTSubject
   protected function cellphone(): Attribute
   {
       return Attribute::make(
-          set: fn($value) => GeneralHelper::getOnlyNumbers($value)
+          set: fn($value) => Help::getOnlyNumbers($value)
       );
   }
 
@@ -163,15 +164,3 @@ class User extends Authenticatable implements JWTSubject
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
