@@ -4,7 +4,6 @@ namespace App\Http\Controllers\V1\Email;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Services\V1\Email\EmailVerificationService;
-use App\Http\Requests\Email\EmailVerificationRequest;
 
 class EmailVerificationController extends Controller
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Email;
+namespace App\Http\Requests\V1\Email;
 use App\Utility\Responser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Http\FormRequest;

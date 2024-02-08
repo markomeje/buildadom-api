@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\V1\Phone;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Phone\PhoneVerificationRequest;
 use App\Services\V1\Phone\PhoneVerificationService;
-use App\Http\Requests\Phone\PhoneVerificationRequest;
+use Illuminate\Http\JsonResponse;
 
 class PhoneVerificationController extends Controller
 {
@@ -35,15 +35,3 @@ class PhoneVerificationController extends Controller
     return $this->phoneVerificationService->resend();
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-

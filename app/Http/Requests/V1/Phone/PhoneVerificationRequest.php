@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Phone;
+namespace App\Http\Requests\V1\Phone;
 use App\Utility\Responser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Http\FormRequest;
@@ -58,17 +58,3 @@ class PhoneVerificationRequest extends FormRequest
     throw new ValidationException($validator, $response);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
