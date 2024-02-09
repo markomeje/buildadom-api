@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\V1\Email;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Email\EmailVerificationRequest;
 use App\Services\V1\Email\EmailVerificationService;
+use Illuminate\Http\JsonResponse;
 
 class EmailVerificationController extends Controller
 {
