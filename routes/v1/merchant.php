@@ -12,13 +12,13 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::middleware(['guest'])->group(function() {
-  Route::post('/signup', [MerchantSignupController::class, 'signup']);
-
-  Route::prefix('/login')->group(function() {
-    Route::post('/', [MerchantSignupController::class, 'login']);
+Route::middleware(['merchant'])->group(function() {
+  Route::prefix('store')->group(function() {
+    Route::post('/create', [StoreController::class, 'create']);
+    Route::post('/update/{id}', [StoreController::class, 'update']);
+    Route::get('/', [StoreController::class, 'store']);
+    Route::post('/publish/{id}', [StoreController::class, 'publish']);
   });
-
 });
 
 // Route::middleware(['auth:api'])->group(function() {
