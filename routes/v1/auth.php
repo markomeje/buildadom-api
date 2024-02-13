@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\V1\Auth\LoginController;
 use App\Http\Controllers\V1\Email\EmailVerificationController;
+use App\Http\Controllers\V1\Kyc\KycFileController;
 use App\Http\Controllers\V1\Kyc\KycVerificationController;
 use App\Http\Controllers\V1\Phone\PhoneVerificationController;
 use Illuminate\Support\Facades\Route;
+
 
 
 Route::post('/login', [LoginController::class, 'login']);
@@ -20,12 +22,16 @@ Route::middleware(['auth'])->group(function() {
   });
 
   Route::prefix('kyc')->group(function() {
-    Route::post('/initialize', [KycVerificationController::class, 'initialize']);
-    Route::post('/info', [KycVerificationController::class, 'info']);
+    Route::prefix('verification')->group(function() {
+      Route::post('/initialize', [KycVerificationController::class, 'initialize']);
+      Route::get('/info', [KycVerificationController::class, 'info']);
+    });
 
-    Route::prefix('document')->group(function() {
-      Route::post('/upload/{id}', [KycVerificationController::class, 'upload']);
-      Route::post('/list', [KycVerificationController::class, 'list']);
+    Route::prefix('file')->group(function() {
+      Route::post('/upload', [KycFileController::class, 'upload']);
+      Route::post('/change/{id}', [KycFileController::class, 'change']);
+      Route::get('/list', [KycFileController::class, 'list']);
+      Route::post('/delete/{id}', [KycFileController::class, 'delete']);
     });
   });
 });

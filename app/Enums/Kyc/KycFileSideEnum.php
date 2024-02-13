@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Enums\Document;
+namespace App\Enums\Kyc;
 use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
-enum DocumentSideEnum: string
+enum KycFileSideEnum: string
 {
   use UsefulEnums;
 

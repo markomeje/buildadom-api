@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Kyc\KycFileStatusEnum;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use App\Enums\Kyc\KycVerificationStatusEnum;
@@ -14,12 +15,14 @@ return new class extends Migration
    */
   public function up()
   {
-    Schema::create('kyc_documents', function (Blueprint $table) {
+    Schema::create('kyc_files', function (Blueprint $table) {
       $table->id();
-      $table->string('fullname')->nullable();
+      $table->string('description');
+      $table->foreignId('user_id')->nullable()->references('id')->on('users');
+      $table->string('file_side');
       $table->foreignId('kyc_verification_id')->nullable()->references('id')->on('kyc_verifications');
-      $table->string('document_side');
-      $table->string('document_file');
+      $table->string('uploaded_file');
+      $table->string('status')->default(KycFileStatusEnum::PENDING->value);
       $table->string('extras')->nullable();
       $table->timestamps();
     });
@@ -32,6 +35,6 @@ return new class extends Migration
    */
   public function down()
   {
-    Schema::dropIfExists('kyc_documents');
+    Schema::dropIfExists('kyc_files');
   }
 };

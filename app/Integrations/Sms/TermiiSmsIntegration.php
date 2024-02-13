@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Integrations\Sms;
-use Exception;
-use App\Helpers\PhoneHelper;
-use App\Interfaces\SmsSenderInterface;
 use \ManeOlawale\Termii\Client;
+use App\Interfaces\SmsSenderInterface;
+use App\Utility\Help;
+use Exception;
 
 class TermiiSmsIntegration implements SmsSenderInterface
 {
@@ -27,7 +27,7 @@ class TermiiSmsIntegration implements SmsSenderInterface
 
   public function setPhone(string $phone): TermiiSmsIntegration
   {
-    $this->phone = PhoneHelper::formatPhoneNumber($phone);
+    $this->phone = Help::formatPhoneNumber($phone);
     return $this;
   }
 
@@ -64,6 +64,3 @@ class TermiiSmsIntegration implements SmsSenderInterface
     return true;
   }
 }
-
-
-

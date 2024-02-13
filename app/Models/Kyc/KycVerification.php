@@ -2,6 +2,7 @@
 
 namespace App\Models\Kyc;
 use App\Models\Country\SupportedCountry;
+use App\Models\Document\DocumentType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -51,9 +52,9 @@ class KycVerification extends Model
   /**
    * @return HasMany
    */
-  public function documents(): HasMany
+  public function kycFiles(): HasMany
   {
-    return $this->hasMany(KycDocument::class, 'kyc_verification_id');
+    return $this->hasMany(KycFile::class);
   }
 
   /**
@@ -62,6 +63,14 @@ class KycVerification extends Model
   public function birthCountry(): BelongsTo
   {
     return $this->belongsTo(SupportedCountry::class, 'birth_country');
+  }
+
+  /**
+   * @return BelongsTo
+   */
+  public function documentType(): BelongsTo
+  {
+    return $this->belongsTo(DocumentType::class, 'document_type_id');
   }
 
 }
