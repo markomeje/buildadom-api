@@ -18,7 +18,6 @@ return new class extends Migration
     Schema::create('supported_countries', function (Blueprint $table) {
       $table->id();
       $table->foreignId('country_id')->nullable()->references('id')->on('countries');
-      $table->string('status')->default(SupportedCountryStatusEnum::ACTIVE->value);
       $table->timestamps();
     });
   }

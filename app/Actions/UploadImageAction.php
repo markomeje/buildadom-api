@@ -25,10 +25,8 @@ class UploadImageAction
     }
 
     $disk->put($filename, file_get_contents($file));
-    $url = $disk->url($filename);
-
     return [
-      'file_url' => $url,
+      'url' => $disk->url($filename),
       'filename' => $filename
     ];
   }

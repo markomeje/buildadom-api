@@ -5,7 +5,9 @@ use App\Http\Controllers\V1\Email\EmailVerificationController;
 use App\Http\Controllers\V1\Kyc\KycFileController;
 use App\Http\Controllers\V1\Kyc\KycVerificationController;
 use App\Http\Controllers\V1\Phone\PhoneVerificationController;
+use App\Http\Controllers\V1\Upload\UploadController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -33,5 +35,10 @@ Route::middleware(['auth'])->group(function() {
       Route::get('/list', [KycFileController::class, 'list']);
       Route::post('/delete/{id}', [KycFileController::class, 'delete']);
     });
+  });
+
+  Route::prefix('upload')->group(function() {
+    Route::post('/handle/{id?}', [UploadController::class, 'handle']);
+    Route::post('/delete/{id}', [UploadController::class, 'delete']);
   });
 });

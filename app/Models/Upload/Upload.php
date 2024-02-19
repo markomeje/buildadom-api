@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Upload;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class Upload extends Model
 {
   use HasFactory;
 
@@ -30,9 +30,9 @@ class Image extends Model
   ];
 
   /**
-   * Get all of the owning imageable models.
+   * Get all of the owning uploadable models.
    */
-  public function imageable()
+  public function uploadable()
   {
     return $this->morphTo();
   }

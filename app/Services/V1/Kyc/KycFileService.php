@@ -41,7 +41,7 @@ class KycFileService extends BaseService
 
       $file = $request->file('kyc_file');
       $uploaded = UploadImageAction::handle($file);
-      $uploaded_file = $uploaded['file_url'] ?? null;
+      $uploaded_file = $uploaded['url'] ?? null;
 
       if(empty($uploaded_file)) {
         return Responser::send(JsonResponse::HTTP_BAD_REQUEST, [], 'File upload failed. Try again.');
@@ -93,7 +93,7 @@ class KycFileService extends BaseService
       $file = $request->file('kyc_file');
       $previous_file = optional($kyc_file->extras)->filename;
       $uploaded = UploadImageAction::handle($file, $previous_file);
-      $uploaded_file = $uploaded['file_url'] ?? null;
+      $uploaded_file = $uploaded['url'] ?? null;
 
       if(empty($uploaded_file)) {
         return Responser::send(JsonResponse::HTTP_BAD_REQUEST, [], 'File upload failed. Try again.');

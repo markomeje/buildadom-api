@@ -1,24 +1,14 @@
 <?php
 
-use App\Http\Controllers\Api\V1\UserController;
-use App\Http\Controllers\V1\AuthController;
-use App\Http\Controllers\V1\Customer\Orders\OrderItemController;
-use App\Http\Controllers\V1\ImageController;
-use App\Http\Controllers\V1\Merchant\Auth\MerchantSignupController;
-use App\Http\Controllers\V1\Merchant\StoreController;
-use App\Http\Controllers\V1\OrderTrackingController;
+use App\Http\Controllers\V1\Merchant\Store\StoreController;
 use Illuminate\Support\Facades\Route;
 
 
-
-
-Route::middleware(['merchant'])->group(function() {
-  Route::prefix('store')->group(function() {
-    Route::post('/create', [StoreController::class, 'create']);
-    Route::post('/update/{id}', [StoreController::class, 'update']);
-    Route::get('/', [StoreController::class, 'store']);
-    Route::post('/publish/{id}', [StoreController::class, 'publish']);
-  });
+Route::prefix('store')->group(function() {
+  Route::post('/create', [StoreController::class, 'create']);
+  Route::post('/update/{id}', [StoreController::class, 'update']);
+  Route::get('/list', [StoreController::class, 'list']);
+  Route::post('/publish/{id}', [StoreController::class, 'publish']);
 });
 
 // Route::middleware(['auth:api'])->group(function() {

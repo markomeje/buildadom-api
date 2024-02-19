@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Image\ImageRoleEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +13,7 @@ return new class extends Migration
    */
   public function up()
   {
-    Schema::create('images', function (Blueprint $table) {
+    Schema::create('uploads', function (Blueprint $table) {
       $table->id();
       $table->string('url');
       $table->string('filename')->nullable();
@@ -23,7 +22,7 @@ return new class extends Migration
       $table->unsignedBigInteger('imageable_id');
       $table->string('name');
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
-      $table->string('role')->default(ImageRoleEnum::MAIN->value);
+      $table->string('role')->default(UploadRoleEnum::MAIN->value);
       $table->timestamps();
     });
   }
@@ -35,7 +34,7 @@ return new class extends Migration
    */
   public function down()
   {
-    Schema::dropIfExists('images');
+    Schema::dropIfExists('uploads');
   }
 
 };

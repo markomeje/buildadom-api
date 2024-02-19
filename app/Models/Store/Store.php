@@ -2,9 +2,16 @@
 
 namespace App\Models\Store;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\City\City;
+use App\Models\Country\Country;
+use App\Models\Product\Product;
+use App\Models\State\State;
+use App\Models\Upload\Upload;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Store extends Model
 {
@@ -18,11 +25,23 @@ class Store extends Model
   protected $fillable = [
     'name',
     'description',
+    'state_id',
     'address',
     'user_id',
     'city',
     'country_id',
-    'published'
+    'logo',
+    'published',
+    'city_id',
+    'extras',
+    'banner',
+  ];
+
+  public $casts = [
+    'published' => 'boolean',
+    'extras' => 'json',
+    'banner' => 'json',
+    'logo' => 'json'
   ];
 
   /**
@@ -33,39 +52,51 @@ class Store extends Model
     return $query->where(['published' => true]);
   }
 
-  /**
-   * A store has many images
-   * @return HasMany
-   */
-  public function images()
-  {
-    return $this->hasMany(Image::class, 'model_id')->where(['model' => 'store']);
-  }
-
    /**
-   * A store belongs to a country
-   * @return Country
+   * @return BelongsTo
    */
-  public function country()
+  public function country(): BelongsTo
   {
     return $this->belongsTo(Country::class, 'country_id');
   }
 
    /**
-   * A store belongs to a user
-   * @return User
+   * @return BelongsTo
    */
-  public function user()
+  public function user(): BelongsTo
   {
     return $this->belongsTo(User::class, 'user_id');
   }
 
   /**
-   * A store has many products
-   * @return hasMany
+   * @return HasMany
    */
-  public function products()
+  public function products(): HasMany
   {
-    return $this->hasMany(Product::class)->with(['images', 'currency']);
+    return $this->hasMany(Product::class);
   }
+   /**
+   * @return BelongsTo
+   */
+  public function city(): BelongsTo
+  {
+    return $this->belongsTo(City::class, 'city_id');
+  }
+
+   /**
+   * @return BelongsTo
+   */
+  public function state(): BelongsTo
+  {
+    return $this->belongsTo(State::class, 'state_id');
+  }
+
+  /**
+   * Get all of the post's comments.
+   */
+  // public function uploads()
+  // {
+  //   return $this->morphMany(Upload::class, 'uploadable');
+  // }
+
 }
