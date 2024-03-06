@@ -21,10 +21,14 @@ class CurrencySeeder extends Seeder
 
     $currencies = [
       ['code' => 'NGN' , 'name' => 'Nigerian Naira', 'symbol' => '₦', 'type' => CurrencyTypeEnum::FIAT->value],
+      ['code' => 'USD' , 'name' => 'US Dollar', 'symbol' => '$', 'type' => CurrencyTypeEnum::FIAT->value],
     ];
 
     foreach ($currencies as $currency) {
-      Currency::create($currency);
+      Currency::updateOrCreate(
+        ['code' => $currency['code']],
+        $currency
+      );
     }
   }
 }

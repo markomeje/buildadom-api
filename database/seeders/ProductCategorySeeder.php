@@ -1,11 +1,11 @@
 <?php
 
 namespace Database\Seeders;
-use Illuminate\Support\Facades\DB;
+use App\Models\Product\ProductCategory;
 use Illuminate\Database\Seeder;
-use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
-class CategorySeeder extends Seeder
+class ProductCategorySeeder extends Seeder
 {
   /**
    * Run the database seeds.
@@ -14,13 +14,13 @@ class CategorySeeder extends Seeder
    */
   public function run()
   {
-    DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-    DB::table('categories')->truncate();
-    DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+    DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+    DB::table('product_categories')->truncate();
+    DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
 
     $categories = [
       'Doors and Windows',
-      'Flooring', 
+      'Flooring',
       'Wood',
       'Plumbing and pipes',
       'Paints',
@@ -35,10 +35,9 @@ class CategorySeeder extends Seeder
     ];
 
     foreach ($categories as $category) {
-      Category::create([
-        'name' => strtolower($category),
-        'type' => 'product' 
-      ]);  
+      ProductCategory::create([
+        'name' => $category,
+      ]);
     }
   }
 }

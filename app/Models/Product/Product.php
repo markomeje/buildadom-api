@@ -2,11 +2,13 @@
 
 namespace App\Models\Product;
 
-use App\Models\V1\Product\ProductUnit;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Currency\Currency;
+use App\Models\Product\ProductCategory;
+use App\Models\Store\Store;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
@@ -22,23 +24,19 @@ class Product extends Model
     'description',
     'store_id',
     'published',
-    'category_id',
+    'product_category_id',
     'price',
     'quantity',
     'user_id',
-    'attributes',
+    'tags',
     'currency_id',
-    'unit_id'
+    'product_unit_id',
+    'extras'
   ];
 
-  /**
-   * Product status
-   *
-   * @var array<string>
-   */
-  private $status = [
-    'active',
-    'pending',
+  public $casts = [
+    'tags' => 'json',
+    'extras' => 'json',
   ];
 
   /**
@@ -50,35 +48,25 @@ class Product extends Model
   }
 
   /**
-   * A product has many images
-   * @return HasMany
+   * @return BelongsTo
    */
-  public function images()
+  public function category(): BelongsTo
   {
-    return $this->hasMany(Image::class, 'model_id')->where(['model' => 'product']);
+    return $this->belongsTo(ProductCategory::class, 'product_category_id');
   }
 
   /**
-   * A product belongs to a category
+   * @return BelongsTo
    */
-  public function category()
-  {
-    return $this->belongsTo(Category::class, 'category_id');
-  }
-
-  /**
-   * A product belongs to a user
-   * @return User
-   */
-  public function user()
+  public function user(): BelongsTo
   {
     return $this->belongsTo(User::class, 'user_id');
   }
 
   /**
-   * A product belongs to a currency
+   * @return BelongsTo
    */
-  public function currency()
+  public function currency(): BelongsTo
   {
     return $this->belongsTo(Currency::class);
   }

@@ -40,8 +40,6 @@ class Store extends Model
   public $casts = [
     'published' => 'boolean',
     'extras' => 'json',
-    'banner' => 'json',
-    'logo' => 'json'
   ];
 
   /**
@@ -90,13 +88,5 @@ class Store extends Model
   {
     return $this->belongsTo(State::class, 'state_id');
   }
-
-  /**
-   * Get all of the post's comments.
-   */
-  // public function uploads()
-  // {
-  //   return $this->morphMany(Upload::class, 'uploadable');
-  // }
 
 }

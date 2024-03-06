@@ -1,15 +1,30 @@
 <?php
 
+use App\Http\Controllers\V1\Merchant\Product\ProductController;
 use App\Http\Controllers\V1\Merchant\Store\StoreController;
 use Illuminate\Support\Facades\Route;
 
 
+
+
 Route::prefix('store')->group(function() {
   Route::post('/create', [StoreController::class, 'create']);
-  Route::post('/update/{id}', [StoreController::class, 'update']);
+  Route::post('/{id}/update', [StoreController::class, 'update']);
   Route::get('/list', [StoreController::class, 'list']);
-  Route::post('/publish/{id}', [StoreController::class, 'publish']);
+  Route::post('/{id}/publish', [StoreController::class, 'publish']);
+  Route::post('/{id}/upload', [StoreController::class, 'upload']);
 });
+
+Route::prefix('product')->group(function() {
+  Route::get('/list', [ProductController::class, 'list']);
+  Route::post('/add', [ProductController::class, 'add']);
+  Route::post('/{id}/update', [ProductController::class, 'update']);
+  Route::get('/{id}/details', [ProductController::class, 'product']);
+
+  Route::post('/{id}/publish', [ProductController::class, 'publish']);
+});
+
+
 
 // Route::middleware(['auth:api'])->group(function() {
 //   Route::prefix('auth')->group(function() {

@@ -20,14 +20,15 @@ return new class extends Migration
       $table->text('description');
       $table->foreignId('store_id')->nullable()->references('id')->on('stores');
       $table->string('status')->default('active');
-      $table->foreignId('category_id')->nullable()->references('id')->on('categories');
+      $table->foreignId('product_category_id')->nullable()->references('id')->on('product_categories');
       $table->float('price');
       $table->foreignId('currency_id')->nullable()->references('id')->on('currencies');
       $table->integer('quantity');
       $table->boolean('published')->default(false);
-      $table->foreignId('unit_id')->nullable()->references('id')->on('product_units');
+      $table->foreignId('product_unit_id')->nullable()->references('id')->on('product_units');
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
-      $table->string('attributes')->nullable();
+      $table->string('tags')->nullable();
+      $table->string('extras')->nullable();
       $table->timestamps();
     });
   }

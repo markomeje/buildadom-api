@@ -5,6 +5,7 @@ use App\Actions\UploadImageAction;
 use App\Models\Store\Store;
 use App\Services\BaseService;
 use App\Utility\Responser;
+use App\Utility\Uploader;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,6 +13,12 @@ use Illuminate\Http\Request;
 
 class StoreService extends BaseService
 {
+
+  public function __construct(private Uploader $uploader)
+  {
+    $this->uploader = $uploader;
+  }
+
   /**
    * @param Request $request
    * @return JsonResponse
@@ -19,21 +26,13 @@ class StoreService extends BaseService
   public function create(Request $request): JsonResponse
   {
     try {
-      $logo = $request->file('logo');
-      if($logo) {
-        $logo = UploadImageAction::handle($logo);
-      }
-
-      $banner = $request->file('banner');
-      if($banner) {
-        $banner = UploadImageAction::handle($banner);
-      }
-
       $store = Store::create([
-        ...$request->validated(),
+        'name' => $request->name,
+        'country_id' => $request->country_id,
+        'description' => $request->description,
+        'address' => $request->address,
+        'city_id' => $request->city_id,
         'user_id' => auth()->id(),
-        'banner' => $banner,
-        'logo' => $logo,
         'published' => false,
       ]);
 
@@ -58,6 +57,34 @@ class StoreService extends BaseService
   }
 
   /**
+   * @param int $id
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function update($id, Request $request): JsonResponse
+  {
+    try {
+      $store = Store::query()->find($id);
+      if(empty($store)) {
+        return Responser::send(JsonResponse::HTTP_NOT_FOUND, $store, 'Store record not found. Try again.');
+      }
+
+      $store->update([
+        'name' => $request->name,
+        'country_id' => $request->country_id,
+        'description' => $request->description,
+        'address' => $request->address,
+        'city_id' => $request->city_id,
+        'published' => (boolean)$request->published,
+      ]);
+
+      return Responser::send(JsonResponse::HTTP_OK, $store, 'Operation successful.');
+    } catch (Exception $e) {
+      return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e->getMessage());
+    }
+  }
+
+  /**
    * @param Request $request,
    * @param $id
    */
@@ -69,7 +96,35 @@ class StoreService extends BaseService
         return Responser::send(JsonResponse::HTTP_NOT_FOUND, $store, 'Store record not found. Try again.');
       }
 
-      $store->update(['published' => (boolean)($request->publish)]);
+      $store->update(['published' => (boolean)$request->published]);
+      return Responser::send(JsonResponse::HTTP_OK, $store, 'Operation successful.');
+    } catch (Exception $e) {
+      return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+    }
+  }
+
+  public function upload($id, Request $request)
+  {
+    try {
+      $store = Store::where(['user_id' => auth()->id(), 'id' => $id])->first();
+      if(empty($store)) {
+        return Responser::send(JsonResponse::HTTP_NOT_FOUND, $store, 'Store record not found. Try again.');
+      }
+
+      $file = $request->file('store_file');
+      $upload_type = $request->upload_type;
+      switch ($upload_type) {
+        case 'logo':
+          $uploaded_file = $this->uploader->uploadToS3($file, $store->logo);
+          $store->logo = $uploaded_file;
+          break;
+        case 'banner':
+          $uploaded_file = $this->uploader->uploadToS3($file, $store->banner);
+          $store->banner = $uploaded_file;
+          break;
+      }
+
+      $store->save();
       return Responser::send(JsonResponse::HTTP_OK, $store, 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
