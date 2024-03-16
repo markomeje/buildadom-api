@@ -26,6 +26,7 @@ Route::prefix('product')->group(function() {
 
   Route::post('/{product_id}/upload-image', [ProductImageController::class, 'upload']);
   Route::post('/{id}/delete-image', [ProductImageController::class, 'delete']);
+  Route::post('/{id}/change-image', [ProductImageController::class, 'change']);
 });
 
 

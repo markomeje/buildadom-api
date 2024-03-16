@@ -42,7 +42,7 @@ class ProductImageController extends Controller
    */
   public function change($id, ChangeProductImageRequest $request): JsonResponse
   {
-    return $this->productImageService->upload($id, $request);
+    return $this->productImageService->change($id, $request);
   }
 
 }

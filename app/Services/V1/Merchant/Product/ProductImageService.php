@@ -7,6 +7,7 @@ use App\Models\Product\Product;
 use App\Models\Product\ProductImage;
 use App\Services\BaseService;
 use App\Traits\FileUploadTrait;
+use App\Traits\ProductImageTrait;
 use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
@@ -16,7 +17,7 @@ use Illuminate\Http\Request;
 
 class ProductImageService extends BaseService
 {
-  use FileUploadTrait;
+  use FileUploadTrait, ProductImageTrait;
 
   /**
    * @param int $product_id,
@@ -32,11 +33,16 @@ class ProductImageService extends BaseService
       }
 
       $image_url = $this->uploadToS3($request->file('image'));
+      $role = strtolower($request->role);
+      if($this->productHasMainImage($product_id) && ($role == strtolower(ProductImageRoleEnum::MAIN->value))) {
+        $role = ProductImageRoleEnum::OTHERS->value;
+      }
+
       $product_image = ProductImage::create([
-        'role' => $request->role,
+        'role' => $role,
         'product_id' => $product_id,
         'url' => $image_url,
-        'user_id' => auth()->id()
+        'user_id' => auth()->id(),
       ]);
 
       return Responser::send(Status::HTTP_OK, $product_image, 'Operation successful.');
@@ -52,14 +58,14 @@ class ProductImageService extends BaseService
   public function delete($id): JsonResponse
   {
     try {
-      $product_image = ProductImage::user()->find($id);
+      $product_image = ProductImage::owner()->find($id);
       if(empty($product_image)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, $product_image, 'Product not found. Try again.');
+        return Responser::send(Status::HTTP_NOT_FOUND, $product_image, 'Product image not found. Try again.');
       }
 
       $this->deleteFileFromS3($product_image->url);
-      $product_image->delete();
-      return Responser::send(Status::HTTP_OK, $product_image, 'Operation successful.');
+      $deleted = $product_image->delete();
+      return Responser::send(Status::HTTP_OK, $deleted, 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
@@ -73,7 +79,7 @@ class ProductImageService extends BaseService
   public function change($id, Request $request): JsonResponse
   {
     try {
-      $product_image = ProductImage::user()->find($id);
+      $product_image = ProductImage::owner()->find($id);
       if(empty($product_image)) {
         return Responser::send(Status::HTTP_NOT_FOUND, $product_image, 'Product not found. Try again.');
       }

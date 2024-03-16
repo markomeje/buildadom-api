@@ -30,7 +30,7 @@ class ProductImage extends Model
   /**
    * @return Builder
    */
-  public function scopeUser($query)
+  public function scopeOwner($query)
   {
     return $query->where(['user_id' => auth()->id()]);
   }
