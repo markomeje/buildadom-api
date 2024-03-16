@@ -1,14 +1,17 @@
 <?php
 
-namespace App\Http\Requests\V1\Merchant\Product;
+namespace App\Http\Requests\V1\Merchant\Store;
+use App\Enums\Store\StoreUploadTypeEnum;
 use App\Utility\Responser;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
 
-class UpdateProductRequest extends FormRequest
+class UploadStoreBannerRequest extends FormRequest
 {
+
   /**
    * Determine if the user is authorized to make this request.
    *
@@ -19,23 +22,15 @@ class UpdateProductRequest extends FormRequest
     return true;
   }
 
-  /**
-   * Get the validation rules that apply to the request.
-   *
-   * @return array<string, mixed>
-   */
+/**
+ * Get the validation rules that apply to the request.
+ *
+ * @return array
+ */
   public function rules()
   {
     return [
-      'name' => ['required', 'string', 'max:50'],
-      'description' => ['required', 'string', 'max:500'],
-      'store_id' => ['required', 'exists:stores,id'],
-      'price' => ['required', 'numeric', 'gt:0'],
-      'product_category_id' => ['required', 'exists:product_categories,id'],
-      'quantity' => ['required', 'integer'],
-      'attributes' => ['nullable'],
-      'currency_id' => ['required', 'exists:currencies,id'],
-      'product_unit_id' => ['required', 'exists:product_units,id'],
+      'banner' => ['required', 'image', 'mimes:jpeg,png,jpg,gif'],
     ];
   }
 
@@ -60,9 +55,8 @@ class UpdateProductRequest extends FormRequest
   {
     $response = Responser::send(JsonResponse::HTTP_UNPROCESSABLE_ENTITY, [
       'errors' => $validator->errors()
-    ], 'Please check your inputs.');
+    ], 'Kindly check the banner you are trying to upload.');
 
     throw new ValidationException($validator, $response);
   }
-
 }

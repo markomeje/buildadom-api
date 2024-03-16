@@ -9,12 +9,14 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\Builder;
 
 class Product extends Model
 {
   use HasFactory;
 
-    /**
+  /**
    * The attributes that are mass assignable.
    *
    * @var array<int, string>
@@ -40,11 +42,19 @@ class Product extends Model
   ];
 
   /**
-   * Scope published products
+   * @return Builder
    */
   public function scopePublished($query)
   {
     return $query->where(['published' => true]);
+  }
+
+  /**
+   * @return Builder
+   */
+  public function scopeOwner($query)
+  {
+    return $query->where(['user_id' => auth()->id()]);
   }
 
   /**
@@ -68,7 +78,7 @@ class Product extends Model
    */
   public function currency(): BelongsTo
   {
-    return $this->belongsTo(Currency::class);
+    return $this->belongsTo(Currency::class, 'currency_id');
   }
 
   /**
@@ -76,7 +86,7 @@ class Product extends Model
    */
   public function unit(): BelongsTo
   {
-    return $this->belongsTo(ProductUnit::class);
+    return $this->belongsTo(ProductUnit::class, 'product_unit_id');
   }
 
   /**
@@ -84,7 +94,15 @@ class Product extends Model
    */
   public function store(): BelongsTo
   {
-    return $this->belongsTo(Store::class);
+    return $this->belongsTo(Store::class, 'store_id');
+  }
+
+  /**
+   * @return HasMany
+   */
+  public function images(): HasMany
+  {
+    return $this->hasMany(ProductImage::class, 'product_id');
   }
 
 }

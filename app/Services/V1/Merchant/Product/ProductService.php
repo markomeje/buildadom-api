@@ -4,6 +4,7 @@ namespace App\Services\V1\Merchant\Product;
 use App\Models\Product\Product;
 use App\Services\BaseService;
 use App\Utility\Responser;
+use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -32,44 +33,41 @@ class ProductService extends BaseService
         'published' => false,
       ]);
 
-      return Responser::send(JsonResponse::HTTP_OK, $product, 'Operation successful.');
+      return Responser::send(Status::HTTP_OK, $product, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+    }
+  }
+
+  public function list(Request $request)
+  {
+    try {
+      $products = Product::owner()->with([
+          'currency' => function($query) {
+            return $query->select(['name', 'code']);
+          },
+          'unit',
+          'category',
+          'images',
+          'store',
+        ])->paginate($request->limit ?? 20);
+      return Responser::send(Status::HTTP_OK, $products, 'Operation successful.');
+    } catch (Exception $e) {
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
   }
 
   /**
-   * Update product
-   *
-   * @param array $data int $id
-   */
-  public function update(int $id, array $data)
-  {
-    return Product::findOrFail($id)->update($data);
-  }
-
-  /**
-   * Get Product
-   * @param array $data, int $id
-   */
-  public static function where(array $data, $id)
-  {
-    return Product::with(['images', 'category'])->where([
-      ...$data,
-      'id' => $id
-    ])->first();
-  }
-
-  /**
    * @param Request $request
+   * @param int $id
    * @return JsonResponse
    */
-  public function edit($id, Request $request): JsonResponse
+  public function update($id, Request $request): JsonResponse
   {
     try {
-      $product = Product::query()->find($id);
+      $product = Product::owner()->find($id);
       if(empty($product)) {
-        return Responser::send(JsonResponse::HTTP_NOT_FOUND, $product, 'Product record not found. Try again.');
+        return Responser::send(Status::HTTP_NOT_FOUND, $product, 'Product record not found. Try again.');
       }
 
       $product->update([
@@ -84,9 +82,9 @@ class ProductService extends BaseService
         'tags' => $request->tags,
       ]);
 
-      return Responser::send(JsonResponse::HTTP_OK, $product, 'Operation successful.');
+      return Responser::send(Status::HTTP_OK, $product, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
   }
 }

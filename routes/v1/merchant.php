@@ -1,27 +1,31 @@
 <?php
 
 use App\Http\Controllers\V1\Merchant\Product\ProductController;
+use App\Http\Controllers\V1\Merchant\Product\ProductImageController;
 use App\Http\Controllers\V1\Merchant\Store\StoreController;
+use App\Http\Controllers\V1\Merchant\Store\StoreUploadController;
 use Illuminate\Support\Facades\Route;
-
-
-
 
 Route::prefix('store')->group(function() {
   Route::post('/create', [StoreController::class, 'create']);
   Route::post('/{id}/update', [StoreController::class, 'update']);
   Route::get('/list', [StoreController::class, 'list']);
   Route::post('/{id}/publish', [StoreController::class, 'publish']);
-  Route::post('/{id}/upload', [StoreController::class, 'upload']);
+
+  Route::post('/{store_id}/upload-logo', [StoreUploadController::class, 'logo']);
+  Route::post('/{store_id}/upload-banner', [StoreUploadController::class, 'banner']);
 });
 
 Route::prefix('product')->group(function() {
   Route::get('/list', [ProductController::class, 'list']);
   Route::post('/add', [ProductController::class, 'add']);
+
   Route::post('/{id}/update', [ProductController::class, 'update']);
   Route::get('/{id}/details', [ProductController::class, 'product']);
-
   Route::post('/{id}/publish', [ProductController::class, 'publish']);
+
+  Route::post('/{product_id}/upload-image', [ProductImageController::class, 'upload']);
+  Route::post('/{id}/delete-image', [ProductImageController::class, 'delete']);
 });
 
 

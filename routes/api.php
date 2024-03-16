@@ -25,7 +25,7 @@ use App\Http\Controllers\V1\Customer\Orders\OrderItemController;
 
 Route::middleware(['accept.json'])->domain(env('API_URL'))->prefix('v1')->group(function() {
   Route::prefix('/admin')->name('admin.')->group(base_path('routes/v1/admin.php'));
-  Route::prefix('/merchant')->name('merchant.')->group(base_path('routes/v1/merchant.php'));
+  Route::middleware(['auth:api'])->prefix('/merchant')->name('merchant.')->group(base_path('routes/v1/merchant.php'));
   Route::prefix('/customer')->name('customer.')->group(base_path('routes/v1/customer.php'));
   Route::prefix('/auth')->name('auth.')->group(base_path('routes/v1/auth.php'));
   Route::prefix('/')->group(base_path('routes/v1/general.php'));
@@ -166,14 +166,3 @@ Route::middleware(['accept.json'])->domain(env('API_URL'))->prefix('v0')->group(
       });
   });
 });
-
-
-
-
-
-
-
-
-
-
-

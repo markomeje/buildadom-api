@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Utility;
+use Illuminate\Http\UploadedFile;
 use Propaganistas\LaravelPhone\PhoneNumber;
 
 
@@ -31,6 +32,19 @@ class Help
   public static function generateRandomDigits(): int
   {
     return rand(111111, 999999);
+  }
+
+  /**
+   * Generate filename
+   *
+   * @param UploadedFile $file
+   * @return string
+   */
+  public static function generateFilename(UploadedFile $file): string
+  {
+    $extension = $file->getClientOriginalExtension();
+    $filename = str()->random(32);
+    return "$filename.$extension";
   }
 
 }
