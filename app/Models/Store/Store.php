@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\Builder;
 
 class Store extends Model
 {
@@ -50,6 +51,14 @@ class Store extends Model
     return $query->where(['published' => true]);
   }
 
+  /**
+   * @return Builder
+   */
+  public function scopeOwner($query)
+  {
+    return $query->where(['user_id' => auth()->id()]);
+  }
+
    /**
    * @return BelongsTo
    */
@@ -73,6 +82,7 @@ class Store extends Model
   {
     return $this->hasMany(Product::class);
   }
+
    /**
    * @return BelongsTo
    */
