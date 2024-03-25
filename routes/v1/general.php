@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::prefix('country')->group(function() {
-  Route::get('/list', [CountryController::class, 'list']);
+  Route::get('/list', [CountryController::class, 'countries']);
   Route::get('/states', [CountryController::class, 'states']);
   Route::get('/cities', [CountryController::class, 'cities']);
 });
