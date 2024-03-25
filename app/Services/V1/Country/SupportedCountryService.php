@@ -4,6 +4,7 @@ namespace App\Services\V1\Country;
 use App\Models\Country\SupportedCountry;
 use App\Services\BaseService;
 use App\Utility\Responser;
+use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,14 +21,28 @@ class SupportedCountryService extends BaseService
   public function list(Request $request): JsonResponse
   {
     try {
-      $countryQuery = function($query) {
-        $query->select(['id', 'flag_url', 'name', 'iso3', 'emoji']);
-      };
+      $countries = SupportedCountry::all();
+      if(!$countries->count()) {
+        return Responser::send(Status::HTTP_OK, [], 'No supported countries listed.');
+      }
 
-      $countries = SupportedCountry::select(['id', 'country_id'])->with(['country' => $countryQuery])->get();
-      return Responser::send(JsonResponse::HTTP_OK, $countries, 'Supported countries fetched successfully.');
+      $countries = collect($countries)->map(function($supported) {
+        $country = $supported->country;
+        return collect([
+          'id' => $supported->id,
+          'phone_code' => $country->phone_code,
+          'country_id' => $country->id,
+          'name' => $country->name,
+          'iso3' => $country->iso3,
+          'emoji' => $country->emoji,
+          'iso2' => $country->iso2,
+          'flag_url' => $country->flag_url,
+        ]);
+      });
+
+      return Responser::send(Status::HTTP_OK, $countries, 'Supported countries fetched successfully.');
     } catch (Exception $e) {
-      return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], 'Unknown error. Try again.');
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Unknown error. Try again.');
     }
   }
 }

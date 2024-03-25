@@ -1,11 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\V1\Country;
-use App\Utility\Responser;
-use Illuminate\Http\Request;
-use App\Models\Country\Country;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Models\City\City;
+use App\Models\Country\Country;
+use App\Models\State\State;
+use App\Utility\Responser;
+use App\Utility\Status;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class CountryController extends Controller
 {
@@ -14,18 +17,37 @@ class CountryController extends Controller
    * @param Request $request)
    * @return JsonResponse
    */
-  public function list(Request $request)
+  public function countries(Request $request)
   {
     $query = Country::query();
     if(isset($request->iso2))  {
       $query->where('iso2', $request->iso2);
     }
 
-    $limit = $request->limit ?? 20;
-    $countries = $query->with(['states' => function($query) {
-        return $query->with(['cities'])->select(['id', 'country_id', 'name']);
-      }])->paginate($request->limit ?? 20);
-
-    return Responser::send(200, $countries, 'Countries retrieved successfully');
+    $countries = $query->get();
+    return Responser::send(Status::HTTP_OK, $countries, 'Countries retrieved successfully');
   }
+
+  /**
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function states(Request $request)
+  {
+    $country_id = $request->country_id ?? 0;
+    $states = State::where('country_id', $country_id)->get();
+    return Responser::send(Status::HTTP_OK, $states, 'Country states fetched successfully');
+  }
+
+  /**
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function cities(Request $request)
+  {
+    $country_id = $request->country_id ?? 0;
+    $cities = City::where('country_id', $country_id)->get();
+    return Responser::send(Status::HTTP_OK, $cities, 'Country cities fetched successfully');
+  }
+
 }

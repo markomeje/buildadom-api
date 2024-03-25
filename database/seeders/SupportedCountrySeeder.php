@@ -16,22 +16,24 @@ class SupportedCountrySeeder extends Seeder
    */
   public function run()
   {
-    DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+    DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
     DB::table('supported_countries')->truncate();
-    DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+    DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
 
-    $countries = Country::select('id')
+    $countries = Country::select('id', 'iso2')
       ->where(['iso2' => 'NG'])
       ->orWhere(['iso2' => 'US'])
-      ->orWhere(['iso2' => 'UK'])
+      ->orWhere(['iso2' => 'GB'])
+      ->orWhere(['iso2' => 'ZA'])
       ->orWhere(['iso2' => 'GH'])
       ->get();
 
     if($countries->count() > 0) {
       foreach ($countries as $country) {
-        SupportedCountry::create([
-          'country_id' => $country->id,
-          'status' => SupportedCountryStatusEnum::ACTIVE->value
+        $country_id = $country->id;
+        SupportedCountry::updateOrCreate(['country_id' => $country_id], [
+          'country_id' => $country_id,
+          'status' => SupportedCountryStatusEnum::ACTIVE->value,
         ]);
       }
     }
