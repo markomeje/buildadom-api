@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\V1\Merchant\Store;
+namespace App\Http\Requests\V1\Customer\Cart;
 use App\Utility\Responser;
 use App\Utility\Status;
 use Illuminate\Contracts\Validation\Validator;
@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class CreateStoreRequest extends FormRequest
+class CreateCartItemRequest extends FormRequest
 {
 
   /**
@@ -29,14 +29,7 @@ class CreateStoreRequest extends FormRequest
   public function rules()
   {
     return [
-      'name' => ['required', 'string', 'max:50', 'unique:stores'],
-      'description' => ['required', 'string', 'max:500'],
-
-      'state_id' => ['nullable', 'integer', Rule::exists('states', 'id')],
-      'city_id' => ['nullable', 'integer', Rule::exists('cities', 'id')],
-      'country_id' => ['required', 'integer', Rule::exists('countries', 'id')],
-
-      'address' => ['required', 'string', 'max:500'],
+      'product_id' => ['required', 'integer', Rule::exists('products', 'id')],
     ];
   }
 

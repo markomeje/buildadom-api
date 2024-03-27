@@ -1,10 +1,6 @@
 <?php
 
-namespace App\Services\V1\Merchant\Store;
-
-use App\Enums\Cart\CartStatusEnum;
-use App\Models\Cart\Cart;
-use App\Models\Store\Store;
+namespace App\Services\V1\Customer\Cart;
 use App\Services\BaseService;
 use App\Traits\CartTrait;
 use App\Utility\Responser;
@@ -26,15 +22,15 @@ class CartService extends BaseService
   public function create(): JsonResponse
   {
     try {
-      $cart = $this->isPendingCart();
-      if(empty($cart)) {
-        $cart = Cart::create([
-          'status' => CartStatusEnum::PENDING->value,
-          'user_id' => auth()->id(),
-        ]);
-      }
+      // $cart = $this->isPendingCart();
+      // if(empty($cart)) {
+      //   $cart = Cart::create([
+      //     'status' => CartStatusEnum::PENDING->value,
+      //     'user_id' => auth()->id(),
+      //   ]);
+      // }
 
-      return Responser::send(Status::HTTP_OK, $cart, 'Operation successful.');
+      return Responser::send(Status::HTTP_OK, [], 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e->getMessage());
     }

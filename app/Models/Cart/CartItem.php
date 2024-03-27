@@ -5,10 +5,9 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
 
-class Cart extends Model
+class CartItem extends Model
 {
   use HasFactory;
 
@@ -18,8 +17,14 @@ class Cart extends Model
    * @var array<int, string>
    */
   protected $fillable = [
-    'status',
     'user_id',
+    'cart_id',
+    'quantity',
+    'product_id'
+  ];
+
+  public $casts = [
+    'product_id' => 'int'
   ];
 
   /**
@@ -39,11 +44,11 @@ class Cart extends Model
   }
 
   /**
-   * @return HasMany
+   * @return BelongsTo
    */
-  public function items(): HasMany
+  public function cart(): BelongsTo
   {
-    return $this->hasMany(CartItem::class, 'cart_id');
+    return $this->belongsTo(Cart::class, 'cart_id');
   }
 
 }
