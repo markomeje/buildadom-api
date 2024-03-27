@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
 
     $this->call([
       CountrySeeder::class,
-      CategorySeeder::class,
       CurrencySeeder::class,
       DocumentTypeSeeder::class,
       // UnitSeeder::class,

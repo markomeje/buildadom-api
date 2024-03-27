@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 use App\Models\Product\ProductCategory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ProductCategorySeeder extends Seeder
 {
@@ -14,10 +13,6 @@ class ProductCategorySeeder extends Seeder
    */
   public function run()
   {
-    DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
-    DB::table('product_categories')->truncate();
-    DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
-
     $categories = [
       'Doors and Windows',
       'Flooring',
@@ -35,9 +30,11 @@ class ProductCategorySeeder extends Seeder
     ];
 
     foreach ($categories as $category) {
-      ProductCategory::create([
-        'name' => $category,
-      ]);
+      if(!ProductCategory::where('name', $category)->exists()) {
+        ProductCategory::create([
+          'name' => $category,
+        ]);
+      }
     }
   }
 }
