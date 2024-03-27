@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Services\V1\Merchant\Auth;
+namespace App\Services\V1\Customer\Auth;
 use App\Enums\User\UserRoleEnum;
 use App\Enums\User\UserStatusEnum;
+use App\Enums\User\UserTypeEnum;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Services\BaseService;
 use App\Services\V1\Email\EmailVerificationService;
 use App\Services\V1\Phone\PhoneVerificationService;
-use App\Traits\UserTypeCheckerTrait;
-use App\Traits\V1\Business\BusinessProfileTrait;
 use App\Utility\Help;
 use App\Utility\Responser;
 use App\Utility\Status;
@@ -20,50 +19,29 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 
-class MerchantSignupService extends BaseService
+class CustomerSignupService extends BaseService
 {
-
-  use UserTypeCheckerTrait, BusinessProfileTrait;
-
-  public function __construct(private PhoneVerificationService $phoneVerification, private EmailVerificationService $emailVerification)
-  {
-    $this->phoneVerification = $phoneVerification;
-    $this->emailVerification = $emailVerification;
-  }
-
   /**
-   * Signup merchant
    * @param Request $request
-   *
    * @return JsonResponse
    */
   public function signup(Request $request): JsonResponse
   {
     try {
       DB::beginTransaction();
-      $type = strtolower($request->type);
-      $phone = Help::formatPhoneNumber($request->phone);
-      $password = Hash::make($request->password);
-
       $user = User::create([
-        'phone' => $phone,
+        'phone' => Help::formatPhoneNumber($request->phone),
         'email' => $request->email,
-        'type' => $type,
+        'firstname' => $request->firstname,
+        'lastname' => $request->lastname,
+        'type' => UserTypeEnum::INDIVIDUAL->value,
         'address' => $request->address,
-        'password' => $password ?? null,
+        'password' => Hash::make($request->password),
         'status' => UserStatusEnum::PENDING->value
       ]);
 
-      $this->createUserBusinessProfile($request, $user);
-      if($this->isIndividualUser($user)) {
-        $user->update([
-          'firstname' => $request->firstname,
-          'lastname' => $request->lastname
-        ]);
-      }
-
       UserRole::create([
-        'name' => UserRoleEnum::MERCHANT->value,
+        'name' => UserRoleEnum::CUSTOMER->value,
         'user_id' => $user->id
       ]);
 

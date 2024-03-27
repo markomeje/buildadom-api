@@ -22,6 +22,7 @@
         "propaganistas/laravel-phone": "^5.0",
         "queueworker/sansdaemon": "^1.2",
         "smknstd/fakerphp-picsum-images": "^1.0",
+        "unicodeveloper/laravel-paystack": "^1.1",
         "yabacon/paystack-php": "^2.2"
     },
     "require-dev": {

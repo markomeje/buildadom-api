@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\BaseService;
 use App\Utility\Help;
 use App\Utility\Responser;
+use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,16 +16,6 @@ use Illuminate\Http\Request;
 
 class PhoneVerificationService extends BaseService
 {
-  /**
-   * @param PhoneVerification $phoneVerification
-   * @param User $user
-   */
-  public function __construct(public PhoneVerification $phoneVerification, private User $user)
-  {
-    $this->phoneVerification = $phoneVerification;
-    $this->user = $user;
-  }
-
   /**
    * @return JsonResponse
    */
@@ -41,9 +32,9 @@ class PhoneVerificationService extends BaseService
       ]);
 
       SmsSenderFacade::push($user, $message);
-      return Responser::send(JsonResponse::HTTP_CREATED, [], 'Phone verification code has been sent.');
+      return Responser::send(Status::HTTP_CREATED, [], 'Phone verification code has been sent.');
     } catch (Exception $e) {
-      return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 
@@ -62,13 +53,13 @@ class PhoneVerificationService extends BaseService
     try {
       $code = $this->generateRandomDigits();
       $message = $this->getMessage($code);
-      $user = $this->user->find(auth()->id());
+      $user = User::find(auth()->id());
 
       $this->createPhoneVerificationDetail($code, $user);
       SmsSenderFacade::push($user, $message);
-      return Responser::send(JsonResponse::HTTP_CREATED, [], 'Your phone verification code has been resent.');
+      return Responser::send(Status::HTTP_CREATED, [], 'Your phone verification code has been resent.');
     } catch (Exception $e) {
-      return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 
@@ -86,19 +77,19 @@ class PhoneVerificationService extends BaseService
     try {
       $phoneVerification = $this->getUserLatestPhoneVerificationDetails();
       if(empty($phoneVerification)) {
-        return Responser::send(JsonResponse::HTTP_NOT_ACCEPTABLE, [], 'Invalid phone verification.');
+        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, [], 'Invalid phone verification.');
       }
 
       if($this->phoneIsVerified($phoneVerification)) {
-        return Responser::send(JsonResponse::HTTP_OK, [], 'Your phone is already verified.');
+        return Responser::send(Status::HTTP_OK, [], 'Your phone is already verified.');
       }
 
       if($request->code !== $phoneVerification->code) {
-        return Responser::send(JsonResponse::HTTP_FORBIDDEN, [], 'Invalid verification code.');
+        return Responser::send(Status::HTTP_FORBIDDEN, [], 'Invalid verification code.');
       }
 
       if($this->phoneVerificationHasExpired($phoneVerification)) {
-        return Responser::send(JsonResponse::HTTP_FORBIDDEN, [], 'Expired verification code. Request another');
+        return Responser::send(Status::HTTP_FORBIDDEN, [], 'Expired verification code. Request another');
       }
 
       $phoneVerification->update([
@@ -107,9 +98,9 @@ class PhoneVerificationService extends BaseService
         'verified_at' => now()
       ]);
 
-      return Responser::send(JsonResponse::HTTP_OK, [$phoneVerification], 'Your phone number has been verified.');
+      return Responser::send(Status::HTTP_OK, [$phoneVerification], 'Your phone number has been verified.');
     } catch (Exception $e) {
-      return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 

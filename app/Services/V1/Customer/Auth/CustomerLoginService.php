@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\V1\Auth\Login;
+namespace App\Services\V1\Customer\Auth;
 use App\Models\User;
 use App\Services\BaseService;
 use App\Utility\Responser;
@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class LoginService extends BaseService
+class CustomerLoginService extends BaseService
 {
   /**
    * Login process
