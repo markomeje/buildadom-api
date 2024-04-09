@@ -1,41 +1,79 @@
 <?php
 
 namespace App\Integrations;
-use Illuminate\Support\Facades\Log;
-use Yabacon\Paystack as Yabacon;
-use Yabacon\Paystack\Exception\ApiException;
-
+use App\Traits\PaystackPaymentTrait;
+use Exception;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Facades\Http;
 
 class Paystack
 {
-
-  public $paystack;
+  use PaystackPaymentTrait;
 
   /**
-   * Call paystack
+   * @var string
    */
-  public function __construct()
+  private $base_url;
+
+  /**
+   * @var PendingRequest
+   */
+  private $http;
+
+  /**
+   * @param $http
+   * @param string $base_url
+   */
+  public function __construct($http, string $base_url)
   {
-    $this->paystack = new Yabacon(env('PAYSTACK_SECRET_KEY'));
+    $this->http = $http;
+    $this->base_url = $base_url;
   }
 
-  public function initialize($data = [])
+  /**
+   * @return self
+   */
+  public static function payment(): self
   {
-    try{
-      return $this->paystack->transaction->initialize($data);
-    } catch(ApiException $error){
-      Log::error($error->getMessage());
-      return false;
-    }
+    $http = Http::withToken(config('services.paystack.secret_key'));
+    $base_url = config('services.paystack.base_url');
+    return new self($http, $base_url);
   }
 
-  public function verify($reference = '')
+  /**
+   * @return mixed
+   */
+  public function banks()
   {
-    try{
-      return $this->paystack->transaction->verify(['reference' => $reference]);
-    } catch(ApiException $error){
-      Log::error($error->getMessage());
-      return false;
-    }
+    $endpoint = "$this->base_url/bank";
+    $query = ['country' => 'nigeria', 'perPage' => 100, 'currency' => 'NG'];
+    $response = $this->http->get($endpoint, $query);
+    return $response->json();
   }
+
+  /**
+   * @param array $payload
+   * @return mixed
+   */
+  public function initialize(array $payload)
+  {
+    $endpoint = "$this->base_url/transaction/initialize";
+    $result = $this->http->post($endpoint, $payload);
+    $response = $result->json();
+    $this->validateResponse($response);
+
+    return $response;
+  }
+
+  /**
+   * @param string $reference
+   * @return mixed
+   */
+  public function verify(string $reference)
+  {
+    $endpoint = "$this->base_url/transaction/verify/$reference";
+    $response = $this->http->get($endpoint);
+    return $response->json();
+  }
+
 }

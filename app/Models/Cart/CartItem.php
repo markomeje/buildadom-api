@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\Cart;
+use App\Models\Product\Product;
+use App\Models\Store\Store;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,9 +20,10 @@ class CartItem extends Model
    */
   protected $fillable = [
     'user_id',
-    'cart_id',
     'quantity',
-    'product_id'
+    'store_id',
+    'product_id',
+    'status',
   ];
 
   public $casts = [
@@ -46,9 +49,17 @@ class CartItem extends Model
   /**
    * @return BelongsTo
    */
-  public function cart(): BelongsTo
+  public function product(): BelongsTo
   {
-    return $this->belongsTo(Cart::class, 'cart_id');
+    return $this->belongsTo(Product::class, 'product_id');
+  }
+
+  /**
+   * @return BelongsTo
+   */
+  public function store(): BelongsTo
+  {
+    return $this->belongsTo(Store::class, 'store_id');
   }
 
 }

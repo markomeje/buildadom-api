@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Customer\Cart\CreateCartItemRequest;
 use App\Services\V1\Customer\Cart\CartItemService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 
 class CartItemController extends Controller
@@ -19,9 +20,8 @@ class CartItemController extends Controller
   }
 
   /**
-   * Add to cart
-   *
    * @param CreateCartItemRequest $request
+   * @return JsonResponse
    */
   public function add(CreateCartItemRequest $request): JsonResponse
   {
@@ -29,11 +29,12 @@ class CartItemController extends Controller
   }
 
   /**
+   * @param Request $request
    * @return JsonResponse
    */
-  public function items(): JsonResponse
+  public function items(Request $request): JsonResponse
   {
-    return $this->cartItemService->items();
+    return $this->cartItemService->items($request);
   }
 
 }

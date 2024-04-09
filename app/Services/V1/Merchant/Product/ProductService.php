@@ -21,7 +21,7 @@ class ProductService extends BaseService
     try {
       $product = Product::create([
         'name' => $request->name,
-        'currency_id' => $request->currency_id,
+        'supported_currency_id' => $request->supported_currency_id,
         'description' => $request->description,
         'quantity' => $request->quantity,
         'product_category_id' => $request->product_category_id,
@@ -42,11 +42,13 @@ class ProductService extends BaseService
   public function list(Request $request)
   {
     try {
-      $products = Product::owner()->with([
+      $products = Product::owner()->latest()->with([
           'currency' => function($query) {
-            return $query->select(['name', 'code']);
+            return $query->select(['id', 'name', 'code']);
           },
-          'unit',
+          'unit' => function($query) {
+            return $query->select(['id', 'name']);
+          },
           'category',
           'images',
           'store',
@@ -72,7 +74,7 @@ class ProductService extends BaseService
 
       $product->update([
         'name' => $request->name,
-        'currency_id' => $request->currency_id,
+        'supported_currency_id' => $request->supported_currency_id,
         'description' => $request->description,
         'quantity' => $request->quantity,
         'product_category_id' => $request->product_category_id,

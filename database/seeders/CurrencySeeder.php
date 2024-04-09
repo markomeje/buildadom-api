@@ -15,20 +15,17 @@ class CurrencySeeder extends Seeder
    */
   public function run()
   {
-    DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-    DB::table('currencies')->truncate();
-    DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+    $this->command->info('Currency Seeder started.');
+    $path = storage_path('currencies.json');
+    $currencies = json_decode(file_get_contents($path), true);
 
-    $currencies = [
-      ['code' => 'NGN' , 'name' => 'Nigerian Naira', 'symbol' => '₦', 'type' => CurrencyTypeEnum::FIAT->value],
-      ['code' => 'USD' , 'name' => 'US Dollar', 'symbol' => '$', 'type' => CurrencyTypeEnum::FIAT->value],
-    ];
-
-    foreach ($currencies as $currency) {
-      Currency::updateOrCreate(
-        ['code' => $currency['code']],
-        $currency
-      );
+    foreach ($currencies as $code => $name) {
+      Currency::updateOrCreate(['code' => $code], [
+        'type' => CurrencyTypeEnum::FIAT->value,
+        'code' => $code,
+        'name' => $name
+      ]);
     }
+    $this->command->info('Currency Seeder successful.');
   }
 }

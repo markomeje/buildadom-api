@@ -1,9 +1,8 @@
 <?php
 
 namespace Database\Seeders;
+use App\Models\Store\Store;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use App\Models\Store;
 
 class StoreSeeder extends Seeder
 {
@@ -14,10 +13,6 @@ class StoreSeeder extends Seeder
    */
   public function run()
   {
-    DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-    DB::table('stores')->truncate();
-    DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
-    Store::factory()->count(520)->create();
+    Store::factory()->count(108)->create();
   }
 }

@@ -8,7 +8,11 @@ enum PaymentStatusEnum: string
 {
   use UsefulEnums;
 
-  case PAID = 'paid';
+  case SUCCESS = 'success';
   case INITIALIZED = 'initialized';
+  case ONGOING = 'ongoing';
+  case PENDING = 'pending';
+  case PROCESSING = 'processing';
+  case QUEUED = 'queued';
 
 }

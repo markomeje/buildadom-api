@@ -1,9 +1,10 @@
 <?php
 
+use App\Enums\Product\ProductStatusEnum;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -19,11 +20,11 @@ return new class extends Migration
       $table->string('name');
       $table->text('description');
       $table->foreignId('store_id')->nullable()->references('id')->on('stores');
-      $table->string('status')->default('active');
+      $table->string('status')->default(ProductStatusEnum::ACTIVE->value);
       $table->foreignId('product_category_id')->nullable()->references('id')->on('product_categories');
       $table->float('price');
-      $table->foreignId('currency_id')->nullable()->references('id')->on('currencies');
-      $table->integer('quantity');
+      $table->foreignId('supported_currency_id')->nullable()->references('id')->on('supported_currencies');
+      $table->integer('quantity')->default(1);
       $table->boolean('published')->default(false);
       $table->foreignId('product_unit_id')->nullable()->references('id')->on('product_units');
       $table->foreignId('user_id')->nullable()->references('id')->on('users');

@@ -22,7 +22,6 @@ return new class extends Migration
       $table->string('symbol')->nullable();
       $table->string('type')->default(CurrencyTypeEnum::FIAT->value);
       $table->string('status')->default(CurrencyStatusEnum::ACTIVE->value);
-      $table->foreignId('country_id')->nullable()->references('id')->on('countries');
       $table->string('name');
       $table->string('icon')->nullable();
       $table->timestamps();

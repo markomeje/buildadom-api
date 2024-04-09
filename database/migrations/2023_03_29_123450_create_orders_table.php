@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Enums\Order\OrderStatusEnum;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -15,10 +17,15 @@ return new class extends Migration
   {
     Schema::create('orders', function (Blueprint $table) {
       $table->id();
-      $table->string('tracking_number');
-      $table->string('status');
-      $table->decimal('total_amount', 28, 2);
+      $table->string('tracking_number')->unique();
+      $table->bigInteger('total_amount');
+      $table->foreignId('product_id')->nullable()->references('id')->on('products');
+      $table->bigInteger('amount');
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
+      $table->bigInteger('quantity')->default(1);
+      $table->foreignId('supported_currency_id')->nullable()->references('id')->on('supported_currencies');
+      $table->foreignId('store_id')->nullable()->references('id')->on('stores');
+      $table->string('status')->default(OrderStatusEnum::PENDING->value);
       $table->timestamps();
     });
   }
@@ -30,7 +37,9 @@ return new class extends Migration
    */
   public function down()
   {
+    DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
     Schema::dropIfExists('orders');
+    DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
   }
 
 };

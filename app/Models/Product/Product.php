@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Models\Product;
-
-use App\Models\Currency\Currency;
+use App\Models\Currency\SupportedCurrency;
 use App\Models\Product\ProductCategory;
 use App\Models\Store\Store;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,15 +31,28 @@ class Product extends Model
     'quantity',
     'user_id',
     'tags',
-    'currency_id',
+    'supported_currency_id',
     'product_unit_id',
     'extras'
   ];
 
   public $casts = [
     'tags' => 'json',
+    'published' => 'boolean',
+    'price' => 'float',
     'extras' => 'json',
   ];
+
+  /**
+   * @return Attribute
+   */
+  protected function price(): Attribute
+  {
+    return new Attribute(
+      get: fn($value) => $value ? ($value/100) : $value,
+      set: fn($value) => $value * 100,
+    );
+  }
 
   /**
    * @return Builder
@@ -78,7 +91,7 @@ class Product extends Model
    */
   public function currency(): BelongsTo
   {
-    return $this->belongsTo(Currency::class, 'currency_id');
+    return $this->belongsTo(SupportedCurrency::class, 'supported_currency_id');
   }
 
   /**

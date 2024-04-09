@@ -40,28 +40,18 @@ class MerchantSignupService extends BaseService
   public function signup(Request $request): JsonResponse
   {
     try {
-      DB::beginTransaction();
-      $type = strtolower($request->type);
-      $phone = Help::formatPhoneNumber($request->phone);
-      $password = Hash::make($request->password);
-
       $user = User::create([
-        'phone' => $phone,
+        'phone' => Help::formatPhoneNumber($request->phone),
         'email' => $request->email,
-        'type' => $type,
+        'type' => strtolower($request->type),
         'address' => $request->address,
-        'password' => $password ?? null,
-        'status' => UserStatusEnum::PENDING->value
+        'password' => Hash::make($request->password) ?? null,
+        'status' => UserStatusEnum::PENDING->value,
+        'firstname' => $request->firstname ?? null,
+        'lastname' => $request->lastname ?? null
       ]);
 
       $this->createUserBusinessProfile($request, $user);
-      if($this->isIndividualUser($user)) {
-        $user->update([
-          'firstname' => $request->firstname,
-          'lastname' => $request->lastname
-        ]);
-      }
-
       UserRole::create([
         'name' => UserRoleEnum::MERCHANT->value,
         'user_id' => $user->id
@@ -70,10 +60,8 @@ class MerchantSignupService extends BaseService
       (new PhoneVerificationService())->send($user);
       (new EmailVerificationService())->send($user);
 
-      DB::commit();
       return Responser::send(Status::HTTP_CREATED, ['token' => auth()->login($user), 'user' => $user], 'Signup successful. Verification detials has been sent.');
     } catch (Exception $e) {
-      DB::rollback();
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Oooops! singup failed. Try again.');
     }
   }

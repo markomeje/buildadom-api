@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use App\Models\Document\DocumentType;
-use App\Enums\Document\DocumentTypeStatusEnum;
 
 class DocumentTypeSeeder extends Seeder
 {
@@ -15,11 +13,7 @@ class DocumentTypeSeeder extends Seeder
    */
   public function run()
   {
-    $this->command->info('Seeding Document Types started.');
-    DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
-    DB::table('document_types')->truncate();
-    DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
-
+    $this->command->info('Document Type Seeder started.');
     $documents = [
       [
         'name' => 'Drivers Liscence' ,
@@ -52,6 +46,6 @@ class DocumentTypeSeeder extends Seeder
         'code' => $document['code'],
       ], $document);
     }
-    $this->command->info('Document Type Seeder completed successfully.');
+    $this->command->info('Document Type Seeder successful.');
   }
 }

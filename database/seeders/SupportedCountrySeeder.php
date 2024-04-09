@@ -5,7 +5,6 @@ use App\Enums\Country\SupportedCountryStatusEnum;
 use App\Models\Country\Country;
 use App\Models\Country\SupportedCountry;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class SupportedCountrySeeder extends Seeder
 {
@@ -16,10 +15,6 @@ class SupportedCountrySeeder extends Seeder
    */
   public function run()
   {
-    DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
-    DB::table('supported_countries')->truncate();
-    DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
-
     $countries = Country::select('id', 'iso2')
       ->where(['iso2' => 'NG'])
       ->orWhere(['iso2' => 'US'])

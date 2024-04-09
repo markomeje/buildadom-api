@@ -197,7 +197,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Laravel\Socialite\SocialiteServiceProvider::class,
-        Unicodeveloper\Paystack\PaystackServiceProvider::class,
 
     ],
 

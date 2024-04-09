@@ -1,11 +1,9 @@
 <?php
 
-use App\Http\Controllers\V1\City\CityController;
 use App\Http\Controllers\V1\Country\CountryController;
 use App\Http\Controllers\V1\Country\SupportedCountryController;
+use App\Http\Controllers\V1\Merchant\Auth\MerchantSignupController;
 use Illuminate\Support\Facades\Route;
-
-
 
 
 Route::prefix('country')->group(function() {
@@ -15,3 +13,4 @@ Route::prefix('country')->group(function() {
 });
 
 Route::get('/supported-countries', [SupportedCountryController::class, 'list']);
+Route::post('/signup', [MerchantSignupController::class, 'signup']);

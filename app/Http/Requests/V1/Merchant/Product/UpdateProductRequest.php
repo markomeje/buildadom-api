@@ -5,6 +5,7 @@ use App\Utility\Responser;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class UpdateProductRequest extends FormRequest
@@ -34,7 +35,7 @@ class UpdateProductRequest extends FormRequest
       'product_category_id' => ['required', 'exists:product_categories,id'],
       'quantity' => ['required', 'integer'],
       'attributes' => ['nullable'],
-      'currency_id' => ['required', 'exists:currencies,id'],
+      'supported_currency_id' => ['required', Rule::exists('supported_currencies', 'id')],
       'product_unit_id' => ['required', 'exists:product_units,id'],
     ];
   }

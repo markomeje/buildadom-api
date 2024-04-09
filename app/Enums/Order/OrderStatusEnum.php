@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Enums\V1\Order;
+namespace App\Enums\Order;
 use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum OrderStatusEnum: string
 {
   use UsefulEnums;
 
-  case ACTIVE = 'active';
   case PENDING = 'pending';
+  case PAID = 'paid';
 
 }

@@ -4,6 +4,7 @@
 return [
   'queue' => [
     'sms' => 'sms',
-    'email' => 'email'
+    'email' => 'email',
+    'payment' => 'payment'
   ]
 ];

@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\V1\Merchant\Auth\MerchantSignupController;
+use App\Http\Controllers\V1\Merchant\Driver\DispatchDriverController;
 use App\Http\Controllers\V1\Merchant\Product\ProductController;
 use App\Http\Controllers\V1\Merchant\Product\ProductImageController;
 use App\Http\Controllers\V1\Merchant\Store\StoreController;
 use App\Http\Controllers\V1\Merchant\Store\StoreUploadController;
 use Illuminate\Support\Facades\Route;
+
+
 
 Route::prefix('store')->group(function() {
   Route::post('/create', [StoreController::class, 'create']);
@@ -29,7 +33,11 @@ Route::prefix('product')->group(function() {
   Route::post('/{id}/change-image', [ProductImageController::class, 'change']);
 });
 
-
+Route::prefix('driver')->group(function() {
+  Route::get('/list', [DispatchDriverController::class, 'list']);
+  Route::post('/add', [DispatchDriverController::class, 'add']);
+  Route::post('/update', [DispatchDriverController::class, 'update']);
+});
 
 // Route::middleware(['auth:api'])->group(function() {
 //   Route::prefix('auth')->group(function() {

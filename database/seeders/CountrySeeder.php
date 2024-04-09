@@ -1,14 +1,11 @@
 <?php
 
 namespace Database\Seeders;
-use App\Enums\Currency\CurrencyTypeEnum;
 use \JsonMachine\Items;
-use App\Models\Currency\Currency;
 use App\Models\City\City;
 use App\Models\State\State;
 use App\Models\Country\Country;
 use Illuminate\Database\Seeder;
-use DB;
 
 class CountrySeeder extends Seeder
 {
@@ -20,24 +17,13 @@ class CountrySeeder extends Seeder
   public function run()
   {
     $this->command->info('Country Seeder started.');
-    DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-    DB::table('cities')->truncate();
-    DB::table('states')->truncate();
-    DB::table('currencies')->truncate();
-    DB::table('countries')->truncate();
-    DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
-    $countries_path = storage_path('globe.json');
-    $countries = Items::fromFile($countries_path);
-
-    $currencies_path = storage_path('currencies.json');
-    $currencies = json_decode(file_get_contents($currencies_path), true);
+    $path = storage_path('globe.json');
+    $countries = Items::fromFile($path);
 
     foreach ($countries as $country) {
       $nation = $this->seedCountry($country);
       if($nation) {
         $country_id = (int)$nation->id;
-        $this->seedCurrency($country, $country_id, $currencies);
 
         if($country->states) {
           foreach($country->states as $state) {
@@ -52,7 +38,7 @@ class CountrySeeder extends Seeder
         }
       }
     }
-    $this->command->info('Country Seeder completed successfully.');
+    $this->command->info('Countries Seeder successful.');
   }
 
   /**
@@ -62,7 +48,9 @@ class CountrySeeder extends Seeder
   private function seedCountry(object $country)
   {
     $iso2 = strtolower($country->iso2);
-    return Country::create([
+    $iso3 = strtoupper($country->iso3);
+
+    return Country::updateOrCreate(['iso2' => strtoupper($iso2), 'iso3' => $iso3], [
       'iso2' => strtoupper($iso2),
       'capital' => $country->capital,
       'iso3' => strtoupper($country->iso3),
@@ -86,28 +74,12 @@ class CountrySeeder extends Seeder
    */
   private function seedState(object $state, int $country_id)
   {
-    return State::create([
+    $name = $state->name;
+    return State::updateOrCreate(['name' => $name, 'country_id' => $country_id], [
       'country_id' => $country_id,
-      'name' => $state->name,
+      'name' => $name,
       'latitude' => $state->latitude,
       'longitude' => $state->longitude,
-    ]);
-  }
-
-  /**
-   * @param object $country
-   * @param int $country_id
-   * @param array $currencies
-   * @return void
-   */
-  private function seedCurrency(object $country, int $country_id, array $currencies)
-  {
-    $currency_code = strtoupper($country->currency);
-    Currency::updateOrCreate(['code' => $currency_code], [
-      'country_id' => $country_id,
-      'type' => CurrencyTypeEnum::FIAT->value,
-      'code' => $currency_code,
-      'name' => $currencies[$currency_code] ?? ''
     ]);
   }
 
@@ -119,10 +91,11 @@ class CountrySeeder extends Seeder
    */
   private function seedCity(object $city, object $state, int $country_id)
   {
-    City::create([
+    $name = $city->name;
+    City::updateOrCreate(['name' => $name, 'country_id' => $country_id], [
       'country_id' => $country_id,
       'state_id' => $state->id ?? null,
-      'name' => $city->name,
+      'name' => $name,
       'latitude' => $city->latitude,
       'longitude' => $city->longitude,
     ]);

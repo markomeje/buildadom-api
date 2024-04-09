@@ -17,9 +17,10 @@ return new class extends Migration
     Schema::create('cart_items', function (Blueprint $table) {
       $table->id();
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
-      $table->foreignId('cart_id')->nullable()->references('id')->on('carts');
       $table->bigInteger('quantity')->default(1);
       $table->foreignId('product_id')->nullable()->references('id')->on('products');
+      $table->foreignId('store_id')->nullable()->references('id')->on('stores');
+      $table->string('status')->default(CartItemStatusEnum::PENDING->value);
       $table->timestamps();
     });
   }

@@ -14,10 +14,6 @@ return [
   |
   */
 
-  'api' => [
-    'key' => env('API_KEY', ''),
-  ],
-
   'mailgun' => [
     'domain' => env('MAILGUN_DOMAIN'),
     'secret' => env('MAILGUN_SECRET'),
@@ -50,6 +46,12 @@ return [
   'termii' => [
     'sender_id' => 'N-Alert',
     'api_key' => env('TERMII_API_KEY'),
+  ],
+
+  'paystack' => [
+    'public_key' => env('PAYSTACK_PUBLIC_KEY'),
+    'base_url' => env('PAYSTACK_PAYMENT_URL'),
+    'secret_key' => env('PAYSTACK_SECRET_KEY'),
   ],
 
 
