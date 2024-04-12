@@ -1,30 +1,22 @@
 <?php
 
-namespace App\Notifications\Customer;
-use App\Models\Order\Order;
-use Carbon\Carbon;
+namespace App\Notifications\Merchant;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OrderPlacedNotification extends Notification implements ShouldQueue
+class PendingOrderNotification extends Notification implements ShouldQueue
 {
   use Queueable;
-
-  /**
-   * @var array
-   */
-  private $tracking_numbers;
 
   /**
    * Create a new notification instance.
    *
    * @return void
    */
-  public function __construct(array $tracking_numbers)
+  public function __construct()
   {
-    $this->tracking_numbers = $tracking_numbers;
     $this->onQueue(config('constants.queue.order'));
   }
 
@@ -47,14 +39,9 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
    */
   public function toMail($notifiable)
   {
-    $start_delivery_date = Carbon::today()->format('M d Y');
-    $end_delivery_date = Carbon::today()->addDays(5)->format('M d Y');
-    $tracking_numbers = implode(', ', $this->tracking_numbers);
-
     return (new MailMessage)
-      ->subject('Buildadom Order Placed Successfully')
-      ->line("Your order has been placed with a delivery duration between $start_delivery_date to $end_delivery_date")
-      ->line("Tracking number(s) $tracking_numbers")
+      ->subject('Buildadom Pending Order')
+      ->line('An order has been placed in your store. Only begin order processing after escrow payment confirmation.')
       ->line('Thank you for choosing our platform');
   }
 

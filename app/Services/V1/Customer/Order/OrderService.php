@@ -37,7 +37,10 @@ class OrderService extends BaseService
       }
 
       $orders = Order::owner()->where(['status' => OrderStatusEnum::PENDING->value])->get();
-      User::find(auth()->id())->notify(new OrderPlacedNotification());
+      $customer = User::find(auth()->id());
+
+      $tracking_numbers = $orders->pluck('tracking_number')->toArray();
+      $customer->notify(new OrderPlacedNotification($tracking_numbers));
       return Responser::send(Status::HTTP_OK, $orders, 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());

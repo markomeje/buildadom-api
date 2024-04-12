@@ -11,7 +11,7 @@ trait CurrencyTrait
    */
   public function getDefaultCurrency()
   {
-    $currency = Currency::isSupported()->where('is_default', 1)->first();
+    $currency = Currency::isSupported()->isDefault()->first();
     if(empty($currency)) {
       throw new Exception('No default supported currency set.');
     }

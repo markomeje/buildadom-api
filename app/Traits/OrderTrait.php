@@ -7,10 +7,15 @@ use App\Models\Cart\CartItem;
 use App\Models\Order\Order;
 use App\Models\Order\OrderItem;
 use App\Models\Product\Product;
+use App\Models\Store\Store;
+use App\Models\User;
+use App\Notifications\Merchant\PendingOrderNotification;
 use Exception;
 
 trait OrderTrait
 {
+  use CurrencyTrait;
+
   /**
    * @return string
    */
@@ -39,7 +44,9 @@ trait OrderTrait
     $user_id = auth()->id();
 
     $product_id = $item->product_id;
-    $order = Order::updateOrCreate([
+    $store_id = $product->store_id;
+
+    Order::updateOrCreate([
       'product_id' => $product_id,
       'status' => OrderStatusEnum::PENDING->value,
       'user_id' => $user_id
@@ -48,13 +55,15 @@ trait OrderTrait
       'product_id' => $product_id,
       'status' => OrderStatusEnum::PENDING->value,
       'user_id' => $user_id,
-      'store_id' => $product->store_id,
-      'currency_id' => $product->currency_id,
+      'store_id' => $store_id,
+      'currency_id' => $this->getDefaultCurrency()->id,
       'tracking_number' => $this->generateTrackingNumber(),
       'quantity' => $quantity,
       'amount' => $price,
     ]);
 
+    $store = $product->store;
+    User::find($store->user_id)->notify(new PendingOrderNotification());
     $item->update(['status' => CartItemStatusEnum::PROCESSING->value]);
   }
 
