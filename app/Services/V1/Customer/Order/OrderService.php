@@ -2,8 +2,11 @@
 
 namespace App\Services\V1\Customer\Order;
 use App\Enums\Cart\CartItemStatusEnum;
+use App\Enums\Order\OrderStatusEnum;
 use App\Models\Cart\CartItem;
 use App\Models\Order\Order;
+use App\Models\User;
+use App\Notifications\Customer\OrderPlacedNotification;
 use App\Services\BaseService;
 use App\Traits\OrderTrait;
 use App\Utility\Responser;
@@ -11,7 +14,6 @@ use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 
 class OrderService extends BaseService
@@ -34,10 +36,10 @@ class OrderService extends BaseService
         $this->createOrder($item);
       }
 
-      $orders = Order::owner()->get();
+      $orders = Order::owner()->where(['status' => OrderStatusEnum::PENDING->value])->get();
+      User::find(auth()->id())->notify(new OrderPlacedNotification());
       return Responser::send(Status::HTTP_OK, $orders, 'Operation successful.');
     } catch (Exception $e) {
-      DB::rollBack();
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
@@ -45,9 +47,11 @@ class OrderService extends BaseService
   public function list(): JsonResponse
   {
     try {
-      $orders = Order::owner()->with(['currency' => function($query) {
-        return $query->select(['id', 'name', 'code']);
-      }])->get();
+      $orders = Order::owner()->with([
+        'currency' => function($query) {
+          return $query->select(['id', 'name', 'code']);
+        }
+      ])->get();
       return Responser::send(Status::HTTP_OK, $orders, 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());

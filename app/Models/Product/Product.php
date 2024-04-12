@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models\Product;
-use App\Models\Currency\SupportedCurrency;
+use App\Models\Currency;
 use App\Models\Product\ProductCategory;
 use App\Models\Store\Store;
 use App\Models\User;
@@ -31,7 +31,7 @@ class Product extends Model
     'quantity',
     'user_id',
     'tags',
-    'supported_currency_id',
+    'currency_id',
     'product_unit_id',
     'extras'
   ];
@@ -59,7 +59,7 @@ class Product extends Model
    */
   public function scopePublished($query)
   {
-    return $query->where(['published' => true]);
+    return $query->where('published', true);
   }
 
   /**
@@ -91,7 +91,7 @@ class Product extends Model
    */
   public function currency(): BelongsTo
   {
-    return $this->belongsTo(SupportedCurrency::class, 'supported_currency_id');
+    return $this->belongsTo(Currency::class, 'currency_id');
   }
 
   /**

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 use App\Models\Product\ProductCategory;
+use App\Models\Product\ProductUnit;
 use App\Models\Store\Store;
 use App\Models\User;
 use Faker\Factory as Faker;
@@ -26,7 +27,7 @@ class ProductFactory extends Factory
       'quantity' => rand(10, 45),
       'user_id' => $faker->randomElement(User::all()->pluck('id')->toArray()),
       'currency_id' => 1,
-      'product_unit_id' => rand(3, 78),
+      'product_unit_id' => rand(1, ProductUnit::count()),
     ];
   }
 }

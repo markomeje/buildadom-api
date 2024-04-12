@@ -24,6 +24,8 @@ return new class extends Migration
       $table->string('status')->default(CurrencyStatusEnum::ACTIVE->value);
       $table->string('name');
       $table->string('icon')->nullable();
+      $table->boolean('is_supported')->default(0);
+      $table->boolean('is_default')->default(0);
       $table->timestamps();
     });
   }

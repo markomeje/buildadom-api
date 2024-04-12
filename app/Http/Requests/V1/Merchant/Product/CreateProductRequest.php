@@ -35,7 +35,7 @@ class CreateProductRequest extends FormRequest
       'product_category_id' => ['required', 'exists:product_categories,id'],
       'quantity' => ['required', 'integer'],
       'attributes' => ['nullable'],
-      'supported_currency_id' => ['required', Rule::exists('supported_currencies', 'id')],
+      'currency_id' => ['required', Rule::exists('currencies', 'id')],
       'product_unit_id' => ['required', 'exists:product_units,id'],
     ];
   }

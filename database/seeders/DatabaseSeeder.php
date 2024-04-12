@@ -13,16 +13,15 @@ class DatabaseSeeder extends Seeder
   public function run()
   {
     $this->call([
-      CountrySeeder::class,
+      //CountrySeeder::class,
       CurrencySeeder::class,
-      SupportedCurrencySeeder::class,
       UserSeeder::class,
       DocumentTypeSeeder::class,
       ProductUnitSeeder::class,
-      SupportedCountrySeeder::class,
       ProductCategorySeeder::class,
+      StoreSeeder::class,
       ProductSeeder::class,
-      ProductImageSeeder::class,
+      //ProductImageSeeder::class,
     ]);
   }
 }

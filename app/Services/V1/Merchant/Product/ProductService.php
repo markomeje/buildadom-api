@@ -21,7 +21,7 @@ class ProductService extends BaseService
     try {
       $product = Product::create([
         'name' => $request->name,
-        'supported_currency_id' => $request->supported_currency_id,
+        'currency_id' => $request->currency_id,
         'description' => $request->description,
         'quantity' => $request->quantity,
         'product_category_id' => $request->product_category_id,
@@ -74,7 +74,7 @@ class ProductService extends BaseService
 
       $product->update([
         'name' => $request->name,
-        'supported_currency_id' => $request->supported_currency_id,
+        'currency_id' => $request->currency_id,
         'description' => $request->description,
         'quantity' => $request->quantity,
         'product_category_id' => $request->product_category_id,

@@ -23,7 +23,7 @@ return new class extends Migration
       $table->bigInteger('amount');
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
       $table->bigInteger('quantity')->default(1);
-      $table->foreignId('supported_currency_id')->nullable()->references('id')->on('supported_currencies');
+      $table->foreignId('currency_id')->nullable()->references('id')->on('currencies');
       $table->foreignId('store_id')->nullable()->references('id')->on('stores');
       $table->string('status')->default(OrderStatusEnum::PENDING->value);
       $table->timestamps();

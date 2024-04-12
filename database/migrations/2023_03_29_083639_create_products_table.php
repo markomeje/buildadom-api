@@ -23,7 +23,7 @@ return new class extends Migration
       $table->string('status')->default(ProductStatusEnum::ACTIVE->value);
       $table->foreignId('product_category_id')->nullable()->references('id')->on('product_categories');
       $table->float('price');
-      $table->foreignId('supported_currency_id')->nullable()->references('id')->on('supported_currencies');
+      $table->foreignId('currency_id')->nullable()->references('id')->on('currencies');
       $table->integer('quantity')->default(1);
       $table->boolean('published')->default(false);
       $table->foreignId('product_unit_id')->nullable()->references('id')->on('product_units');

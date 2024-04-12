@@ -4,7 +4,7 @@ namespace Database\Seeders;
 use \JsonMachine\Items;
 use App\Models\City\City;
 use App\Models\State\State;
-use App\Models\Country\Country;
+use App\Models\Country;
 use Illuminate\Database\Seeder;
 
 class CountrySeeder extends Seeder
@@ -38,7 +38,7 @@ class CountrySeeder extends Seeder
         }
       }
     }
-    $this->command->info('Countries Seeder successful.');
+    $this->command->info('Country Seeder successful.');
   }
 
   /**
@@ -64,6 +64,7 @@ class CountrySeeder extends Seeder
       'longitude' => $country->longitude,
       'emoji' => $country->emoji,
       'flag_url' => "https://flagcdn.com/h80/{$iso2}.jpg",
+      'is_supported' => $iso2 == 'ng' ? 1 : 0
     ]);
   }
 

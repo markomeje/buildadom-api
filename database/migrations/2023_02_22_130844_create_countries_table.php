@@ -29,6 +29,7 @@ return new class extends Migration
       $table->string('flag_url')->nullable();
       $table->string('iso3');
       $table->string('iso2');
+      $table->boolean('is_supported')->default(0);
       $table->timestamps();
     });
   }

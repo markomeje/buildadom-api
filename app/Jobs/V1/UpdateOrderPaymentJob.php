@@ -41,7 +41,6 @@ class UpdateOrderPaymentJob implements ShouldQueue
     foreach ($orders as $order) {
       $order_payment = OrderPayment::where('order_id', $order->id)->first();
       if(!empty($order_payment)) {
-
         $payment = Payment::find($order_payment->payment_id);
         if($payment && (strtolower($payment->status) == strtolower(PaymentStatusEnum::SUCCESS->value))) {
           $order->update(['status' => OrderStatusEnum::PAID->value]);

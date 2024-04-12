@@ -20,9 +20,8 @@ class DispatchDriverService extends BaseService
   public function add(Request $request): JsonResponse
   {
     try {
-      $phone = Help::formatPhoneNumber($request->phone);
       $driver = DispatchDriver::create([
-        'phone' => $phone,
+        'phone' => Help::formatPhoneNumber($request->phone),
         'user_id' => auth()->id(),
         'firstname' => $request->firstname,
         'lastname' => $request->lastname,
@@ -56,7 +55,7 @@ class DispatchDriverService extends BaseService
     try {
       $driver = DispatchDriver::where(['id' => $request->id, 'user_id' => auth()->id()])->first();
       if(empty($driver)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, [], '.Driver not found');
+        return Responser::send(Status::HTTP_NOT_FOUND, [], 'Driver not found');
       }
 
       $driver->update([

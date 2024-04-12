@@ -1,12 +1,10 @@
 <?php
 
 namespace App\Models\Store;
-
 use App\Models\City\City;
-use App\Models\Country\Country;
+use App\Models\Country;
 use App\Models\Product\Product;
 use App\Models\State\State;
-use App\Models\Upload\Upload;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

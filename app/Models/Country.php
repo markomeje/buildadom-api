@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models\Country;
-
+namespace App\Models;
 use App\Models\City\City;
 use App\Models\State\State;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Query\Builder;
 
 class Country extends Model
 {
@@ -19,7 +19,6 @@ class Country extends Model
    */
   protected $fillable = [
     'latitude',
-    'cities',
     'longitude',
     'iso2',
     'capital',
@@ -34,16 +33,22 @@ class Country extends Model
     'timezones',
     'emoji',
     'sub_region',
-    'states'
   ];
 
   public $casts = [
     'translations' => 'json',
-    'cities' => 'json',
     'timezones' => 'json',
-    'states' => 'json'
+    'is_supported' => 'boolean'
   ];
-  
+
+  /**
+   * @return Builder
+   */
+  public function scopeIsSupported($query)
+  {
+    return $query->where('is_supported', 1);
+  }
+
   /**
    * @return HasMany
    */

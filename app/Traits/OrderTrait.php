@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Traits;
-
 use App\Enums\Cart\CartItemStatusEnum;
 use App\Enums\Order\OrderStatusEnum;
 use App\Models\Cart\CartItem;
@@ -9,7 +8,6 @@ use App\Models\Order\Order;
 use App\Models\Order\OrderItem;
 use App\Models\Product\Product;
 use Exception;
-use Illuminate\Support\Arr;
 
 trait OrderTrait
 {
@@ -41,7 +39,7 @@ trait OrderTrait
     $user_id = auth()->id();
 
     $product_id = $item->product_id;
-    Order::updateOrCreate([
+    $order = Order::updateOrCreate([
       'product_id' => $product_id,
       'status' => OrderStatusEnum::PENDING->value,
       'user_id' => $user_id
@@ -51,7 +49,7 @@ trait OrderTrait
       'status' => OrderStatusEnum::PENDING->value,
       'user_id' => $user_id,
       'store_id' => $product->store_id,
-      'supported_currency_id' => $product->supported_currency_id,
+      'currency_id' => $product->currency_id,
       'tracking_number' => $this->generateTrackingNumber(),
       'quantity' => $quantity,
       'amount' => $price,

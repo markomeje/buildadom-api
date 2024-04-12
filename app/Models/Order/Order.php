@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models\Order;
-use App\Models\Currency\SupportedCurrency;
+use App\Models\Currency;
 use App\Models\Order\OrderPayment;
 use App\Models\Product\Product;
 use App\Models\Store\Store;
@@ -32,7 +32,7 @@ class Order extends Model
 
     'product_id',
     'amount',
-    'supported_currency_id',
+    'currency_id',
     'quantity',
     'order_id',
   ];
@@ -72,39 +72,6 @@ class Order extends Model
   }
 
   /**
-   * @return HasMany
-   */
-  public function itemsLean(): HasMany
-  {
-    return $this->hasMany(OrderItem::class)->with([
-      'product' => function($query) {
-        $query->select([
-          'id',
-          'name',
-          'description',
-          'store_id',
-          'published',
-          'product_category_id',
-          'product_unit_id',
-          'price',
-          'quantity',
-          'user_id',
-          'tags',
-          'currency_id',
-        ])->with(['images', 'unit', 'store']);
-      }, 'currency' => function($query) {
-        $query->select([
-          'id',
-          'code',
-          'name',
-          'type',
-          'icon'
-        ]);
-      }
-    ]);
-  }
-
-  /**
    * @return BelongsTo
    */
   public function user(): BelongsTo
@@ -133,7 +100,7 @@ class Order extends Model
    */
   public function currency(): BelongsTo
   {
-    return $this->belongsTo(SupportedCurrency::class, 'supported_currency_id');
+    return $this->belongsTo(Currency::class, 'currency_id');
   }
 
   /**

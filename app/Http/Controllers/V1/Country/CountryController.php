@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\V1\Country;
 use App\Http\Controllers\Controller;
 use App\Models\City\City;
-use App\Models\Country\Country;
 use App\Models\State\State;
+use App\Services\V1\Country\CountryService;
 use App\Utility\Responser;
 use App\Utility\Status;
 use Illuminate\Http\JsonResponse;
@@ -13,19 +13,27 @@ use Illuminate\Http\Request;
 class CountryController extends Controller
 {
   /**
-   * Get all countries
-   * @param Request $request)
+   * @param CountryService $countryService
+   */
+  public function __construct(private CountryService $countryService)
+  {
+    $this->countryService = $countryService;
+  }
+
+  /**
    * @return JsonResponse
    */
-  public function countries(Request $request)
+  public function list(): JsonResponse
   {
-    $query = Country::query();
-    if(isset($request->iso2))  {
-      $query->where('iso2', $request->iso2);
-    }
+    return $this->countryService->list();
+  }
 
-    $countries = $query->get();
-    return Responser::send(Status::HTTP_OK, $countries, 'Countries retrieved successfully');
+  /**
+   * @return JsonResponse
+   */
+  public function supported(): JsonResponse
+  {
+    return $this->countryService->supported();
   }
 
   /**
