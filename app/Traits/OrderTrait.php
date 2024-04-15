@@ -5,16 +5,12 @@ use App\Enums\Cart\CartItemStatusEnum;
 use App\Enums\Order\OrderStatusEnum;
 use App\Models\Cart\CartItem;
 use App\Models\Order\Order;
-use App\Models\Order\OrderItem;
-use App\Models\Product\Product;
-use App\Models\Store\Store;
-use App\Models\User;
 use App\Notifications\Merchant\PendingOrderNotification;
 use Exception;
 
 trait OrderTrait
 {
-  use CurrencyTrait;
+  use CurrencyTrait, MerchantTrait;
 
   /**
    * @return string
@@ -62,8 +58,8 @@ trait OrderTrait
       'amount' => $price,
     ]);
 
-    $store = $product->store;
-    User::find($store->user_id)->notify(new PendingOrderNotification());
+    $merchant = $this->getMerchantUser($product->user_id);
+    $merchant->notify(new PendingOrderNotification());
     $item->update(['status' => CartItemStatusEnum::PROCESSING->value]);
   }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\V1\Customer\Escrow;
+namespace App\Services\V1\Merchant\Escrow;
 use App\Models\Escrow\EscrowAccount;
 use App\Models\Payment\Payment;
 use App\Services\BaseService;

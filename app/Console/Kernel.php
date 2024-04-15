@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Console;
+use App\Jobs\V1\HandleEscrowAccountJob;
 use App\Jobs\V1\UpdateOrderPaymentJob;
 use App\Jobs\V1\VerifyPaymentJob;
 use Illuminate\Console\Scheduling\Schedule;
@@ -18,6 +19,7 @@ class Kernel extends ConsoleKernel
   {
     $schedule->job(new VerifyPaymentJob)->everyMinute();
     $schedule->job(new UpdateOrderPaymentJob)->everyMinute();
+    $schedule->job(new HandleEscrowAccountJob)->everyMinute();
   }
 
   /**

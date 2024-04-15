@@ -2,12 +2,14 @@
 
 namespace App\Models\Payment;
 
+use App\Models\Escrow\EscrowAccount;
 use App\Models\Store\Store;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
 
 class Payment extends Model
@@ -26,14 +28,13 @@ class Payment extends Model
     'reference',
     'type',
     'payload',
-    'order_id',
     'response',
   ];
 
   public $casts = [
+    'response' => 'json',
     'amount' => 'float',
     'payload' => 'json',
-    'response' => 'json'
   ];
 
   /**
@@ -69,6 +70,14 @@ class Payment extends Model
   public function store(): BelongsTo
   {
     return $this->belongsTo(Store::class, 'store_id');
+  }
+
+  /**
+   * @return HasOne
+   */
+  public function escrow(): HasOne
+  {
+    return $this->hasOne(EscrowAccount::class, 'payment_id');
   }
 
 }

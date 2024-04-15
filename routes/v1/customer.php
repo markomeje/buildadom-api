@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\V1\Customer\Auth\CustomerSignupController;
 use App\Http\Controllers\V1\Customer\Cart\CartItemController;
+use App\Http\Controllers\V1\Customer\Escrow\EscrowAccountController;
 use App\Http\Controllers\V1\Customer\Order\OrderController;
 use App\Http\Controllers\V1\Customer\Payment\PaymentController;
 use Illuminate\Support\Facades\Route;
+
+
 
 
 
@@ -25,4 +28,8 @@ Route::prefix('payment')->group(function() {
 
 Route::prefix('auth')->group(function() {
   Route::post('/signup', [CustomerSignupController::class, 'signup']);
+});
+
+Route::prefix('escrow')->group(function() {
+  Route::get('/accounts', [EscrowAccountController::class, 'accounts']);
 });

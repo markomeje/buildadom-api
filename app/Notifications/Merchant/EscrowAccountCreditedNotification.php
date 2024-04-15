@@ -1,30 +1,31 @@
 <?php
 
-namespace App\Notifications\Customer;
-use Carbon\Carbon;
+namespace App\Notifications\Merchant;
+use App\Enums\Queue\QueueEnum;
+use App\Traits\CurrencyTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OrderPlacedNotification extends Notification implements ShouldQueue
+class EscrowAccountCreditedNotification extends Notification implements ShouldQueue
 {
-  use Queueable;
+  use Queueable, CurrencyTrait;
 
   /**
-   * @var array
+   * @var float
    */
-  private $tracking_numbers;
+  private $total_amount;
 
   /**
    * Create a new notification instance.
    *
    * @return void
    */
-  public function __construct(array $tracking_numbers)
+  public function __construct($total_amount)
   {
-    $this->tracking_numbers = $tracking_numbers;
-    $this->onQueue(config('constants.queue.order'));
+    $this->total_amount = $total_amount;
+    $this->onQueue(QueueEnum::ESCROW->value);
   }
 
   /**
@@ -46,14 +47,11 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
    */
   public function toMail($notifiable)
   {
-    $start_delivery_date = Carbon::today()->format('M d Y');
-    $end_delivery_date = Carbon::today()->addDays(5)->format('M d Y');
-    $tracking_numbers = implode(', ', $this->tracking_numbers);
-
+    $total_amount = 'NGN'.number_format($this->total_amount);
     return (new MailMessage)
-      ->subject('Buildadom Order Placed Successfully')
-      ->line("Your order has been placed with a delivery duration between $start_delivery_date to $end_delivery_date")
-      ->line("Tracking number(s) $tracking_numbers")
+      ->subject('Buildadom Escrow Account credited.')
+      ->line("Your escrow account has been credited with the sum of $total_amount and will be disbursed to the respective merchant(s) after your order(s) has been fulfilled.")
+      ->line('Incase of an questions, kindly contact our support.')
       ->line('Thank you for choosing our platform');
   }
 

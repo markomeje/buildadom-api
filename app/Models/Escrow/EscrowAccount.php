@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Models\Escrow;
+use App\Models\Payment\Payment;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,9 +18,8 @@ class EscrowAccount extends Model
    * @var array<int, string>
    */
   protected $fillable = [
-    'kyc_verification_id',
+    'total_amount',
     'extras',
-    'order_id',
     'user_id',
     'payment_id',
     'status',
@@ -28,9 +29,22 @@ class EscrowAccount extends Model
     'extras' => 'json'
   ];
 
+  /**
+   * @return Builder
+   */
+  public function scopeOwner($query)
+  {
+    return $query->where(['user_id' => auth()->id()]);
+  }
+
   public function user(): BelongsTo
   {
     return $this->belongsTo(User::class, 'user_id');
+  }
+
+  public function payment(): BelongsTo
+  {
+    return $this->belongsTo(Payment::class, 'payment_id');
   }
 
 }

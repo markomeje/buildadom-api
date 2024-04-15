@@ -14,5 +14,6 @@ enum PaymentStatusEnum: string
   case PENDING = 'pending';
   case PROCESSING = 'processing';
   case QUEUED = 'queued';
+  case ABANDONED = 'abandoned';
 
 }

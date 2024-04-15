@@ -38,7 +38,8 @@ class Order extends Model
   ];
 
   public $casts = [
-    'total_amount' => 'float'
+    'total_amount' => 'float',
+    'amount' => 'float'
   ];
 
   /**

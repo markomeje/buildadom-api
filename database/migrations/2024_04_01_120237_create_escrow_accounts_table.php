@@ -18,7 +18,8 @@ return new class extends Migration
       $table->id();
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
       $table->foreignId('payment_id')->nullable()->references('id')->on('payments');
-      $table->foreignId('order_id')->nullable()->references('id')->on('orders');
+      $table->bigInteger('total_amount');
+      $table->text('extras')->nullable();
       $table->string('status')->default(EscrowAccountStatusEnum::PENDING->value);
       $table->timestamps();
     });

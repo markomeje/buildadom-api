@@ -13,7 +13,6 @@ use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 
 class PaymentService extends BaseService
@@ -50,7 +49,6 @@ class PaymentService extends BaseService
         'reference' => $reference,
         'status' => PaymentStatusEnum::INITIALIZED->value,
         'payload' => $request->all(),
-        'order_id' => $request->order_id
       ]);
 
       foreach ($orders as $order) {
@@ -89,7 +87,6 @@ class PaymentService extends BaseService
   public function verify(Request $request): JsonResponse
   {
     try {
-
       $reference = $request->reference;
       $paystack = Paystack::payment()->verify($reference);
       $payment = Payment::owner()->where([

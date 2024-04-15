@@ -3,6 +3,7 @@
 namespace App\Jobs\V1;
 use App\Enums\Payment\PaymentStatusEnum;
 use App\Integrations\Paystack;
+use App\Jobs\V1\HandleEscrowAccountJob;
 use App\Models\Payment\Payment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -32,27 +33,35 @@ class VerifyPaymentJob implements ShouldQueue
    */
   public function handle()
   {
-    $payments = Payment::where('status', PaymentStatusEnum::INITIALIZED->value)
-      ->orWhere('status', PaymentStatusEnum::ONGOING->value)
-      ->orWhere('status', PaymentStatusEnum::PENDING->value)
-      ->orWhere('status', PaymentStatusEnum::PROCESSING->value)
-      ->orWhere('status', PaymentStatusEnum::QUEUED->value)
-      ->get();
+    $payments = Payment::whereIn('status', [
+      PaymentStatusEnum::INITIALIZED->value,
+      PaymentStatusEnum::ONGOING->value,
+      PaymentStatusEnum::PROCESSING->value,
+      PaymentStatusEnum::PENDING->value,
+      PaymentStatusEnum::QUEUED->value,
+      PaymentStatusEnum::ABANDONED->value,
+    ])->get();
 
-    if (empty($payments->count())) {
-      return;
-    }
-
-    foreach ($payments as $payment) {
-      $response = Paystack::payment()->verify($payment->reference);
-      if(isset($response['status']) && (boolean)$response['status'] == true) {
-        $data = $response['data'] ?? null;
-
-        $status = strtolower($data['status'] ?? PaymentStatusEnum::INITIALIZED->value);
-        $payment->update(['status' => $status, 'response' => $data]);
+    if ($payments->count() > 0) {
+      foreach ($payments as $payment) {
+        $this->handlePaymentStatus($payment);
+        HandleEscrowAccountJob::dispatch();
       }
     }
+  }
 
+  /**
+   * @param Payment $payment
+   */
+  private function handlePaymentStatus(Payment $payment)
+  {
+    $response = Paystack::payment()->verify($payment->reference);
+    if(isset($response['status']) && (boolean)$response['status'] == true) {
+      $data = $response['data'] ?? null;
+
+      $status = strtolower($data['status'] ?? PaymentStatusEnum::INITIALIZED->value);
+      $payment->update(['status' => $status, 'response' => $data]);
+    }
   }
 
 }

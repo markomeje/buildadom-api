@@ -4,16 +4,16 @@ header("Access-Control-Allow-Origin: *");
 header('Access-Control-Allow-Headers: origin, x-requested-with, content-type');
 header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 
-
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\AuthController;
-use App\Http\Controllers\V1\UnitController;
-use App\Http\Controllers\V1\UserController;
-use App\Http\Controllers\V1\SignupController;
+use App\Http\Controllers\V1\Country\CountryController;
 use App\Http\Controllers\V1\Customer\Cart\CartController;
 use App\Http\Controllers\V1\Customer\Orders\OrderController;
 use App\Http\Controllers\V1\Marchant\OrderTrackingController;
-use App\Http\Controllers\V1\Customer\Orders\OrderItemController;
+use App\Http\Controllers\V1\Merchant\Auth\MerchantSignupController;
+use App\Http\Controllers\V1\SignupController;
+use App\Http\Controllers\V1\UnitController;
+use App\Http\Controllers\V1\UserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,17 +25,21 @@ use App\Http\Controllers\V1\Customer\Orders\OrderItemController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-
 Route::middleware(['accept.json'])->domain(env('API_URL'))->prefix('v1')->group(function() {
   Route::prefix('/admin')->name('admin.')->group(base_path('routes/v1/admin.php'));
   Route::middleware(['auth:api'])->prefix('/merchant')->name('merchant.')->group(base_path('routes/v1/merchant.php'));
   Route::middleware(['auth:api'])->prefix('/customer')->name('customer.')->group(base_path('routes/v1/customer.php'));
   Route::prefix('/auth')->name('auth.')->group(base_path('routes/v1/auth.php'));
-  Route::prefix('/')->group(base_path('routes/v1/general.php'));
-});
 
-Route::middleware(['accept.json'])->domain(env('API_URL'))->prefix('v0')->group(function() {
+  Route::prefix('country')->group(function() {
+    Route::get('/list', [CountryController::class, 'list']);
+    Route::get('/supported-countries', [CountryController::class, 'supported']);
+    Route::get('/states', [CountryController::class, 'states']);
+    Route::get('/cities', [CountryController::class, 'cities']);
+  });
+
+  Route::post('/merchant/signup', [MerchantSignupController::class, 'signup']);
+});
   Route::middleware(['auth:api'])->prefix('user')->group(function() {
     Route::get('/me', [UserController::class, 'me']);
   });
@@ -107,66 +111,3 @@ Route::middleware(['accept.json'])->domain(env('API_URL'))->prefix('v0')->group(
   Route::get('/banks', [App\Http\Controllers\V1\BanksController::class, 'banks']);
   Route::get('/identification/types', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'types']);
   Route::get('/currencies', [App\Http\Controllers\V1\CurrencyController::class, 'index']);
-
-  Route::prefix('reset')->group(function() {
-      Route::post('/process', [App\Http\Controllers\V1\ResetController::class, 'process']);
-      Route::post('/update', [App\Http\Controllers\V1\ResetController::class, 'update']);
-  });
-
-  Route::middleware(['auth:api'])->group(function() {
-      Route::prefix('auth')->group(function() {
-        Route::post('/user', [\App\Http\Controllers\V1\UserController::class, 'user']);
-        Route::post('/logout', [\App\Http\Controllers\V1\AuthController::class, 'logout']);
-        Route::post('/refresh', [\App\Http\Controllers\V1\AuthController::class, 'refresh']);
-      });
-
-    Route::prefix('marchant')->group(function() {
-      Route::prefix('order')->group(function() {
-        Route::post('/track', [OrderTrackingController::class, 'track']);
-        Route::get('/items', [OrderItemController::class, 'items']);
-      });
-
-      Route::prefix('store')->group(function() {
-        Route::post('/create', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'create']);
-        Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'update']);
-        Route::get('/', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'store']);
-        Route::post('/publish/{id}', [\App\Http\Controllers\V1\Marchant\StoreController::class, 'publish']);
-      });
-
-      Route::get('/drivers', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'drivers']);
-
-      Route::prefix('driver')->group(function() {
-        Route::post('/add', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'add']);
-        Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'update']);
-        Route::get('/{id}', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'store']);
-        Route::delete('/delete/{id}', [\App\Http\Controllers\V1\Marchant\DriverController::class, 'delete']);
-      });
-
-      Route::prefix('image')->group(function() {
-        Route::post('/upload', [\App\Http\Controllers\V1\ImageController::class, 'upload']);
-      });
-
-      Route::get('/products', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'products']);
-
-      Route::prefix('product')->group(function() {
-        Route::post('/create', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'create']);
-        Route::post('/update/{id}', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'update']);
-        Route::get('/{id}', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'product']);
-
-        Route::post('/publish/{id}', [\App\Http\Controllers\V1\Marchant\ProductController::class, 'publish']);
-      });
-
-      Route::prefix('identification')->group(function() {
-        Route::post('/save', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'save']);
-
-        Route::get('/details', [\App\Http\Controllers\V1\Marchant\IdentificationController::class, 'details']);
-      });
-
-      Route::prefix('account')->group(function() {
-        Route::post('/save', [\App\Http\Controllers\V1\Marchant\AccountController::class, 'save']);
-
-        Route::get('/information', [\App\Http\Controllers\V1\Marchant\AccountController::class, 'information']);
-      });
-      });
-  });
-});
