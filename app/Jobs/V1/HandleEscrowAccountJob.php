@@ -59,8 +59,10 @@ class HandleEscrowAccountJob implements ShouldQueue
       'status' => EscrowAccountStatusEnum::PAID->value
     ]);
 
-    $merchant = $this->getMerchantUser($user_id);
-    $merchant->notify(new EscrowAccountCreditedNotification($total_amount));
+    if($escrow) {
+      $merchant = $this->getMerchantUser($user_id);
+      $merchant->notify(new EscrowAccountCreditedNotification($total_amount));
+    }
   }
 
 }

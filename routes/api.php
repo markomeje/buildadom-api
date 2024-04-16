@@ -4,16 +4,11 @@ header("Access-Control-Allow-Origin: *");
 header('Access-Control-Allow-Headers: origin, x-requested-with, content-type');
 header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 
-use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\Country\CountryController;
-use App\Http\Controllers\V1\Customer\Cart\CartController;
-use App\Http\Controllers\V1\Customer\Orders\OrderController;
-use App\Http\Controllers\V1\Marchant\OrderTrackingController;
 use App\Http\Controllers\V1\Merchant\Auth\MerchantSignupController;
-use App\Http\Controllers\V1\SignupController;
-use App\Http\Controllers\V1\UnitController;
-use App\Http\Controllers\V1\UserController;
+use App\Http\Controllers\V1\Product\ProductCategoryController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -39,4 +34,14 @@ Route::middleware(['accept.json'])->domain(env('API_URL'))->prefix('v1')->group(
   });
 
   Route::post('/merchant/signup', [MerchantSignupController::class, 'signup']);
+
+  Route::prefix('product')->group(function() {
+    Route::prefix('category')->group(function() {
+      Route::get('/list', [ProductCategoryController::class, 'list']);
+    });
+
+    Route::prefix('unit')->group(function() {
+      Route::get('/list', [ProductCategoryController::class, 'list']);
+    });
+  });
 });

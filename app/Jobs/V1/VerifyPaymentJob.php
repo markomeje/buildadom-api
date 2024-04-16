@@ -45,7 +45,6 @@ class VerifyPaymentJob implements ShouldQueue
     if ($payments->count() > 0) {
       foreach ($payments as $payment) {
         $this->handlePaymentStatus($payment);
-        HandleEscrowAccountJob::dispatch();
       }
     }
   }
