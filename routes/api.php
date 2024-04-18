@@ -7,7 +7,9 @@ header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 use App\Http\Controllers\V1\Country\CountryController;
 use App\Http\Controllers\V1\Merchant\Auth\MerchantSignupController;
 use App\Http\Controllers\V1\Product\ProductCategoryController;
+use App\Http\Controllers\V1\Product\ProductUnitController;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -41,7 +43,7 @@ Route::middleware(['accept.json'])->domain(env('API_URL'))->prefix('v1')->group(
     });
 
     Route::prefix('unit')->group(function() {
-      Route::get('/list', [ProductCategoryController::class, 'list']);
+      Route::get('/list', [ProductUnitController::class, 'list']);
     });
   });
 });
