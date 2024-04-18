@@ -35,7 +35,7 @@ class ProductService extends BaseService
 
       return Responser::send(Status::HTTP_OK, $product, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage(), $e);
     }
   }
 

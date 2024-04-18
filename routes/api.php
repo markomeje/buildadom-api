@@ -5,10 +5,12 @@ header('Access-Control-Allow-Headers: origin, x-requested-with, content-type');
 header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 
 use App\Http\Controllers\V1\Country\CountryController;
+use App\Http\Controllers\V1\Currency\CurrencyController;
 use App\Http\Controllers\V1\Merchant\Auth\MerchantSignupController;
 use App\Http\Controllers\V1\Product\ProductCategoryController;
 use App\Http\Controllers\V1\Product\ProductUnitController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -33,6 +35,10 @@ Route::middleware(['accept.json'])->domain(env('API_URL'))->prefix('v1')->group(
     Route::get('/supported-countries', [CountryController::class, 'supported']);
     Route::get('/states', [CountryController::class, 'states']);
     Route::get('/cities', [CountryController::class, 'cities']);
+  });
+
+  Route::prefix('currency')->group(function() {
+    Route::get('/list', [CurrencyController::class, 'list']);
   });
 
   Route::post('/merchant/signup', [MerchantSignupController::class, 'signup']);
