@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Business\BusinessProfile;
 use App\Models\Notification\InappNotification;
+use App\Models\Store\Store;
 use App\Models\Verification\PhoneVerification;
 use App\Utility\Help;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -130,16 +131,6 @@ class User extends Authenticatable implements JWTSubject
   }
 
   /**
-   * Override notifications() method in HasDatabaseNotifications trait.
-   *
-   *
-  */
-  public function notifications()
-  {
-    return $this->morphMany(InappNotification::class, 'notifiable')->orderBy('created_at', 'desc');
-  }
-
-  /**
    * A user may have One business profile
    */
   public function businessProfile()
@@ -161,6 +152,14 @@ class User extends Authenticatable implements JWTSubject
   public function roles()
   {
     return $this->hasMany(UserRole::class);
+  }
+
+  /**
+   * A user may have a many roles
+   */
+  public function stores()
+  {
+    return $this->hasMany(Store::class);
   }
 
 }

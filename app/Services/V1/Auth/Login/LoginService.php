@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services\V1\Auth\Login;
+use App\Enums\User\UserRoleEnum;
 use App\Models\User;
 use App\Services\BaseService;
 use App\Utility\Responser;
@@ -33,6 +34,11 @@ class LoginService extends BaseService
       $token = auth()->attempt($request->validated());
       if (!$token) {
         return Responser::send(Status::HTTP_UNAUTHORIZED, [], 'Invalid account details.');
+      }
+
+      $roles = array_map('strtolower', $user->roles()->pluck('name')->toArray());
+      if(in_array(strtolower(UserRoleEnum::MERCHANT->value), $roles)) {
+        return Responser::send(Status::HTTP_OK, ['user' => auth()->user(), 'token' => $token, 'stores' => $user->stores], 'Login successful');
       }
 
       return Responser::send(Status::HTTP_OK, ['user' => auth()->user(), 'token' => $token], 'Login successful');
