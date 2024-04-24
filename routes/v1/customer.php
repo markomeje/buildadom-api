@@ -26,10 +26,6 @@ Route::prefix('payment')->group(function() {
   Route::get('/list', [PaymentController::class, 'list']);
 });
 
-Route::prefix('auth')->group(function() {
-  Route::post('/signup', [CustomerSignupController::class, 'signup']);
-});
-
 Route::prefix('escrow')->group(function() {
   Route::get('/accounts', [EscrowAccountController::class, 'accounts']);
 });

@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 class CurrencyController extends Controller
 {
   /**
-   * @param CurrencyService $CurrencyService
+   * @param CurrencyService $currencyService
    */
   public function __construct(private CurrencyService $currencyService)
   {
@@ -22,4 +22,5 @@ class CurrencyController extends Controller
   {
     return $this->currencyService->list();
   }
+
 }

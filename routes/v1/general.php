@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\V1\Country\CountryController;
 use App\Http\Controllers\V1\Country\SupportedCountryController;
+use App\Http\Controllers\V1\Customer\Auth\CustomerSignupController;
 use App\Http\Controllers\V1\Merchant\Auth\MerchantSignupController;
 use Illuminate\Support\Facades\Route;
+
 
 
 Route::prefix('country')->group(function() {
@@ -12,5 +14,3 @@ Route::prefix('country')->group(function() {
   Route::get('/states', [CountryController::class, 'states']);
   Route::get('/cities', [CountryController::class, 'cities']);
 });
-
-Route::post('/merchant/signup', [MerchantSignupController::class, 'signup']);

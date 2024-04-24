@@ -6,10 +6,12 @@ header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 
 use App\Http\Controllers\V1\Country\CountryController;
 use App\Http\Controllers\V1\Currency\CurrencyController;
+use App\Http\Controllers\V1\Customer\Auth\CustomerSignupController;
 use App\Http\Controllers\V1\Merchant\Auth\MerchantSignupController;
 use App\Http\Controllers\V1\Product\ProductCategoryController;
 use App\Http\Controllers\V1\Product\ProductUnitController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -42,6 +44,7 @@ Route::middleware(['accept.json'])->domain(env('API_URL'))->prefix('v1')->group(
   });
 
   Route::post('/merchant/signup', [MerchantSignupController::class, 'signup']);
+  Route::post('/customer/signup', [CustomerSignupController::class, 'signup']);
 
   Route::prefix('product')->group(function() {
     Route::prefix('category')->group(function() {
