@@ -15,7 +15,7 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::middleware(['auth'])->group(function() {
   Route::prefix('/phone')->group(function() {
     Route::post('/verify', [PhoneVerificationController::class, 'verify']);
-    Route::post('/resend/code', [PhoneVerificationController::class, 'resend']);
+    Route::post('/resend-code', [PhoneVerificationController::class, 'resend']);
   });
 
   Route::prefix('email')->group(function() {
