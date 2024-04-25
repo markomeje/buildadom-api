@@ -85,11 +85,14 @@ class ProductImageService extends BaseService
       }
 
       $image_url = $this->uploadToS3($request->file('image'), $product_image->url);
-      $product_image->update(['url' => $image_url]);
+      if(empty($image_url)) {
+        throw new Exception('Error uploading the image');
+      }
 
+      $product_image->update(['url' => $image_url]);
       return Responser::send(Status::HTTP_OK, $product_image, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 
