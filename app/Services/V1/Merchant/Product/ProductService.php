@@ -67,7 +67,7 @@ class ProductService extends BaseService
   public function update($id, Request $request): JsonResponse
   {
     try {
-      $product = Product::owner()->find($id);
+      $product = Product::owner()->with(['images'])->find($id);
       if(empty($product)) {
         return Responser::send(Status::HTTP_NOT_FOUND, $product, 'Product record not found. Try again.');
       }
