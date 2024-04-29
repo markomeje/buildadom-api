@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Resources;
-
+namespace App\Http\Resources\Product;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CurrencyResource extends JsonResource
+class ProductUnitResource extends JsonResource
 {
   /**
    * Transform the resource into an array.
@@ -17,7 +16,6 @@ class CurrencyResource extends JsonResource
     return [
       'id' => $this->id,
       'name' => ucwords($this->name),
-      'code' => strtoupper($this->code),
     ];
   }
 }

@@ -9,8 +9,10 @@ use App\Http\Controllers\V1\Currency\CurrencyController;
 use App\Http\Controllers\V1\Customer\Auth\CustomerSignupController;
 use App\Http\Controllers\V1\Merchant\Auth\MerchantSignupController;
 use App\Http\Controllers\V1\Product\ProductCategoryController;
+use App\Http\Controllers\V1\Product\ProductController;
 use App\Http\Controllers\V1\Product\ProductUnitController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -47,6 +49,9 @@ Route::middleware(['accept.json'])->domain(env('API_URL'))->prefix('v1')->group(
   Route::post('/customer/signup', [CustomerSignupController::class, 'signup']);
 
   Route::prefix('product')->group(function() {
+    Route::get('/list', [ProductController::class, 'list']);
+    Route::get('/show/{id}', [ProductController::class, 'show']);
+
     Route::prefix('category')->group(function() {
       Route::get('/list', [ProductCategoryController::class, 'list']);
     });
