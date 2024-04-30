@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Product;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ProductImageResource extends JsonResource
 {
@@ -15,7 +16,9 @@ class ProductImageResource extends JsonResource
   {
     return [
       'id' => $this->id,
-      'name' => ucwords($this->name),
+      'product_id' => $this->product_id,
+      'url' => $this->url,
+      'role' => $this->role,
     ];
   }
 }
