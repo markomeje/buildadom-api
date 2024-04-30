@@ -22,18 +22,18 @@ class LoginService extends BaseService
   public function signin(Request $request): JsonResponse
   {
     try {
-      $user = User::query()->where(['email' => $request->email])->first();
+      $user = User::where(['email' => $request->email])->first();
       if (empty($user)) {
-        return Responser::send(Status::HTTP_UNAUTHORIZED, [], 'Invalid account details. Try again.');
+        return Responser::send(Status::HTTP_BAD_REQUEST, [], 'Invalid account details. Try again.');
       }
 
       if(!Hash::check($request->password, $user->password)) {
-        return Responser::send(Status::HTTP_UNAUTHORIZED, [], 'Invalid account details.');
+        return Responser::send(Status::HTTP_BAD_REQUEST, [], 'Invalid account details.');
       }
 
       $token = auth()->attempt($request->validated());
       if (!$token) {
-        return Responser::send(Status::HTTP_UNAUTHORIZED, [], 'Invalid account details.');
+        return Responser::send(Status::HTTP_BAD_REQUEST, [], 'Invalid account details.');
       }
 
       $roles = array_map('strtolower', $user->roles()->pluck('name')->toArray());
