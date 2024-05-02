@@ -14,11 +14,11 @@ class StoreController extends Controller
 {
   /**
    * Store
-   * @param StoreService $store
+   * @param StoreService $storeService
    */
-  public function __construct(public StoreService $store)
+  public function __construct(public StoreService $storeService)
   {
-    $this->store = $store;
+    $this->storeService = $storeService;
   }
 
   /**
@@ -27,7 +27,7 @@ class StoreController extends Controller
    */
   public function create(CreateStoreRequest $request): JsonResponse
   {
-    return $this->store->create($request);
+    return $this->storeService->create($request);
   }
 
   /**
@@ -36,16 +36,7 @@ class StoreController extends Controller
    */
   public function list(Request $request): JsonResponse
   {
-    return $this->store->list($request);
-  }
-
-  /**
-   * @param UploadStoreFileRequest $request
-   * @return JsonResponse
-   */
-  public function upload($id, UploadStoreFileRequest $request): JsonResponse
-  {
-    return $this->store->upload($id, $request);
+    return $this->storeService->list($request);
   }
 
   /**
@@ -54,7 +45,7 @@ class StoreController extends Controller
    */
   public function publish($id, Request $request): JsonResponse
   {
-    return $this->store->publish($id, $request);
+    return $this->storeService->publish($id, $request);
   }
 
   /**
@@ -63,7 +54,7 @@ class StoreController extends Controller
    */
   public function update($id, UpdateStoreRequest $request): JsonResponse
   {
-    return $this->store->update($id, $request);
+    return $this->storeService->update($id, $request);
   }
 
 }

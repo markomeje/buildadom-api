@@ -60,6 +60,29 @@ class ProductService extends BaseService
   }
 
   /**
+   * @param Request $request,
+   * @param $id
+   */
+  public function publish($id, Request $request)
+  {
+    try {
+      $product = Product::owner()->with(['images'])->find($id);
+      if(empty($product)) {
+        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Product record not found. Try again.');
+      }
+
+      if(!$product->images()->exists()) {
+        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Upload at least one product picture.');
+      }
+
+      $product->update(['published' => (boolean)$request->published]);
+      return Responser::send(Status::HTTP_OK, $product, 'Operation successful.');
+    } catch (Exception $e) {
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+    }
+  }
+
+  /**
    * @param Request $request
    * @param int $id
    * @return JsonResponse

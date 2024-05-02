@@ -87,7 +87,11 @@ class StoreService extends BaseService
     try {
       $store = Store::owner()->find($id);
       if(empty($store)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, $store, 'Store record not found. Try again.');
+        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Store record not found. Try again.');
+      }
+
+      if(empty($store->banner) || empty($store->logo)) {
+        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Store banner and logo must be uploaded before publishing a store');
       }
 
       $store->update(['published' => (boolean)$request->published]);

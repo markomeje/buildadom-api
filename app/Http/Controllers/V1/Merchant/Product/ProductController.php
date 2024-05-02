@@ -46,4 +46,13 @@ class ProductController extends Controller
     return $this->productService->update($id, $request);
   }
 
+  /**
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function publish($id, Request $request): JsonResponse
+  {
+    return $this->productService->publish($id, $request);
+  }
+
 }
