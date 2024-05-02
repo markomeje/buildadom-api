@@ -38,7 +38,13 @@ class LoginService extends BaseService
 
       $roles = array_map('strtolower', $user->roles()->pluck('name')->toArray());
       if(in_array(strtolower(UserRoleEnum::MERCHANT->value), $roles)) {
-        return Responser::send(Status::HTTP_OK, ['user' => auth()->user(), 'token' => $token, 'stores' => $user->stores], 'Login successful');
+        return Responser::send(Status::HTTP_OK, [
+          'user' => auth()->user(),
+          'token' => $token,
+          'stores' => $user->stores,
+          'email_verification' => $user->emailVerification,
+          'phone_verification' => $user->phoneVerification,
+        ], 'Login successful');
       }
 
       return Responser::send(Status::HTTP_OK, ['user' => auth()->user(), 'token' => $token], 'Login successful');

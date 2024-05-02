@@ -1,14 +1,15 @@
 <?php
 
 namespace App\Models;
-
 use App\Models\Business\BusinessProfile;
-use App\Models\Notification\InappNotification;
+use App\Models\Email\EmailVerification;
+use App\Models\Phone\PhoneVerification;
 use App\Models\Store\Store;
-use App\Models\Verification\PhoneVerification;
 use App\Utility\Help;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
@@ -114,20 +115,20 @@ class User extends Authenticatable implements JWTSubject
     return $this->phone;
   }
 
-   /**
-   * A user may have one veirifcation
+  /**
+   * @return HasOne
    */
-  public function phoneVerification()
+  public function phoneVerification(): HasOne
   {
-    return $this->belongsTo(PhoneVerification::class);
+    return $this->hasOne(PhoneVerification::class)->select(['id', 'user_id', 'verified', 'expiry', 'created_at', 'verified_at']);
   }
 
-   /**
-   * A user has one identification record
+  /**
+   * @return HasOne
    */
-  public function identification()
+  public function emailVerification(): HasOne
   {
-    return $this->hasOne(Identification::class);
+    return $this->hasOne(EmailVerification::class)->select(['id', 'user_id', 'verified', 'expiry', 'created_at', 'verified_at']);
   }
 
   /**
