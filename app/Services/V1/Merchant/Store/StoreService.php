@@ -85,16 +85,21 @@ class StoreService extends BaseService
   public function publish($id, Request $request)
   {
     try {
-      $store = Store::owner()->find($id);
+      $store = Store::owner()->with(['products'])->find($id);
       if(empty($store)) {
         return Responser::send(Status::HTTP_NOT_FOUND, null, 'Store record not found. Try again.');
       }
 
+      $published = (boolean)($request->published ?? 0);
       if(empty($store->banner) || empty($store->logo)) {
         return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Store banner and logo must be uploaded before publishing a store');
       }
 
-      $store->update(['published' => (boolean)$request->published]);
+      if(!$store->products()->where('published', 1)->count()) {
+        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Kindly upload and publish a product first.');
+      }
+
+      $store->update(['published' => $published]);
       return Responser::send(Status::HTTP_OK, $store, 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
