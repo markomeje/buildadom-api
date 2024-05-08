@@ -101,7 +101,7 @@ class EmailVerificationService extends BaseService
 
   private function getVerificationDetails(): ?emailVerification
   {
-    return EmailVerification::where(['user_id' => auth()->id()])->first();
+    return EmailVerification::where(['user_id' => auth()->id()])->latest()->first();
   }
 
   /**
