@@ -8,6 +8,7 @@ use App\Models\Kyc\KycFile;
 use App\Models\Kyc\KycVerification;
 use App\Services\BaseService;
 use App\Utility\Responser;
+use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -44,7 +45,7 @@ class KycFileService extends BaseService
       $uploaded_file = $uploaded['url'] ?? null;
 
       if(empty($uploaded_file)) {
-        return Responser::send(JsonResponse::HTTP_BAD_REQUEST, [], 'File upload failed. Try again.');
+        return Responser::send(Status::HTTP_BAD_REQUEST, [], 'File upload failed. Try again.');
       }
 
       $kyc_verification = KycVerification::find($kyc_verification_id);
@@ -60,9 +61,9 @@ class KycFileService extends BaseService
         'extras' => ['filename' => $uploaded['filename'] ?? '']
       ]);
 
-      return Responser::send(JsonResponse::HTTP_OK, $kyc_file, 'Operation successful.');
+      return Responser::send(Status::HTTP_OK, $kyc_file, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
     }
   }
 
@@ -70,9 +71,9 @@ class KycFileService extends BaseService
   {
     try {
       $kyc_files = KycFile::where(['user_id' => auth()->id()])->get();
-      return Responser::send(JsonResponse::HTTP_OK, $kyc_files, 'Operation successful.');
+      return Responser::send(Status::HTTP_OK, $kyc_files, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
     }
   }
 
@@ -87,7 +88,7 @@ class KycFileService extends BaseService
     try {
       $kyc_file = KycFile::where(['id' => $id, 'user_id' => auth()->id()])->first();
       if(strtolower($kyc_file->status) === strtolower(KycFileStatusEnum::ACCEPTED->value)) {
-        return Responser::send(JsonResponse::HTTP_BAD_REQUEST, [], 'Operation not allowed. Uploaded file is already accepted.');
+        return Responser::send(Status::HTTP_BAD_REQUEST, [], 'Operation not allowed. Uploaded file is already accepted.');
       }
 
       $file = $request->file('kyc_file');
@@ -96,16 +97,16 @@ class KycFileService extends BaseService
       $uploaded_file = $uploaded['url'] ?? null;
 
       if(empty($uploaded_file)) {
-        return Responser::send(JsonResponse::HTTP_BAD_REQUEST, [], 'File upload failed. Try again.');
+        return Responser::send(Status::HTTP_BAD_REQUEST, [], 'File upload failed. Try again.');
       }
 
       $kyc_file->uploaded_file = $uploaded_file;
       $kyc_file->status = KycFileStatusEnum::PENDING->value;
       $kyc_file->extras = ['filename' => $uploaded['filename'] ?? ''];
       $kyc_file->update();
-      return Responser::send(JsonResponse::HTTP_OK, $kyc_file, 'Operation successful.');
+      return Responser::send(Status::HTTP_OK, $kyc_file, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
     }
   }
 
@@ -120,19 +121,19 @@ class KycFileService extends BaseService
     try {
       $kyc_file = KycFile::where(['id' => $id, 'user_id' => auth()->id()])->first();
       if(empty($kyc_file)) {
-        return Responser::send(JsonResponse::HTTP_NOT_FOUND, [], 'Record not found. Try again.');
+        return Responser::send(Status::HTTP_NOT_FOUND, [], 'Record not found. Try again.');
       }
 
       if(strtolower($kyc_file->status) === strtolower(KycFileStatusEnum::ACCEPTED->value)) {
-        return Responser::send(JsonResponse::HTTP_BAD_REQUEST, [], 'Operation not allowed. Accepted file cannot be deleted.');
+        return Responser::send(Status::HTTP_BAD_REQUEST, [], 'Operation not allowed. Accepted file cannot be deleted.');
       }
 
-      $extras = optional($kyc_file->extras);
-      UploadImageAction::delete($extras->filename);
+      $extras = optional($kyc_file)->extras;
+      UploadImageAction::delete(optional($extras)->filename);
       $kyc_file->delete();
-      return Responser::send(JsonResponse::HTTP_OK, [], 'Operation successful.');
+      return Responser::send(Status::HTTP_OK, null, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
     }
   }
 
