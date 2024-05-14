@@ -83,6 +83,35 @@ class ProductService extends BaseService
   }
 
   /**
+   * @param Request $request,
+   * @param $id
+   */
+  public function product($id, Request $request)
+  {
+    try {
+      $product = Product::owner()->with([
+        'currency' => function($query) {
+          return $query->select(['id', 'name', 'code']);
+        },
+        'unit' => function($query) {
+          return $query->select(['id', 'name']);
+        },
+        'category',
+        'images',
+        'store',
+      ])->find($id);
+
+      if(empty($product)) {
+        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Product record not found. Try again.');
+      }
+
+      return Responser::send(Status::HTTP_OK, $product, 'Operation successful.');
+    } catch (Exception $e) {
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+    }
+  }
+
+  /**
    * @param Request $request
    * @param int $id
    * @return JsonResponse

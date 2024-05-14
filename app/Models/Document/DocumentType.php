@@ -16,14 +16,10 @@ class DocumentType extends Model
    * @var array<int, string>
    */
   protected $fillable = [
-    'currency_code',
-    'iso2',
-    'capital',
-    'iso3',
-    'fullname',
-    'phone_code',
-    'region',
-    'status',
+    'code',
+    'double_sided',
+    'name',
+    'description',
   ];
 
   public $casts = [

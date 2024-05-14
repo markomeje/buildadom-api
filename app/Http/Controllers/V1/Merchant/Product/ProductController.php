@@ -50,6 +50,15 @@ class ProductController extends Controller
    * @param Request $request
    * @return JsonResponse
    */
+  public function product($id, Request $request): JsonResponse
+  {
+    return $this->productService->product($id, $request);
+  }
+
+  /**
+   * @param Request $request
+   * @return JsonResponse
+   */
   public function publish($id, Request $request): JsonResponse
   {
     return $this->productService->publish($id, $request);
