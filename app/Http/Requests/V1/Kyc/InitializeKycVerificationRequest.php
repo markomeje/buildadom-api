@@ -30,7 +30,7 @@ class InitializeKycVerificationRequest extends FormRequest
   {
     return [
       'document_number' => ['required', 'string', 'max:50'],
-      'fullname' => ['required', 'string', 'max:50'],
+      'fullname' => ['required', 'string', 'max:50', 'min:3'],
       'document_type_id' => ['required', 'int', Rule::exists('document_types', 'id')],
       'birth_country' => ['required', 'int', Rule::exists('countries', 'id')],
       'citizenship_country' => ['required', 'int', Rule::exists('countries', 'id')],
