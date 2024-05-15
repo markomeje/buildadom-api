@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models\Kyc;
+use App\Models\Country;
 use App\Models\Country\SupportedCountry;
 use App\Models\Document\DocumentType;
 use App\Models\User;
@@ -46,7 +47,7 @@ class KycVerification extends Model
    */
   public function citizenshipCountry(): BelongsTo
   {
-    return $this->belongsTo(SupportedCountry::class, 'citizenship_country');
+    return $this->belongsTo(Country::class, 'citizenship_country');
   }
 
   /**
@@ -62,7 +63,7 @@ class KycVerification extends Model
    */
   public function birthCountry(): BelongsTo
   {
-    return $this->belongsTo(SupportedCountry::class, 'birth_country');
+    return $this->belongsTo(Country::class, 'birth_country');
   }
 
   /**

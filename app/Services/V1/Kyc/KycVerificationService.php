@@ -22,7 +22,7 @@ class KycVerificationService extends BaseService
    */
   public function initialize(Request $request): JsonResponse
   {
-    // try {
+    try {
       $user_id = auth()->id();
       $kycVerification = KycVerification::updateOrCreate(
         ['user_id' => $user_id, 'status' => KycVerificationStatusEnum::PENDING->value],
@@ -30,9 +30,9 @@ class KycVerificationService extends BaseService
       );
 
       return Responser::send(Status::HTTP_OK, $kycVerification, 'Operation successful.');
-    // } catch (Exception $e) {
-    //   return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
-    // }
+    } catch (Exception $e) {
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+    }
   }
 
   /**
