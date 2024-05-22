@@ -3,6 +3,7 @@
 namespace App\Jobs\V1;
 use App\Enums\Order\OrderStatusEnum;
 use App\Enums\Payment\PaymentStatusEnum;
+use App\Enums\Queue\QueueEnum;
 use App\Models\Order\Order;
 use App\Models\Order\OrderPayment;
 use App\Models\Payment\Payment;
@@ -23,7 +24,7 @@ class UpdateOrderPaymentJob implements ShouldQueue
    */
   public function __construct()
   {
-    $this->onQueue(config('constants.queue.payment'));
+    $this->onQueue(QueueEnum::PAYMENT->value);
   }
 
   /**

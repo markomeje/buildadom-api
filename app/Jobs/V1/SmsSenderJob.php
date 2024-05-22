@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Jobs\V1;
+
+use App\Enums\Queue\QueueEnum;
 use App\Enums\Sms\SmsStatusEnum;
 use App\Integrations\Termii;
 use App\Models\SmsLog;
@@ -22,7 +24,7 @@ class SmsSenderJob implements ShouldQueue
    */
   public function __construct(private int $log_id)
   {
-    $this->onQueue(config('constants.queue.sms'));
+    $this->onQueue(QueueEnum::SMS->value);
   }
 
   /**

@@ -2,6 +2,7 @@
 
 namespace App\Jobs\V1;
 use App\Enums\Payment\PaymentStatusEnum;
+use App\Enums\Queue\QueueEnum;
 use App\Integrations\Paystack;
 use App\Jobs\V1\HandleEscrowAccountJob;
 use App\Models\Payment\Payment;
@@ -23,7 +24,7 @@ class VerifyPaymentJob implements ShouldQueue
    */
   public function __construct()
   {
-    $this->onQueue(config('constants.queue.payment'));
+    $this->onQueue(QueueEnum::PAYMENT->value);
   }
 
   /**

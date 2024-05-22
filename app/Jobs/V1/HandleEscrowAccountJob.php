@@ -3,6 +3,7 @@
 namespace App\Jobs\V1;
 use App\Enums\Escrow\EscrowAccountStatusEnum;
 use App\Enums\Payment\PaymentStatusEnum;
+use App\Enums\Queue\QueueEnum;
 use App\Models\Escrow\EscrowAccount;
 use App\Models\Payment\Payment;
 use App\Notifications\Merchant\EscrowAccountCreditedNotification;
@@ -25,7 +26,7 @@ class HandleEscrowAccountJob implements ShouldQueue
    */
   public function __construct()
   {
-    $this->onQueue(config('constants.queue.escrow'));
+    $this->onQueue(QueueEnum::ESCROW->value);
   }
 
   /**
