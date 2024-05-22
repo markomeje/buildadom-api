@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Notifications\Merchant;
+use App\Enums\Queue\QueueEnum;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -17,7 +18,7 @@ class PendingOrderNotification extends Notification implements ShouldQueue
    */
   public function __construct()
   {
-    $this->onQueue(config('constants.queue.order'));
+    $this->onQueue(QueueEnum::ORDER->value);
   }
 
   /**

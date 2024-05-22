@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Notifications\Customer;
+use App\Enums\Queue\QueueEnum;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,7 +25,7 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
   public function __construct(array $tracking_numbers)
   {
     $this->tracking_numbers = $tracking_numbers;
-    $this->onQueue(config('constants.queue.order'));
+    $this->onQueue(QueueEnum::ORDER->value);
   }
 
   /**
