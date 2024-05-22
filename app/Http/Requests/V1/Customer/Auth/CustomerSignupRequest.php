@@ -31,7 +31,7 @@ class CustomerSignupRequest extends FormRequest
   public function rules()
   {
     return [
-      'email' => ['required', 'email', (new EmailRule)],
+      'email' => ['required', 'email', 'unique:users', (new EmailRule)],
       'password' => ['required', app()->environment(['production']) ? Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised() : 'min:4'],
       'confirm_password' => ['required', 'same:password'],
       'firstname' => ['required', 'string', 'max:255'],
