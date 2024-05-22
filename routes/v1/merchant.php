@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\V1\Merchant\Auth\MerchantSignupController;
+use App\Http\Controllers\V1\Merchant\Bank\BankAccountController;
 use App\Http\Controllers\V1\Merchant\Driver\DispatchDriverController;
 use App\Http\Controllers\V1\Merchant\Order\OrderController;
 use App\Http\Controllers\V1\Merchant\Payment\PaymentController;
@@ -9,6 +10,8 @@ use App\Http\Controllers\V1\Merchant\Product\ProductImageController;
 use App\Http\Controllers\V1\Merchant\Store\StoreController;
 use App\Http\Controllers\V1\Merchant\Store\StoreUploadController;
 use Illuminate\Support\Facades\Route;
+
+
 
 
 Route::post('/signup', [MerchantSignupController::class, 'signup']);
@@ -54,5 +57,11 @@ Route::middleware(['auth:api'])->group(function() {
 
   Route::prefix('payment')->group(function() {
     Route::get('/list', [PaymentController::class, 'list']);
+  });
+
+  Route::prefix('bank-account')->group(function() {
+    Route::get('/details', [BankAccountController::class, 'details']);
+    Route::post('/update', [BankAccountController::class, 'update']);
+    Route::post('/add', [BankAccountController::class, 'add']);
   });
 });

@@ -19,16 +19,18 @@ class ProductSeeder extends Seeder
    */
   public function run()
   {
-    DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
-    Product::truncate();
-    DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
-
-    foreach($this->dummyProducts() as $product) {
-      Product::create($product);
+    $products = $this->getDummyProducts();
+    if(!empty($products) && is_array($products)) {
+      foreach($products as $product) {
+        Product::updateOrCreate(['name' => $product['name']], $product);
+      }
     }
   }
 
-  private function dummyProducts()
+  /**
+   * @return array
+   */
+  private function getDummyProducts(): array
   {
     $faker = Faker::create();
     return [

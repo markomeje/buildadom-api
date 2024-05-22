@@ -4,12 +4,14 @@ header("Access-Control-Allow-Origin: *");
 header('Access-Control-Allow-Headers: origin, x-requested-with, content-type');
 header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 
+use App\Http\Controllers\V1\Bank\NigerianBankController;
 use App\Http\Controllers\V1\Country\CountryController;
 use App\Http\Controllers\V1\Currency\CurrencyController;
 use App\Http\Controllers\V1\Product\ProductCategoryController;
 use App\Http\Controllers\V1\Product\ProductController;
 use App\Http\Controllers\V1\Product\ProductUnitController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +39,10 @@ Route::middleware(['accept.json'])->domain(env('API_URL'))->prefix('v1')->group(
 
   Route::prefix('currency')->group(function() {
     Route::get('/list', [CurrencyController::class, 'list']);
+  });
+
+  Route::prefix('banks')->group(function() {
+    Route::get('/list', [NigerianBankController::class, 'list']);
   });
 
   Route::prefix('product')->group(function() {
