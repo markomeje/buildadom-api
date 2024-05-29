@@ -24,7 +24,7 @@ class Order extends Model
    * @var array<int, string>
    */
   protected $fillable = [
-    'user_id',
+    'customer_id',
     'status',
     'total_amount',
     'store_id',
@@ -34,7 +34,6 @@ class Order extends Model
     'amount',
     'currency_id',
     'quantity',
-    'order_id',
   ];
 
   public $casts = [
@@ -47,7 +46,7 @@ class Order extends Model
    */
   public function scopeOwner($query)
   {
-    return $query->where(['user_id' => auth()->id()]);
+    return $query->where(['customer_id' => auth()->id()]);
   }
 
   /**
@@ -75,9 +74,9 @@ class Order extends Model
   /**
    * @return BelongsTo
    */
-  public function user(): BelongsTo
+  public function customer(): BelongsTo
   {
-    return $this->belongsTo(User::class, 'user_id');
+    return $this->belongsTo(User::class, 'customer_id');
   }
 
   /**

@@ -24,12 +24,17 @@ class OrderService extends BaseService
    * @param Request $request
    * @return JsonResponse
    */
-  public function create(): JsonResponse
+  public function create(Request $request): JsonResponse
   {
     try {
-      $cart_items = CartItem::owner()->where('status', CartItemStatusEnum::PENDING->value)->get();
+      $items = collect($request->cart_items)->pluck('product_id')->toArray();
+      $cart_items = CartItem::owner()
+        ->where('status', CartItemStatusEnum::PENDING->value)
+        ->whereIn('product_id', $items)
+        ->get();
+
       if(empty($cart_items->count())) {
-        return Responser::send(Status::HTTP_NOT_FOUND, null, 'No pending cart items found.');
+        return Responser::send(Status::HTTP_NOT_FOUND, null, 'No cart items found.');
       }
 
       foreach($cart_items as $item) {
@@ -37,13 +42,16 @@ class OrderService extends BaseService
       }
 
       $orders = Order::owner()->where(['status' => OrderStatusEnum::PENDING->value])->get();
-      $customer = User::find(auth()->id());
+      if(empty($orders->count())) {
+        throw new Exception('An error occured in placing your order.');
+      }
 
       $tracking_numbers = $orders->pluck('tracking_number')->toArray();
-      $customer->notify(new OrderPlacedNotification($tracking_numbers));
+      $orders->first()->customer->notify(new OrderPlacedNotification($tracking_numbers));
+
       return Responser::send(Status::HTTP_OK, $orders, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
     }
   }
 

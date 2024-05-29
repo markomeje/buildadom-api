@@ -89,6 +89,14 @@ class Product extends Model
   /**
    * @return BelongsTo
    */
+  public function merchant(): BelongsTo
+  {
+    return $this->belongsTo(User::class, 'user_id');
+  }
+
+  /**
+   * @return BelongsTo
+   */
   public function currency(): BelongsTo
   {
     return $this->belongsTo(Currency::class, 'currency_id');

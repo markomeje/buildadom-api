@@ -10,12 +10,12 @@ use Exception;
 
 trait OrderTrait
 {
-  use CurrencyTrait, MerchantTrait;
+  use CurrencyTrait;
 
   /**
    * @return string
    */
-  public function generateTrackingNumber(): string
+  public function generateOrderTrackingNumber(): string
   {
     do {
       $tracking_number = strtoupper(str()->random(15));
@@ -34,10 +34,10 @@ trait OrderTrait
       throw new Exception('Invalid cart product');
     }
 
-    $quantity = empty($item->quantity) ? 1 : $item->quantity;
+    $quantity = (int)($item->quantity ?? 1);
     $price = (float)$product->price;
     $total_amount = (float)($price * $quantity);
-    $user_id = auth()->id();
+    $customer_id = auth()->id();
 
     $product_id = $item->product_id;
     $store_id = $product->store_id;
@@ -45,21 +45,20 @@ trait OrderTrait
     Order::updateOrCreate([
       'product_id' => $product_id,
       'status' => OrderStatusEnum::PENDING->value,
-      'user_id' => $user_id
+      'customer_id' => $customer_id
     ], [
       'total_amount' => $total_amount,
       'product_id' => $product_id,
       'status' => OrderStatusEnum::PENDING->value,
-      'user_id' => $user_id,
+      'customer_id' => $customer_id,
       'store_id' => $store_id,
       'currency_id' => $this->getDefaultCurrency()->id,
-      'tracking_number' => $this->generateTrackingNumber(),
+      'tracking_number' => $this->generateOrderTrackingNumber(),
       'quantity' => $quantity,
       'amount' => $price,
     ]);
 
-    $merchant = $this->getMerchantUser($product->user_id);
-    $merchant->notify(new PendingOrderNotification());
+    $product->merchant->notify(new PendingOrderNotification());
     $item->update(['status' => CartItemStatusEnum::PROCESSING->value]);
   }
 

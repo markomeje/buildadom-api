@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1\Customer\Order;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Customer\Order\CreateCustomerOrderRequest;
 use App\Services\V1\Customer\Order\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,11 +20,12 @@ class OrderController extends Controller
   }
 
   /**
+   * @param CreateCustomerOrderRequest $request
    * @return JsonResponse
    */
-  public function create(): JsonResponse
+  public function create(CreateCustomerOrderRequest $request): JsonResponse
   {
-    return $this->orderService->create();
+    return $this->orderService->create($request);
   }
 
   /**

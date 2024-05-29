@@ -42,7 +42,7 @@ class PendingOrderNotification extends Notification implements ShouldQueue
   {
     return (new MailMessage)
       ->subject('Buildadom Pending Order')
-      ->line('An order has been placed in your store. Only begin order processing after escrow payment confirmation.')
+      ->line('An order has been placed from your store. Only begin order processing after escrow payment confirmation.')
       ->line('Thank you for choosing our platform');
   }
 

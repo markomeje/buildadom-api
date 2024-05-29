@@ -21,7 +21,7 @@ return new class extends Migration
       $table->bigInteger('total_amount');
       $table->foreignId('product_id')->nullable()->references('id')->on('products');
       $table->bigInteger('amount');
-      $table->foreignId('user_id')->nullable()->references('id')->on('users');
+      $table->foreignId('customer_id')->nullable()->references('id')->on('users');
       $table->bigInteger('quantity')->default(1);
       $table->foreignId('currency_id')->nullable()->references('id')->on('currencies');
       $table->foreignId('store_id')->nullable()->references('id')->on('stores');

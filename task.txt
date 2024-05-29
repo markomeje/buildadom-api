@@ -1,2 +1,2 @@
 Bank edit details
-Make order and crate account auto
+Make order and create account auto
