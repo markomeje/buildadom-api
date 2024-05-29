@@ -27,7 +27,7 @@ class BankAccountService extends BaseService
         'bank_id' => $request->bank_id,
       ]);
 
-      return Responser::send(Status::HTTP_OK, $account, 'Operation successful.');
+      return Responser::send(Status::HTTP_OK, $account->load('bank'), 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
@@ -53,7 +53,7 @@ class BankAccountService extends BaseService
   public function update(Request $request): JsonResponse
   {
     try {
-      $account = BankAccount::owner()->first();
+      $account = BankAccount::owner()->with(['bank'])->first();
       if(empty($account)) {
         return Responser::send(Status::HTTP_NOT_FOUND, [], 'Bank details not found');
       }
