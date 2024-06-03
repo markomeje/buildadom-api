@@ -5,7 +5,10 @@ use App\Http\Controllers\V1\Customer\Cart\CartItemController;
 use App\Http\Controllers\V1\Customer\Escrow\EscrowAccountController;
 use App\Http\Controllers\V1\Customer\Order\OrderController;
 use App\Http\Controllers\V1\Customer\Payment\PaymentController;
+use App\Http\Controllers\V1\Customer\Shipping\ShippingAddressController;
 use Illuminate\Support\Facades\Route;
+
+
 
 Route::post('/signup', [CustomerSignupController::class, 'signup']);
 
@@ -27,6 +30,13 @@ Route::middleware(['auth:api'])->group(function() {
 
   Route::prefix('escrow')->group(function() {
     Route::get('/accounts', [EscrowAccountController::class, 'accounts']);
+  });
+
+  Route::prefix('shipping')->group(function() {
+    Route::prefix('address')->group(function() {
+      Route::post('/update', [ShippingAddressController::class, 'update']);
+      Route::post('/details', [ShippingAddressController::class, 'details']);
+    });
   });
 
 });

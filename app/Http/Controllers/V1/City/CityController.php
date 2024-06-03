@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 
 class CityController extends Controller
 {
+
   /**
    * Get all countries
    * @param Request $request)
