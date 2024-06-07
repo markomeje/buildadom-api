@@ -10,7 +10,9 @@ use App\Http\Controllers\V1\Currency\CurrencyController;
 use App\Http\Controllers\V1\Product\ProductCategoryController;
 use App\Http\Controllers\V1\Product\ProductController;
 use App\Http\Controllers\V1\Product\ProductUnitController;
+use App\Http\Controllers\V1\Store\StoreController;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -56,5 +58,10 @@ Route::middleware(['accept.json'])->domain(env('API_URL'))->prefix('v1')->group(
     Route::prefix('unit')->group(function() {
       Route::get('/list', [ProductUnitController::class, 'list']);
     });
+  });
+
+  Route::prefix('store')->group(function() {
+    Route::get('/list', [StoreController::class, 'list']);
+    Route::get('/show/{id}', [StoreController::class, 'show']);
   });
 });

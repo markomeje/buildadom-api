@@ -27,17 +27,22 @@ class OrderService extends BaseService
   public function create(Request $request): JsonResponse
   {
     try {
-      $items = collect($request->cart_items)->pluck('product_id')->toArray();
-      $cart_items = CartItem::owner()
-        ->where('status', CartItemStatusEnum::PENDING->value)
-        ->whereIn('product_id', $items)
-        ->get();
+      $cart_items = collect($request->cart_items)->toArray();
+      $user_id = auth()->id();
 
-      if(empty($cart_items->count())) {
-        return Responser::send(Status::HTTP_NOT_FOUND, null, 'No cart items found.');
+      foreach ($cart_items as $item) {
+        CartItem::updateOrCreate([
+          'user_id' => $user_id,
+          'product_id' => $item['product_id'],
+        ],
+        [
+          ...$item,
+          'user_id' => $user_id,
+        ]);
       }
 
-      foreach($cart_items as $item) {
+      $pending_items = CartItem::owner()->where('status', CartItemStatusEnum::PENDING->value)->get();
+      foreach($pending_items as $item) {
         $this->createOrder($item);
       }
 

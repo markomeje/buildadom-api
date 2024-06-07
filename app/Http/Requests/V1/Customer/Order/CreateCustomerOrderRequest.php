@@ -29,8 +29,9 @@ class CreateCustomerOrderRequest extends FormRequest
   public function rules()
   {
     return [
-      'cart_items' => ['nullable', 'array'],
+      'cart_items' => ['required', 'array'],
       'cart_items.*.product_id' => ['required', Rule::exists('products', 'id')],
+      'cart_items.*.quantity' => ['required', 'integer'],
     ];
   }
 
