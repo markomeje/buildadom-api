@@ -23,8 +23,13 @@ class ProductService extends BaseService
   public function list(Request $request): JsonResponse
   {
     try {
+      $query = Product::query()->latest()->published();
+      if($request->query('category')) {
+        $query->where('product_category_id', (int)$request->category);
+      }
+
       $limit = $request->limit ?? 20;
-      $products = Product::published()->with($this->loadProductRelations())->latest()->paginate($limit);
+      $products = $query->with($this->loadProductRelations())->paginate($limit);
       return Responser::send(Status::HTTP_OK, ProductResource::collection($products), 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
