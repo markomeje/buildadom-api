@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
@@ -38,6 +39,10 @@ class AppServiceProvider extends ServiceProvider
       return new LengthAwarePaginator(
         $this->forPage($page, $perPage), $total ?: $this->count(), $perPage, $page, ['path' => LengthAwarePaginator::resolveCurrentPath(), 'pageName' => $pageName]
       );
+    });
+
+    Builder::macro('withWhereHas', function($relation, $constraint) {
+      $this->whereHas($relation, $constraint)->with([$relation => $constraint]);
     });
   }
 }
