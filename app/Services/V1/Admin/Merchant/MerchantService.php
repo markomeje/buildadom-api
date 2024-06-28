@@ -2,6 +2,7 @@
 
 namespace App\Services\V1\Admin\Merchant;
 use App\Enums\User\UserRoleEnum;
+use App\Http\Resources\Admin\Merchant\MerchantListResource;
 use App\Models\User;
 use App\Services\BaseService;
 use App\Utility\Responser;
@@ -22,10 +23,10 @@ class MerchantService extends BaseService
   {
     try {
       $merchants = User::withWhereHas('roles', function($query) {
-        $query->where(['name' => UserRoleEnum::MERCHANT->value]);
+        $query->select(['name', 'user_id'])->where(['name' => UserRoleEnum::MERCHANT->value]);
       })->paginate($request->limit ?? 20);
 
-      return Responser::send(Status::HTTP_OK, $merchants, 'Operation successful.');
+      return Responser::send(Status::HTTP_OK, MerchantListResource::collection($merchants), 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
     }
