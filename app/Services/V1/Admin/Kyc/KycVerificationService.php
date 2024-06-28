@@ -49,4 +49,18 @@ class KycVerificationService extends BaseService
     }
   }
 
+  /**
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function list(Request $request): JsonResponse
+  {
+    try {
+      $kyc_verifications = KycVerification::with(['kycFiles'])->paginate($request->limit ?? 20);
+      return Responser::send(Status::HTTP_OK, $kyc_verifications, 'Operation successful.');
+    } catch (Exception $e) {
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
+    }
+  }
+
 }

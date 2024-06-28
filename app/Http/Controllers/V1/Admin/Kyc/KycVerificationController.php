@@ -28,4 +28,13 @@ class KycVerificationController extends Controller
   {
     return $this->kycVerificationService->action($id, $request);
   }
+
+  /**
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function list(Request $request)
+  {
+    return $this->kycVerificationService->list($request);
+  }
 }

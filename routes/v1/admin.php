@@ -6,5 +6,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware([])->group(function() {
   Route::prefix('kyc')->group(function() {
     Route::post('/action/{id}', [KycVerificationController::class, 'action']);
+    Route::post('/list', [KycVerificationController::class, 'list']);
   });
 });
