@@ -48,7 +48,7 @@ Route::middleware(['auth:api'])->group(function() {
 
   Route::prefix('order')->group(function() {
     Route::get('/list', [OrderController::class, 'list']);
-    //Route::post('/track', [OrderTrackingController::class, 'track']);
+    Route::post('/{id}/track', [OrderController::class, 'track']);
   });
 
   Route::prefix('escrow')->group(function() {

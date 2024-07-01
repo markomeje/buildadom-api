@@ -3,7 +3,7 @@
 namespace App\Services\V1\Merchant\Store;
 use App\Models\Store\Store;
 use App\Services\BaseService;
-use App\Traits\FileUploadTrait;
+use App\Traits\V1\FileUploadTrait;
 use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;

@@ -16,7 +16,7 @@ return new class extends Migration
   {
     Schema::create('escrow_accounts', function (Blueprint $table) {
       $table->id();
-      $table->foreignId('user_id')->nullable()->references('id')->on('users');
+      $table->foreignId('customer_id')->nullable()->references('id')->on('users');
       $table->foreignId('payment_id')->nullable()->references('id')->on('payments');
       $table->bigInteger('total_amount');
       $table->text('extras')->nullable();

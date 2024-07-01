@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Integrations;
-use App\Traits\PaystackPaymentTrait;
+use App\Traits\V1\PaystackPaymentTrait;
 use Exception;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
@@ -33,7 +33,7 @@ class Paystack
   /**
    * @return self
    */
-  public static function payment(): self
+  public static function payment()
   {
     $http = Http::withToken(config('services.paystack.secret_key'));
     $base_url = config('services.paystack.base_url');

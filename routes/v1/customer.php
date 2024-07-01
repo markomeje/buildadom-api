@@ -4,9 +4,11 @@ use App\Http\Controllers\V1\Customer\Auth\CustomerSignupController;
 use App\Http\Controllers\V1\Customer\Cart\CartItemController;
 use App\Http\Controllers\V1\Customer\Escrow\EscrowAccountController;
 use App\Http\Controllers\V1\Customer\Order\OrderController;
+use App\Http\Controllers\V1\Customer\Order\OrderPaymentController;
 use App\Http\Controllers\V1\Customer\Payment\PaymentController;
 use App\Http\Controllers\V1\Customer\Shipping\ShippingAddressController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -21,6 +23,8 @@ Route::middleware(['auth:api'])->group(function() {
   Route::prefix('order')->group(function() {
     Route::post('/create', [OrderController::class, 'create']);
     Route::get('/list', [OrderController::class, 'list']);
+    Route::get('/payment', [OrderPaymentController::class, 'list']);
+    Route::get('/{id}/trackings', [OrderController::class, 'trackings']);
   });
 
   Route::prefix('payment')->group(function() {

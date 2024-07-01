@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\Escrow;
+namespace App\Enums\Document;
 use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum DocumentTypeEnum: string

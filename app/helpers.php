@@ -3,27 +3,13 @@
 use App\Models\Country;
 use App\Models\Store\Store;
 use App\Models\User;
+use App\Utility\Help;
 use Propaganistas\LaravelPhone\PhoneNumber;
 
 
-if(!function_exists('getStoreMerchant')) {
-  function getStoreMerchant($user_id) {
-    if(!Store::where('user_id', $user_id)->exists()) {
-      throw new Exception('Invalid merchant store.');
-    }
-
-    return User::find($user_id);
-  }
-}
-
-if(!function_exists('defaultCountry')) {
-  function defaultCountry() {
-    $country = Country::where('iso2', 'NG')->first();
-    if(empty($country)) {
-      throw new Exception('An error occurred with default country');
-    }
-
-    return $country;
+if(!function_exists('help')) {
+  function help() {
+    return (new Help());
   }
 }
 
@@ -40,5 +26,17 @@ if(!function_exists('getOnlyNumbers')) {
 
     unset($matches);
     return substr($string, $length);
+  }
+}
+
+if(!function_exists('generateRandomDigits')) {
+  /**
+   * @return int
+   */
+  function generateRandomDigits($length = 6): int
+  {
+    $digits = str_pad('', $length, '0', STR_PAD_LEFT);
+    $digits = str_shuffle($digits);
+    return (int)substr($digits, 0, $length);
   }
 }

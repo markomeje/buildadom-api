@@ -3,6 +3,7 @@
 use App\Enums\Payment\PaymentStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -17,12 +18,11 @@ return new class extends Migration
     Schema::create('payments', function (Blueprint $table) {
       $table->id();
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
-      $table->foreignId('order_id')->nullable()->references('id')->on('orders');
+      $table->foreignId('currency_id')->nullable()->references('id')->on('currencies');
       $table->string('status')->default(PaymentStatusEnum::INITIALIZED->value);
       $table->bigInteger('amount');
       $table->string('type')->nullable();
       $table->string('reference')->unique();
-
       $table->text('response')->nullable();
       $table->text('payload')->nullable();
       $table->timestamps();
@@ -36,6 +36,8 @@ return new class extends Migration
    */
   public function down()
   {
+    DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
     Schema::dropIfExists('payments');
+    DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
   }
 };

@@ -17,7 +17,7 @@ return new class extends Migration
     Schema::create('order_trackings', function (Blueprint $table) {
       $table->id();
       $table->string('status')->default(OrderTrackingStatusEnum::PENDING->value);
-      $table->foreignId('order_item_id')->nullable()->references('id')->on('order_items');
+      $table->foreignId('order_id')->nullable()->references('id')->on('orders');
       $table->timestamps();
     });
   }

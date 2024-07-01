@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class Order extends Model
 {
@@ -29,7 +30,6 @@ class Order extends Model
     'total_amount',
     'store_id',
     'tracking_number',
-
     'product_id',
     'amount',
     'currency_id',
@@ -116,7 +116,7 @@ class Order extends Model
    */
   public function payment(): HasOne
   {
-    return $this->hasOne(OrderPayment::class, 'order_id');
+    return $this->hasOne(OrderPayment::class, 'payment_id');
   }
 
 }

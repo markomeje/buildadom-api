@@ -5,12 +5,9 @@ use App\Models\Business\BusinessProfile;
 use App\Models\Email\EmailVerification;
 use App\Models\Phone\PhoneVerification;
 use App\Models\Store\Store;
-use App\Utility\Help;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
@@ -58,9 +55,9 @@ class User extends Authenticatable implements JWTSubject
    */
   public function fullname(): Attribute
   {
-      return Attribute::make(
-          get: fn() => ucfirst($this->firstname) . ' ' . ucfirst($this->lastname),
-      );
+    return Attribute::make(
+      get: fn() => ucfirst($this->firstname) . ' ' . ucfirst($this->lastname),
+    );
   }
 
   /**
@@ -69,20 +66,20 @@ class User extends Authenticatable implements JWTSubject
    */
   protected function email(): Attribute
   {
-      return Attribute::make(
-          set: fn($value) => strtolower($value)
-      );
+    return Attribute::make(
+      set: fn($value) => strtolower($value)
+    );
   }
 
   /**
    *
    * @return Attribute
    */
-  protected function cellphone(): Attribute
+  protected function phone(): Attribute
   {
-      return Attribute::make(
-          set: fn($value) => Help::getOnlyNumbers($value)
-      );
+    return Attribute::make(
+      set: fn($value) => formatPhoneNumber($value)
+    );
   }
 
    /**

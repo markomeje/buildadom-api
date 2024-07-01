@@ -4,7 +4,7 @@ namespace App\Jobs\V1;
 
 use App\Enums\Queue\QueueEnum;
 use App\Enums\Sms\SmsStatusEnum;
-use App\Integrations\Termii;
+use App\Integrations\TermiiSms;
 use App\Models\SmsLog;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -35,20 +35,13 @@ class SmsSenderJob implements ShouldQueue
   public function handle()
   {
     $smsLog = SmsLog::query()->find($this->log_id);
-    if (empty($smsLog)) {
-      return;
-    }
 
     try {
-      if ($smsLog->status !== SmsStatusEnum::PENDING->value) {
-        return;
-      }
-
-      $sent = (new Termii())->setPhone($smsLog->phone)
+      (new TermiiSms())->setPhone($smsLog->phone)
         ->setMessage($smsLog->message)
         ->send();
 
-      if($sent) {
+      if($smsLog) {
         $smsLog->status = SmsStatusEnum::SENT->value;
         $smsLog->save();
       }

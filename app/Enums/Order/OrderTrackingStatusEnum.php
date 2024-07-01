@@ -9,10 +9,10 @@ enum OrderTrackingStatusEnum: string
   use UsefulEnums;
 
   case DISPATCHED = 'dispatched';
-  case ACCEPTED = 'accepted';
 
-  case ARRIVED = 'arrived';
-  case CONFIRMED = 'confirmed';
+  case DELIVERED = 'delivered';
+  case PROCESSED = 'processed';
   case PENDING = 'pending';
+  case PROCESSING = 'processing';
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\V1\Cart;
+namespace App\Http\Requests\V1\Order;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateOrderRequest extends FormRequest

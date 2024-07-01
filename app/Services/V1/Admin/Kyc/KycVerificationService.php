@@ -3,7 +3,7 @@
 namespace App\Services\V1\Admin\Kyc;
 use App\Enums\Kyc\KycVerificationStatusEnum;
 use App\Models\Kyc\KycVerification;
-use App\Notifications\Admin\AdminKycActionNotification;
+use App\Notifications\V1\Admin\Kyc\AdminKycActionNotification;
 use App\Services\BaseService;
 use App\Utility\Responser;
 use App\Utility\Status;

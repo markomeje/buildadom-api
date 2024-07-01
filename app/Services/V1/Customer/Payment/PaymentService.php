@@ -2,12 +2,14 @@
 
 namespace App\Services\V1\Customer\Payment;
 use App\Enums\Order\OrderStatusEnum;
-use App\Enums\Payment\PaymentStatusEnum;
+use App\Http\Resources\V1\Customer\Payment\PaymentResource;
 use App\Integrations\Paystack;
+use App\Jobs\V1\Customer\Order\SaveCustomerOrderPaymentJob;
 use App\Models\Order\Order;
-use App\Models\Order\OrderPayment;
 use App\Models\Payment\Payment;
 use App\Services\BaseService;
+use App\Traits\V1\CurrencyTrait;
+use App\Traits\V1\PaymentTrait;
 use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
@@ -17,6 +19,8 @@ use Illuminate\Http\Request;
 
 class PaymentService extends BaseService
 {
+  use CurrencyTrait, PaymentTrait;
+
   /**
    * @param Request $request
    * @return JsonResponse
@@ -31,36 +35,19 @@ class PaymentService extends BaseService
 
       $reference = str()->uuid();
       $total_amount = (float)$orders->sum('total_amount');
+      $currency = $this->getDefaultCurrency();
+
       $paystack = Paystack::payment()->initialize([
         'amount' => $total_amount * 100, //in kobo
         'reference' => $reference,
         'email' => auth()->user()->email,
-        'currency' => 'NGN',
+        'currency' => strtoupper($currency->code),
       ]);
 
-      $user_id = auth()->id();
-      $payment = Payment::updateOrCreate([
-        'user_id' => $user_id,
-        'amount' => $total_amount,
-        'status' => PaymentStatusEnum::INITIALIZED->value
-      ], [
-        'user_id' => $user_id,
-        'amount' => $total_amount,
-        'reference' => $reference,
-        'status' => PaymentStatusEnum::INITIALIZED->value,
-        'payload' => $request->all(),
-      ]);
-
-      foreach ($orders as $order) {
-        $order_id = $order->id;
-        OrderPayment::updateOrCreate(['order_id' => $order_id], [
-          'order_id' => $order_id,
-          'payment_id' => $payment->id,
-          'user_id' => $user_id,
-        ]);
-      }
-
-      return Responser::send(Status::HTTP_OK, [$payment, 'paystack' => $paystack], 'Operation successful.');
+      $customer_id = auth()->id();
+      $payment = $this->createPayment($customer_id, $total_amount, $reference, $currency->id, $request->all());
+      SaveCustomerOrderPaymentJob::dispatch($orders, $customer_id, $payment->id);
+      return Responser::send(Status::HTTP_OK, ['payment' => $payment, 'paystack' => $paystack], 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
@@ -73,27 +60,8 @@ class PaymentService extends BaseService
   public function list(Request $request): JsonResponse
   {
     try {
-      $payments = Payment::owner()->latest()->paginate($request->limit ?? 20);
-      return Responser::send(Status::HTTP_OK, $payments, 'Operation successful.');
-    } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
-    }
-  }
-
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function verify(Request $request): JsonResponse
-  {
-    try {
-      $reference = $request->reference;
-      $paystack = Paystack::payment()->verify($reference);
-      $payment = Payment::owner()->where([
-        'reference' => $reference,
-      ]);
-
-      return Responser::send(Status::HTTP_OK, [$payment, 'paystack' => $paystack], 'Operation successful.');
+      $payments = Payment::owner()->with(['currency'])->latest()->paginate($request->limit ?? 20);
+      return Responser::send(Status::HTTP_OK, PaymentResource::collection($payments), 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }

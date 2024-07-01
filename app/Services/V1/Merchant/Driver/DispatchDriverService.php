@@ -21,7 +21,7 @@ class DispatchDriverService extends BaseService
   {
     try {
       $driver = DispatchDriver::create([
-        'phone' => Help::formatPhoneNumber($request->phone),
+        'phone' => formatPhoneNumber($request->phone),
         'user_id' => auth()->id(),
         'firstname' => $request->firstname,
         'lastname' => $request->lastname,
@@ -59,7 +59,7 @@ class DispatchDriverService extends BaseService
       }
 
       $driver->update([
-        'phone' => Help::formatPhoneNumber($request->phone),
+        'phone' => formatPhoneNumber($request->phone),
         'firstname' => $request->firstname,
         'lastname' => $request->lastname,
       ]);

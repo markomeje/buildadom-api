@@ -20,7 +20,7 @@ class EscrowAccount extends Model
   protected $fillable = [
     'total_amount',
     'extras',
-    'user_id',
+    'customer_id',
     'payment_id',
     'status',
   ];
@@ -34,12 +34,12 @@ class EscrowAccount extends Model
    */
   public function scopeOwner($query)
   {
-    return $query->where(['user_id' => auth()->id()]);
+    return $query->where(['customer_id' => auth()->id()]);
   }
 
-  public function user(): BelongsTo
+  public function customer(): BelongsTo
   {
-    return $this->belongsTo(User::class, 'user_id');
+    return $this->belongsTo(User::class, 'customer_id');
   }
 
   public function payment(): BelongsTo

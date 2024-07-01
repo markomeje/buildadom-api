@@ -1,24 +1,19 @@
 <?php
 
 namespace App\Utility;
-use Illuminate\Http\UploadedFile;
+use App\Models\Country;
 use Propaganistas\LaravelPhone\PhoneNumber;
+use Exception;
 
 
 class Help
 {
-
   /**
-   * Format phone number
-   *
-   * @return ?string
+   * @param string $string
+   * @param int $length
+   * @return string
    */
-  public static function formatPhoneNumber(string $phone): ?string
-  {
-    return (string)(new PhoneNumber($phone));
-  }
-
-  public static function getOnlyNumbers($string, $length = 0): string
+  public function getOnlyNumbers($string, $length = 0)
   {
     preg_match_all('!\d+!', $string, $matches);
     $string = implode('', $matches[0]);
@@ -27,24 +22,30 @@ class Help
   }
 
   /**
-   * @return int
+   * @return Country
    */
-  public static function generateRandomDigits(): int
+  public function getDefaultCountry()
   {
-    return rand(111111, 999999);
+    $country = Country::where('iso2', 'NG')->first();
+    if(empty($country)) {
+      throw new Exception('An error occurred with default country');
+    }
+
+    return $country;
+  }
+  public function formatPhoneNumber($phone)
+  {
+    return (string)(new PhoneNumber($phone));
   }
 
   /**
-   * Generate filename
-   *
-   * @param UploadedFile $file
-   * @return string
+   * @return int
    */
-  public static function generateFilename(UploadedFile $file): string
+  public function generateRandomDigits($length = 6)
   {
-    $extension = $file->getClientOriginalExtension();
-    $filename = str()->random(32);
-    return "$filename.$extension";
+    $digits = str_pad('', $length, '0', STR_PAD_LEFT);
+    $digits = str_shuffle($digits);
+    return (int)substr($digits, 0, $length);
   }
 
 }

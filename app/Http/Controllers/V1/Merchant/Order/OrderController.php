@@ -25,5 +25,13 @@ class OrderController extends Controller
   {
     return $this->orderService->list($request);
   }
+  /**
+   * @param int $id
+   * @return JsonResponse
+   */
+  public function track($id): JsonResponse
+  {
+    return $this->orderService->track($id);
+  }
 
 }

@@ -4,14 +4,12 @@ namespace App\Jobs\V1;
 use App\Enums\Payment\PaymentStatusEnum;
 use App\Enums\Queue\QueueEnum;
 use App\Integrations\Paystack;
-use App\Jobs\V1\HandleEscrowAccountJob;
 use App\Models\Payment\Payment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class VerifyPaymentJob implements ShouldQueue
 {

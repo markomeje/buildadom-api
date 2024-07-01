@@ -4,7 +4,6 @@ namespace App\Services\V1\Product;
 use App\Http\Resources\Product\ProductResource;
 use App\Models\Product\Product;
 use App\Services\BaseService;
-use App\Traits\ProductTrait;
 use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
@@ -14,7 +13,6 @@ use Illuminate\Http\Request;
 
 class ProductService extends BaseService
 {
-  use ProductTrait;
 
   /**
    * @param Request $request
@@ -28,8 +26,7 @@ class ProductService extends BaseService
         $query->where('product_category_id', (int)$request->category);
       }
 
-      $limit = $request->limit ?? 20;
-      $products = $query->with($this->loadProductRelations())->paginate($limit);
+      $products = $query->with(['unit', 'images', 'category', 'store', 'currency'])->paginate($request->limit ?? 20);
       return Responser::send(Status::HTTP_OK, ProductResource::collection($products), 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());

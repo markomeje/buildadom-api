@@ -25,7 +25,7 @@ class ShippingAddressService extends BaseService
         'street_address' => $request->street_address,
         'city_id' => $request->city_id,
         'state_id' => $request->state_id,
-        'country_id' => defaultCountry()->id,
+        'country_id' => help()->getDefaultCountry()->id,
         'zip_code' => $request->zip_code,
       ]);
 

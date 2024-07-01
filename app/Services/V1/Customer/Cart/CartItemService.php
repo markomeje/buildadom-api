@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Services\V1\Customer\Cart;
-
 use App\Enums\Cart\CartItemStatusEnum;
 use App\Models\Cart\CartItem;
 use App\Models\Product\Product;
@@ -31,7 +30,7 @@ class CartItemService extends BaseService
       if(empty($item)) {
         $product = Product::find($product_id);
         $item = CartItem::create([
-          'user_id' => auth()->id(),
+          'customer_id' => auth()->id(),
           'quantity' => 1,
           'product_id' => $product_id,
           'store_id' => $product->store_id,

@@ -24,4 +24,5 @@ class CustomerSignupController extends Controller
   {
     return $this->customerSignupService->signup($request);
   }
+
 }

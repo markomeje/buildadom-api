@@ -8,8 +8,8 @@ use App\Models\UserRole;
 use App\Services\BaseService;
 use App\Services\V1\Email\EmailVerificationService;
 use App\Services\V1\Phone\PhoneVerificationService;
-use App\Traits\UserTypeCheckerTrait;
-use App\Traits\V1\Business\BusinessProfileTrait;
+use App\Traits\V1\UserTypeCheckerTrait;
+use App\Traits\V1\BusinessProfileTrait;
 use App\Utility\Help;
 use App\Utility\Responser;
 use App\Utility\Status;
@@ -41,7 +41,7 @@ class MerchantSignupService extends BaseService
   {
     try {
       $user = User::create([
-        'phone' => Help::formatPhoneNumber($request->phone),
+        'phone' => formatPhoneNumber($request->phone),
         'email' => $request->email,
         'type' => strtolower($request->type),
         'address' => $request->address,

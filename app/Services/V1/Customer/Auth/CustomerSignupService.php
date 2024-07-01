@@ -30,7 +30,7 @@ class CustomerSignupService extends BaseService
     try {
       DB::beginTransaction();
       $user = User::create([
-        'phone' => Help::formatPhoneNumber($request->phone),
+        'phone' => formatPhoneNumber($request->phone),
         'email' => $request->email,
         'firstname' => $request->firstname,
         'lastname' => $request->lastname,

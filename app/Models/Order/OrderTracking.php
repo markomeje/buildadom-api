@@ -3,6 +3,7 @@
 namespace App\Models\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderTracking extends Model
 {
@@ -14,7 +15,15 @@ class OrderTracking extends Model
    * @var array<int, string>
    */
   protected $fillable = [
-    'order_item_id',
+    'order_id',
     'status',
   ];
+
+  /**
+   * @return BelongsTo
+   */
+  public function order(): BelongsTo
+  {
+    return $this->belongsTo(Order::class, 'order_id');
+  }
 }

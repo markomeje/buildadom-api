@@ -19,7 +19,7 @@ class CartItem extends Model
    * @var array<int, string>
    */
   protected $fillable = [
-    'user_id',
+    'customer_id',
     'quantity',
     'store_id',
     'product_id',
@@ -27,7 +27,9 @@ class CartItem extends Model
   ];
 
   public $casts = [
-    'product_id' => 'int'
+    'product_id' => 'int',
+    'store_id' => 'int',
+    'customer_id' => 'int'
   ];
 
   /**
@@ -35,15 +37,15 @@ class CartItem extends Model
    */
   public function scopeOwner($query)
   {
-    return $query->where(['user_id' => auth()->id()]);
+    return $query->where(['customer_id' => auth()->id()]);
   }
 
   /**
    * @return BelongsTo
    */
-  public function user(): BelongsTo
+  public function customer(): BelongsTo
   {
-    return $this->belongsTo(User::class, 'user_id');
+    return $this->belongsTo(User::class, 'customer_id');
   }
 
   /**

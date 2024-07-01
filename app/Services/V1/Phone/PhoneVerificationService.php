@@ -6,7 +6,6 @@ use App\Facades\V1\SmsSenderFacade;
 use App\Models\Phone\PhoneVerification;
 use App\Models\User;
 use App\Services\BaseService;
-use App\Utility\Help;
 use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
@@ -22,7 +21,7 @@ class PhoneVerificationService extends BaseService
   public function send(User $user): JsonResponse
   {
     try {
-      $code = Help::generateRandomDigits();
+      $code = help()->generateRandomDigits();
       $message = $this->getMessage($code);
 
       PhoneVerification::create([
