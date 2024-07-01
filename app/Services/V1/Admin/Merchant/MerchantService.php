@@ -22,7 +22,7 @@ class MerchantService extends BaseService
   public function list(Request $request): JsonResponse
   {
     try {
-      $merchants = User::withWhereHas('roles', function($query) {
+      $merchants = User::whereHas('roles', function($query) {
         $query->select(['name', 'user_id'])->where(['name' => UserRoleEnum::MERCHANT->value]);
       })->paginate($request->limit ?? 20);
 
