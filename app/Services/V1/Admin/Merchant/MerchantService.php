@@ -25,7 +25,6 @@ class MerchantService extends BaseService
       $merchants = User::whereHas('roles', function($query) {
         $query->select(['name', 'user_id'])->where(['name' => UserRoleEnum::MERCHANT->value]);
       })->paginate($request->limit ?? 20);
-
       return Responser::send(Status::HTTP_OK, MerchantListResource::collection($merchants), 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
