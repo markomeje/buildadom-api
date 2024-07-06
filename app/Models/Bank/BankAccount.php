@@ -19,8 +19,19 @@ class BankAccount extends Model
   protected $fillable = [
     'account_name',
     'account_number',
-    'bank_id',
+    'extras',
+    'transfer_recipient_created',
+    'bank_name',
+    'nigerian_bank_id',
+    'bank_code',
+    'recipient_code',
     'user_id',
+  ];
+
+  public $casts = [
+    // 'extras' => 'json',
+    'transfer_recipient_created' => 'boolean',
+    'nigerian_bank_id' => 'int',
   ];
 
   /**
@@ -44,7 +55,7 @@ class BankAccount extends Model
    */
   public function bank(): BelongsTo
   {
-    return $this->belongsTo(NigerianBank::class, 'bank_id')->select(['id', 'bank_name', 'bank_code']);
+    return $this->belongsTo(NigerianBank::class, 'bank_id');
   }
 
 }

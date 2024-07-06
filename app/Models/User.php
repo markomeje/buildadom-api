@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Bank\BankAccount;
 use App\Models\Business\BusinessProfile;
 use App\Models\Email\EmailVerification;
 use App\Models\Phone\PhoneVerification;
@@ -137,20 +138,12 @@ class User extends Authenticatable implements JWTSubject
     return $this->hasOne(BusinessProfile::class);
   }
 
-   /**
-   * A user may have a store
-   */
-  public function store()
-  {
-    return $this->hasOne(Store::class);
-  }
-
-   /**
+  /**
    * A user may have a many roles
    */
   public function roles()
   {
-    return $this->hasMany(UserRole::class);
+    return $this->hasMany(UserRole::class, 'user_id');
   }
 
   /**
@@ -158,7 +151,15 @@ class User extends Authenticatable implements JWTSubject
    */
   public function stores()
   {
-    return $this->hasMany(Store::class);
+    return $this->hasMany(Store::class, 'user_id');
+  }
+
+  /**
+   * @return HasOne
+   */
+  public function bank(): HasOne
+  {
+    return $this->hasOne(BankAccount::class, 'user_id');
   }
 
 }

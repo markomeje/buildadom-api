@@ -28,7 +28,7 @@ class CreateBankAccountRequest extends FormRequest
   public function rules()
   {
     return [
-      'account_name' => ['required', 'max:50'],
+      'account_name' => ['nullable', 'max:50'],
       'account_number' => ['required', 'max:50'],
       'bank_id' => ['required', Rule::exists('nigerian_banks', 'id')],
     ];

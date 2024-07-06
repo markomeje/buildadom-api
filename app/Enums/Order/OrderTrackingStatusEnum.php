@@ -11,7 +11,6 @@ enum OrderTrackingStatusEnum: string
   case DISPATCHED = 'dispatched';
 
   case DELIVERED = 'delivered';
-  case PROCESSED = 'processed';
   case PENDING = 'pending';
   case PROCESSING = 'processing';
 

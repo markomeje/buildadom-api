@@ -39,13 +39,14 @@ class Help
   }
 
   /**
-   * @return int
+   * @param int $length
+   * @return string
    */
-  public function generateRandomDigits($length = 6)
+  public function generateRandomDigits(int $length = 6)
   {
-    $digits = str_pad('', $length, '0', STR_PAD_LEFT);
-    $digits = str_shuffle($digits);
-    return (int)substr($digits, 0, $length);
+    $digits = range(0, 9);
+    shuffle($digits);
+    return implode('', array_slice($digits, 0, $length));
   }
 
 }

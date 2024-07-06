@@ -10,7 +10,8 @@ use App\Models\User;
 class SmsSenderFacade extends BaseFacade
 {
   /**
-   *
+   * @param User $user,
+   * @param string $message
    */
   public static function push(User $user, string $message): SmsLog
   {

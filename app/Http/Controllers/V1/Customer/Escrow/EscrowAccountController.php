@@ -17,12 +17,11 @@ class EscrowAccountController extends Controller
   }
 
   /**
-   * @param Request $request
    * @return JsonResponse
    */
-  public function accounts(Request $request): JsonResponse
+  public function details(): JsonResponse
   {
-    return $this->escrowAccountService->accounts($request);
+    return $this->escrowAccountService->details();
   }
 
 }

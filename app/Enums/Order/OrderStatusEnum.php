@@ -7,7 +7,14 @@ enum OrderStatusEnum: string
 {
   use UsefulEnums;
 
+  case ACCEPTED = 'accepted';
+  case DISPATCHED = 'dispatched';
+  case PLACED = 'placed';
+  case DELIVERED = 'delivered';
   case PENDING = 'pending';
-  case PAID = 'paid';
+  case PROCESSED = 'processed';
+  case DECLINED = 'declined';
+  case CANCELLED = 'cancelled';
+
 
 }

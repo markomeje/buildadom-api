@@ -50,7 +50,7 @@ class CustomerEscrowAccountCreditedNotification extends Notification implements 
     $total_amount = $this->getDefaultCurrency()->code.number_format($this->total_amount);
     return (new MailMessage)
       ->subject('Buildadom Escrow Account credited.')
-      ->line("Your escrow account has been credited with the sum of $total_amount and will be disbursed to the respective merchant(s) after your order(s) has been fulfilled.")
+      ->line("Your escrow account has been credited with the sum of $total_amount.")
       ->line('Incase of an questions, kindly contact our support.')
       ->line('Thank you for choosing our platform');
   }

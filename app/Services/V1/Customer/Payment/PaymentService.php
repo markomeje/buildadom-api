@@ -4,7 +4,7 @@ namespace App\Services\V1\Customer\Payment;
 use App\Enums\Order\OrderStatusEnum;
 use App\Http\Resources\V1\Customer\Payment\PaymentResource;
 use App\Integrations\Paystack;
-use App\Jobs\V1\Customer\Order\SaveCustomerOrderPaymentJob;
+use App\Jobs\V1\Order\SaveCustomerOrderPaymentJob;
 use App\Models\Order\Order;
 use App\Models\Payment\Payment;
 use App\Services\BaseService;
@@ -45,7 +45,7 @@ class PaymentService extends BaseService
       ]);
 
       $customer_id = auth()->id();
-      $payment = $this->createPayment($customer_id, $total_amount, $reference, $currency->id, $request->all());
+      $payment = $this->createPayment($customer_id, $total_amount, $reference, $currency->id);
       SaveCustomerOrderPaymentJob::dispatch($orders, $customer_id, $payment->id);
       return Responser::send(Status::HTTP_OK, ['payment' => $payment, 'paystack' => $paystack], 'Operation successful.');
     } catch (Exception $e) {

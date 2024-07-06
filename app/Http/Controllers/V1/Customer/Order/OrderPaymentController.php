@@ -21,6 +21,14 @@ class OrderPaymentController extends Controller
   /**
    * @return JsonResponse
    */
+  public function initialize(): JsonResponse
+  {
+    return $this->orderPaymentService->initialize();
+  }
+  /**
+   * @param Request $request
+   * @return JsonResponse
+   */
   public function list(Request $request): JsonResponse
   {
     return $this->orderPaymentService->list($request);

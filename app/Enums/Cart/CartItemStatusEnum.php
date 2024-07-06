@@ -8,6 +8,6 @@ enum CartItemStatusEnum: string
   use UsefulEnums;
   case FULFILLED = 'fulfilled';
   case PENDING = 'pending';
-  case PROCESSING = 'processing';
+  case PROCESSED = 'processed';
 
 }

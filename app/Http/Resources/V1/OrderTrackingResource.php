@@ -16,7 +16,7 @@ class OrderTrackingResource extends JsonResource
   {
     return [
       'id' => $this->id,
-      'status' => strtoupper($this->status),
+      'status' => $this->status,
       'created_at' => $this->created_at,
       'updated_at' => $this->updated_at,
     ];

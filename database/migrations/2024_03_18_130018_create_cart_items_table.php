@@ -19,7 +19,6 @@ return new class extends Migration
       $table->foreignId('customer_id')->nullable()->references('id')->on('users');
       $table->bigInteger('quantity')->default(1);
       $table->foreignId('product_id')->nullable()->references('id')->on('products');
-      $table->foreignId('store_id')->nullable()->references('id')->on('stores');
       $table->string('status')->default(CartItemStatusEnum::PENDING->value);
       $table->timestamps();
     });

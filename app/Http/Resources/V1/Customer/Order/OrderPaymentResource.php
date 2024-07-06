@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1\Customer\Order;
 use App\Http\Resources\V1\Customer\Payment\PaymentResource;
+use App\Http\Resources\V1\Order\OrderResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderPaymentResource extends JsonResource
@@ -15,10 +16,7 @@ class OrderPaymentResource extends JsonResource
   public function toArray($request)
   {
     return [
-      'id' => $this->id,
-      'order_id' => $this->order_id,
       'order' => new OrderResource($this->whenLoaded('order')),
-      'payment_id' => $this->payment_id,
       'payment' => new PaymentResource($this->whenLoaded('payment')),
     ];
   }

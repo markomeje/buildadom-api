@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\V1\Merchant\Auth\MerchantSignupController;
-use App\Http\Controllers\V1\Merchant\Bank\BankAccountController;
 use App\Http\Controllers\V1\Merchant\Driver\DispatchDriverController;
 use App\Http\Controllers\V1\Merchant\Order\OrderController;
+use App\Http\Controllers\V1\Merchant\Order\OrderTrackingController;
 use App\Http\Controllers\V1\Merchant\Payment\PaymentController;
 use App\Http\Controllers\V1\Merchant\Product\ProductController;
 use App\Http\Controllers\V1\Merchant\Product\ProductImageController;
@@ -14,9 +14,10 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
 Route::post('/signup', [MerchantSignupController::class, 'signup']);
 
-Route::middleware(['auth:api'])->group(function() {
+Route::middleware(['auth:api', 'merchants.only'])->group(function() {
   Route::prefix('store')->group(function() {
     Route::post('/create', [StoreController::class, 'create']);
     Route::post('/{id}/update', [StoreController::class, 'update']);
@@ -48,7 +49,8 @@ Route::middleware(['auth:api'])->group(function() {
 
   Route::prefix('order')->group(function() {
     Route::get('/list', [OrderController::class, 'list']);
-    Route::post('/{id}/track', [OrderController::class, 'track']);
+    Route::post('/track', [OrderTrackingController::class, 'track']);
+    Route::post('/{id}/action', [OrderController::class, 'action']);
   });
 
   Route::prefix('escrow')->group(function() {
@@ -57,11 +59,5 @@ Route::middleware(['auth:api'])->group(function() {
 
   Route::prefix('payment')->group(function() {
     Route::get('/list', [PaymentController::class, 'list']);
-  });
-
-  Route::prefix('bank-account')->group(function() {
-    Route::get('/details', [BankAccountController::class, 'details']);
-    Route::post('/update', [BankAccountController::class, 'update']);
-    Route::post('/add', [BankAccountController::class, 'add']);
   });
 });

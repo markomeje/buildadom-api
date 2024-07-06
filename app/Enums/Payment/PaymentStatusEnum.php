@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Enums\Payment;
-
 use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum PaymentStatusEnum: string

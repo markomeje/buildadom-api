@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\V1\Admin\Kyc\KycVerificationController;
 use App\Http\Controllers\V1\Admin\Merchant\MerchantController;
+use App\Http\Controllers\V1\Admin\Order\OrderController;
 use Illuminate\Support\Facades\Route;
+
 
 
 Route::middleware([])->group(function() {
@@ -13,5 +15,9 @@ Route::middleware([])->group(function() {
 
   Route::prefix('merchant')->group(function() {
     Route::get('/list', [MerchantController::class, 'list']);
+  });
+
+  Route::prefix('order')->group(function() {
+    Route::get('/list', [OrderController::class, 'list']);
   });
 });

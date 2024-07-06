@@ -15,9 +15,11 @@ return new class extends Migration
   {
     Schema::create('nigerian_banks', function (Blueprint $table) {
       $table->id();
-      $table->string('bank_name');
-      $table->string('bank_code');
+      $table->string('name');
+      $table->string('code');
       $table->boolean('is_active')->default(1);
+      $table->string('slug')->nullable();
+      $table->string('ussd')->nullable();
       $table->timestamps();
     });
   }

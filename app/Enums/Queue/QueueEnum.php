@@ -12,4 +12,5 @@ enum QueueEnum: string
   case SMS = 'sms';
   case EMAIL = 'email';
   case PAYMENT = 'payment';
+  case TASK = 'task';
 }

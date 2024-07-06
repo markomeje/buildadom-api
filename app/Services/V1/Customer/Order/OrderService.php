@@ -3,11 +3,10 @@
 namespace App\Services\V1\Customer\Order;
 use App\Enums\Cart\CartItemStatusEnum;
 use App\Enums\Order\OrderStatusEnum;
-use App\Http\Resources\V1\Customer\Order\OrderResource;
-use App\Jobs\V1\Customer\Order\HandleCustomerOrderPlacementJob;
+use App\Http\Resources\V1\Order\OrderResource;
 use App\Models\Cart\CartItem;
 use App\Models\Order\Order;
-use App\Notifications\V1\Customer\Order\CustomerOrderPlacedNotification;
+use App\Notifications\V1\Order\CustomerOrderStatusUpdateNotification;
 use App\Services\BaseService;
 use App\Traits\V1\CartItemTrait;
 use App\Traits\V1\OrderTrait;
@@ -32,44 +31,58 @@ class OrderService extends BaseService
       $cart_items = collect($request->cart_items)->toArray();
       $customer_id = auth()->id();
 
-      $this->saveCartItems($cart_items, $customer_id);
+      foreach($cart_items as $item) {
+        $this->saveCartItem((object)$item, $customer_id);
+      }
+
       $items = CartItem::owner()->where('status', CartItemStatusEnum::PENDING->value)->get();
       foreach($items as $item) {
         $this->createOrder($item);
       }
 
-      $orders = Order::owner()->with(['currency'])->where(['status' => OrderStatusEnum::PENDING->value])->get();
-      if(empty($orders->count())) {
-        throw new Exception('An error occured in placing your order.');
-      }
-
-      HandleCustomerOrderPlacementJob::dispatch($orders);
+      $orders = Order::owner()->isPending()->get();
       return Responser::send(Status::HTTP_OK, OrderResource::collection($orders), 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
     }
   }
 
-  public function list(): JsonResponse
+  /**
+   * @param Request $request
+   */
+  public function list(Request $request): JsonResponse
   {
     try {
-      $orders = Order::owner()->latest()->with(['currency', 'trackings'])->get();
+      $query = Order::query()->owner()->latest();
+      if(!empty($request->status)) {
+        $query->where('status', $request->status);
+      }
+
+      $orders = $query->with(['currency', 'trackings', 'delivery'])->paginate($request->limit ?? 0);
       return Responser::send(Status::HTTP_OK, OrderResource::collection($orders), 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 
+  /**
+   * @param $id
+   * @return JsonResponse
+   */
   public function delete($id): JsonResponse
   {
     try {
       $order = Order::owner()->find($id);
       if(empty($order)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, [], 'Order not found.');
+        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Order not found.');
       }
 
-      $order->delete();
-      return Responser::send(Status::HTTP_OK, null, 'Operation successful.');
+      if(strtolower($order->status) !== strtolower(OrderStatusEnum::PENDING->value)) {
+        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Only pending orders can be deleted.');
+      }
+
+      $deleted = $order->delete();
+      return Responser::send(Status::HTTP_OK, ['deleted' => $deleted], 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
@@ -82,8 +95,37 @@ class OrderService extends BaseService
   public function trackings($id): JsonResponse
   {
     try {
-      $order = Order::owner()->findOrFail($id)->with(['trackings'])->first();
+      $order = Order::owner()->with(['trackings'])->find($id);
+      if(empty($order)) {
+        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Order not found.');
+      }
+
       return Responser::send(Status::HTTP_OK, new OrderResource($order), 'Operation successful.');
+    } catch (Exception $e) {
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+    }
+  }
+
+  /**
+   * @param $id
+   * @return JsonResponse
+   */
+  public function cancel($id): JsonResponse
+  {
+    try {
+      $order = Order::owner()->find($id);
+      if(empty($order)) {
+        return Responser::send(Status::HTTP_NOT_FOUND, [], 'Order not found.');
+      }
+
+      if(strtolower($order->status) !== strtolower(OrderStatusEnum::PENDING->value)) {
+        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Only pending orders can be cancelled.');
+      }
+
+      $order->update(['status' => OrderStatusEnum::CANCELLED->value]);
+      $order->customer->notify(new CustomerOrderStatusUpdateNotification($order));
+
+      return Responser::send(Status::HTTP_OK, null, 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }

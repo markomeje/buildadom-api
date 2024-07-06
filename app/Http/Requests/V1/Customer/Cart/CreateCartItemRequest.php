@@ -30,6 +30,7 @@ class CreateCartItemRequest extends FormRequest
   {
     return [
       'product_id' => ['required', 'integer', Rule::exists('products', 'id')],
+      'quantity' => ['nullable', 'integer', 'gt:0'],
     ];
   }
 

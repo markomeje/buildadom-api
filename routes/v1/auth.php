@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\V1\Auth\LoginController;
+use App\Http\Controllers\V1\Bank\BankAccountController;
 use App\Http\Controllers\V1\Document\DocumentTypeController;
 use App\Http\Controllers\V1\Email\EmailVerificationController;
 use App\Http\Controllers\V1\Kyc\KycFileController;
@@ -10,9 +11,10 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
 Route::post('/login', [LoginController::class, 'login']);
 
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth:api'])->group(function() {
   Route::prefix('/phone')->group(function() {
     Route::post('/verify', [PhoneVerificationController::class, 'verify']);
     Route::post('/resend-code', [PhoneVerificationController::class, 'resend']);
@@ -37,5 +39,10 @@ Route::middleware(['auth'])->group(function() {
       Route::get('/list', [KycFileController::class, 'list']);
       Route::post('/delete/{id}', [KycFileController::class, 'delete']);
     });
+  });
+
+  Route::prefix('bank')->group(function() {
+    Route::get('/details', [BankAccountController::class, 'details']);
+    Route::post('/save-account', [BankAccountController::class, 'save']);
   });
 });

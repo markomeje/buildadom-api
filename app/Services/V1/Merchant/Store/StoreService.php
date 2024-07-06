@@ -42,10 +42,10 @@ class StoreService extends BaseService
   public function list(Request $request): JsonResponse
   {
     try {
-      $stores = Store::owner()->with(['country', 'city', 'state'])->get();
+      $stores = auth()->user()->stores;
       return Responser::send(Status::HTTP_OK, $stores, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
     }
   }
 

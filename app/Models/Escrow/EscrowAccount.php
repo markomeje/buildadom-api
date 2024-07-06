@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Models\Escrow;
+use App\Models\Currency;
 use App\Models\Payment\Payment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class EscrowAccount extends Model
 {
@@ -18,15 +20,16 @@ class EscrowAccount extends Model
    * @var array<int, string>
    */
   protected $fillable = [
-    'total_amount',
+    'balance',
+    'currency_id',
     'extras',
-    'customer_id',
-    'payment_id',
+    'user_id',
     'status',
   ];
 
   public $casts = [
-    'extras' => 'json'
+    'extras' => 'json',
+    'balance' => 'float'
   ];
 
   /**
@@ -34,17 +37,39 @@ class EscrowAccount extends Model
    */
   public function scopeOwner($query)
   {
-    return $query->where(['customer_id' => auth()->id()]);
+    return $query->where(['user_id' => auth()->id()]);
   }
 
-  public function customer(): BelongsTo
+  /**
+   * @return BelongsTo
+   */
+  public function user(): BelongsTo
   {
-    return $this->belongsTo(User::class, 'customer_id');
+    return $this->belongsTo(User::class, 'user_id');
   }
 
+  /**
+   * @return BelongsTo
+   */
   public function payment(): BelongsTo
   {
     return $this->belongsTo(Payment::class, 'payment_id');
+  }
+
+  /**
+   * @return BelongsTo
+   */
+  public function currency(): BelongsTo
+  {
+    return $this->belongsTo(Currency::class, 'currency_id');
+  }
+
+  /**
+   * @return HasMany
+   */
+  public function balances(): HasMany
+  {
+    return $this->hasMany(EscrowBalance::class, 'escrow_account_id');
   }
 
 }

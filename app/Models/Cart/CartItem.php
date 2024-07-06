@@ -29,7 +29,8 @@ class CartItem extends Model
   public $casts = [
     'product_id' => 'int',
     'store_id' => 'int',
-    'customer_id' => 'int'
+    'customer_id' => 'int',
+    'quantity' => 'int'
   ];
 
   /**

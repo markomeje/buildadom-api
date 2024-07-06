@@ -3,6 +3,7 @@
 namespace App\Models\Store;
 use App\Models\City\City;
 use App\Models\Country;
+use App\Models\Order\Order;
 use App\Models\Product\Product;
 use App\Models\State\State;
 use App\Models\User;
@@ -27,7 +28,6 @@ class Store extends Model
     'state_id',
     'address',
     'user_id',
-    'city',
     'country_id',
     'logo',
     'published',
@@ -65,10 +65,18 @@ class Store extends Model
     return $this->belongsTo(Country::class, 'country_id');
   }
 
-   /**
+  /**
    * @return BelongsTo
    */
   public function user(): BelongsTo
+  {
+    return $this->belongsTo(User::class, 'user_id');
+  }
+
+  /**
+   * @return BelongsTo
+   */
+  public function merchant(): BelongsTo
   {
     return $this->belongsTo(User::class, 'user_id');
   }
@@ -95,6 +103,14 @@ class Store extends Model
   public function state(): BelongsTo
   {
     return $this->belongsTo(State::class, 'state_id');
+  }
+
+  /**
+   * @return HasMany
+   */
+  public function orders(): HasMany
+  {
+    return $this->hasMany(Order::class, 'order_id');
   }
 
 }

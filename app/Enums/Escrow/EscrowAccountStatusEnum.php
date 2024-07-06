@@ -8,6 +8,6 @@ enum EscrowAccountStatusEnum: string
   use UsefulEnums;
 
   case PENDING = 'pending';
-  case PAID = 'paid';
+  case ACTIVE = 'active';
 
 }

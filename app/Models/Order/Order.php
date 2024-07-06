@@ -1,8 +1,13 @@
 <?php
 
 namespace App\Models\Order;
+
+use App\Enums\Order\OrderStatusEnum;
 use App\Models\Currency;
+use App\Models\Escrow\EscrowAccount;
+use App\Models\Order\OrderDelivery;
 use App\Models\Order\OrderPayment;
+use App\Models\Payment\Payment;
 use App\Models\Product\Product;
 use App\Models\Store\Store;
 use App\Models\User;
@@ -61,6 +66,14 @@ class Order extends Model
   }
 
   /**
+   * @return Builder
+   */
+  public function scopeIsPending($query)
+  {
+    return $query->where(['status' => OrderStatusEnum::PENDING->value]);
+  }
+
+  /**
    * @return Attribute
    */
   protected function amount(): Attribute
@@ -114,9 +127,29 @@ class Order extends Model
   /**
    * @return HasOne
    */
-  public function payment(): HasOne
+  public function orderPayment(): HasOne
   {
-    return $this->hasOne(OrderPayment::class, 'payment_id');
+    return $this->hasOne(OrderPayment::class);
+  }
+
+  public function payment()
+  {
+    return $this->hasOneThrough(
+      Payment::class,
+      OrderPayment::class,
+      'order_id',
+      'id',
+      'id',
+      'payment_id'
+    );
+  }
+
+  /**
+   * @return HasOne
+   */
+  public function delivery(): HasOne
+  {
+    return $this->hasOne(OrderDelivery::class, 'order_id');
   }
 
 }

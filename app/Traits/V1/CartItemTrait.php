@@ -7,23 +7,22 @@ use App\Models\Cart\CartItem;
 trait CartItemTrait
 {
   /**
-   * @param array $cart_items
-   * @return void
+   * @param $item
+   * @return null|CartItem
    */
-  public function saveCartItems(array $cart_items, int $customer_id)
+  public function saveCartItem($item, int $customer_id)
   {
-    foreach ($cart_items as $item) {
-      CartItem::updateOrCreate([
-        'customer_id' => $customer_id,
-        'product_id' => $item['product_id'],
-      ],
-      [
-        'product_id' => $item['product_id'],
-        'quantity' => $item['quantity'],
-        'customer_id' => $customer_id,
-        'status' => CartItemStatusEnum::PENDING->value
-      ]);
-    }
+    $product_id = $item->product_id;
+    return CartItem::updateOrCreate([
+      'customer_id' => $customer_id,
+      'product_id' => $product_id,
+    ],
+    [
+      'product_id' => $product_id,
+      'quantity' => $item->quantity,
+      'customer_id' => $customer_id,
+      'status' => CartItemStatusEnum::PENDING->value
+    ]);
   }
 
 }

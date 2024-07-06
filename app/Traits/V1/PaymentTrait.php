@@ -3,6 +3,7 @@
 namespace App\Traits\V1;
 use App\Enums\Payment\PaymentStatusEnum;
 use App\Models\Payment\Payment;
+use Exception;
 
 trait PaymentTrait
 {
@@ -11,12 +12,12 @@ trait PaymentTrait
    * @param float $total_amount
    * @param string $reference
    * @param int $currency_id
-   * @param array|null $payload
-   * @return null|Payment
+   * @throws Exception
+   * @return Payment
    */
-  public function createPayment($user_id, $total_amount, $reference, $currency_id, $payload = null)
+  public function createPayment(int $user_id, float $total_amount, string $reference, int $currency_id)
   {
-    return Payment::updateOrCreate([
+    $payment = Payment::updateOrCreate([
       'user_id' => $user_id,
       'amount' => $total_amount,
       'status' => PaymentStatusEnum::INITIALIZED->value
@@ -25,9 +26,14 @@ trait PaymentTrait
       'amount' => $total_amount,
       'reference' => $reference,
       'status' => PaymentStatusEnum::INITIALIZED->value,
-      'payload' => $payload,
       'currency_id' => $currency_id,
     ]);
+
+    if(empty($payment)) {
+      throw new Exception('Unknown error. Payment operation failed.');
+    }
+
+    return $payment;
   }
 
 }

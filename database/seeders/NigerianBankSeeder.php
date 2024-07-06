@@ -4,6 +4,7 @@ namespace Database\Seeders;
 use \JsonMachine\Items;
 use App\Models\Bank\NigerianBank;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 
 class NigerianBankSeeder extends Seeder
 {
@@ -20,8 +21,9 @@ class NigerianBankSeeder extends Seeder
 
     if(!empty($banks)) {
       foreach ($banks as $bank) {
+        Log::info(json_encode($bank));
         if(is_object($bank)) {
-          $this->seedNigerianBank($bank);
+          $this->seedNigerianBank((object)$bank);
         }
       }
     }
@@ -35,10 +37,12 @@ class NigerianBankSeeder extends Seeder
    */
   private function seedNigerianBank(object $bank)
   {
-    $bank_code = $bank->bank_code;
-    NigerianBank::updateOrCreate(['bank_code' => $bank->bank_code], [
-      'bank_name' => ucwords(strtolower($bank->bank_name)),
-      'bank_code' => $bank_code,
+    $bank_code = $bank->code;
+    NigerianBank::updateOrCreate(['code' => $bank_code], [
+      'name' => $bank->name,
+      'code' => $bank_code,
+      'slug' => $bank->slug,
+      'ussd' => $bank->ussd,
       'is_active' => 1,
     ]);
   }

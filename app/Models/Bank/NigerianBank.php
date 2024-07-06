@@ -14,8 +14,10 @@ class NigerianBank extends Model
    * @var array<int, string>
    */
   protected $fillable = [
-    'bank_name',
-    'bank_code',
+    'name',
+    'code',
+    'slug',
+    'ussd',
     'is_active',
   ];
 

@@ -5,7 +5,8 @@ use App\Enums\Cart\CartItemStatusEnum;
 use App\Enums\Order\OrderStatusEnum;
 use App\Models\Cart\CartItem;
 use App\Models\Order\Order;
-use App\Notifications\V1\Merchant\Order\MerchantPendingOrderNotification;
+use App\Notifications\V1\Order\CustomerPendingOrderNotification;
+use App\Traits\V1\CurrencyTrait;
 use Exception;
 
 trait OrderTrait
@@ -18,13 +19,14 @@ trait OrderTrait
   public function generateOrderTrackingNumber(): string
   {
     do {
-      $tracking_number = strtoupper(str()->random(15));
+      $tracking_number = help()->generateRandomDigits(15);
     } while (Order::where('tracking_number', $tracking_number)->exists());
     return $tracking_number;
   }
 
   /**
    * @param CartItem $item
+   * @throws Exception
    * @return void
    */
   public function createOrder(CartItem $item)
@@ -41,7 +43,7 @@ trait OrderTrait
 
     $product_id = $item->product_id;
 
-    Order::updateOrCreate([
+    $order = Order::updateOrCreate([
       'product_id' => $product_id,
       'status' => OrderStatusEnum::PENDING->value,
       'customer_id' => $customer_id
@@ -57,8 +59,8 @@ trait OrderTrait
       'amount' => $price,
     ]);
 
-    $product->merchant->notify(new MerchantPendingOrderNotification());
-    $item->update(['status' => CartItemStatusEnum::PROCESSING->value]);
+    $order->customer->notify(new CustomerPendingOrderNotification($order, $product));
+    $item->update(['status' => CartItemStatusEnum::PROCESSED->value]);
   }
 
 }

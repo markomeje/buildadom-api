@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Services\V1\Customer\Escrow;
+use App\Http\Resources\V1\Escrow\EscrowAccountResource;
 use App\Models\Escrow\EscrowAccount;
-use App\Models\Payment\Payment;
 use App\Services\BaseService;
 use App\Utility\Responser;
 use App\Utility\Status;
@@ -14,16 +14,15 @@ use Illuminate\Http\Request;
 class EscrowAccountService extends BaseService
 {
   /**
-   * @param Request $request
    * @return JsonResponse
    */
-  public function accounts(Request $request): JsonResponse
+  public function details(): JsonResponse
   {
     try {
-      $accounts = EscrowAccount::owner()->latest()->paginate($request->limit ?? 20);
-      return Responser::send(Status::HTTP_OK, $accounts, 'Operation successful.');
+      $account = EscrowAccount::owner()->with(['currency', 'balances'])->first();
+      return Responser::send(Status::HTTP_OK, new EscrowAccountResource($account), 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models\Order;
+use App\Models\Escrow\EscrowAccount;
 use App\Models\Payment\Payment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,9 +19,10 @@ class OrderPayment extends Model
    * @var array<int, string>
    */
   protected $fillable = [
-    'user_id',
     'payment_id',
     'order_id',
+    'customer_id',
+    'status'
   ];
 
   /**
@@ -28,7 +30,7 @@ class OrderPayment extends Model
    */
   public function scopeOwner($query)
   {
-    return $query->where(['user_id' => auth()->id()]);
+    return $query->where(['customer_id' => auth()->id()]);
   }
 
   /**
@@ -36,7 +38,7 @@ class OrderPayment extends Model
    */
   public function order(): BelongsTo
   {
-    return $this->belongsTo(Order::class, 'order_id');
+    return $this->belongsTo(Order::class);
   }
 
   /**
@@ -44,7 +46,15 @@ class OrderPayment extends Model
    */
   public function payment(): BelongsTo
   {
-    return $this->belongsTo(Payment::class, 'payment_id');
+    return $this->belongsTo(Payment::class);
+  }
+
+  /**
+   * @return BelongsTo
+   */
+  public function escrow(): BelongsTo
+  {
+    return $this->belongsTo(EscrowAccount::class, 'payment_id');
   }
 
 }

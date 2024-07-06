@@ -7,7 +7,8 @@ use Exception;
 trait CurrencyTrait
 {
   /**
-   * @return null|Currency
+   * @throws Exception
+   * @return Currency
    */
   public function getDefaultCurrency()
   {

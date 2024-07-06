@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1\Customer\Payment;
 use App\Http\Resources\CurrencyResource;
+use App\Http\Resources\V1\Escrow\EscrowAccountResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PaymentResource extends JsonResource
@@ -15,11 +16,8 @@ class PaymentResource extends JsonResource
   public function toArray($request)
   {
     return [
-      'id' => $this->id,
       'amount' => $this->amount,
       'status' => $this->status,
-      'created_at' => $this->created_at,
-      'updated_at' => $this->updated_at,
       'currency' => new CurrencyResource($this->whenLoaded('currency')),
     ];
   }

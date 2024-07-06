@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models\Payment;
-
 use App\Models\Currency;
 use App\Models\Escrow\EscrowAccount;
 use App\Models\Order\OrderPayment;
@@ -19,7 +18,7 @@ class Payment extends Model
 {
   use HasFactory;
 
-   /**
+    /**
     * The attributes that are mass assignable.
     *
     * @var array<int, string>
@@ -68,11 +67,11 @@ class Payment extends Model
   }
 
   /**
-   * @return HasOne
+   * @return BelongsTo
    */
-  public function escrow(): HasOne
+  public function escrow(): BelongsTo
   {
-    return $this->hasOne(EscrowAccount::class, 'payment_id');
+    return $this->belongsTo(EscrowAccount::class, 'payment_id');
   }
 
   /**
@@ -86,9 +85,9 @@ class Payment extends Model
   /**
    * @return HasOne
    */
-  public function order(): HasOne
+  public function orderPayment()
   {
-    return $this->hasOne(OrderPayment::class, 'order_id');
+    return $this->hasOne(OrderPayment::class);
   }
 
 }
