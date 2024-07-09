@@ -4,7 +4,6 @@ namespace App\Models\Payment;
 use App\Models\Currency;
 use App\Models\Escrow\EscrowAccount;
 use App\Models\Order\OrderPayment;
-use App\Models\Store\Store;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,14 +27,19 @@ class Payment extends Model
     'user_id',
     'status',
     'reference',
+    'fee',
     'type',
     'currency_id',
     'payload',
     'response',
+    'total_amount',
   ];
 
   public $casts = [
     'response' => 'json',
+    'total_amount' => 'float',
+    'fee' => 'float',
+    'amount' => 'float',
     'payload' => 'json',
   ];
 
@@ -51,6 +55,27 @@ class Payment extends Model
    * @return Attribute
    */
   protected function amount(): Attribute
+  {
+    return new Attribute(
+      get: fn($value) => $value ? ($value/100) : $value,
+      set: fn($value) => $value * 100,
+    );
+  }
+  /**
+   * @return Attribute
+   */
+  protected function totalAmount(): Attribute
+  {
+    return new Attribute(
+      get: fn($value) => $value ? ($value/100) : $value,
+      set: fn($value) => $value * 100,
+    );
+  }
+
+  /**
+   * @return Attribute
+   */
+  protected function fee(): Attribute
   {
     return new Attribute(
       get: fn($value) => $value ? ($value/100) : $value,

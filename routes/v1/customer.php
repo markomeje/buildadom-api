@@ -31,8 +31,8 @@ Route::middleware(['auth:api', 'customers.only'])->group(function() {
     Route::post('/{id}/delete', [OrderController::class, 'delete']);
 
     Route::prefix('payment')->group(function() {
-      Route::post('/initialize', [OrderPaymentController::class, 'initialize']);
       Route::get('/list', [OrderPaymentController::class, 'list']);
+      Route::post('/initialize', [OrderPaymentController::class, 'initialize']);
     });
 
     Route::prefix('delivery')->group(function() {

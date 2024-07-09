@@ -46,7 +46,7 @@ class EscrowAccountCreditedNotification extends Notification implements ShouldQu
     return (new MailMessage)
       ->subject('Buildadom Escrow Account credited.')
       ->line("Your escrow account has been credited with the sum of $amount.")
-      ->line('Incase of an questions, kindly contact our support.')
+      ->line('Incase of any questions, kindly contact our support.')
       ->line('Thank you for choosing our platform');
   }
 

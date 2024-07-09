@@ -6,7 +6,6 @@ use App\Enums\Escrow\EscrowBalanceTypeEnum;
 use App\Jobs\V1\Escrow\LogEscrowAccountBalanceJob;
 use App\Models\Escrow\EscrowAccount;
 use App\Models\User;
-use App\Notifications\V1\Escrow\EscrowAccountCreditedNotification;
 use App\Notifications\V1\Escrow\EscrowAccountDebitedNotification;
 use App\Traits\V1\CurrencyTrait;
 
@@ -17,7 +16,7 @@ trait EscrowAccountTrait
   /**
    * @param float $amount
    * @param User $user
-   * @return void
+   * @return array
    */
   public function creditEscrowAccount(User $user, float $amount)
   {
@@ -38,9 +37,11 @@ trait EscrowAccountTrait
       $escrow->update(['balance' => $new_balance]);
     }
 
-    $user->notify(new EscrowAccountCreditedNotification($amount));
-    $balance_type = strtolower(EscrowBalanceTypeEnum::CREDIT->value);
-    LogEscrowAccountBalanceJob::dispatch($new_balance, $old_balance, $escrow->id, $amount, $balance_type, $user_id);
+    return [
+      'new_balance' => $new_balance,
+      'old_balance' => $old_balance,
+      'escrow_account_id' => $escrow->id
+    ];
   }
 
   /**

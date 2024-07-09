@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\V1\Admin\Fee\FeeSettingController;
 use App\Http\Controllers\V1\Admin\Kyc\KycVerificationController;
 use App\Http\Controllers\V1\Admin\Merchant\MerchantController;
 use App\Http\Controllers\V1\Admin\Order\OrderController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -19,5 +21,9 @@ Route::middleware([])->group(function() {
 
   Route::prefix('order')->group(function() {
     Route::get('/list', [OrderController::class, 'list']);
+  });
+
+  Route::prefix('fees')->group(function() {
+    Route::get('/list', [FeeSettingController::class, 'list']);
   });
 });

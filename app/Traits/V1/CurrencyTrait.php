@@ -14,7 +14,7 @@ trait CurrencyTrait
   {
     $currency = Currency::isSupported()->isDefault()->first();
     if(empty($currency)) {
-      throw new Exception('No default supported currency set.');
+      throw new Exception('Default supported currency not set.');
     }
 
     return $currency;

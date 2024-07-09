@@ -15,8 +15,12 @@ class PaymentResource extends JsonResource
   public function toArray($request)
   {
     return [
+      'id' => $this->id,
       'amount' => $this->amount,
+      'fee' => $this->fee,
+      'total_amount' => $this->total_amount,
       'status' => $this->status,
+      'reference' => $this->reference,
       'currency' => new CurrencyResource($this->whenLoaded('currency')),
     ];
   }

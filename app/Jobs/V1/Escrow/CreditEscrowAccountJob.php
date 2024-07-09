@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Jobs\V1\Escrow;
+use App\Enums\Escrow\EscrowBalanceTypeEnum;
 use App\Enums\Queue\QueueEnum;
 use App\Models\User;
+use App\Notifications\V1\Escrow\EscrowAccountCreditedNotification;
 use App\Traits\V1\Escrow\EscrowAccountTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -21,8 +23,6 @@ class CreditEscrowAccountJob implements ShouldQueue
    */
   public function __construct(private User $user, private float $amount)
   {
-    $this->user = $user;
-    $this->amount = $amount;
     $this->onQueue(QueueEnum::ESCROW->value);
   }
 
@@ -33,7 +33,9 @@ class CreditEscrowAccountJob implements ShouldQueue
    */
   public function handle()
   {
-    $this->creditEscrowAccount($this->user, $this->amount);
+    $this->user->notify(new EscrowAccountCreditedNotification($this->amount));
+    $escrow = $this->creditEscrowAccount($this->user, $this->amount);
+    LogEscrowAccountBalanceJob::dispatch($escrow['new_balance'], $escrow['old_balance'], $escrow['escrow_account_id'], $this->amount, EscrowBalanceTypeEnum::CREDIT->value, $this->user->id);
   }
 
 }

@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Resources\V1\Customer\Payment;
+namespace App\Http\Resources\V1\Fee;
 use App\Http\Resources\CurrencyResource;
-use App\Http\Resources\V1\Escrow\EscrowAccountResource;
+use App\Traits\V1\Fee\FeeSettingTrait;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PaymentResource extends JsonResource
+class FeeSettingResource extends JsonResource
 {
+  use FeeSettingTrait;
+
   /**
    * Transform the resource into an array.
    *
@@ -16,8 +18,11 @@ class PaymentResource extends JsonResource
   public function toArray($request)
   {
     return [
+      'id' => $this->id,
+      'code' => $this->code,
       'amount' => $this->amount,
-      'status' => $this->status,
+      'type' => $this->type,
+      'description' => $this->convertToReadable($this->code),
       'currency' => new CurrencyResource($this->whenLoaded('currency')),
     ];
   }

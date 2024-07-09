@@ -9,6 +9,7 @@ use App\Models\Order\Order;
 use App\Models\Order\OrderPayment;
 use App\Services\BaseService;
 use App\Traits\V1\CurrencyTrait;
+use App\Traits\V1\Fee\FeeSettingTrait;
 use App\Traits\V1\PaymentTrait;
 use App\Utility\Responser;
 use App\Utility\Status;
@@ -19,7 +20,7 @@ use Illuminate\Http\Request;
 
 class OrderPaymentService extends BaseService
 {
-  use CurrencyTrait, PaymentTrait;
+  use CurrencyTrait, PaymentTrait, FeeSettingTrait;
 
   /**
    * @return JsonResponse
@@ -32,19 +33,23 @@ class OrderPaymentService extends BaseService
         return Responser::send(Status::HTTP_NOT_FOUND, null, 'No pending orders found.');
       }
 
-      $reference = (string)str()->uuid();
-      $total_amount = $orders->sum('total_amount');
+      $amount = $orders->sum('total_amount');
       $currency = $this->getDefaultCurrency();
 
-      $paystack = Paystack::payment()->initialize([
-        'amount' => (int)$total_amount * 100, //in kobo
-        'reference' => $reference,
+      $fee = $this->calculateFeeAmount('VAT', $amount);
+      $total_amount = ($amount + $fee);
+
+      $payload = [
+        'amount' => (int)($total_amount * 100), //in kobo
+        'reference' => (string)str()->uuid(),
         'email' => auth()->user()->email,
         'currency' => strtoupper($currency->code)
-      ]);
+      ];
 
+      $paystack = Paystack::payment()->initialize($payload);
       $customer_id = (int)auth()->id();
-      $payment = $this->createPayment($customer_id, $total_amount, $reference, (int)$currency->id);
+
+      $payment = $this->createPayment($payload, $customer_id, $total_amount, $amount, $fee, $currency->id);
       SaveCustomerOrderPaymentJob::dispatch($orders, $customer_id, $payment->id);
 
       return Responser::send(Status::HTTP_OK, $paystack, 'Operation successful.');

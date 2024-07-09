@@ -26,6 +26,7 @@ class Currency extends Model
   public $casts = [
     'is_supported' => 'boolean',
     'is_default' => 'boolean',
+    'id' => 'int',
   ];
 
   /**

@@ -21,9 +21,6 @@ class SaveCustomerOrderPaymentJob implements ShouldQueue
    */
   public function __construct(private $orders, private $customer_id, private $payment_id)
   {
-    $this->orders = $orders;
-    $this->customer_id = $customer_id;
-    $this->payment_id = $payment_id;
     $this->onQueue(QueueEnum::ORDER->value);
   }
 

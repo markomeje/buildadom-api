@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\V1\Admin\Order;
-use App\Http\Resources\V1\Order\OrderResource;
-use App\Models\Order\Order;
+namespace App\Services\V1\Admin\Fee;
+use App\Http\Resources\V1\Fee\FeeSettingResource;
+use App\Models\Fee\FeeSetting;
 use App\Services\BaseService;
 use App\Utility\Responser;
 use App\Utility\Status;
@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 
-class OrderService extends BaseService
+class FeeSettingService extends BaseService
 {
 
   /**
@@ -21,8 +21,8 @@ class OrderService extends BaseService
   public function list(Request $request): JsonResponse
   {
     try {
-      $orders = Order::latest()->with(['trackings'])->paginate($request->limit ?? 20);
-      return Responser::send(Status::HTTP_OK, OrderResource::collection($orders), 'Operation successful.');
+      $fees = FeeSetting::latest()->paginate($request->limit ?? 20);
+      return Responser::send(Status::HTTP_OK, $fees, 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
     }

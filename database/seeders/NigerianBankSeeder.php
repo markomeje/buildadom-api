@@ -21,7 +21,6 @@ class NigerianBankSeeder extends Seeder
 
     if(!empty($banks)) {
       foreach ($banks as $bank) {
-        Log::info(json_encode($bank));
         if(is_object($bank)) {
           $this->seedNigerianBank((object)$bank);
         }

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Resources\V1\Customer\Order;
-use App\Http\Resources\V1\Customer\Payment\PaymentResource;
+use App\Http\Resources\V1\Payment\PaymentResource;
 use App\Http\Resources\V1\Order\OrderResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 

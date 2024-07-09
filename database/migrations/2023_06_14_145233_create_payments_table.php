@@ -20,7 +20,9 @@ return new class extends Migration
       $table->foreignId('user_id')->nullable()->references('id')->on('users');
       $table->foreignId('currency_id')->nullable()->references('id')->on('currencies');
       $table->string('status')->default(PaymentStatusEnum::INITIALIZED->value);
-      $table->bigInteger('amount');
+      $table->decimal('amount', 18, 2);
+      $table->decimal('fee', 18, 2);
+      $table->decimal('total_amount', 18, 2);
       $table->string('type')->nullable();
       $table->string('reference')->unique();
       $table->text('response')->nullable();
