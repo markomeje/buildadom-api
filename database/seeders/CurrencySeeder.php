@@ -21,12 +21,14 @@ class CurrencySeeder extends Seeder
     foreach ($currencies as $code => $name) {
       $currency_code = strtoupper($code);
       $is_naira = $currency_code == 'NGN' ? 1 : 0;
+
       Currency::updateOrCreate(['code' => $currency_code], [
         'type' => CurrencyTypeEnum::FIAT->value,
         'code' => $currency_code,
         'is_default' => $is_naira,
         'name' => $name,
         'is_supported' => $is_naira,
+        'symbol' => $currency_code == 'NGN' ? '₦' : null,
       ]);
     }
     $this->command->info('Currency Seeder successful.');
