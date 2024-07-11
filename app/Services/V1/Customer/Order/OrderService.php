@@ -97,7 +97,7 @@ class OrderService extends BaseService
   public function trackings($id): JsonResponse
   {
     try {
-      $order = Order::owner()->with(['trackings', 'currency', 'product' => function($query) {
+      $order = Order::owner()->with(['trackings', 'currency', 'store', 'product' => function($query) {
         $query->with(['images', 'category', 'unit', 'currency']);
       }])->find($id);
 

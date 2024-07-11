@@ -20,15 +20,17 @@ class ShippingAddressService extends BaseService
   {
     try {
       $user_id = auth()->id();
+      $address = $request->street_address;
       $shipping = ShippingAddress::updateOrCreate(['user_id' => $user_id], [
         'user_id' => $user_id,
-        'street_address' => $request->street_address,
+        'street_address' => $address,
         'city_id' => $request->city_id,
         'state_id' => $request->state_id,
         'country_id' => help()->getDefaultCountry()->id,
         'zip_code' => $request->zip_code,
       ]);
 
+      $shipping->user->update(['address' => $address]);
       return Responser::send(Status::HTTP_OK, $shipping, 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());

@@ -112,6 +112,17 @@ class Paystack
   }
 
   /**
+   * @param string $reference
+   * @return mixed
+   */
+  public function webhook(string $reference)
+  {
+    $endpoint = "$this->base_url/transfer/verify/$reference";
+    $response = $this->http->get($endpoint);
+    return $response->json();
+  }
+
+  /**
    * @param array $fields,
    * @return mixed
    */
