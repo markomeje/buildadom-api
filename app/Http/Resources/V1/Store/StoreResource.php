@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Http\Resources;
-
+namespace App\Http\Resources\V1\Store;
+use App\Http\Resources\CountryResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class StoreResource extends JsonResource

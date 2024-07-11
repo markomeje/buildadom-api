@@ -13,13 +13,6 @@ class OrderDeliveryResource extends JsonResource
    */
   public function toArray($request)
   {
-    return [
-      'id' => $this->id,
-      'payment_authorized' => $this->payment_authorized,
-      'confirmation_code' => $this->confirmation_code,
-      'payment_processed' => $this->payment_processed,
-      'is_confirmed' => $this->is_confirmed,
-      'status' => $this->status,
-    ];
+    return parent::toArray($request);
   }
 }

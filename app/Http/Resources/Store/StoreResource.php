@@ -16,7 +16,7 @@ class StoreResource extends JsonResource
   {
     return [
       'id' => $this->id,
-      'name' => ucwords($this->name),
+      'name' => $this->name,
       'description' => $this->description,
       'banner' => $this->banner,
       'published' => $this->published,

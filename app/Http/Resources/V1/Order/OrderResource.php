@@ -5,6 +5,8 @@ use App\Http\Resources\CurrencyResource;
 use App\Http\Resources\V1\Order\OrderDeliveryResource;
 use App\Http\Resources\V1\OrderTrackingResource;
 use App\Http\Resources\V1\Payment\PaymentResource;
+use App\Http\Resources\V1\Product\ProductResource;
+use App\Http\Resources\V1\Store\StoreResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource
@@ -28,10 +30,14 @@ class OrderResource extends JsonResource
       'currency_id' => $this->currency_id,
       'store_id' => $this->store_id,
       'status' => $this->status,
+      'updated_at' => $this->updated_at,
+      'created_at' => $this->created_at,
       'currency' => new CurrencyResource($this->whenLoaded('currency')),
       'trackings' => OrderTrackingResource::collection($this->whenLoaded('trackings')),
       'payment' => new PaymentResource($this->whenLoaded('payment')),
       'delivery' => new OrderDeliveryResource($this->whenLoaded('delivery')),
+      'product' => new ProductResource($this->whenLoaded('product')),
+      'store' => new StoreResource($this->whenLoaded('store')),
     ];
   }
 }

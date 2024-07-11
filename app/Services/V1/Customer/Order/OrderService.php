@@ -58,7 +58,9 @@ class OrderService extends BaseService
         $query->where('status', $request->status);
       }
 
-      $orders = $query->with(['currency', 'trackings', 'delivery'])->paginate($request->limit ?? 0);
+      $orders = $query->with(['currency', 'trackings', 'delivery', 'product' => function($query) {
+        $query->with(['images', 'category', 'unit', 'currency']);
+      }, 'store'])->paginate($request->limit ?? 0);
       return Responser::send(Status::HTTP_OK, OrderResource::collection($orders), 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());

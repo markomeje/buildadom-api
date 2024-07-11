@@ -27,12 +27,21 @@ class OrderService extends BaseService
       $stores = auth()->user()->stores;
       $orders = Order::whereIn('store_id', $stores->pluck('id')->toArray())
         ->whereNotIn('status', [OrderStatusEnum::PENDING->value, OrderStatusEnum::CANCELLED->value])
+        ->with([
+          'currency',
+          'trackings',
+          'delivery',
+          'store',
+          'product' => function($query) {
+            $query->with(['images', 'category', 'unit', 'currency']);
+          },
+        ])
         ->latest()->with(['currency', 'payment'])
         ->paginate($request->limit ?? 20);
 
       return Responser::send(Status::HTTP_OK, OrderResource::collection($orders), 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
     }
   }
 
