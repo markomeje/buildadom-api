@@ -91,13 +91,16 @@ class OrderService extends BaseService
   }
 
   /**
-   * @param $id
+   * @param int $id
    * @return JsonResponse
    */
   public function trackings($id): JsonResponse
   {
     try {
-      $order = Order::owner()->with(['trackings'])->find($id);
+      $order = Order::owner()->with(['trackings', 'currency', 'product' => function($query) {
+        $query->with(['images', 'category', 'unit', 'currency']);
+      }])->find($id);
+
       if(empty($order)) {
         return Responser::send(Status::HTTP_NOT_FOUND, null, 'Order not found.');
       }
