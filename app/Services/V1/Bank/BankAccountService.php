@@ -17,6 +17,7 @@ class BankAccountService extends BaseService
 {
   /**
    * @param Request $request
+   * @throws Exception
    * @return JsonResponse
    */
   public function save(Request $request): JsonResponse
@@ -27,8 +28,8 @@ class BankAccountService extends BaseService
       $bank_code = $bank->code;
 
       $resolve = Paystack::payment()->resolveAccountNumber($account_number, $bank_code);
-      if(($resolve['status'] ?? 0) === false) {
-        return Responser::send(Status::HTTP_OK, null, $resolve['message']);
+      if(($resolve['status'] ?? 0) == false) {
+        throw new Exception($resolve['message'], Status::HTTP_NOT_ACCEPTABLE);
       }
 
       $user_id = auth()->id();
@@ -47,7 +48,7 @@ class BankAccountService extends BaseService
       CreatePaystackTransferRecipientJob::dispatch();
       return Responser::send(Status::HTTP_OK, $account, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
+      return Responser::send($e->getCode(), null, $e->getMessage());
     }
   }
 
