@@ -21,7 +21,7 @@ class PhoneVerificationService extends BaseService
   public function send(User $user): JsonResponse
   {
     try {
-      $code = help()->generateRandomDigits();
+      $code = help()->generateRandomDigits(6);
       $message = $this->getMessage($code);
 
       PhoneVerification::create([
@@ -50,7 +50,7 @@ class PhoneVerificationService extends BaseService
   public function resend(): JsonResponse
   {
     try {
-      $code = $this->generateRandomDigits();
+      $code = help()->generateRandomDigits(6);
       $message = $this->getMessage($code);
       $user = User::find(auth()->id());
 
@@ -117,7 +117,7 @@ class PhoneVerificationService extends BaseService
     return PhoneVerification::create([
       'code' => $code,
       'user_id' => $user->id,
-      'expiry' => now()->addMinutes(5),
+      'expiry' => now()->addMinutes(10),
     ]);
   }
 
