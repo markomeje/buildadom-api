@@ -115,7 +115,7 @@ class EmailVerificationService extends BaseService
   private function saveVerificationDetail(int $code, User $user)
   {
     $emailVerificationDetails = $this->getVerificationDetails();
-    $expiry = now()->addMinutes(5);
+    $expiry = now()->addMinutes(10);
 
     if(empty($emailVerificationDetails)) {
       return EmailVerification::create([

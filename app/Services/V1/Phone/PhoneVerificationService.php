@@ -27,7 +27,7 @@ class PhoneVerificationService extends BaseService
       PhoneVerification::create([
         'code' => $code,
         'user_id' => $user->id,
-        'expiry' => now()->addMinutes(5),
+        'expiry' => now()->addMinutes(10),
       ]);
 
       SmsSenderFacade::push($user, $message);
