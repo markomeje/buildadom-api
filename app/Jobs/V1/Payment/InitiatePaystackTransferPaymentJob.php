@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Jobs\V1\Payment;
-use App\Enums\Queue\QueueEnum;
+use App\Enums\QueuedJobEnum;
 use App\Integrations\Paystack;
 use App\Models\Bank\BankAccount;
-use App\Models\Payment\TransferPayment;
+use App\Models\Payment\Payment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -20,9 +20,9 @@ class InitiatePaystackTransferPaymentJob implements ShouldQueue
    *
    * @return void
    */
-  public function __construct(private TransferPayment $transfer, private BankAccount $account, private int $amount)
+  public function __construct(private Payment $payment, private BankAccount $account)
   {
-    $this->onQueue(QueueEnum::PAYMENT->value);
+    $this->onQueue(QueuedJobEnum::PAYMENT->value);
   }
 
   /**
@@ -33,9 +33,9 @@ class InitiatePaystackTransferPaymentJob implements ShouldQueue
   public function handle()
   {
     $fields = [
-      'reference' => $this->transfer->reference,
+      'reference' => $this->payment->reference,
       'recipient' => $this->account->recipient_code,
-      'amount' => $this->amount * 100,
+      'amount' => $this->payment->total_amount * 100,
     ];
 
     $result = Paystack::payment()->initiateTransfer($fields);
@@ -48,18 +48,18 @@ class InitiatePaystackTransferPaymentJob implements ShouldQueue
    */
   private function handleResult($result)
   {
-    $message = $result['message'];
-    if(!($result['status'] ?? 0)) {
-      $this->transfer->update(['message' => $message, 'is_failed' => 1]);
+    $message = $result['message'] ?? '';
+    if(empty($result['status']) || empty($result['data'])) {
+      $this->payment->update(['message' => $message, 'is_failed' => 1]);
       return null;
     }
 
     $data = $result['data'];
-    return $this->transfer->update([
+    return $this->payment->update([
       'status' => $data['status'],
       'message' => $message,
       'transfer_code' => $data['transfer_code'],
-      'response' => $data,
+      'initialize_response' => $data,
       'is_failed' => 0
     ]);
   }

@@ -2,15 +2,17 @@
 
 namespace App\Services\V1\Customer\Order;
 use App\Enums\Order\OrderStatusEnum;
+use App\Enums\Payment\PaymentStatusEnum;
+use App\Enums\Payment\PaymentTypeEnum;
 use App\Http\Resources\V1\Customer\Order\OrderPaymentResource;
 use App\Integrations\Paystack;
 use App\Jobs\V1\Order\SaveCustomerOrderPaymentJob;
 use App\Models\Order\Order;
 use App\Models\Order\OrderPayment;
+use App\Models\Payment\Payment;
 use App\Services\BaseService;
 use App\Traits\V1\CurrencyTrait;
 use App\Traits\V1\Fee\FeeSettingTrait;
-use App\Traits\V1\PaymentTrait;
 use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
@@ -20,7 +22,7 @@ use Illuminate\Http\Request;
 
 class OrderPaymentService extends BaseService
 {
-  use CurrencyTrait, PaymentTrait, FeeSettingTrait;
+  use CurrencyTrait, FeeSettingTrait;
 
   /**
    * @return JsonResponse
@@ -49,9 +51,24 @@ class OrderPaymentService extends BaseService
       $paystack = Paystack::payment()->initialize($payload);
       $customer_id = (int)auth()->id();
 
-      $payment = $this->createPayment($payload, $customer_id, $total_amount, $amount, $fee, $currency->id);
-      SaveCustomerOrderPaymentJob::dispatch($orders, $customer_id, $payment->id);
+      $payment = Payment::updateOrCreate([
+        'user_id' => $customer_id,
+        'amount' => $amount,
+        'status' => PaymentStatusEnum::INITIALIZED->value
+      ], [
+        'user_id' => $customer_id,
+        'total_amount' => $total_amount,
+        'amount' => $amount,
+        'fee' => $fee,
+        'reference' => $payload['reference'],
+        'status' => PaymentStatusEnum::INITIALIZED->value,
+        'currency_id' => $currency->id,
+        'payload' => $payload,
+        'initialize_response' => $paystack,
+        'type' => PaymentTypeEnum::CHARGE->value
+      ]);
 
+      SaveCustomerOrderPaymentJob::dispatch($orders, $customer_id, $payment->id);
       return Responser::send(Status::HTTP_OK, $paystack, 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());

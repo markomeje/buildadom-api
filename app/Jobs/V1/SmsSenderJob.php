@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Jobs\V1;
-
 use App\Enums\Queue\QueueEnum;
 use App\Enums\Sms\SmsStatusEnum;
 use App\Integrations\TermiiSms;

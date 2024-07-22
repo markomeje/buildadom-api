@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Notifications\V1\Admin\Kyc;
-use App\Enums\Queue\QueueEnum;
+use App\Enums\QueuedJobEnum;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -24,7 +24,7 @@ class AdminKycActionNotification extends Notification implements ShouldQueue
   public function __construct($kyc_status)
   {
     $this->kyc_status = $kyc_status;
-    $this->onQueue(QueueEnum::EMAIL->value);
+    $this->onQueue(QueuedJobEnum::KYC->value);
   }
 
   /**

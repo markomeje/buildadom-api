@@ -19,7 +19,7 @@ class EscrowAccountService extends BaseService
   public function details(): JsonResponse
   {
     try {
-      $account = EscrowAccount::owner()->with(['currency', 'balances'])->first();
+      $account = EscrowAccount::owner()->with(['currency', 'balances' => fn($query) => $query->latest()])->first();
       return Responser::send(Status::HTTP_OK, new EscrowAccountResource($account), 'Operation successful.');
     } catch (Exception $e) {
       return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());

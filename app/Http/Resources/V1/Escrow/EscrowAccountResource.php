@@ -17,6 +17,8 @@ class EscrowAccountResource extends JsonResource
     return [
       'balance' => $this->balance,
       'status' => $this->status,
+      'created_at' => $this->created_at,
+      'updated_at' => $this->updated_at,
       'currency' => new CurrencyResource($this->whenLoaded('currency')),
       'balances' => EscrowBalanceResource::collection($this->whenLoaded('balances'))
     ];

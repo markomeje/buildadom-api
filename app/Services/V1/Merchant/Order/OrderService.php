@@ -58,6 +58,11 @@ class OrderService extends BaseService
         return Responser::send(Status::HTTP_NOT_FOUND, null, 'Order not found');
       }
 
+      $request_status = strtolower($request->status);
+      if($request_status == strtolower(OrderStatusEnum::ACCEPTED->value) && !auth()->user()->bank) {
+        throw new Exception('You need to setup your bank details first.', Status::HTTP_NOT_ACCEPTABLE);
+      }
+
       $order_payment = OrderPayment::where(['order_id' => $order->id])->first();
       if(strtolower(optional($order_payment)->status) !== strtolower(OrderPaymentStatusEnum::PAID->value)) {
         return Responser::send(Status::HTTP_NOT_ACCEPTABLE, $order_payment, 'Only paid orders can be acted on.');
@@ -72,11 +77,11 @@ class OrderService extends BaseService
         return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Only placed others can be acted on.');
       }
 
-      $order->update(['status' => strtolower($request->status)]);
+      $order->update(['status' => strtolower($request_status)]);
       $order->customer->notify(new CustomerOrderStatusUpdateNotification($order));
       return Responser::send(Status::HTTP_OK, new OrderResource($order), 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
+      return Responser::send($e->getCode(), null, $e->getMessage());
     }
   }
 

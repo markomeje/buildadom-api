@@ -54,15 +54,18 @@ class PaystackPaymentVerificationJob implements ShouldQueue
    */
   private function handlePaymentStatus(Payment $payment)
   {
-    $response = Paystack::payment()->verify($payment->reference);
-    if((boolean)($response['status'] ?? 0)) {
-      $data = $response['data'] ?? null;
-      $status = strtolower($data['status']);
+    $result = Paystack::payment()->verify($payment->reference);
+    if(empty($result['status']) || empty($result['data'])) {
+      $payment->update(['message' => $result['message'] ?? '', 'is_failed' => 1]);
+      return null;
+    }
 
-      $payment->update(['status' => $status, 'response' => $data]);
-      if($status === strtolower(PaymentStatusEnum::SUCCESS->value)) {
-        CreditEscrowAccountJob::dispatch($payment->user, (float)$payment->amount);
-      }
+    $data = $result['data'];
+    $status = strtolower($data['status']);
+
+    $payment->update(['status' => $status, 'response' => $data]);
+    if($status === strtolower(PaymentStatusEnum::SUCCESS->value)) {
+      CreditEscrowAccountJob::dispatch($payment->user, (float)$payment->amount);
     }
   }
 

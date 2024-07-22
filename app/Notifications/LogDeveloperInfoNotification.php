@@ -1,30 +1,24 @@
 <?php
 
 namespace App\Notifications;
-
 use App\Enums\QueuedJobEnum;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class EmailVerificationNotification extends Notification implements ShouldQueue
+class LogDeveloperInfoNotification extends Notification implements ShouldQueue
 {
   use Queueable;
-
-  /**
-   * The email verification code
-   */
-  private $code;
 
   /**
    * Create a new notification instance.
    *
    * @return void
    */
-  public function __construct($code)
+  public function __construct(private string $info)
   {
-    $this->onQueue(QueuedJobEnum::EMAIL->value);
+    $this->onQueue(QueuedJobEnum::INFO->value);
   }
 
   /**
@@ -47,10 +41,8 @@ class EmailVerificationNotification extends Notification implements ShouldQueue
   public function toMail($notifiable)
   {
     return (new MailMessage)
-      ->subject('Email Verification Required')
-      ->line('Thank you for your registration. Please use the code below to veirfy your email')
-      ->line($this->code)
-      ->line('Thank you for choosing our platform');
+      ->subject('Buildadom Developer Info Log')
+      ->line($this->info);
   }
 
   /**
@@ -61,8 +53,11 @@ class EmailVerificationNotification extends Notification implements ShouldQueue
    */
   public function toArray($notifiable)
   {
-    return [
-      //
-    ];
+    return [];
+  }
+
+  public function routeNotificationFor($notifiable)
+  {
+    return $notifiable->email;
   }
 }

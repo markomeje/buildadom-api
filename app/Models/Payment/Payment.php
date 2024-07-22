@@ -31,12 +31,19 @@ class Payment extends Model
     'type',
     'currency_id',
     'payload',
-    'response',
+    'initialize_response',
     'total_amount',
+    'message',
+    'verify_response',
+    'webhook_response',
+    'transfer_code',
+    'is_failed',
   ];
 
   public $casts = [
-    'response' => 'json',
+    'webhook_response' => 'json',
+    'initialize_response' => 'json',
+    'verify_response' => 'json',
     'total_amount' => 'float',
     'fee' => 'float',
     'amount' => 'float',

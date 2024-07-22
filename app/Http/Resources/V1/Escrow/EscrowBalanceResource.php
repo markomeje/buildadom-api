@@ -19,6 +19,7 @@ class EscrowBalanceResource extends JsonResource
       'new_balance' => $this->new_balance,
       'balance_type' => $this->balance_type,
       'created_at' => $this->created_at,
+      'updated_at' => $this->updated_at,
     ];
   }
 }

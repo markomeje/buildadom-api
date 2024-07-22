@@ -3,6 +3,7 @@
 namespace App\Http\Requests\V1\Auth;
 use App\Rules\EmailRule;
 use App\Utility\Responser;
+use App\Utility\Status;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
@@ -53,7 +54,7 @@ class LoginRequest extends FormRequest
    */
   protected function failedValidation(Validator $validator)
   {
-    $response = Responser::send(JsonResponse::HTTP_UNPROCESSABLE_ENTITY, [
+    $response = Responser::send(Status::HTTP_UNPROCESSABLE_ENTITY, [
       'errors' => $validator->errors()
     ], 'Please check your inputs.');
 

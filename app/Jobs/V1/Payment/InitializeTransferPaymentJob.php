@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Jobs\V1\Payment;
-use App\Enums\Queue\QueueEnum;
+use App\Enums\Payment\PaymentTypeEnum;
+use App\Enums\QueuedJobEnum;
 use App\Jobs\V1\Payment\InitiatePaystackTransferPaymentJob;
 use App\Models\User;
 use App\Traits\V1\Escrow\EscrowAccountTrait;
-use App\Traits\V1\Payment\TransferPaymentTrait;
+use App\Traits\V1\Payment\PaymentTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,7 +15,7 @@ use Illuminate\Queue\SerializesModels;
 
 class InitializeTransferPaymentJob implements ShouldQueue
 {
-  use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, EscrowAccountTrait, TransferPaymentTrait;
+  use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, EscrowAccountTrait, PaymentTrait;
 
   /**
    * Create a new job instance.
@@ -23,7 +24,7 @@ class InitializeTransferPaymentJob implements ShouldQueue
    */
   public function __construct(private User $user, private string $reference, private float $amount)
   {
-    $this->onQueue(QueueEnum::PAYMENT->value);
+    $this->onQueue(QueuedJobEnum::PAYMENT->value);
   }
 
   /**
@@ -33,8 +34,8 @@ class InitializeTransferPaymentJob implements ShouldQueue
    */
   public function handle()
   {
-    $transfer = $this->initializeTransferPayment($this->user, $this->reference, $this->amount);
-    InitiatePaystackTransferPaymentJob::dispatch($transfer, $this->user->bank, (int)$this->amount);
+    $payment = $this->initializePayment($this->user, $this->reference, $this->amount, PaymentTypeEnum::TRANSFER->value);
+    InitiatePaystackTransferPaymentJob::dispatch($payment, $this->user->bank);
   }
 
 }

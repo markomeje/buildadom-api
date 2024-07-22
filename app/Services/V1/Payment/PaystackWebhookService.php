@@ -1,44 +1,78 @@
 <?php
 
 namespace App\Services\V1\Payment;
+use App\Jobs\LogDeveloperInfoJob;
+use App\Models\Payment\Payment;
 use App\Services\BaseService;
-use App\Utility\Responser;
-use App\Utility\Status;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 
 class PaystackWebhookService extends BaseService
 {
   /**
-   * @return JsonResponse
+   * @param Request $request
+   * @return mixed
    */
-  public function webhook(Request $request): JsonResponse
+  public function webhook(Request $request)
   {
     try {
-      $server = $request->server();
-      if((strtoupper($request->server('REQUEST_METHOD')) !== 'POST') || !array_key_exists('HTTP_X_PAYSTACK_SIGNATURE', $request->server())) {
+      $payload = json_encode($request->all());
+      if((strtolower($request->server('REQUEST_METHOD')) !== 'post')) {
+        LogDeveloperInfoJob::dispatch("Invalid paystack webhook request method - $payload");
         exit();
       }
 
-      // Retrieve the request's body
+      if(!array_key_exists('HTTP_X_PAYSTACK_SIGNATURE', $request->server())) {
+        LogDeveloperInfoJob::dispatch("Invalid paystack http server signature - $payload");
+        exit();
+      }
+
       $input = @file_get_contents("php://input");
       $secret_key = config('services.paystack.secret_key');
-
-      // validate event do all at once to avoid timing attack
       if($request->server('HTTP_X_PAYSTACK_SIGNATURE') !== hash_hmac('sha512', $input, $secret_key)) {
+        LogDeveloperInfoJob::dispatch("Invalid paystack signature - $payload");
         exit();
       }
 
-      $event = json_decode($input);
-      // Do something with $event
-      http_response_code(200); // PHP 5.4 or greater
+      $result = json_decode($input);
+      $paystack = $result->data;
 
-      return Responser::send(Status::HTTP_OK, null, 'Operation successful.');
+      $payment = Payment::where('reference', $paystack->reference)->first();
+      if(empty($payment)) {
+        LogDeveloperInfoJob::dispatch("Invalid paystack payment reference - $payload");
+        exit();
+      }
+
+      $data = ['status' => $paystack->status, 'webhook_response' => $paystack];
+      if(in_array($result->event, $this->events()['transfer'])) {
+        $data = array_merge($data, ['transfer_code' => $paystack->transfer_code]);
+      }
+
+      $payment->update($data);
+      http_response_code(200);
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      $message = $e->getMessage();
+      LogDeveloperInfoJob::dispatch("An exception from Paystack webhook - $message");
+      exit();
     }
+  }
+
+  /**
+   * @return array
+   */
+  private function events()
+  {
+    return [
+      'transfer' => [
+        'transfer.failed',
+        'transfer.success',
+        'transfer.reversed',
+      ],
+      'charge' => [
+        'charge.success',
+      ]
+    ];
   }
 
 }

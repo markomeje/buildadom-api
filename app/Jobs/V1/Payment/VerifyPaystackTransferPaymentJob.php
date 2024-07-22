@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Jobs\V1\Payment;
-use App\Enums\Queue\QueueEnum;
+
+use App\Enums\Payment\PaymentTypeEnum;
+use App\Enums\QueuedJobEnum;
 use App\Integrations\Paystack;
-use App\Models\Payment\TransferPayment;
+use App\Models\Payment\Payment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -22,7 +24,7 @@ class VerifyPaystackTransferPaymentJob implements ShouldQueue
    */
   public function __construct()
   {
-    $this->onQueue(QueueEnum::PAYMENT->value);
+    $this->onQueue(QueuedJobEnum::PAYMENT->value);
   }
 
   /**
@@ -32,10 +34,10 @@ class VerifyPaystackTransferPaymentJob implements ShouldQueue
    */
   public function handle()
   {
-    $transfers = TransferPayment::where(['is_failed' => 1])->get();
+    $transfers = Payment::where(['is_failed' => 1, 'type' => PaymentTypeEnum::TRANSFER->value])->get();
     if($transfers->count()) {
-      $transfers->map(function($transfer) {
-        $this->handleVerifyTransferResult($transfer);
+      $transfers->map(function($payment) {
+        $this->handleResult($payment);
       });
     }
   }
@@ -44,24 +46,24 @@ class VerifyPaystackTransferPaymentJob implements ShouldQueue
    * @param array $result
    * @return mixed
    */
-  private function handleVerifyTransferResult($transfer)
+  private function handleResult($payment)
   {
-    $result = Paystack::payment()->verifyTransfer($transfer->reference);
-    Log::info(json_encode($result));
+    $result = Paystack::payment()->verifyTransfer($payment->reference);
 
-    $message = $result['message'];
-    if(!($result['status'] ?? 0)) {
-      $transfer->update(['message' => $message, 'is_failed' => 1]);
+    $message = $result['message'] ?? '';
+    if(empty($result['status']) || empty($result['data'])) {
+      $payment->update(['message' => $message, 'is_failed' => 1]);
       return null;
     }
 
     $data = $result['data'];
-    return $transfer->update([
+    $payment->update([
       'status' => $data['status'],
       'message' => $message,
       'transfer_code' => $data['transfer_code'],
       'response' => $data,
-      'is_failed' => 0
+      'is_failed' => 0,
+      'verify_response' => $result
     ]);
   }
 
