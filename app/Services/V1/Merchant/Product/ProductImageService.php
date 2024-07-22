@@ -24,20 +24,17 @@ class ProductImageService extends BaseService
    * @param Request $request
    * @return JsonResponse
    */
-  public function upload($product_id, Request $request): JsonResponse
+  public function upload(Request $request): JsonResponse
   {
     try {
-      $product = Product::find($product_id);
+      $product_id = $request->product_id;
+      $product = Product::owner()->find($product_id);
       if(empty($product)) {
         return Responser::send(Status::HTTP_NOT_FOUND, $product, 'Product not found. Try again.');
       }
 
       $image_url = $this->uploadToS3($request->file('image'));
-      $role = strtolower($request->role);
-
-      if($this->productHasMainImage($product_id) && ($role == strtolower(ProductImageRoleEnum::MAIN->value))) {
-        $role = ProductImageRoleEnum::OTHERS->value;
-      }
+      $role = $this->productHasMainImage($product_id) ? ProductImageRoleEnum::OTHERS->value : ProductImageRoleEnum::MAIN->value;
 
       $product_image = ProductImage::create([
         'role' => $role,
@@ -54,18 +51,19 @@ class ProductImageService extends BaseService
 
   /**
    * @param int $id
+   * @param Request $request
    * @return JsonResponse
    */
-  public function delete($id): JsonResponse
+  public function delete($id, Request $request): JsonResponse
   {
     try {
-      $product_image = ProductImage::owner()->find($id);
+      $product_image = ProductImage::owner()->where(['product_id' => $request->product_id])->find($id);
       if(empty($product_image)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, $product_image, 'Product image not found. Try again.');
+        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Product image not found. Try again.');
       }
 
       if(strtolower($product_image->role) == strtolower(ProductImageRoleEnum::MAIN->value)) {
-        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Operation not allowed. You can only change a main image.');
+        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Operation not allowed. You cannot delete a main image.');
       }
 
       $this->deleteFileFromS3($product_image->url);
@@ -77,16 +75,16 @@ class ProductImageService extends BaseService
   }
 
   /**
-   * @param int $id,
+   * @param int $id
    * @param Request $request
    * @return JsonResponse
    */
   public function change($id, Request $request): JsonResponse
   {
     try {
-      $product_image = ProductImage::owner()->find($id);
+      $product_image = ProductImage::owner()->where(['product_id' => $request->product_id])->find($id);
       if(empty($product_image)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, $product_image, 'Product not found. Try again.');
+        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Product not found. Try again.');
       }
 
       $image_url = $this->uploadToS3($request->file('image'), $product_image->url);
@@ -97,7 +95,7 @@ class ProductImageService extends BaseService
       $product_image->update(['url' => $image_url]);
       return Responser::send(Status::HTTP_OK, $product_image, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return Responser::send($e->getCode(), null, $e->getMessage());
     }
   }
 

@@ -1,12 +1,11 @@
 <?php
 
 namespace App\Http\Requests\V1\Merchant\Product;
-use App\Enums\Product\ProductImageRoleEnum;
 use App\Utility\Responser;
 use App\Utility\Status;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class UploadProductImageRequest extends FormRequest
@@ -31,7 +30,7 @@ class UploadProductImageRequest extends FormRequest
   {
     return [
       'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif'],
-      'role' => ['required', new Enum(ProductImageRoleEnum::class)],
+      'product_id' => ['required', Rule::exists('products', 'id')],
     ];
   }
 

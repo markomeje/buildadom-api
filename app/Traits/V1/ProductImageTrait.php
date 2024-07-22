@@ -12,7 +12,7 @@ trait ProductImageTrait
    */
   public function productHasMainImage(int $product_id)
   {
-    return ProductImage::owner()->where(['role' => ProductImageRoleEnum::MAIN->value, 'product_id' => $product_id])->exists();
+    return ProductImage::owner()->where(['role' => strtolower(ProductImageRoleEnum::MAIN->value), 'product_id' => $product_id])->exists();
   }
 
 }

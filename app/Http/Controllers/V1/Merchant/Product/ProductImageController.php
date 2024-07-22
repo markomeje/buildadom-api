@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Merchant\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Merchant\Product\ChangeProductImageRequest;
+use App\Http\Requests\V1\Merchant\Product\DeleteProductImageRequest;
 use App\Http\Requests\V1\Merchant\Product\UploadProductImageRequest;
 use App\Services\V1\Merchant\Product\ProductImageService;
 use Illuminate\Http\JsonResponse;
@@ -22,21 +23,23 @@ class ProductImageController extends Controller
    * @param UploadProductImageRequest $request
    * @return JsonResponse
    */
-  public function upload($product_id, UploadProductImageRequest $request): JsonResponse
+  public function upload(UploadProductImageRequest $request): JsonResponse
   {
-    return $this->productImageService->upload($product_id, $request);
+    return $this->productImageService->upload($request);
   }
 
   /**
-   * @param int $product_id
+   * @param int $id
+   * @param DeleteProductImageRequest $request
    * @return JsonResponse
    */
-  public function delete($id): JsonResponse
+  public function delete($id, DeleteProductImageRequest $request): JsonResponse
   {
-    return $this->productImageService->delete($id);
+    return $this->productImageService->delete($id, $request);
   }
 
   /**
+   * @param int $id
    * @param ChangeProductImageRequest $request
    * @return JsonResponse
    */

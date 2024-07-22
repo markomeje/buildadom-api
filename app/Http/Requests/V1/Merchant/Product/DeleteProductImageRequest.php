@@ -8,7 +8,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
 
-class ChangeProductImageRequest extends FormRequest
+class DeleteProductImageRequest extends FormRequest
 {
 
   /**
@@ -29,7 +29,6 @@ class ChangeProductImageRequest extends FormRequest
   public function rules()
   {
     return [
-      'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif'],
       'product_id' => ['required', Rule::exists('products', 'id')],
     ];
   }

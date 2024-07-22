@@ -36,9 +36,11 @@ Route::middleware(['auth:api', 'merchants.only'])->group(function() {
     Route::get('/{id}/details', [ProductController::class, 'product']);
     Route::post('/{id}/publish', [ProductController::class, 'publish']);
 
-    Route::post('/{product_id}/upload-image', [ProductImageController::class, 'upload']);
-    Route::post('/{id}/delete-image', [ProductImageController::class, 'delete']);
-    Route::post('/{id}/change-image', [ProductImageController::class, 'change']);
+    Route::prefix('image')->group(function() {
+      Route::post('/upload', [ProductImageController::class, 'upload']);
+      Route::post('/{id}/delete', [ProductImageController::class, 'delete']);
+      Route::post('/{id}/change', [ProductImageController::class, 'change']);
+    });
   });
 
   Route::prefix('driver')->group(function() {
