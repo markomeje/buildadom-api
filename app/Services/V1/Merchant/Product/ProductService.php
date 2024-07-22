@@ -75,10 +75,6 @@ class ProductService extends BaseService
         return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Upload at least one product picture.');
       }
 
-      if(optional($product->store)->published !== true) {
-        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Publish your store first.');
-      }
-
       $product->update(['published' => (boolean)$request->published]);
       return Responser::send(Status::HTTP_OK, $product, 'Operation successful.');
     } catch (Exception $e) {
