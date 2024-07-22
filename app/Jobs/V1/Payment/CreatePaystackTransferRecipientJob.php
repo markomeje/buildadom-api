@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Jobs\V1\Payment;
-use App\Enums\Queue\QueueEnum;
+use App\Enums\QueuedJobEnum;
 use App\Integrations\Paystack;
 use App\Models\Bank\BankAccount;
 use Illuminate\Bus\Queueable;
@@ -21,7 +21,7 @@ class CreatePaystackTransferRecipientJob implements ShouldQueue
    */
   public function __construct()
   {
-    $this->onQueue(QueueEnum::PAYMENT->value);
+    $this->onQueue(QueuedJobEnum::PAYMENT->value);
   }
 
   /**

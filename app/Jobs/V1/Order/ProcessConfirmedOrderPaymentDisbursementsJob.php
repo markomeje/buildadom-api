@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Jobs\V1\Order;
-use App\Enums\Queue\QueueEnum;
+use App\Enums\QueuedJobEnum;
 use App\Jobs\V1\Order\HandleConfirmedOrderPaymentJob;
 use App\Models\Order\OrderDelivery;
 use App\Traits\V1\Escrow\EscrowAccountTrait;
@@ -23,7 +23,7 @@ class ProcessConfirmedOrderPaymentDisbursementsJob implements ShouldQueue
    */
   public function __construct()
   {
-    $this->onQueue(QueueEnum::ORDER->value);
+    $this->onQueue(QueuedJobEnum::ORDER->value);
   }
 
   /**

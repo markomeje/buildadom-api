@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Jobs\V1\Order;
-use App\Enums\Queue\QueueEnum;
+use App\Enums\QueuedJobEnum;
 use App\Models\Order\Order;
 use App\Notifications\V1\Order\CustomerPendingOrderReminderNotification;
 use Illuminate\Bus\Queueable;
@@ -21,7 +21,7 @@ class CustomerPendingOrderReminderJob implements ShouldQueue
    */
   public function __construct()
   {
-    $this->onQueue(QueueEnum::ORDER->value);
+    $this->onQueue(QueuedJobEnum::ORDER->value);
   }
 
   /**

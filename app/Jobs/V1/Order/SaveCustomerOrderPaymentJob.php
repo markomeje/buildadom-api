@@ -2,7 +2,7 @@
 
 namespace App\Jobs\V1\Order;
 use App\Enums\Order\OrderPaymentStatusEnum;
-use App\Enums\Queue\QueueEnum;
+use App\Enums\QueuedJobEnum;
 use App\Models\Order\OrderPayment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -21,7 +21,7 @@ class SaveCustomerOrderPaymentJob implements ShouldQueue
    */
   public function __construct(private $orders, private $customer_id, private $payment_id)
   {
-    $this->onQueue(QueueEnum::ORDER->value);
+    $this->onQueue(QueuedJobEnum::ORDER->value);
   }
 
   /**

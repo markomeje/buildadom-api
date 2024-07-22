@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Jobs\V1\Order;
-use App\Enums\Queue\QueueEnum;
+use App\Enums\QueuedJobEnum;
 use App\Models\Order\Order;
 use App\Notifications\V1\Order\CustomerConfirmOrderDeliveryNotification;
 use App\Traits\V1\Order\OrderDeliveryTrait;
@@ -22,8 +22,7 @@ class HandleMerchantDeliveredOrderJob implements ShouldQueue
    */
   public function __construct(private Order $order)
   {
-    $this->order = $order;
-    $this->onQueue(QueueEnum::ORDER->value);
+    $this->onQueue(QueuedJobEnum::ORDER->value);
   }
 
   /**
