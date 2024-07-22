@@ -32,10 +32,10 @@ class CreatePaystackTransferRecipientJob implements ShouldQueue
   public function handle()
   {
     $accounts = BankAccount::where(['transfer_recipient_created' => 0, 'recipient_code' => null])->get();
-    if ($accounts->count()) {
-      foreach ($accounts as $account) {
-        $this->handleRecipientCreation($account);
-      }
+    if($accounts->count()) {
+      $accounts->map(function($account) {
+        $this->createRecipient($account);
+      });
     }
   }
 
@@ -43,7 +43,7 @@ class CreatePaystackTransferRecipientJob implements ShouldQueue
    * @param BankAccount $account
    * @return void
    */
-  private function handleRecipientCreation($account)
+  private function createRecipient($account)
   {
     $result = Paystack::payment()->createRecipient($account);
     if(($result['status'] ?? 0)) {

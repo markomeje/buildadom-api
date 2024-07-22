@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class PaystackWebhookController extends Controller
 {
   /**
-   * @param PaystackWebhookService $PaystackWebhookService
+   * @param PaystackWebhookService $paystackWebhook
    */
   public function __construct(private PaystackWebhookService $paystackWebhook)
   {
