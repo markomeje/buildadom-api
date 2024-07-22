@@ -34,6 +34,7 @@ class ProductImageService extends BaseService
 
       $image_url = $this->uploadToS3($request->file('image'));
       $role = strtolower($request->role);
+
       if($this->productHasMainImage($product_id) && ($role == strtolower(ProductImageRoleEnum::MAIN->value))) {
         $role = ProductImageRoleEnum::OTHERS->value;
       }
@@ -61,6 +62,10 @@ class ProductImageService extends BaseService
       $product_image = ProductImage::owner()->find($id);
       if(empty($product_image)) {
         return Responser::send(Status::HTTP_NOT_FOUND, $product_image, 'Product image not found. Try again.');
+      }
+
+      if(strtolower($product_image->role) == strtolower(ProductImageRoleEnum::MAIN->value)) {
+        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Operation not allowed. You can only change a main image.');
       }
 
       $this->deleteFileFromS3($product_image->url);
