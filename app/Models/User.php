@@ -4,6 +4,7 @@ namespace App\Models;
 use App\Models\Bank\BankAccount;
 use App\Models\Business\BusinessProfile;
 use App\Models\Email\EmailVerification;
+use App\Models\Escrow\EscrowAccount;
 use App\Models\Phone\PhoneVerification;
 use App\Models\Store\Store;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -160,6 +161,14 @@ class User extends Authenticatable implements JWTSubject
   public function bank(): HasOne
   {
     return $this->hasOne(BankAccount::class, 'user_id');
+  }
+
+  /**
+   * @return HasOne
+   */
+  public function escrow(): HasOne
+  {
+    return $this->hasOne(EscrowAccount::class, 'user_id');
   }
 
 }

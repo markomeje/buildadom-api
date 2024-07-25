@@ -101,14 +101,6 @@ class Payment extends Model
   /**
    * @return BelongsTo
    */
-  public function escrow(): BelongsTo
-  {
-    return $this->belongsTo(EscrowAccount::class, 'payment_id');
-  }
-
-  /**
-   * @return BelongsTo
-   */
   public function currency(): BelongsTo
   {
     return $this->belongsTo(Currency::class, 'currency_id');
