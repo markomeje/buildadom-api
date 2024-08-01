@@ -7,12 +7,14 @@ header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 use App\Http\Controllers\V1\Bank\NigerianBankController;
 use App\Http\Controllers\V1\Country\CountryController;
 use App\Http\Controllers\V1\Currency\CurrencyController;
+use App\Http\Controllers\V1\Logistics\LogisticsCompanyController;
 use App\Http\Controllers\V1\Payment\PaystackWebhookController;
 use App\Http\Controllers\V1\Product\ProductCategoryController;
 use App\Http\Controllers\V1\Product\ProductController;
 use App\Http\Controllers\V1\Product\ProductUnitController;
 use App\Http\Controllers\V1\Store\StoreController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -66,6 +68,14 @@ Route::middleware([])->domain(env('API_URL'))->prefix('v1')->group(function() {
     Route::prefix('store')->group(function() {
       Route::get('/list', [StoreController::class, 'list']);
       Route::get('/show/{id}', [StoreController::class, 'show']);
+    });
+
+    Route::prefix('logistics')->group(function() {
+      Route::prefix('company')->group(function() {
+        Route::post('/create', [LogisticsCompanyController::class, 'create']);
+        Route::post('/update', [LogisticsCompanyController::class, 'update']);
+        Route::get('/list', [LogisticsCompanyController::class, 'list']);
+      });
     });
   });
   Route::any('/webhook', [PaystackWebhookController::class, 'webhook']);

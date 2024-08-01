@@ -30,7 +30,6 @@ trait FileUploadTrait
   /**
    * @param UploadedFile $file
    * @param string|null $previous_file
-   * @param bool $is_local
    * @return string
    */
   private function uploadFile(UploadedFile $file, mixed $disk, string|null $previous_file = null): string
