@@ -1,0 +1,43 @@
+# Use the specified PHP version with the CLI variant as the base image
+FROM public.ecr.aws/f4e5u5e7/php8.2-cli:latest
+
+# Update package lists and install necessary dependencies
+RUN apt-get update -y \
+    && apt-get install -y unzip libpq-dev libcurl4-gnutls-dev \
+                        libpng-dev libjpeg-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions: pdo, pdo_mysql, bcmath, and redis
+RUN docker-php-ext-install pdo pdo_mysql bcmath gd \
+    && pecl install -o -f redis \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable redis
+
+RUN docker-php-ext-install exif
+
+# Set the working directory to /var/www
+WORKDIR /var/www
+
+# Copy the application code into the image
+COPY . .
+
+# Install composer
+COPY --from=composer:2.5.8 /usr/bin/composer /usr/bin/composer
+
+ENTRYPOINT ["docker/entry.sh"]
+
+# Run Artisan commands for configuration and setup
+RUN php artisan optimize
+RUN php artisan key:generate
+RUN php artisan migrate
+RUN php artisan cache:clear
+RUN php artisan config:clear
+RUN php artisan route:clear
+
+#RUN php artisan queue:work
+
+# Expose port 8000 for the Laravel application
+EXPOSE 8000
+
+# Start the application using the Laravel built-in server
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

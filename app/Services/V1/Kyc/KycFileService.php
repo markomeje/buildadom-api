@@ -1,12 +1,11 @@
 <?php
 
 namespace App\Services\V1\Kyc;
-use App\Actions\UploadImageAction;
 use App\Enums\Kyc\KycFileStatusEnum;
-use App\Enums\Kyc\KycVerificationStatusEnum;
 use App\Models\Kyc\KycFile;
 use App\Models\Kyc\KycVerification;
 use App\Services\BaseService;
+use App\Traits\V1\FileUploadTrait;
 use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
@@ -16,6 +15,7 @@ use Illuminate\Http\Request;
 
 class KycFileService extends BaseService
 {
+  use FileUploadTrait;
 
   /**
    * Initialize kyc verification
@@ -40,14 +40,7 @@ class KycFileService extends BaseService
         return $this->change((int)$kyc_file->id, $request);
       }
 
-      $file = $request->file('kyc_file');
-      $uploaded = UploadImageAction::handle($file);
-      $uploaded_file = $uploaded['url'] ?? null;
-
-      if(empty($uploaded_file)) {
-        return Responser::send(Status::HTTP_BAD_REQUEST, [], 'File upload failed. Try again.');
-      }
-
+      $uploaded_file = $this->uploadToS3($request->file('kyc_file'));
       $kyc_verification = KycVerification::find($kyc_verification_id);
       $document_name = $kyc_verification->documentType ? optional($kyc_verification->documentType)->name : '';
 
@@ -58,7 +51,7 @@ class KycFileService extends BaseService
         'status' => KycFileStatusEnum::PENDING->value,
         'user_id' => $user_id,
         'kyc_verification_id' => $kyc_verification_id,
-        'extras' => ['filename' => $uploaded['filename'] ?? '']
+        'extras' => null
       ]);
 
       return Responser::send(Status::HTTP_OK, $kyc_file, 'Operation successful.');
@@ -91,18 +84,9 @@ class KycFileService extends BaseService
         return Responser::send(Status::HTTP_BAD_REQUEST, [], 'Operation not allowed. Uploaded file is already accepted.');
       }
 
-      $file = $request->file('kyc_file');
       $previous_file = optional($kyc_file->extras)->filename;
-      $uploaded = UploadImageAction::handle($file, $previous_file);
-      $uploaded_file = $uploaded['url'] ?? null;
-
-      if(empty($uploaded_file)) {
-        return Responser::send(Status::HTTP_BAD_REQUEST, [], 'File upload failed. Try again.');
-      }
-
-      $kyc_file->uploaded_file = $uploaded_file;
-      $kyc_file->status = KycFileStatusEnum::PENDING->value;
-      $kyc_file->extras = ['filename' => $uploaded['filename'] ?? ''];
+      $kyc_file->uploaded_file = $this->uploadToS3($request->file('kyc_file'), $previous_file);
+      $kyc_file->status = KycFileStatusEnum::PENDING->value;;
       $kyc_file->update();
       return Responser::send(Status::HTTP_OK, $kyc_file, 'Operation successful.');
     } catch (Exception $e) {
@@ -128,8 +112,6 @@ class KycFileService extends BaseService
         return Responser::send(Status::HTTP_BAD_REQUEST, [], 'Operation not allowed. Accepted file cannot be deleted.');
       }
 
-      $extras = optional($kyc_file)->extras;
-      UploadImageAction::delete(optional($extras)->filename);
       $kyc_file->delete();
       return Responser::send(Status::HTTP_OK, null, 'Operation successful.');
     } catch (Exception $e) {
