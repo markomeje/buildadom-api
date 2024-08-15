@@ -24,7 +24,8 @@ class UpdateLogisticsCompanyRequest extends FormRequest
   public function rules()
   {
     return [
-      'plate_number' => ['required', 'string', 'max:50'],
+      'name' => ['required', 'string', 'max:250', Rule::unique('logistics_companies')->ignore($this->id)],
+      'plate_number' => ['required', 'string', 'max:50', Rule::unique('logistics_companies')->ignore($this->id)],
       'city_id' => ['required', Rule::exists('cities', 'id')],
       'state_id' => ['required', Rule::exists('states', 'id')],
       'phone_number' => ['required', 'string'],

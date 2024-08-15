@@ -14,6 +14,7 @@ class LogisticsCompany extends Model
    * @var array<int, string>
    */
   protected $fillable = [
+    'name',
     'plate_number',
     'drivers_license',
     'vehicle_picture',
@@ -27,11 +28,14 @@ class LogisticsCompany extends Model
     'country_id',
     'state_id',
     'status',
+    'is_verified',
+    'verified_at',
     'extras',
     'reference',
   ];
 
   public $casts = [
-    'extras' => 'json'
+    'extras' => 'json',
+    'is_verified' => 'boolean',
   ];
 }

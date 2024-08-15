@@ -24,6 +24,7 @@ class CreateLogisticsCompanyRequest extends FormRequest
   public function rules()
   {
     return [
+      'name' => ['required', 'string', 'max:250', Rule::unique('logistics_companies')],
       'plate_number' => ['required', 'string', Rule::unique('logistics_companies')],
       'drivers_license' => ['required', 'file', 'mimes:jpg,jpeg,png'],
       'vehicle_picture' => ['required', 'file', 'mimes:jpg,jpeg,png'],

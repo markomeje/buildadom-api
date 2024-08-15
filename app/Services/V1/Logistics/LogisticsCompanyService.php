@@ -26,6 +26,7 @@ class LogisticsCompanyService extends BaseService
     try {
 
       $logistics_company = LogisticsCompany::create([
+        'name' => $request->name,
         'vehicle_picture' => $this->uploadToS3($request->file('vehicle_picture')),
         'drivers_license' => $this->uploadToS3($request->file('drivers_license')),
         'driver_picture' => $this->uploadToS3($request->file('driver_picture')),
@@ -74,6 +75,7 @@ class LogisticsCompanyService extends BaseService
       }
 
       $logistics_company->update([
+        'name' => $request->name,
         'state_id' => $request->state_id,
         'plate_number' => $request->plate_number,
         'city_id' => $request->city_id,
@@ -92,7 +94,7 @@ class LogisticsCompanyService extends BaseService
   private function generateLogisticsCompanyReference()
   {
     do {
-      $reference = str()->random(32);
+      $reference = str()->random(64);
     } while (LogisticsCompany::where('reference', $reference)->exists());
     return $reference;
   }
