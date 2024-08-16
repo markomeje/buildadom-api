@@ -33,6 +33,8 @@ Route::middleware([])->group(function() {
 
   Route::prefix('logistics')->group(function() {
     Route::prefix('company')->group(function() {
+      Route::post('/create', [LogisticsCompanyController::class, 'create']);
+      Route::post('/update', [LogisticsCompanyController::class, 'update']);
       Route::get('/list', [LogisticsCompanyController::class, 'list']);
     });
   });

@@ -12,9 +12,6 @@ use App\Http\Controllers\V1\Merchant\Store\StoreUploadController;
 use Illuminate\Support\Facades\Route;
 
 
-
-
-
 Route::post('/signup', [MerchantSignupController::class, 'signup']);
 
 Route::middleware(['auth:api', 'merchants.only'])->group(function() {
