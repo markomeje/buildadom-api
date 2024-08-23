@@ -38,7 +38,7 @@ class PaystackWebhookService extends BaseService
 
       $payment = Payment::where('reference', $paystack['reference'])->first();
       if(empty($payment)) {
-        LogDeveloperInfoJob::dispatch("Invalid paystack payment reference");
+        LogDeveloperInfoJob::dispatch("Invalid paystack payment reference".$paystack['reference']);
         exit();
       }
 
