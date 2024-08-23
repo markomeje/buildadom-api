@@ -28,7 +28,8 @@ class PaystackWebhookService extends BaseService
         exit();
       }
 
-      if($request->server('HTTP_X_PAYSTACK_SIGNATURE') !== hash_hmac('sha512', json_encode($payload), config('services.paystack.secret_key'))) {
+      $input = @file_get_contents("php://input");
+      if($request->server('HTTP_X_PAYSTACK_SIGNATURE') !== hash_hmac('sha512', $input, config('services.paystack.secret_key'))) {
         LogDeveloperInfoJob::dispatch("Invalid paystack signature");
         exit();
       }
