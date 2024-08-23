@@ -11,21 +11,27 @@ class LoginController extends Controller
 {
 
   /**
-   * @param LoginService $login
+   * @param LoginService $loginService
    */
-  public function __construct(private LoginService $login)
+  public function __construct(private LoginService $loginService)
   {
-    $this->login = $login;
+    $this->loginService = $loginService;
   }
 
   /**
-   * Auth a valid user
-   *
    * @param LoginRequest $request
    * @return JsonResponse
    */
   public function login(LoginRequest $request): JsonResponse
   {
-    return $this->login->signin($request);
+    return $this->loginService->signin($request);
+  }
+
+  /**
+   * @return JsonResponse
+   */
+  public function logout(): JsonResponse
+  {
+    return $this->loginService->logout();
   }
 }

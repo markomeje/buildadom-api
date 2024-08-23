@@ -10,6 +10,8 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class LoginService extends BaseService
 {
@@ -50,6 +52,17 @@ class LoginService extends BaseService
       return responser()->send(Status::HTTP_OK, ['user' => auth()->user(), 'token' => $token], 'Login successful');
     } catch (Exception $e) {
       return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Ooops! login failed. Try again.');
+    }
+  }
+
+  public function logout()
+  {
+    try {
+      $token = JWTAuth::getToken();
+      JWTAuth::invalidate($token);
+      return responser()->send(Status::HTTP_OK, null, 'User logged out successfully');
+    } catch (JWTException $e) {
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Failed to log out user');
     }
   }
 }
