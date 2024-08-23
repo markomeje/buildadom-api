@@ -9,9 +9,6 @@ use App\Http\Controllers\V1\Kyc\KycVerificationController;
 use App\Http\Controllers\V1\Phone\PhoneVerificationController;
 use Illuminate\Support\Facades\Route;
 
-
-
-
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout']);
 

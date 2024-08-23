@@ -2,7 +2,7 @@
 
 namespace App\Services\V1\Customer\Order;
 use App\Http\Resources\V1\Order\OrderFulfillmentResource;
-use App\Jobs\V1\Order\HandleMerchantDeliveredOrderConfirmedJob;
+use App\Jobs\V1\Order\HandleMerchantFulfilledOrderConfirmedJob;
 use App\Models\Order\OrderFulfillment;
 use App\Services\BaseService;
 use App\Traits\V1\Order\OrderFulfillmentTrait;
@@ -32,7 +32,7 @@ class OrderFulfillmentService extends BaseService
       $this->handleFulfilledOrderConfirmationChecks($order_fulfillment);
 
       $confirmed_fulfillment = $this->confirmFilfilledOrder($order_fulfillment);
-      HandleMerchantDeliveredOrderConfirmedJob::dispatch($confirmed_fulfillment);
+      HandleMerchantFulfilledOrderConfirmedJob::dispatch($confirmed_fulfillment);
       return responser()->send(Status::HTTP_OK, new OrderFulfillmentResource($confirmed_fulfillment), 'Operation successful.');
     } catch (Exception $e) {
       return responser()->send($e->getCode(), null, $e->getMessage());

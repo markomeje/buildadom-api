@@ -3,14 +3,14 @@
 namespace App\Jobs\V1\Order;
 use App\Enums\QueuedJobEnum;
 use App\Models\Order\OrderFulfillment;
-use App\Notifications\V1\Order\MerchantDeliveredOrderConfirmedNotification;
+use App\Notifications\V1\Order\MerchantFulfilledOrderConfirmedNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class HandleMerchantDeliveredOrderConfirmedJob implements ShouldQueue
+class HandleMerchantFulfilledOrderConfirmedJob implements ShouldQueue
 {
   use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,7 +32,7 @@ class HandleMerchantDeliveredOrderConfirmedJob implements ShouldQueue
   public function handle()
   {
     $order = $this->order_fulfillment->order;
-    $order->store->merchant->notify(new MerchantDeliveredOrderConfirmedNotification($order->tracking_number));
+    $order->store->merchant->notify(new MerchantFulfilledOrderConfirmedNotification($order->tracking_number));
     ProcessConfirmedOrderPaymentDisbursementsJob::dispatch($this->order_fulfillment);
   }
 

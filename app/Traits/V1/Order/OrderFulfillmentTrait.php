@@ -54,7 +54,7 @@ trait OrderFulfillmentTrait
    */
   private function confirmFilfilledOrder(OrderFulfillment $order_fulfillment)
   {
-    $order_fulfillment->update(['confirmation_code' => null, 'is_confirmed' => 1, 'confirmed_at' => Carbon::now(), 'payment_authorized' => 1, 'status' => strtolower(OrderFulfillmentStatusEnum::CONFIRMED->value)]);
+    $order_fulfillment->update(['confirmation_code' => null, 'is_confirmed' => 1, 'confirmed_at' => Carbon::now(), 'status' => strtolower(OrderFulfillmentStatusEnum::CONFIRMED->value), 'payment_authorized' => 1]);
     return $order_fulfillment;
   }
 

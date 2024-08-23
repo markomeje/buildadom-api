@@ -44,7 +44,7 @@ class CustomerConfirmOrderFulfilledNotification extends Notification implements 
     return (new MailMessage)
       ->subject('Buildadom Order Fulfillment Confirmation Required')
       ->line('Dear valued Customer,')
-      ->line("Kindly confirm the fulfillment of order ($this->tracking_number) with the confirmation code below:")
+      ->line("Kindly confirm the fulfillment of order $this->tracking_number with the confirmation code below:")
       ->line("Confirmation code: $this->confirmation_code")
       ->line('Thank you for choosing our platform');
   }
