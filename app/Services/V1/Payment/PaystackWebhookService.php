@@ -36,9 +36,10 @@ class PaystackWebhookService extends BaseService
       $payload = json_decode($input, true, 512);
       $paystack = $payload['data'];
 
-      $payment = Payment::where('reference', $paystack['reference'])->first();
+      $payment = Payment::where(['reference' => $paystack['reference']])->first();
+      LogDeveloperInfoJob::dispatch(json_encode(['payment' => $payment, 'payload' => $payload, 'paystack' => $paystack]));
       if(empty($payment)) {
-        LogDeveloperInfoJob::dispatch("Invalid paystack payment reference".$paystack['reference']);
+        LogDeveloperInfoJob::dispatch("Invalid paystack payment reference");
         exit();
       }
 
@@ -50,8 +51,7 @@ class PaystackWebhookService extends BaseService
       $payment->update($data);
       http_response_code(200);
     } catch (Exception $e) {
-      $message = $e->getMessage();
-      LogDeveloperInfoJob::dispatch("An exception from Paystack webhook - $message");
+      LogDeveloperInfoJob::dispatch($e->getMessage());
       exit();
     }
   }
