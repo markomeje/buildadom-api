@@ -3,7 +3,6 @@
 namespace App\Services\V1\Payment;
 use App\Jobs\LogDeveloperInfoJob;
 use App\Jobs\V1\Payment\HandlePaystackWebhookEventJob;
-use App\Models\Payment\Payment;
 use App\Services\BaseService;
 use Exception;
 use Illuminate\Http\Request;
