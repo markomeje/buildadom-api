@@ -49,10 +49,10 @@ class CustomerSignupService extends BaseService
       (new EmailVerificationService())->send($user);
 
       DB::commit();
-      return Responser::send(Status::HTTP_CREATED, ['token' => auth()->login($user), 'user' => $user], 'Signup successful. Verification detials has been sent.');
+      return responser()->send(Status::HTTP_CREATED, ['token' => auth()->login($user), 'user' => $user], 'Signup successful. Verification detials has been sent.');
     } catch (Exception $e) {
       DB::rollback();
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Oooops! singup failed. Try again.');
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Oooops! singup failed. Try again.');
     }
   }
 

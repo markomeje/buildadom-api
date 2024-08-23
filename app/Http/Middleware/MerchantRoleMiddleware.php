@@ -19,7 +19,7 @@ class MerchantRoleMiddleware
   {
     $roles = auth()->user()->roles->pluck('name')->toArray();
     if(!in_array(strtolower(UserRoleEnum::MERCHANT->value), $roles)) {
-      return Responser::send(Status::HTTP_UNAUTHORIZED, null, 'Operation not allowed. Unauthorized entry');
+      return responser()->send(Status::HTTP_UNAUTHORIZED, null, 'Operation not allowed. Unauthorized entry');
     }
 
     return $next($request);

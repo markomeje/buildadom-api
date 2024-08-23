@@ -33,9 +33,9 @@ class ProductService extends BaseService
         'published' => false,
       ]);
 
-      return Responser::send(Status::HTTP_OK, $product, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $product, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage(), $e);
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage(), $e);
     }
   }
 
@@ -53,9 +53,9 @@ class ProductService extends BaseService
           'images',
           'store',
         ])->paginate($request->limit ?? 20);
-      return Responser::send(Status::HTTP_OK, $products, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $products, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
   }
 
@@ -68,17 +68,17 @@ class ProductService extends BaseService
     try {
       $product = Product::owner()->with(['images'])->find($id);
       if(empty($product)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Product record not found. Try again.');
+        return responser()->send(Status::HTTP_NOT_FOUND, null, 'Product record not found. Try again.');
       }
 
       if(!$product->images()->exists()) {
-        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Upload at least one product picture.');
+        return responser()->send(Status::HTTP_NOT_ACCEPTABLE, null, 'Upload at least one product picture.');
       }
 
       $product->update(['published' => (boolean)$request->published]);
-      return Responser::send(Status::HTTP_OK, $product, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $product, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
   }
 
@@ -102,12 +102,12 @@ class ProductService extends BaseService
       ])->find($id);
 
       if(empty($product)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Product record not found. Try again.');
+        return responser()->send(Status::HTTP_NOT_FOUND, null, 'Product record not found. Try again.');
       }
 
-      return Responser::send(Status::HTTP_OK, $product, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $product, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
   }
 
@@ -121,7 +121,7 @@ class ProductService extends BaseService
     try {
       $product = Product::owner()->with(['images'])->find($id);
       if(empty($product)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, $product, 'Product record not found. Try again.');
+        return responser()->send(Status::HTTP_NOT_FOUND, $product, 'Product record not found. Try again.');
       }
 
       $product->update([
@@ -136,9 +136,9 @@ class ProductService extends BaseService
         'tags' => $request->tags,
       ]);
 
-      return Responser::send(Status::HTTP_OK, $product, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $product, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
   }
 }

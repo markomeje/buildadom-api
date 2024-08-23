@@ -29,9 +29,9 @@ class KycVerificationService extends BaseService
         [...$request->all(), 'status' => KycVerificationStatusEnum::PENDING->value, 'user_id' => $user_id]
       );
 
-      return Responser::send(Status::HTTP_OK, $kycVerification, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $kycVerification, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
     }
   }
 
@@ -42,9 +42,9 @@ class KycVerificationService extends BaseService
   {
     try {
       $kyc_verification = KycVerification::with(['kycFiles'])->where(['user_id' => auth()->id()])->first();
-      return Responser::send(Status::HTTP_OK, $kyc_verification, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $kyc_verification, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
     }
   }
 

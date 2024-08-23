@@ -44,7 +44,7 @@ class CountryController extends Controller
   {
     $country_id = $request->country_id ?? 0;
     $states = State::where('country_id', $country_id)->get();
-    return Responser::send(Status::HTTP_OK, $states, 'Country states fetched successfully');
+    return responser()->send(Status::HTTP_OK, $states, 'Country states fetched successfully');
   }
 
   /**
@@ -55,7 +55,7 @@ class CountryController extends Controller
   {
     $country_id = $request->country_id ?? 0;
     $cities = City::where('country_id', $country_id)->get();
-    return Responser::send(Status::HTTP_OK, $cities, 'Country cities fetched successfully');
+    return responser()->send(Status::HTTP_OK, $cities, 'Country cities fetched successfully');
   }
 
 }

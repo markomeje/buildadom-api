@@ -1,14 +1,13 @@
 <?php
 
 namespace App\Http\Requests\V1\Customer\Order;
-use App\Utility\Responser;
 use App\Utility\Status;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class ConfirmOrderDeliveryRequest extends FormRequest
+class ConfirmOrderFulfillmentRequest extends FormRequest
 {
 
   /**
@@ -29,20 +28,10 @@ class ConfirmOrderDeliveryRequest extends FormRequest
   public function rules()
   {
     return [
-      'confirmation_code' => ['required', Rule::exists('order_deliveries', 'confirmation_code')],
-      'order_id' => ['required', Rule::exists('order_deliveries', 'order_id')],
+      'confirmation_code' => ['required', Rule::exists('order_fulfillments', 'confirmation_code')],
+      'order_id' => ['required', 'int'],
       'payment_authorized' => ['required', 'int']
     ];
-  }
-
-  /**
- * Custom message for validation
- *
- * @return array
- */
-  public function messages()
-  {
-    return [];
   }
 
   /**
@@ -54,7 +43,7 @@ class ConfirmOrderDeliveryRequest extends FormRequest
    */
   protected function failedValidation(Validator $validator)
   {
-    $response = Responser::send(Status::HTTP_UNPROCESSABLE_ENTITY, [
+    $response = responser()->send(Status::HTTP_UNPROCESSABLE_ENTITY, [
       'errors' => $validator->errors()
     ], 'Please check your inputs.');
 

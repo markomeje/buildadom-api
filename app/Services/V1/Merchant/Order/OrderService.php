@@ -27,21 +27,16 @@ class OrderService extends BaseService
       $stores = auth()->user()->stores;
       $orders = Order::whereIn('store_id', $stores->pluck('id')->toArray())
         ->whereNotIn('status', [OrderStatusEnum::PENDING->value, OrderStatusEnum::CANCELLED->value])
-        ->with([
-          'currency',
-          'trackings',
-          'delivery',
-          'store',
-          'product' => function($query) {
-            $query->with(['images', 'category', 'unit', 'currency']);
-          },
-        ])
-        ->latest()->with(['currency', 'payment'])
+        ->with(['currency', 'trackings', 'fulfillment', 'store', 'product' => function($query) {
+          $query->with(['images', 'category', 'unit', 'currency']);
+        }])
+        ->latest()
+        ->with(['currency', 'payment'])
         ->paginate($request->limit ?? 20);
 
-      return Responser::send(Status::HTTP_OK, OrderResource::collection($orders), 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, OrderResource::collection($orders), 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
     }
   }
 
@@ -55,7 +50,7 @@ class OrderService extends BaseService
     try {
       $order = Order::find($id);
       if(empty($order)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Order not found');
+        return responser()->send(Status::HTTP_NOT_FOUND, null, 'Order not found');
       }
 
       $request_status = strtolower($request->status);
@@ -65,23 +60,23 @@ class OrderService extends BaseService
 
       $order_payment = OrderPayment::where(['order_id' => $order->id])->first();
       if(strtolower(optional($order_payment)->status) !== strtolower(OrderPaymentStatusEnum::PAID->value)) {
-        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, $order_payment, 'Only paid orders can be acted on.');
+        return responser()->send(Status::HTTP_NOT_ACCEPTABLE, $order_payment, 'Only paid orders can be acted on.');
       }
 
       $order_status = strtolower($order->status);
       if($order_status == strtolower(OrderStatusEnum::DECLINED->value)) {
-        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'You have already declined this order.');
+        return responser()->send(Status::HTTP_NOT_ACCEPTABLE, null, 'You have already declined this order.');
       }
 
       if($order_status !== strtolower(OrderStatusEnum::PLACED->value)) {
-        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Only placed others can be acted on.');
+        return responser()->send(Status::HTTP_NOT_ACCEPTABLE, null, 'Only placed others can be acted on.');
       }
 
       $order->update(['status' => strtolower($request_status)]);
       $order->customer->notify(new CustomerOrderStatusUpdateNotification($order));
-      return Responser::send(Status::HTTP_OK, new OrderResource($order), 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, new OrderResource($order), 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send($e->getCode(), null, $e->getMessage());
+      return responser()->send($e->getCode(), null, $e->getMessage());
     }
   }
 

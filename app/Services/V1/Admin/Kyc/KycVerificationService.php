@@ -26,7 +26,7 @@ class KycVerificationService extends BaseService
     try {
       $kyc_verification = KycVerification::with(['kycFiles'])->find($id);
       if(empty($kyc_verification)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Invalid Kyc verification record.');
+        return responser()->send(Status::HTTP_NOT_FOUND, null, 'Invalid Kyc verification record.');
       }
 
       $kyc_status = strtolower($request->status);
@@ -37,15 +37,15 @@ class KycVerificationService extends BaseService
       ];
 
       if(!in_array($kyc_status, $allowed_status)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Invalid Kyc verification status');
+        return responser()->send(Status::HTTP_NOT_FOUND, null, 'Invalid Kyc verification status');
       }
 
       $kyc_verification->update(['status' => $kyc_status]);
 
       $kyc_verification->user->notify(new AdminKycActionNotification($kyc_status));
-      return Responser::send(Status::HTTP_OK, $kyc_verification, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $kyc_verification, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Operation failed. Try again.');
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Operation failed. Try again.');
     }
   }
 
@@ -57,9 +57,9 @@ class KycVerificationService extends BaseService
   {
     try {
       $kyc_verifications = KycVerification::with(['kycFiles'])->paginate($request->limit ?? 20);
-      return Responser::send(Status::HTTP_OK, $kyc_verifications, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $kyc_verifications, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
     }
   }
 

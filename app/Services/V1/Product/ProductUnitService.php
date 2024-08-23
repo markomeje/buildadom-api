@@ -18,9 +18,9 @@ class ProductUnitService extends BaseService
   {
     try {
       $units = ProductUnit::latest()->get();
-      return Responser::send(Status::HTTP_OK, $units, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $units, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 

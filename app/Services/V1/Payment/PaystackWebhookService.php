@@ -17,36 +17,32 @@ class PaystackWebhookService extends BaseService
   public function webhook(Request $request)
   {
     try {
-      $payload = json_encode($request->all());
+      $payload = $request->all();
       if((strtolower($request->server('REQUEST_METHOD')) !== 'post')) {
-        LogDeveloperInfoJob::dispatch("Invalid paystack webhook request method - $payload");
+        LogDeveloperInfoJob::dispatch("Invalid paystack webhook request method");
         exit();
       }
 
       if(!array_key_exists('HTTP_X_PAYSTACK_SIGNATURE', $request->server())) {
-        LogDeveloperInfoJob::dispatch("Invalid paystack http server signature - $payload");
+        LogDeveloperInfoJob::dispatch("Invalid paystack http server signature");
         exit();
       }
 
-      $input = @file_get_contents("php://input");
-      $secret_key = config('services.paystack.secret_key');
-      if($request->server('HTTP_X_PAYSTACK_SIGNATURE') !== hash_hmac('sha512', $input, $secret_key)) {
-        LogDeveloperInfoJob::dispatch("Invalid paystack signature - $payload");
+      if($request->server('HTTP_X_PAYSTACK_SIGNATURE') !== hash_hmac('sha512', json_encode($payload), config('services.paystack.secret_key'))) {
+        LogDeveloperInfoJob::dispatch("Invalid paystack signature");
         exit();
       }
 
-      $result = json_decode($input);
-      $paystack = $result->data;
-
-      $payment = Payment::where('reference', $paystack->reference)->first();
+      $paystack = $payload['data'];
+      $payment = Payment::where('reference', $paystack['reference'] ?? null)->first();
       if(empty($payment)) {
-        LogDeveloperInfoJob::dispatch("Invalid paystack payment reference - $payload");
+        LogDeveloperInfoJob::dispatch("Invalid paystack payment reference");
         exit();
       }
 
-      $data = ['status' => $paystack->status, 'webhook_response' => $paystack];
-      if(in_array($result->event, $this->events()['transfer'])) {
-        $data = array_merge($data, ['transfer_code' => $paystack->transfer_code]);
+      $data = ['status' => $paystack['status'], 'webhook_response' => $paystack];
+      if(in_array($payload['event'], $this->events()['transfer'])) {
+        $data = array_merge($data, ['transfer_code' => $paystack['transfer_code']]);
       }
 
       $payment->update($data);

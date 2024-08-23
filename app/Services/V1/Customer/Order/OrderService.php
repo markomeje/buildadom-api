@@ -41,9 +41,9 @@ class OrderService extends BaseService
       }
 
       $orders = Order::owner()->isPending()->get();
-      return Responser::send(Status::HTTP_OK, OrderResource::collection($orders), 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, OrderResource::collection($orders), 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
     }
   }
 
@@ -58,12 +58,12 @@ class OrderService extends BaseService
         $query->where('status', $request->status);
       }
 
-      $orders = $query->with(['currency', 'trackings', 'delivery', 'product' => function($query) {
+      $orders = $query->with(['currency', 'trackings', 'fulfillment', 'product' => function($query) {
         $query->with(['images', 'category', 'unit', 'currency']);
       }, 'store'])->paginate($request->limit ?? 0);
-      return Responser::send(Status::HTTP_OK, OrderResource::collection($orders), 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, OrderResource::collection($orders), 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 
@@ -76,17 +76,17 @@ class OrderService extends BaseService
     try {
       $order = Order::owner()->find($id);
       if(empty($order)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Order not found.');
+        return responser()->send(Status::HTTP_NOT_FOUND, null, 'Order not found.');
       }
 
       if(strtolower($order->status) !== strtolower(OrderStatusEnum::PENDING->value)) {
-        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Only pending orders can be deleted.');
+        return responser()->send(Status::HTTP_NOT_ACCEPTABLE, null, 'Only pending orders can be deleted.');
       }
 
       $deleted = $order->delete();
-      return Responser::send(Status::HTTP_OK, ['deleted' => $deleted], 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, ['deleted' => $deleted], 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 
@@ -102,12 +102,12 @@ class OrderService extends BaseService
       }])->find($id);
 
       if(empty($order)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Order not found.');
+        return responser()->send(Status::HTTP_NOT_FOUND, null, 'Order not found.');
       }
 
-      return Responser::send(Status::HTTP_OK, new OrderResource($order), 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, new OrderResource($order), 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 
@@ -120,19 +120,19 @@ class OrderService extends BaseService
     try {
       $order = Order::owner()->find($id);
       if(empty($order)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, [], 'Order not found.');
+        return responser()->send(Status::HTTP_NOT_FOUND, null, 'Order not found.');
       }
 
       if(strtolower($order->status) !== strtolower(OrderStatusEnum::PENDING->value)) {
-        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Only pending orders can be cancelled.');
+        return responser()->send(Status::HTTP_NOT_ACCEPTABLE, null, 'Only pending orders can be cancelled.');
       }
 
-      $order->update(['status' => OrderStatusEnum::CANCELLED->value]);
+      $order->update(['status' => strtolower(OrderStatusEnum::CANCELLED->value)]);
       $order->customer->notify(new CustomerOrderStatusUpdateNotification($order));
 
-      return Responser::send(Status::HTTP_OK, null, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, null, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 

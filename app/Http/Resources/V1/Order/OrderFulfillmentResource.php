@@ -3,7 +3,7 @@
 namespace App\Http\Resources\V1\Order;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderDeliveryResource extends JsonResource
+class OrderFulfillmentResource extends JsonResource
 {
   /**
    * Transform the resource into an array.

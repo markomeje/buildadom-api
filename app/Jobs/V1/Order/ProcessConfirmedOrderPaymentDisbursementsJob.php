@@ -3,9 +3,9 @@
 namespace App\Jobs\V1\Order;
 use App\Enums\QueuedJobEnum;
 use App\Jobs\V1\Order\HandleConfirmedOrderPaymentJob;
-use App\Models\Order\OrderDelivery;
+use App\Models\Order\OrderFulfillment;
 use App\Traits\V1\Escrow\EscrowAccountTrait;
-use App\Traits\V1\Order\OrderDeliveryTrait;
+use App\Traits\V1\Order\OrderFulfillmentTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,7 +14,7 @@ use Illuminate\Queue\SerializesModels;
 
 class ProcessConfirmedOrderPaymentDisbursementsJob implements ShouldQueue
 {
-  use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, OrderDeliveryTrait, EscrowAccountTrait;
+  use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, OrderFulfillmentTrait, EscrowAccountTrait;
 
   /**
    * Create a new job instance.
@@ -33,10 +33,10 @@ class ProcessConfirmedOrderPaymentDisbursementsJob implements ShouldQueue
    */
   public function handle()
   {
-    $order_deliveries = OrderDelivery::where(['payment_processed' => 0, 'is_confirmed' => 1, 'payment_authorized' => 1])->get();
-    if($order_deliveries->count()) {
-      $order_deliveries->map(function ($order_delivery) {
-        HandleConfirmedOrderPaymentJob::dispatch($order_delivery);
+    $order_fulfillments = OrderFulfillment::where(['payment_processed' => 0, 'is_confirmed' => 1, 'payment_authorized' => 1])->get();
+    if($order_fulfillments->count()) {
+      $order_fulfillments->map(function ($order_fulfillment) {
+        HandleConfirmedOrderPaymentJob::dispatch($order_fulfillment);
       });
     }
   }

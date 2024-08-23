@@ -1,11 +1,9 @@
 <?php
 
 namespace App\Models\Order;
-
 use App\Enums\Order\OrderStatusEnum;
 use App\Models\Currency;
-use App\Models\Escrow\EscrowAccount;
-use App\Models\Order\OrderDelivery;
+use App\Models\Order\OrderFulfillment;
 use App\Models\Order\OrderPayment;
 use App\Models\Payment\Payment;
 use App\Models\Product\Product;
@@ -18,7 +16,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class Order extends Model
 {
@@ -147,9 +144,9 @@ class Order extends Model
   /**
    * @return HasOne
    */
-  public function delivery(): HasOne
+  public function fulfillment(): HasOne
   {
-    return $this->hasOne(OrderDelivery::class, 'order_id');
+    return $this->hasOne(OrderFulfillment::class, 'order_id');
   }
 
 }

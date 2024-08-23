@@ -3,7 +3,7 @@
 namespace App\Jobs\V1\Order;
 use App\Enums\Order\OrderStatusEnum;
 use App\Enums\QueuedJobEnum;
-use App\Jobs\V1\Order\HandleMerchantDeliveredOrderJob;
+use App\Jobs\V1\Order\HandleMerchantFulfilledOrderJob;
 use App\Models\Order\Order;
 use App\Notifications\V1\Order\CustomerOrderStatusUpdateNotification;
 use Illuminate\Bus\Queueable;
@@ -23,7 +23,6 @@ class CustomerOrderStatusUpdateJob implements ShouldQueue
    */
   public function __construct(private Order $order)
   {
-    $this->order = $order;
     $this->onQueue(QueuedJobEnum::ORDER->value);
   }
 
@@ -34,10 +33,9 @@ class CustomerOrderStatusUpdateJob implements ShouldQueue
    */
   public function handle()
   {
-    $order = $this->order;
-    $order->customer->notify(new CustomerOrderStatusUpdateNotification($order));
-    if(strtolower($order->status) == strtolower(OrderStatusEnum::DELIVERED->value)) {
-      HandleMerchantDeliveredOrderJob::dispatch($order);
+    $this->order->customer->notify(new CustomerOrderStatusUpdateNotification($this->order));
+    if(strtolower($this->order->status) === strtolower(OrderStatusEnum::FULFILLED->value)) {
+      HandleMerchantFulfilledOrderJob::dispatch($this->order);
     }
   }
 

@@ -18,9 +18,9 @@ class FeeSettingSeeder extends BaseService
   {
     try {
       $fees = FeeSetting::latest()->get();
-      return Responser::send(Status::HTTP_OK, $fees, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $fees, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
     }
   }
 

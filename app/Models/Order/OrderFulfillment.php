@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class OrderDelivery extends Model
+class OrderFulfillment extends Model
 {
   use HasFactory;
 
@@ -23,6 +23,7 @@ class OrderDelivery extends Model
     'order_id',
     'payment_processed',
     'is_confirmed',
+    'confirmed_at',
     'reference',
   ];
 

@@ -17,7 +17,7 @@ class JsonMiddleware
   public function handle(Request $request, Closure $next)
   {
     if(!in_array(strtolower($request->headers->get('accept')), ['application/json'])) {
-      return Responser::send(Status::HTTP_NOT_IMPLEMENTED, ['headers' => $request->headers], 'Please add `Accept: application/json` header.');
+      return responser()->send(Status::HTTP_NOT_IMPLEMENTED, ['headers' => $request->headers], 'Please add `Accept: application/json` header.');
     }
 
     return $next($request);

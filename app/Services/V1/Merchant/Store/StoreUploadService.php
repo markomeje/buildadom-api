@@ -25,16 +25,16 @@ class StoreUploadService extends BaseService
     try {
       $store = Store::find($store_id);
       if(empty($store)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, $store, 'Store record not found. Try again.');
+        return responser()->send(Status::HTTP_NOT_FOUND, $store, 'Store record not found. Try again.');
       }
 
       $file = $request->file('logo');
       $logo_url = $this->uploadToS3($file, $store->logo);
 
       $store->update(['logo' => $logo_url]);
-      return Responser::send(Status::HTTP_OK, $store, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $store, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
   }
 
@@ -48,16 +48,16 @@ class StoreUploadService extends BaseService
     try {
       $store = Store::find($store_id);
       if(empty($store)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, $store, 'Store record not found. Try again.');
+        return responser()->send(Status::HTTP_NOT_FOUND, $store, 'Store record not found. Try again.');
       }
 
       $file = $request->file('banner');
       $banner_url = $this->uploadToS3($file, $store->banner);
 
       $store->update(['banner' => $banner_url]);
-      return Responser::send(Status::HTTP_OK, $store, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $store, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
   }
 

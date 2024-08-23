@@ -27,9 +27,9 @@ class DispatchDriverService extends BaseService
         'lastname' => $request->lastname,
       ]);
 
-      return Responser::send(Status::HTTP_OK, $driver, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $driver, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
   }
 
@@ -40,9 +40,9 @@ class DispatchDriverService extends BaseService
   {
     try {
       $drivers = DispatchDriver::owner()->get();
-      return Responser::send(Status::HTTP_OK, $drivers, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $drivers, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e->getMessage());
     }
   }
 
@@ -55,7 +55,7 @@ class DispatchDriverService extends BaseService
     try {
       $driver = DispatchDriver::where(['id' => $request->id, 'user_id' => auth()->id()])->first();
       if(empty($driver)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, [], 'Driver not found');
+        return responser()->send(Status::HTTP_NOT_FOUND, [], 'Driver not found');
       }
 
       $driver->update([
@@ -64,9 +64,9 @@ class DispatchDriverService extends BaseService
         'lastname' => $request->lastname,
       ]);
 
-      return Responser::send(Status::HTTP_OK, $driver, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $driver, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
   }
 

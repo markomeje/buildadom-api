@@ -54,7 +54,7 @@ class LoginRequest extends FormRequest
    */
   protected function failedValidation(Validator $validator)
   {
-    $response = Responser::send(Status::HTTP_UNPROCESSABLE_ENTITY, [
+    $response = responser()->send(Status::HTTP_UNPROCESSABLE_ENTITY, [
       'errors' => $validator->errors()
     ], 'Please check your inputs.');
 

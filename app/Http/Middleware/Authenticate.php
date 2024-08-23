@@ -23,7 +23,7 @@ class Authenticate extends Middleware
 
   protected function unauthenticated($request, array $guards)
   {
-    abort(Responser::send(JsonResponse::HTTP_UNAUTHORIZED, ['user' => auth()->user()], 'Unauthenticated. Please login.'));
+    abort(responser()->send(JsonResponse::HTTP_UNAUTHORIZED, ['user' => auth()->user()], 'Unauthenticated. Please login.'));
   }
 
 }

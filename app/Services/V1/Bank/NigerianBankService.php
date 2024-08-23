@@ -19,9 +19,9 @@ class NigerianBankService extends BaseService
   {
     try {
       $banks = NigerianBank::orderBy('name', 'asc')->get();
-      return Responser::send(Status::HTTP_OK, $banks, 'Banks fetched successfully.');
+      return responser()->send(Status::HTTP_OK, $banks, 'Banks fetched successfully.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Unknown error. Try again.');
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Unknown error. Try again.');
     }
   }
 

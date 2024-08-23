@@ -3,12 +3,11 @@
 namespace App\Enums\Order;
 use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
-enum OrderDeliveryStatusEnum: string
+enum OrderFulfillmentStatusEnum: string
 {
   use UsefulEnums;
 
   case CONFIRMED = 'confirmed';
   case PENDING = 'pending';
-
 
 }

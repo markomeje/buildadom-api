@@ -1,35 +1,15 @@
 <?php
 
 namespace App\Traits\V1\Order;
-use App\Enums\Order\OrderDeliveryStatusEnum;
+use App\Enums\Order\OrderFulfillmentStatusEnum;
 use App\Enums\Order\OrderStatusEnum;
 use App\Models\Order\Order;
-use App\Models\Order\OrderDelivery;
+use App\Models\Order\OrderFulfillment;
 use App\Utility\Status;
 use Exception;
 
 trait OrderTrackingTrait
 {
-  /**
-   * @param Order $order
-   * @return OrderDelivery
-   */
-  public function saveOrderDelivery(Order $order, int $confirmation_code)
-  {
-    $order_id = $order->id;
-    return OrderDelivery::updateOrCreate([
-      'order_id' => $order_id,
-      'status' => OrderDeliveryStatusEnum::PENDING->value,
-      'customer_id' => $order->customer_id
-    ], [
-      'order_id' => $order_id,
-      'is_confirmed' => 0,
-      'customer_id' => $order->customer_id,
-      'status' => OrderDeliveryStatusEnum::PENDING->value,
-      'confirmation_code' => $confirmation_code,
-      'reference' => str()->uuid()
-    ]);
-  }
 
   /**
    * @param string $current_status
@@ -44,7 +24,7 @@ trait OrderTrackingTrait
     }elseif($current_status == OrderStatusEnum::PROCESSED->value) {
       $current_status = OrderStatusEnum::DISPATCHED->value;
     }else {
-      $current_status = OrderStatusEnum::DELIVERED->value;
+      $current_status = OrderStatusEnum::FULFILLED->value;
     }
 
     return $current_status;
@@ -57,9 +37,7 @@ trait OrderTrackingTrait
    */
   public function handleOrderTrackingChecks(string $current_status)
   {
-    if($current_status == strtolower(OrderStatusEnum::DELIVERED->value)) {
-      throw new Exception('Order has already been delivered.', Status::HTTP_NOT_ACCEPTABLE);
-    }elseif($current_status == strtolower(OrderStatusEnum::DECLINED->value)) {
+    if($current_status == strtolower(OrderStatusEnum::DECLINED->value)) {
       throw new Exception('Order has already been declined.', Status::HTTP_NOT_ACCEPTABLE);
     }elseif($current_status == strtolower(OrderStatusEnum::PLACED->value)) {
       throw new Exception('You need to accept or decline the order first.', Status::HTTP_NOT_ACCEPTABLE);

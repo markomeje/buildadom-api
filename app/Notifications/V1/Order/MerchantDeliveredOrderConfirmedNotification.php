@@ -23,7 +23,7 @@ class MerchantDeliveredOrderConfirmedNotification extends Notification implement
   }
 
   /**
-   * Get the notification's delivery channels.
+   * Get the notification's fulfillment channels.
    *
    * @param  mixed  $notifiable
    * @return array
@@ -42,8 +42,8 @@ class MerchantDeliveredOrderConfirmedNotification extends Notification implement
   public function toMail($notifiable)
   {
     return (new MailMessage)
-      ->subject('Buildadom Order Delivery Confirmation')
-      ->line("Your delivery of the order with tracking number $this->tracking_number has been confirmed.")
+      ->subject('Buildadom Order fulfillment Confirmation')
+      ->line("Your fulfillment of the order with tracking number $this->tracking_number has been confirmed.")
       ->line('Thank you for choosing our platform');
   }
 

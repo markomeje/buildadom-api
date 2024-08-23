@@ -46,9 +46,9 @@ class BankAccountService extends BaseService
       ]);
 
       CreatePaystackTransferRecipientJob::dispatch();
-      return Responser::send(Status::HTTP_OK, $account, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $account, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send($e->getCode(), null, $e->getMessage());
+      return responser()->send($e->getCode(), null, $e->getMessage());
     }
   }
 
@@ -59,9 +59,9 @@ class BankAccountService extends BaseService
   {
     try {
       $account = BankAccount::owner()->with(['bank'])->first();
-      return Responser::send(Status::HTTP_OK, $account, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $account, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
     }
   }
 

@@ -24,7 +24,7 @@ class CustomerOrderStatusUpdateNotification extends Notification implements Shou
   }
 
   /**
-   * Get the notification's delivery channels.
+   * Get the notification's fulfillment channels.
    *
    * @param  mixed  $notifiable
    * @return array

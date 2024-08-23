@@ -28,9 +28,9 @@ class EmailVerificationService extends BaseService
       $emailVerification = $this->saveVerificationDetail($code, $user);
 
       $user->notify(new EmailVerificationNotification($code));
-      return Responser::send(Status::HTTP_CREATED, [$emailVerification], 'Email verification code has been sent.');
+      return responser()->send(Status::HTTP_CREATED, [$emailVerification], 'Email verification code has been sent.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 
@@ -46,15 +46,15 @@ class EmailVerificationService extends BaseService
       $emailVerification = $this->getVerificationDetails();
       if(!empty($emailVerification)) {
         if($this->isVerified($emailVerification)) {
-          return Responser::send(Status::HTTP_OK, [], 'Your email is already verified.');
+          return responser()->send(Status::HTTP_OK, [], 'Your email is already verified.');
         }
       }
 
       $this->saveVerificationDetail($code, $user);
       $user->notify(new EmailVerificationNotification($code));
-      return Responser::send(Status::HTTP_CREATED, [], 'Your email verification code has been resent.');
+      return responser()->send(Status::HTTP_CREATED, [], 'Your email verification code has been resent.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 
@@ -72,19 +72,19 @@ class EmailVerificationService extends BaseService
     try {
       $emailVerification = $this->getVerificationDetails();
       if(empty($emailVerification)) {
-        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, [], 'Invalid email verification.');
+        return responser()->send(Status::HTTP_NOT_ACCEPTABLE, [], 'Invalid email verification.');
       }
 
       if($this->isVerified($emailVerification)) {
-        return Responser::send(Status::HTTP_OK, [], 'Your email is already verified.');
+        return responser()->send(Status::HTTP_OK, [], 'Your email is already verified.');
       }
 
       if($request->code !== $emailVerification->code) {
-        return Responser::send(Status::HTTP_FORBIDDEN, [], 'Invalid verification code.');
+        return responser()->send(Status::HTTP_FORBIDDEN, [], 'Invalid verification code.');
       }
 
       if($this->verificationExpired($emailVerification)) {
-        return Responser::send(Status::HTTP_FORBIDDEN, [], 'Expired verification code. Request another');
+        return responser()->send(Status::HTTP_FORBIDDEN, [], 'Expired verification code. Request another');
       }
 
       $emailVerification->update([
@@ -93,9 +93,9 @@ class EmailVerificationService extends BaseService
         'verified_at' => now()
       ]);
 
-      return Responser::send(Status::HTTP_OK, [$emailVerification], 'Your email has been verified.');
+      return responser()->send(Status::HTTP_OK, [$emailVerification], 'Your email has been verified.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 

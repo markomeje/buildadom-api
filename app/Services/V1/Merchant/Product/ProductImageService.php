@@ -30,7 +30,7 @@ class ProductImageService extends BaseService
       $product_id = $request->product_id;
       $product = Product::owner()->find($product_id);
       if(empty($product)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, $product, 'Product not found. Try again.');
+        return responser()->send(Status::HTTP_NOT_FOUND, $product, 'Product not found. Try again.');
       }
 
       $image_url = $this->uploadToS3($request->file('image'));
@@ -43,9 +43,9 @@ class ProductImageService extends BaseService
         'user_id' => auth()->id(),
       ]);
 
-      return Responser::send(Status::HTTP_OK, $product_image, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $product_image, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
   }
 
@@ -59,18 +59,18 @@ class ProductImageService extends BaseService
     try {
       $product_image = ProductImage::owner()->where(['product_id' => $request->product_id])->find($id);
       if(empty($product_image)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Product image not found. Try again.');
+        return responser()->send(Status::HTTP_NOT_FOUND, null, 'Product image not found. Try again.');
       }
 
       if(strtolower($product_image->role) == strtolower(ProductImageRoleEnum::MAIN->value)) {
-        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, null, 'Operation not allowed. You cannot delete a main image.');
+        return responser()->send(Status::HTTP_NOT_ACCEPTABLE, null, 'Operation not allowed. You cannot delete a main image.');
       }
 
       $this->deleteFileFromS3($product_image->url);
       $deleted = $product_image->delete();
-      return Responser::send(Status::HTTP_OK, $deleted, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $deleted, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
   }
 
@@ -84,7 +84,7 @@ class ProductImageService extends BaseService
     try {
       $product_image = ProductImage::owner()->where(['product_id' => $request->product_id])->find($id);
       if(empty($product_image)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, null, 'Product not found. Try again.');
+        return responser()->send(Status::HTTP_NOT_FOUND, null, 'Product not found. Try again.');
       }
 
       $image_url = $this->uploadToS3($request->file('image'), $product_image->url);
@@ -93,9 +93,9 @@ class ProductImageService extends BaseService
       }
 
       $product_image->update(['url' => $image_url]);
-      return Responser::send(Status::HTTP_OK, $product_image, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $product_image, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send($e->getCode(), null, $e->getMessage());
+      return responser()->send($e->getCode(), null, $e->getMessage());
     }
   }
 

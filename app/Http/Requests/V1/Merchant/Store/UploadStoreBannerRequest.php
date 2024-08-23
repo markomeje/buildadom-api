@@ -53,7 +53,7 @@ class UploadStoreBannerRequest extends FormRequest
    */
   protected function failedValidation(Validator $validator)
   {
-    $response = Responser::send(JsonResponse::HTTP_UNPROCESSABLE_ENTITY, [
+    $response = responser()->send(JsonResponse::HTTP_UNPROCESSABLE_ENTITY, [
       'errors' => $validator->errors()
     ], 'Kindly check the banner you are trying to upload.');
 

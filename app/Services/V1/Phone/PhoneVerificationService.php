@@ -31,9 +31,9 @@ class PhoneVerificationService extends BaseService
       ]);
 
       SmsSenderFacade::push($user, $message);
-      return Responser::send(Status::HTTP_CREATED, [], 'Phone verification code has been sent.');
+      return responser()->send(Status::HTTP_CREATED, [], 'Phone verification code has been sent.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 
@@ -56,9 +56,9 @@ class PhoneVerificationService extends BaseService
 
       $this->createPhoneVerificationDetail($code, $user);
       SmsSenderFacade::push($user, $message);
-      return Responser::send(Status::HTTP_CREATED, [], 'Your phone verification code has been resent.');
+      return responser()->send(Status::HTTP_CREATED, [], 'Your phone verification code has been resent.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 
@@ -76,19 +76,19 @@ class PhoneVerificationService extends BaseService
     try {
       $phoneVerification = $this->getUserLatestPhoneVerificationDetails();
       if(empty($phoneVerification)) {
-        return Responser::send(Status::HTTP_NOT_ACCEPTABLE, [], 'Invalid phone verification.');
+        return responser()->send(Status::HTTP_NOT_ACCEPTABLE, [], 'Invalid phone verification.');
       }
 
       if($this->phoneIsVerified($phoneVerification)) {
-        return Responser::send(Status::HTTP_OK, [], 'Your phone is already verified.');
+        return responser()->send(Status::HTTP_OK, [], 'Your phone is already verified.');
       }
 
       if($request->code !== $phoneVerification->code) {
-        return Responser::send(Status::HTTP_FORBIDDEN, [], 'Invalid verification code.');
+        return responser()->send(Status::HTTP_FORBIDDEN, [], 'Invalid verification code.');
       }
 
       if($this->phoneVerificationHasExpired($phoneVerification)) {
-        return Responser::send(Status::HTTP_FORBIDDEN, [], 'Expired verification code. Request another');
+        return responser()->send(Status::HTTP_FORBIDDEN, [], 'Expired verification code. Request another');
       }
 
       $phoneVerification->update([
@@ -97,9 +97,9 @@ class PhoneVerificationService extends BaseService
         'verified_at' => now()
       ]);
 
-      return Responser::send(Status::HTTP_OK, [$phoneVerification], 'Your phone number has been verified.');
+      return responser()->send(Status::HTTP_OK, [$phoneVerification], 'Your phone number has been verified.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 

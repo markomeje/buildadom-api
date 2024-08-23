@@ -31,9 +31,9 @@ class ShippingAddressService extends BaseService
       ]);
 
       $shipping->user->update(['address' => $address]);
-      return Responser::send(Status::HTTP_OK, $shipping, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $shipping, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
     }
   }
 
@@ -44,9 +44,9 @@ class ShippingAddressService extends BaseService
   {
     try {
       $address = ShippingAddress::owner()->first();
-      return Responser::send(Status::HTTP_OK, $address, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $address, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 

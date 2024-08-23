@@ -22,7 +22,7 @@ class MerchantOrderPaymentConfirmedNotification extends Notification implements 
   }
 
   /**
-   * Get the notification's delivery channels.
+   * Get the notification's fulfillment channels.
    *
    * @param  mixed  $notifiable
    * @return array

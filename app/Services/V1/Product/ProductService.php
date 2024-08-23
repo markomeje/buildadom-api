@@ -27,9 +27,9 @@ class ProductService extends BaseService
       }
 
       $products = $query->with(['unit', 'images', 'category', 'store', 'currency'])->paginate($request->limit ?? 20);
-      return Responser::send(Status::HTTP_OK, ProductResource::collection($products), 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, ProductResource::collection($products), 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 
@@ -41,9 +41,9 @@ class ProductService extends BaseService
   {
     try {
       $product = Product::published()->with(['images', 'unit', 'category', 'store'])->find($id);
-      return Responser::send(Status::HTTP_OK, $product, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $product, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 

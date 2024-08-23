@@ -56,7 +56,7 @@ class ChangeKycFileRequest extends FormRequest
    */
   protected function failedValidation(Validator $validator)
   {
-    $response = Responser::send(JsonResponse::HTTP_UNPROCESSABLE_ENTITY, [
+    $response = responser()->send(JsonResponse::HTTP_UNPROCESSABLE_ENTITY, [
       'errors' => $validator->errors()
     ], 'Please check your inputs.');
 

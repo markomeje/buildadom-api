@@ -32,7 +32,7 @@ class OrderPaymentService extends BaseService
     try {
       $orders = Order::owner()->where(['status' => OrderStatusEnum::PENDING->value])->get();
       if(empty($orders->count())) {
-        return Responser::send(Status::HTTP_NOT_FOUND, null, 'No pending orders found.');
+        return responser()->send(Status::HTTP_NOT_FOUND, null, 'No pending orders found.');
       }
 
       $amount = $orders->sum('total_amount');
@@ -69,9 +69,9 @@ class OrderPaymentService extends BaseService
       ]);
 
       SaveCustomerOrderPaymentJob::dispatch($orders, $customer_id, $payment->id);
-      return Responser::send(Status::HTTP_OK, $paystack, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $paystack, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 
@@ -82,9 +82,9 @@ class OrderPaymentService extends BaseService
   {
     try {
       $orders = OrderPayment::owner()->latest()->with(['payment', 'order'])->paginate($request->limit ?? 20);
-      return Responser::send(Status::HTTP_OK, OrderPaymentResource::collection($orders), 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, OrderPaymentResource::collection($orders), 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
     }
   }
 

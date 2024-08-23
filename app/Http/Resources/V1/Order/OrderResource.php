@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\V1\Order;
 use App\Http\Resources\CurrencyResource;
-use App\Http\Resources\V1\Order\OrderDeliveryResource;
+use App\Http\Resources\V1\Order\OrderFulfillmentResource;
 use App\Http\Resources\V1\OrderTrackingResource;
 use App\Http\Resources\V1\Payment\PaymentResource;
 use App\Http\Resources\V1\Product\ProductResource;
@@ -35,7 +35,7 @@ class OrderResource extends JsonResource
       'currency' => new CurrencyResource($this->whenLoaded('currency')),
       'trackings' => OrderTrackingResource::collection($this->whenLoaded('trackings')),
       'payment' => new PaymentResource($this->whenLoaded('payment')),
-      'delivery' => new OrderDeliveryResource($this->whenLoaded('delivery')),
+      'fulfillment' => new OrderFulfillmentResource($this->whenLoaded('fulfillment')),
       'product' => new ProductResource($this->whenLoaded('product')),
       'store' => new StoreResource($this->whenLoaded('store')),
     ];

@@ -4,14 +4,11 @@ use App\Http\Controllers\V1\Customer\Auth\CustomerSignupController;
 use App\Http\Controllers\V1\Customer\Cart\CartItemController;
 use App\Http\Controllers\V1\Customer\Escrow\EscrowAccountController;
 use App\Http\Controllers\V1\Customer\Order\OrderController;
-use App\Http\Controllers\V1\Customer\Order\OrderDeliveryController;
+use App\Http\Controllers\V1\Customer\Order\OrderFulfillmentController;
 use App\Http\Controllers\V1\Customer\Order\OrderPaymentController;
 use App\Http\Controllers\V1\Customer\Payment\PaymentController;
 use App\Http\Controllers\V1\Customer\Shipping\ShippingAddressController;
 use Illuminate\Support\Facades\Route;
-
-
-
 
 
 Route::post('/signup', [CustomerSignupController::class, 'signup']);
@@ -35,8 +32,9 @@ Route::middleware(['auth:api', 'customers.only'])->group(function() {
       Route::post('/initialize', [OrderPaymentController::class, 'initialize']);
     });
 
-    Route::prefix('delivery')->group(function() {
-      Route::post('/confirm', [OrderDeliveryController::class, 'confirm']);
+    Route::prefix('fulfillment')->group(function() {
+      Route::post('/confirm', [OrderFulfillmentController::class, 'confirm']);
+      Route::get('/list', [OrderFulfillmentController::class, 'list']);
     });
   });
 

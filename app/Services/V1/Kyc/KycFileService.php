@@ -54,9 +54,9 @@ class KycFileService extends BaseService
         'extras' => null
       ]);
 
-      return Responser::send(Status::HTTP_OK, $kyc_file, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $kyc_file, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
     }
   }
 
@@ -64,9 +64,9 @@ class KycFileService extends BaseService
   {
     try {
       $kyc_files = KycFile::where(['user_id' => auth()->id()])->get();
-      return Responser::send(Status::HTTP_OK, $kyc_files, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $kyc_files, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
     }
   }
 
@@ -81,16 +81,16 @@ class KycFileService extends BaseService
     try {
       $kyc_file = KycFile::where(['id' => $id, 'user_id' => auth()->id()])->first();
       if(strtolower($kyc_file->status) === strtolower(KycFileStatusEnum::ACCEPTED->value)) {
-        return Responser::send(Status::HTTP_BAD_REQUEST, [], 'Operation not allowed. Uploaded file is already accepted.');
+        return responser()->send(Status::HTTP_BAD_REQUEST, [], 'Operation not allowed. Uploaded file is already accepted.');
       }
 
       $previous_file = optional($kyc_file->extras)->filename;
       $kyc_file->uploaded_file = $this->uploadToS3($request->file('kyc_file'), $previous_file);
       $kyc_file->status = KycFileStatusEnum::PENDING->value;;
       $kyc_file->update();
-      return Responser::send(Status::HTTP_OK, $kyc_file, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $kyc_file, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
     }
   }
 
@@ -105,17 +105,17 @@ class KycFileService extends BaseService
     try {
       $kyc_file = KycFile::where(['id' => $id, 'user_id' => auth()->id()])->first();
       if(empty($kyc_file)) {
-        return Responser::send(Status::HTTP_NOT_FOUND, [], 'Record not found. Try again.');
+        return responser()->send(Status::HTTP_NOT_FOUND, [], 'Record not found. Try again.');
       }
 
       if(strtolower($kyc_file->status) === strtolower(KycFileStatusEnum::ACCEPTED->value)) {
-        return Responser::send(Status::HTTP_BAD_REQUEST, [], 'Operation not allowed. Accepted file cannot be deleted.');
+        return responser()->send(Status::HTTP_BAD_REQUEST, [], 'Operation not allowed. Accepted file cannot be deleted.');
       }
 
       $kyc_file->delete();
-      return Responser::send(Status::HTTP_OK, null, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, null, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
     }
   }
 

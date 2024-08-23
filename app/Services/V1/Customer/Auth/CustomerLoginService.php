@@ -23,21 +23,21 @@ class CustomerLoginService extends BaseService
     try {
       $user = User::query()->where(['email' => $request->email])->first();
       if (empty($user)) {
-        return Responser::send(Status::HTTP_UNAUTHORIZED, [], 'Invalid account details. Try again.');
+        return responser()->send(Status::HTTP_UNAUTHORIZED, [], 'Invalid account details. Try again.');
       }
 
       if(!Hash::check($request->password, $user->password)) {
-        return Responser::send(Status::HTTP_UNAUTHORIZED, [], 'Invalid account details.');
+        return responser()->send(Status::HTTP_UNAUTHORIZED, [], 'Invalid account details.');
       }
 
       $token = auth()->attempt($request->validated());
       if (!$token) {
-        return Responser::send(Status::HTTP_UNAUTHORIZED, [], 'Invalid account details.');
+        return responser()->send(Status::HTTP_UNAUTHORIZED, [], 'Invalid account details.');
       }
 
-      return Responser::send(Status::HTTP_OK, ['user' => auth()->user(), 'token' => $token], 'Login successful');
+      return responser()->send(Status::HTTP_OK, ['user' => auth()->user(), 'token' => $token], 'Login successful');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Ooops! login failed. Try again.');
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Ooops! login failed. Try again.');
     }
   }
 }

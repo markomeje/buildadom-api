@@ -51,7 +51,7 @@ class UploadProductImageRequest extends FormRequest
    */
   protected function failedValidation(Validator $validator)
   {
-    $response = Responser::send(Status::HTTP_UNPROCESSABLE_ENTITY, [
+    $response = responser()->send(Status::HTTP_UNPROCESSABLE_ENTITY, [
       'errors' => $validator->errors()
     ], 'Kindly check the pics you are trying to upload.');
 

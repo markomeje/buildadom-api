@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CustomerConfirmOrderDeliveryNotification extends Notification implements ShouldQueue
+class CustomerConfirmOrderFulfilledNotification extends Notification implements ShouldQueue
 {
   use Queueable, CurrencyTrait;
 
@@ -19,13 +19,11 @@ class CustomerConfirmOrderDeliveryNotification extends Notification implements S
    */
   public function __construct(private string $tracking_number, private int $confirmation_code)
   {
-    $this->tracking_number = $tracking_number;
-    $this->confirmation_code = $confirmation_code;
     $this->onQueue(QueueEnum::ORDER->value);
   }
 
   /**
-   * Get the notification's delivery channels.
+   * Get the notification's fulfillment channels.
    *
    * @param  mixed  $notifiable
    * @return array
@@ -44,21 +42,11 @@ class CustomerConfirmOrderDeliveryNotification extends Notification implements S
   public function toMail($notifiable)
   {
     return (new MailMessage)
-      ->subject('Buildadom Order Delivery Confirmation Required')
+      ->subject('Buildadom Order Fulfillment Confirmation Required')
       ->line('Dear valued Customer,')
-      ->line("Kindly confirm the delivery of order $this->tracking_number with the confirmation code below:")
+      ->line("Kindly confirm the fulfillment of order ($this->tracking_number) with the confirmation code below:")
       ->line("Confirmation code: $this->confirmation_code")
       ->line('Thank you for choosing our platform');
   }
 
-  /**
-   * Get the array representation of the notification.
-   *
-   * @param  mixed  $notifiable
-   * @return array
-   */
-  public function toArray($notifiable)
-  {
-    return [];
-  }
 }

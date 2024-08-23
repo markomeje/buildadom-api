@@ -3,7 +3,7 @@
 namespace App\Enums\Logistics;
 use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
-enum LogisticsCompanyFilesEnum: string
+enum LogisticsCompanyFileEnum: string
 {
   use UsefulEnums;
 

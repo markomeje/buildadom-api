@@ -20,9 +20,9 @@ class PaymentService extends BaseService
   {
     try {
       $payments = Payment::owner()->latest()->paginate($request->limit ?? 20);
-      return Responser::send(Status::HTTP_OK, $payments, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $payments, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
     }
   }
 

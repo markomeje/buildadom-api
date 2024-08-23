@@ -19,7 +19,7 @@ class CustomerRoleMiddleware
   {
     $roles = auth()->user()->roles->pluck('name')->toArray();
     if(!in_array(strtolower(UserRoleEnum::CUSTOMER->value), $roles)) {
-      return Responser::send(Status::HTTP_UNAUTHORIZED, null, 'Operation not allowed. Unauthorized entry');
+      return responser()->send(Status::HTTP_UNAUTHORIZED, null, 'Operation not allowed. Unauthorized entry');
     }
 
     return $next($request);

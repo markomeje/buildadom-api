@@ -22,9 +22,9 @@ class StoreService extends BaseService
 	{
     try {
       $stores = Store::published()->with(['state', 'city'])->latest()->paginate($request->limit ?? 20);
-      return Responser::send(Status::HTTP_OK, $stores, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $stores, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
     }
 	}
 
@@ -35,9 +35,9 @@ class StoreService extends BaseService
 	{
     try {
       $store = Store::published()->with(['state', 'city'])->find($id);
-      return Responser::send(Status::HTTP_OK, $store, 'Operation successful.');
+      return responser()->send(Status::HTTP_OK, $store, 'Operation successful.');
     } catch (Exception $e) {
-      return Responser::send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Operation failed. Try again.');
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Operation failed. Try again.');
     }
 	}
 

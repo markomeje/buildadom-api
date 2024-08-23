@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Middleware;
-use App\Utility\Responser;
 use App\Utility\Status;
 use Closure;
 use Illuminate\Http\Request;
@@ -26,6 +25,6 @@ class PaystackIpWhitelist
       return $next($request);
     }
 
-    return Responser::send(Status::HTTP_UNAUTHORIZED, null, 'Operation not allowed. Unauthorized entry');
+    return responser()->send(Status::HTTP_UNAUTHORIZED, null, 'Operation not allowed. Unauthorized entry');
   }
 }
