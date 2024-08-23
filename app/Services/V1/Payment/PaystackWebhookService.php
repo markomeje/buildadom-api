@@ -17,7 +17,6 @@ class PaystackWebhookService extends BaseService
   public function webhook(Request $request)
   {
     try {
-      $payload = $request->all();
       if((strtolower($request->server('REQUEST_METHOD')) !== 'post')) {
         LogDeveloperInfoJob::dispatch("Invalid paystack webhook request method");
         exit();
@@ -34,14 +33,16 @@ class PaystackWebhookService extends BaseService
         exit();
       }
 
+      $payload = json_decode($input, true, 512);
       $paystack = $payload['data'];
+
       $payment = Payment::where('reference', $paystack['reference'])->first();
       if(empty($payment)) {
-        LogDeveloperInfoJob::dispatch("Invalid paystack payment reference".json_encode($payload).'--inout--'.$input);
+        LogDeveloperInfoJob::dispatch("Invalid paystack payment reference");
         exit();
       }
 
-      $data = ['status' => $paystack['status'], 'webhook_response' => $paystack];
+      $data = ['status' => $paystack['status'], 'webhook_response' => $payload];
       if(in_array($payload['event'], $this->events()['transfer'])) {
         $data = array_merge($data, ['transfer_code' => $paystack['transfer_code']]);
       }
