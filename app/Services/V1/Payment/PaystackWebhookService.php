@@ -2,6 +2,7 @@
 
 namespace App\Services\V1\Payment;
 use App\Jobs\LogDeveloperInfoJob;
+use App\Jobs\V1\Payment\HandlePaystackWebhookEventJob;
 use App\Models\Payment\Payment;
 use App\Services\BaseService;
 use Exception;
@@ -34,43 +35,12 @@ class PaystackWebhookService extends BaseService
       }
 
       $payload = json_decode($input, true, 512);
-      $paystack = $payload['data'];
-
-      $payment = Payment::where(['reference' => $paystack['reference']])->first();
-      LogDeveloperInfoJob::dispatch(json_encode(['payment' => $payment, 'payload' => $payload, 'paystack' => $paystack]));
-      if(empty($payment)) {
-        LogDeveloperInfoJob::dispatch("Invalid paystack payment reference");
-        exit();
-      }
-
-      $data = ['status' => $paystack['status'], 'webhook_response' => $payload];
-      if(in_array($payload['event'], $this->events()['transfer'])) {
-        $data = array_merge($data, ['transfer_code' => $paystack['transfer_code']]);
-      }
-
-      $payment->update($data);
+      HandlePaystackWebhookEventJob::dispatch($payload);
       http_response_code(200);
     } catch (Exception $e) {
       LogDeveloperInfoJob::dispatch($e->getMessage());
       exit();
     }
-  }
-
-  /**
-   * @return array
-   */
-  private function events()
-  {
-    return [
-      'transfer' => [
-        'transfer.failed',
-        'transfer.success',
-        'transfer.reversed',
-      ],
-      'charge' => [
-        'charge.success',
-      ]
-    ];
   }
 
 }
