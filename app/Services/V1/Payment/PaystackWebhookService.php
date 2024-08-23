@@ -35,6 +35,8 @@ class PaystackWebhookService extends BaseService
 
       $payload = json_decode($input, true, 512);
       HandlePaystackWebhookEventJob::dispatch($payload);
+
+      LogDeveloperInfoJob::dispatch("Paystack webhook event recieved successfully.");
       http_response_code(200);
     } catch (Exception $e) {
       LogDeveloperInfoJob::dispatch($e->getMessage());

@@ -45,6 +45,7 @@ class HandlePaystackWebhookEventJob implements ShouldQueue
     }
 
     $payment->update($data);
+    LogDeveloperInfoJob::dispatch("Paystack webhook even was successful");
   }
 
   /**
