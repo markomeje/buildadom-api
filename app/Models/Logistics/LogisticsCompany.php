@@ -23,6 +23,7 @@ class LogisticsCompany extends Model
     'currency_id',
     'base_price',
     'park_address',
+    'office_address',
     'driver_picture',
     'vehicle_type',
     'country_id',
