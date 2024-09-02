@@ -12,12 +12,16 @@ class DatabaseSeeder extends Seeder
    */
   public function run()
   {
-
     $this->call([
       CountrySeeder::class,
-      CategorySeeder::class,
       CurrencySeeder::class,
-      UnitSeeder::class,
+      FeesSeeder::class,
+      UserSeeder::class,
+      DocumentTypeSeeder::class,
+      ProductUnitSeeder::class,
+      ProductCategorySeeder::class,
+      NigerianBankSeeder::class,
+      UserSeeder::class,
     ]);
   }
 }

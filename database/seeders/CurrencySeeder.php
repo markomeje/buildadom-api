@@ -1,9 +1,9 @@
 <?php
 
 namespace Database\Seeders;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Seeder;
+use App\Enums\Currency\CurrencyTypeEnum;
 use App\Models\Currency;
+use Illuminate\Database\Seeder;
 
 class CurrencySeeder extends Seeder
 {
@@ -14,16 +14,23 @@ class CurrencySeeder extends Seeder
    */
   public function run()
   {
-    DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-    DB::table('currencies')->truncate();
-    DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+    $this->command->info('Currency Seeder started.');
+    $path = storage_path('currencies.json');
+    $currencies = json_decode(file_get_contents($path), true);
 
-    $currencies = [
-      ['code' =>'NGN' , 'name' => 'Naira', 'symbol' => '₦'],
-    ];
+    foreach ($currencies as $code => $name) {
+      $currency_code = strtoupper($code);
+      $is_naira = $currency_code == 'NGN' ? 1 : 0;
 
-    foreach ($currencies as $currency) {
-      Currency::create($currency);
+      Currency::updateOrCreate(['code' => $currency_code], [
+        'type' => CurrencyTypeEnum::FIAT->value,
+        'code' => $currency_code,
+        'is_default' => $is_naira,
+        'name' => $name,
+        'is_supported' => $is_naira,
+        'symbol' => $currency_code == 'NGN' ? '₦' : null,
+      ]);
     }
+    $this->command->info('Currency Seeder successful.');
   }
 }

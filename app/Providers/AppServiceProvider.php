@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
@@ -27,17 +28,17 @@ class AppServiceProvider extends ServiceProvider
   public function boot()
   {
     JsonResource::withoutWrapping();
-    Validator::extend('olderthan', function ($attribute, $value, $parameters, $validator) {
-      $minAge = !empty($parameters) ? (int)$parameters[0] : 13;
-      return Carbon::now()->diff(new Carbon($value))->y >= $minAge;
-    });
+    // Validator::extend('olderthan', function ($attribute, $value, $parameters, $validator) {
+    //   $minAge = !empty($parameters) ? (int)$parameters[0] : 13;
+    //   return Carbon::now()->diff(new Carbon($value))->y >= $minAge;
+    // });
 
     Schema::defaultStringLength(191);
-    Collection::macro('paginate', function($perPage, $total = null, $page = null, $pageName = 'page') {
-      $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
-      return new LengthAwarePaginator(
-        $this->forPage($page, $perPage), $total ?: $this->count(), $perPage, $page, ['path' => LengthAwarePaginator::resolveCurrentPath(), 'pageName' => $pageName]
-      );
-    });
+    // Collection::macro('paginate', function($perPage, $total = null, $page = null, $pageName = 'page') {
+    //   $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
+    //   return new LengthAwarePaginator(
+    //     $this->forPage($page, $perPage), $total ?: $this->count(), $perPage, $page, ['path' => LengthAwarePaginator::resolveCurrentPath(), 'pageName' => $pageName]
+    //   );
+    // });
   }
 }

@@ -1,16 +1,22 @@
 <?php
 
 namespace App\Models;
-
-use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use App\Models\Bank\BankAccount;
+use App\Models\Business\BusinessProfile;
+use App\Models\Email\EmailVerification;
+use App\Models\Escrow\EscrowAccount;
+use App\Models\Phone\PhoneVerification;
+use App\Models\Store\Store;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-// use Illuminate\Notifications\Notification;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-   use HasFactory, Notifiable;
+  use HasFactory, Notifiable;
 
    /**
    * The attributes that are mass assignable.
@@ -33,54 +39,70 @@ class User extends Authenticatable implements JWTSubject
    *
    * @var array<int, string>
    */
-   protected $hidden = [
-      'password',
-   ];
+  protected $hidden = [
+    'password',
+  ];
 
    /**
    * The attributes that should be cast.
    *
    * @var array<string, string>
    */
-   protected $casts = [];
+  protected $casts = [];
 
-   /**
-   * User types
-   *
-   * @var array<int, string>
-   */
-   public static $types = [
-      'individual',
-      'business'
-   ];
-
-   /**
+  /**
    * Get the user's full name.
+   *
+   * @return Attribute
    */
-   public function fullname()
-   {
-      return ucwords($this->firstname . ' ' . $this->lastname);
-   }
+  public function fullname(): Attribute
+  {
+    return Attribute::make(
+      get: fn() => ucfirst($this->firstname) . ' ' . ucfirst($this->lastname),
+    );
+  }
+
+  /**
+   *
+   * @return Attribute
+   */
+  protected function email(): Attribute
+  {
+    return Attribute::make(
+      set: fn($value) => strtolower($value)
+    );
+  }
+
+  /**
+   *
+   * @return Attribute
+   */
+  protected function phone(): Attribute
+  {
+    return Attribute::make(
+      set: fn($value) => formatPhoneNumber($value)
+    );
+  }
 
    /**
    * Get the identifier that will be stored in the subject claim of the JWT.
    *
    * @return mixed
    */
-   public function getJWTIdentifier()
-   {
-      return $this->getKey();
-   }
+  public function getJWTIdentifier()
+  {
+    return $this->getKey();
+  }
 
    /**
    * Return a key value array, containing any custom claims to be added to the JWT.
    *
    * @return array
    */
-   public function getJWTCustomClaims()
-   {
-      return [];
-   }
+  public function getJWTCustomClaims()
+  {
+    return [];
+  }
 
    /**
    * Route notifications for the Africas Talking channel.
@@ -88,61 +110,65 @@ class User extends Authenticatable implements JWTSubject
    * @param  \Illuminate\Notifications\Notification  $notification
    * @return string
    */
-   public function routeNotificationForAfricasTalking($notification): string
-   {
-      return $this->phone;
-   }
+  public function routeNotificationForAfricasTalking($notification): string
+  {
+    return $this->phone;
+  }
 
-   /**
-   * A user may have one veirifcation
+  /**
+   * @return HasOne
    */
-   public function verification($type = 'phone')
-   {
-      return $this->belongsTo(Verification::class)->where(['type' => $type]);
-   }
+  public function phoneVerification(): HasOne
+  {
+    return $this->hasOne(PhoneVerification::class)->select(['id', 'user_id', 'verified', 'expiry', 'created_at', 'verified_at']);
+  }
 
-   /**
-   * A user has one identification record
+  /**
+   * @return HasOne
    */
-   public function identification()
-   {
-      return $this->hasOne(Identification::class);
-   }
+  public function emailVerification(): HasOne
+  {
+    return $this->hasOne(EmailVerification::class)->select(['id', 'user_id', 'verified', 'expiry', 'created_at', 'verified_at']);
+  }
 
-   /**
-   * A user may have One business account
+  /**
+   * A user may have One business profile
    */
-   public function business()
-   {
-      return $this->hasOne(Business::class);
-   }
+  public function businessProfile()
+  {
+    return $this->hasOne(BusinessProfile::class);
+  }
 
-   /**
-   * A user may have a store
+  /**
+   * A user may have a many roles
    */
-   public function store()
-   {
-      return $this->hasOne(Store::class);
-   }
+  public function roles()
+  {
+    return $this->hasMany(UserRole::class, 'user_id');
+  }
 
-   /**
-   * A user may have a role
+  /**
+   * A user may have a many roles
    */
-   public function role()
-   {
-      return $this->hasOne(Role::class);
-   }
+  public function stores()
+  {
+    return $this->hasMany(Store::class, 'user_id');
+  }
+
+  /**
+   * @return HasOne
+   */
+  public function bank(): HasOne
+  {
+    return $this->hasOne(BankAccount::class, 'user_id');
+  }
+
+  /**
+   * @return HasOne
+   */
+  public function escrow(): HasOne
+  {
+    return $this->hasOne(EscrowAccount::class, 'user_id');
+  }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

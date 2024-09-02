@@ -17,9 +17,7 @@ class CurrencyResource extends JsonResource
     return [
       'id' => $this->id,
       'name' => ucwords($this->name),
-      'symbol' => ucwords($this->symbol),
       'code' => strtoupper($this->code),
-      'active' => (boolean)$this->active,
     ];
   }
 }

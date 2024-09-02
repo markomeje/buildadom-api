@@ -69,5 +69,10 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
+        'customers.only' => \App\Http\Middleware\CustomerRoleMiddleware::class,
+        'merchants.only' => \App\Http\Middleware\MerchantRoleMiddleware::class,
+
+        'paystack.ipwhitelist' => \App\Http\Middleware\PaystackIpWhitelist::class,
     ];
 }

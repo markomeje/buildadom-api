@@ -15,13 +15,25 @@ class Image extends Model
    * @var array<int, string>
    */
   protected $fillable = [
-    'model_id',
+    'imageable_id',
     'role',
-    'model',
-    'type',
+    'imageable_type',
     'filename',
     'url',
     'user_id',
-    'extension'
+    'name',
+    'extras'
   ];
+
+  public $casts = [
+    'extras' => 'json'
+  ];
+
+  /**
+   * Get all of the owning imageable models.
+   */
+  public function imageable()
+  {
+    return $this->morphTo();
+  }
 }

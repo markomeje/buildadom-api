@@ -2,25 +2,14 @@
 
 
 namespace App\Services;
+use Illuminate\Http\JsonResponse;
 
 
 class BaseService
 {
-  /**
-   * Save Account data
-   */
-  public function save(array $data): Account
+
+  public static function generateRandomDigits(): int
   {
-    $account = self::information();
-    if(empty($account)) {
-      return Account::create([
-        'user_id' => auth()->id(),
-        ...$data,
-      ]);
-    }
-
-    $account->update([...$data]);
-    return $account;
+    return rand(111111, 999999);
   }
-
 }

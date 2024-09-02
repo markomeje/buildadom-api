@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Models\Order;
+use App\Models\Escrow\EscrowAccount;
+use App\Models\Payment\Payment;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Query\Builder;
+
+class OrderPayment extends Model
+{
+  use HasFactory;
+
+  /**
+   * The attributes that are mass assignable.
+   *
+   * @var array<int, string>
+   */
+  protected $fillable = [
+    'payment_id',
+    'order_id',
+    'customer_id',
+    'status'
+  ];
+
+  /**
+   * @return Builder
+   */
+  public function scopeOwner($query)
+  {
+    return $query->where(['customer_id' => auth()->id()]);
+  }
+
+  /**
+   * @return BelongsTo
+   */
+  public function order(): BelongsTo
+  {
+    return $this->belongsTo(Order::class);
+  }
+
+  /**
+   * @return BelongsTo
+   */
+  public function payment(): BelongsTo
+  {
+    return $this->belongsTo(Payment::class);
+  }
+
+  /**
+   * @return BelongsTo
+   */
+  public function escrow(): BelongsTo
+  {
+    return $this->belongsTo(EscrowAccount::class, 'payment_id');
+  }
+
+}

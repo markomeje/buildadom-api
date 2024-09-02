@@ -2,30 +2,28 @@
 
 namespace App\Http\Middleware;
 
+use App\Utility\Responser;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
 class Authenticate extends Middleware
 {
-    /**
-     * Get the path the user should be redirected to when they are not authenticated.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string|null
-     */
-    protected function redirectTo($request)
-    {
-
-        if (!$request->expectsJson()) {
-            return '';
-        }
+  /**
+   * Get the path the user should be redirected to when they are not authenticated.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return string|null
+   */
+  protected function redirectTo($request)
+  {
+    if (!$request->expectsJson()) {
+      return '';
     }
+  }
 
-    protected function unauthenticated($request, array $guards)
-    {
-        abort(response()->json([
-            'success' => false,
-            'message' => 'Unauthenticated. Please login.'
-        ], 401));
-    }
+  protected function unauthenticated($request, array $guards)
+  {
+    abort(responser()->send(JsonResponse::HTTP_UNAUTHORIZED, ['user' => auth()->user()], 'Unauthenticated. Please login.'));
+  }
 
 }

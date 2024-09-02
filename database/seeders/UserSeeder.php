@@ -1,9 +1,14 @@
 <?php
 
 namespace Database\Seeders;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+
+use App\Enums\User\UserRoleEnum;
+use App\Enums\User\UserStatusEnum;
+use App\Enums\User\UserTypeEnum;
 use App\Models\User;
+use App\Models\UserRole;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -14,10 +19,19 @@ class UserSeeder extends Seeder
    */
   public function run()
   {
-    DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-    DB::table('users')->truncate();
-    DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+    $users = [
+      ['firstname' => 'Elim', 'lastname' => 'Bolt', 'email' => 'markomejeonline@gmail.com', 'password' => Hash::make('12345'), 'phone' => '08158212666', 'status' => UserStatusEnum::ACTIVE->value, 'address' => 'No 43 Main road, Oakland Inn.', 'type' => UserTypeEnum::BUSINESS->value],
+    ];
 
-    User::factory()->count(230)->create();
+    foreach($users as $user) {
+      $user = User::updateOrCreate(['email' => $user['email']], $user);
+      if($user) {
+        $user_id = $user->id;
+        UserRole::updateOrCreate(['user_id' => $user_id], [
+          'user_id' => $user_id,
+          'name' => UserRoleEnum::MERCHANT->value
+        ]);
+      }
+    }
   }
 }
