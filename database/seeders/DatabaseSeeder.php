@@ -13,7 +13,6 @@ class DatabaseSeeder extends Seeder
   public function run()
   {
     $this->call([
-      CountrySeeder::class,
       CurrencySeeder::class,
       FeesSeeder::class,
       UserSeeder::class,
@@ -22,6 +21,7 @@ class DatabaseSeeder extends Seeder
       ProductCategorySeeder::class,
       NigerianBankSeeder::class,
       UserSeeder::class,
+      CountrySeeder::class,
     ]);
   }
 }
