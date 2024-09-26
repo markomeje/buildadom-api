@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\V1\Auth\LoginController;
+use App\Http\Controllers\V1\Auth\PasswordResetController;
 use App\Http\Controllers\V1\Bank\BankAccountController;
 use App\Http\Controllers\V1\Document\DocumentTypeController;
 use App\Http\Controllers\V1\Email\EmailVerificationController;
@@ -9,8 +10,15 @@ use App\Http\Controllers\V1\Kyc\KycVerificationController;
 use App\Http\Controllers\V1\Phone\PhoneVerificationController;
 use Illuminate\Support\Facades\Route;
 
+
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout']);
+
+Route::prefix('/password')->group(function() {
+  Route::post('/reset', [PasswordResetController::class, 'reset']);
+  Route::post('/initiate-reset', [PasswordResetController::class, 'initiate']);
+  Route::post('/confirm-reset-code', [PasswordResetController::class, 'confirm']);
+});
 
 Route::middleware(['auth:api'])->group(function() {
   Route::prefix('/phone')->group(function() {

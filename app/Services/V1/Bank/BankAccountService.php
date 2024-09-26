@@ -6,7 +6,6 @@ use App\Jobs\V1\Payment\CreatePaystackTransferRecipientJob;
 use App\Models\Bank\BankAccount;
 use App\Models\Bank\NigerianBank;
 use App\Services\BaseService;
-use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;

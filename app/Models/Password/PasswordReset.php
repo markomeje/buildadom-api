@@ -16,8 +16,7 @@ class PasswordReset extends Model
   protected $fillable = [
     'email',
     'expiry',
-    'type',
-    'done',
     'code'
   ];
+
 }
