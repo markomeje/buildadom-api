@@ -6,7 +6,6 @@ use App\Facades\V1\SmsSenderFacade;
 use App\Models\Phone\PhoneVerification;
 use App\Models\User;
 use App\Services\BaseService;
-use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -16,6 +15,12 @@ use Illuminate\Http\Request;
 class PhoneVerificationService extends BaseService
 {
   /**
+   * Expiry in minutes
+   * @var int
+   */
+  private $expiry = 20;
+
+  /**
    * @return JsonResponse
    */
   public function send(User $user): JsonResponse
@@ -24,12 +29,7 @@ class PhoneVerificationService extends BaseService
       $code = help()->generateRandomDigits(6);
       $message = $this->getMessage($code);
 
-      PhoneVerification::create([
-        'code' => $code,
-        'user_id' => $user->id,
-        'expiry' => now()->addMinutes(10),
-      ]);
-
+      $this->createPhoneVerificationDetail($code, $user);
       SmsSenderFacade::push($user, $message);
       return responser()->send(Status::HTTP_CREATED, [], 'Phone verification code has been sent.');
     } catch (Exception $e) {
@@ -117,7 +117,7 @@ class PhoneVerificationService extends BaseService
     return PhoneVerification::create([
       'code' => $code,
       'user_id' => $user->id,
-      'expiry' => now()->addMinutes(10),
+      'expiry' => now()->addMinutes($this->expiry),
     ]);
   }
 

@@ -10,8 +10,6 @@ use App\Services\V1\Email\EmailVerificationService;
 use App\Services\V1\Phone\PhoneVerificationService;
 use App\Traits\V1\UserTypeCheckerTrait;
 use App\Traits\V1\BusinessProfileTrait;
-use App\Utility\Help;
-use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;

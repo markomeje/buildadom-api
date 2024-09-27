@@ -1,2 +1,0 @@
-Bank edit details
-Make order and create account auto

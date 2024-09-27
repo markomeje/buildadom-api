@@ -18,6 +18,13 @@ use Illuminate\Http\Request;
  */
 class EmailVerificationService extends BaseService
 {
+
+  /**
+   * Expiry in minutes
+   * @var int
+   */
+  private $expiry = 20;
+
   /**
    * @return JsonResponse
    */
@@ -115,7 +122,7 @@ class EmailVerificationService extends BaseService
   private function saveVerificationDetail(int $code, User $user)
   {
     $emailVerificationDetails = $this->getVerificationDetails();
-    $expiry = now()->addMinutes(10);
+    $expiry = now()->addMinutes($this->expiry);
 
     if(empty($emailVerificationDetails)) {
       return EmailVerification::create([
