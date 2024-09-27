@@ -30,7 +30,7 @@ class EmailVerificationService extends BaseService
   public function send(User $user): JsonResponse
   {
     try {
-      $code = help()->generateRandomDigits(6);
+      $code = rand(111111, 999999);
       $emailVerification = $this->saveVerificationDetail($code, $user);
 
       $user->notify(new EmailVerificationNotification($code));
@@ -46,7 +46,7 @@ class EmailVerificationService extends BaseService
   public function resend(): JsonResponse
   {
     try {
-      $code = help()->generateRandomDigits(6);
+      $code = rand(111111, 999999);
       $user = User::find(auth()->id());
 
       $emailVerification = $this->getVerificationDetails();
