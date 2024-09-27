@@ -12,16 +12,11 @@ class EmailVerificationNotification extends Notification implements ShouldQueue
   use Queueable;
 
   /**
-   * The email verification code
-   */
-  private $code;
-
-  /**
    * Create a new notification instance.
    *
    * @return void
    */
-  public function __construct($code)
+  public function __construct(private $code)
   {
     $this->onQueue(QueuedJobEnum::EMAIL->value);
   }
