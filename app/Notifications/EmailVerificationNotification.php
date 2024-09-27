@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Notifications;
-
 use App\Enums\QueuedJobEnum;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

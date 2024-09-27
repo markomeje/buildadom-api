@@ -6,7 +6,6 @@ use App\Models\Email\EmailVerification;
 use App\Models\User;
 use App\Notifications\EmailVerificationNotification;
 use App\Services\BaseService;
-use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -106,6 +105,9 @@ class EmailVerificationService extends BaseService
     }
   }
 
+  /**
+   * @return EmailVerification|object
+   */
   private function getVerificationDetails(): ?emailVerification
   {
     return EmailVerification::where(['user_id' => auth()->id()])->latest()->first();
@@ -139,6 +141,10 @@ class EmailVerificationService extends BaseService
     ]);
   }
 
+  /**
+   * @param EmailVerification $emailVerification
+   * @return bool
+   */
   public function isVerified(EmailVerification $emailVerification): bool
   {
     return (bool)$emailVerification->verified === true;
