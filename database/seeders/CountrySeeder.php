@@ -1,11 +1,12 @@
 <?php
 
 namespace Database\Seeders;
-use Illuminate\Database\Seeder;
 use \JsonMachine\Items;
 use App\Models\City\City;
-use App\Models\State\State;
 use App\Models\Country;
+use App\Models\State\State;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CountrySeeder extends Seeder
 {
@@ -16,17 +17,24 @@ class CountrySeeder extends Seeder
    */
   public function run()
   {
+    DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+    Country::truncate();
+    DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
+
     $this->command->info('Country Seeder started.');
     $path = storage_path('globe.json');
     $countries = Items::fromFile($path);
 
     if(!empty($countries)) {
       foreach($countries as $country) {
-        $this->runSeeder($country);
+        $currency = strtoupper($country->currency ?? '');
+        if($currency == 'NGN' || $currency == 'GHS') {
+          $this->runSeeder($country);
+        }
       }
     }
 
-    $this->command->info('Country Seeder queued.');
+    $this->command->info('Country Seeder completed.');
   }
 
   /**
