@@ -6,6 +6,7 @@ use App\Jobs\V1\Payment\HandlePaystackWebhookEventJob;
 use App\Services\BaseService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 
 class PaystackWebhookService extends BaseService
@@ -37,6 +38,7 @@ class PaystackWebhookService extends BaseService
       HandlePaystackWebhookEventJob::dispatch($payload);
 
       LogDeveloperInfoJob::dispatch('Paystack webhook event recieved successfully.');
+      Log::info('Paystack Webhook Payload - '.json_encode($payload));
       http_response_code(200);
     } catch (Exception $e) {
       LogDeveloperInfoJob::dispatch($e->getMessage());

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Notifications\V1\Merchant\Order;
+namespace App\Notifications\V1\Order;
 use App\Enums\Queue\QueueEnum;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class MerchantPendingOrderNotification extends Notification implements ShouldQueue
+class MarchantTransferPaymentProcessedNotification extends Notification implements ShouldQueue
 {
   use Queueable;
 
@@ -41,8 +41,8 @@ class MerchantPendingOrderNotification extends Notification implements ShouldQue
   public function toMail($notifiable)
   {
     return (new MailMessage)
-      ->subject('Buildadom Pending Order')
-      ->line('An order has been placed from your store. Only begin order processing after escrow payment confirmation.')
+      ->subject('Buildadom Order Transfer Payment Processed')
+      ->line('The Transfer payment for the order in your store has been processed and you will recieve the payment in about 24 hours. If you did not recieve payment after 24hours, please contact us.')
       ->line('Thank you for choosing our platform');
   }
 

@@ -19,9 +19,9 @@ class EscrowAccountController extends Controller
   /**
    * @return JsonResponse
    */
-  public function details(): JsonResponse
+  public function account(): JsonResponse
   {
-    return $this->escrowAccountService->details();
+    return $this->escrowAccountService->account();
   }
 
 }

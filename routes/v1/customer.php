@@ -44,7 +44,7 @@ Route::middleware(['auth:api', 'customers.only'])->group(function() {
   });
 
   Route::prefix('escrow')->group(function() {
-    Route::get('/account', [EscrowAccountController::class, 'details']);
+    Route::get('/account', [EscrowAccountController::class, 'account']);
   });
 
   Route::prefix('shipping')->group(function() {

@@ -49,6 +49,7 @@ class VerifyPaystackTransferPaymentJob implements ShouldQueue
   private function handleResult($payment)
   {
     $result = Paystack::payment()->verifyTransfer($payment->reference);
+    Log::info('Verify Paystack Transfer Payment Result - '.json_encode($result));
 
     $message = $result['message'] ?? '';
     if(empty($result['status']) || empty($result['data'])) {

@@ -5,6 +5,7 @@ use App\Enums\QueuedJobEnum;
 use App\Integrations\Paystack;
 use App\Models\Bank\BankAccount;
 use App\Models\Payment\Payment;
+use App\Notifications\V1\Order\MarchantTransferPaymentProcessedNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -39,16 +40,19 @@ class InitiatePaystackTransferPaymentJob implements ShouldQueue
     ];
 
     $result = Paystack::payment()->initiateTransfer($fields);
-    $this->handleResult((array)$result);
+    $this->payment->user->notify(new MarchantTransferPaymentProcessedNotification());
+    $this->handleTransferResult($result);
   }
 
   /**
-   * @param array $result
+   * @param array $transfer_result
    * @return mixed
    */
-  private function handleResult($result)
+  private function handleTransferResult($transfer_result)
   {
+    $result = (array)$transfer_result;
     $message = $result['message'] ?? '';
+
     if(empty($result['status']) || empty($result['data'])) {
       $this->payment->update(['message' => $message, 'is_failed' => 1]);
       return null;
