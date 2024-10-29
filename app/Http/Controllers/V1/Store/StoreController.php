@@ -17,12 +17,11 @@ class StoreController extends Controller
   }
 
   /**
-   * @param Request $request
    * @return JsonResponse
    */
-  public function list(Request $request): JsonResponse
+  public function list(): JsonResponse
   {
-    return $this->storeService->list($request);
+    return $this->storeService->list();
   }
 
   /**

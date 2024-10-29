@@ -33,4 +33,14 @@ class ProductController extends Controller
   {
     return $this->productService->show($id);
   }
+
+  /**
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function search(Request $request): JsonResponse
+  {
+    return $this->productService->search($request);
+  }
+
 }

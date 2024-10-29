@@ -4,7 +4,6 @@ namespace App\Services\V1\Product;
 use App\Http\Resources\Product\ProductResource;
 use App\Models\Product\Product;
 use App\Services\BaseService;
-use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -29,7 +28,7 @@ class ProductService extends BaseService
       $products = $query->with(['unit', 'images', 'category', 'store', 'currency'])->paginate($request->limit ?? 20);
       return responser()->send(Status::HTTP_OK, ProductResource::collection($products), 'Operation successful.');
     } catch (Exception $e) {
-      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
     }
   }
 
@@ -43,7 +42,28 @@ class ProductService extends BaseService
       $product = Product::published()->with(['images', 'unit', 'category', 'store'])->find($id);
       return responser()->send(Status::HTTP_OK, $product, 'Operation successful.');
     } catch (Exception $e) {
-      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
+    }
+  }
+
+  /**
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function search(Request $request): JsonResponse
+  {
+    try {
+      $search = $request->get('query');
+      $products = Product::with('store')->published()
+        ->where(function ($query) use ($search) {
+          $query->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('description', 'LIKE', "%{$search}%")
+            ->orWhere('tags', 'LIKE', "%{$search}%");
+        })
+        ->get();
+      return responser()->send(Status::HTTP_OK, ProductResource::collection($products), 'Operation successful.');
+    } catch (Exception $e) {
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
     }
   }
 

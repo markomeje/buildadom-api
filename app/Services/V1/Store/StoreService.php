@@ -15,13 +15,12 @@ class StoreService extends BaseService
 {
 
   /**
-   * @param Request $request
    * @return JsonResponse
    */
-	public function list(Request $request): JsonResponse
+	public function list(): JsonResponse
 	{
     try {
-      $stores = Store::published()->with(['state', 'city'])->latest()->paginate($request->limit ?? 20);
+      $stores = Store::published()->with(['state', 'city'])->latest()->get();
       return responser()->send(Status::HTTP_OK, $stores, 'Operation successful.');
     } catch (Exception $e) {
       return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');

@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware([])->domain(env('API_URL'))->prefix('v1')->group(function() {
   Route::middleware(['accept.json'])->group(function() {
+
     Route::prefix('/admin')->name('admin.')->group(base_path('routes/v1/admin.php'));
     Route::prefix('/merchant')->name('merchant.')->group(base_path('routes/v1/merchant.php'));
     Route::prefix('/customer')->name('customer.')->group(base_path('routes/v1/customer.php'));
@@ -55,6 +56,7 @@ Route::middleware([])->domain(env('API_URL'))->prefix('v1')->group(function() {
     Route::prefix('product')->group(function() {
       Route::get('/list', [ProductController::class, 'list']);
       Route::get('/show/{id}', [ProductController::class, 'show']);
+      Route::get('/search', [ProductController::class, 'search']);
 
       Route::prefix('category')->group(function() {
         Route::get('/list', [ProductCategoryController::class, 'list']);

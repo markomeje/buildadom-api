@@ -22,7 +22,7 @@ class ProductSeeder extends Seeder
     $products = $this->getDummyProducts();
     if(!empty($products) && is_array($products)) {
       foreach($products as $product) {
-        Product::updateOrCreate(['name' => $product['name']], $product);
+        Product::updateOrCreate(['name' => $product['name']], [...$product, 'published' => 1]);
       }
     }
   }
