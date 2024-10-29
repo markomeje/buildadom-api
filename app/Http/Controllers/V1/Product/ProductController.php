@@ -43,4 +43,13 @@ class ProductController extends Controller
     return $this->productService->search($request);
   }
 
+  /**
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function filter(Request $request): JsonResponse
+  {
+    return $this->productService->filter($request);
+  }
+
 }

@@ -57,6 +57,7 @@ Route::middleware([])->domain(env('API_URL'))->prefix('v1')->group(function() {
       Route::get('/list', [ProductController::class, 'list']);
       Route::get('/show/{id}', [ProductController::class, 'show']);
       Route::get('/search', [ProductController::class, 'search']);
+      Route::get('/filter', [ProductController::class, 'filter']);
 
       Route::prefix('category')->group(function() {
         Route::get('/list', [ProductCategoryController::class, 'list']);

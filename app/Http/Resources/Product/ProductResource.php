@@ -27,6 +27,7 @@ class ProductResource extends JsonResource
       'status' => $this->status,
       'price' => $this->price,
       'quantity' => $this->quantity,
+      'published' => $this->published,
       'images' => ProductImageResource::collection($this->whenLoaded('images')),
       'category' => new ProductCategoryResource($this->whenLoaded('category')),
       'unit' => new ProductUnitResource($this->whenLoaded('unit')),
