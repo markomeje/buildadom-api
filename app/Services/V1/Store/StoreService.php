@@ -40,4 +40,25 @@ class StoreService extends BaseService
     }
 	}
 
+  /**
+   * @param Request $request
+   * @return JsonResponse
+   */
+	public function search(Request $request): JsonResponse
+	{
+    try {
+      $search = $request->get('query');
+      $stores = Store::with(['state', 'city'])->published()
+        ->where(function ($query) use ($search) {
+          $query->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('description', 'LIKE', "%{$search}%")
+            ->orWhere('address', 'LIKE', "%{$search}%");
+        })
+        ->get();
+      return responser()->send(Status::HTTP_OK, $stores, 'Operation successful.');
+    } catch (Exception $e) {
+      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+    }
+	}
+
 }

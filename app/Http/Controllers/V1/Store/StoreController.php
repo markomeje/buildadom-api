@@ -32,4 +32,14 @@ class StoreController extends Controller
   {
     return $this->storeService->show($id);
   }
+
+  /**
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function search(Request $request): JsonResponse
+  {
+    return $this->storeService->search($request);
+  }
+
 }
