@@ -6,7 +6,6 @@ use App\Jobs\V1\Order\HandleMerchantFulfilledOrderConfirmedJob;
 use App\Models\Order\OrderFulfillment;
 use App\Services\BaseService;
 use App\Traits\V1\Order\OrderFulfillmentTrait;
-use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -31,7 +30,7 @@ class OrderFulfillmentService extends BaseService
 
       $this->handleFulfilledOrderConfirmationChecks($order_fulfillment);
 
-      $confirmed_fulfillment = $this->confirmFilfilledOrder($order_fulfillment);
+      $confirmed_fulfillment = $this->confirmFulfilledOrder($order_fulfillment);
       HandleMerchantFulfilledOrderConfirmedJob::dispatch($confirmed_fulfillment);
       return responser()->send(Status::HTTP_OK, new OrderFulfillmentResource($confirmed_fulfillment), 'Operation successful.');
     } catch (Exception $e) {
