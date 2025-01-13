@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Jobs\V1\Order;
+
+use App\Enums\Payment\PaymentAccountTypeEnum;
 use App\Enums\QueuedJobEnum;
 use App\Jobs\V1\Escrow\DebitEscrowAccountJob;
 use App\Jobs\V1\Payment\InitializeTransferPaymentJob;
@@ -18,9 +20,7 @@ class HandleConfirmedOrderPaymentJob implements ShouldQueue
   use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, OrderFulfillmentTrait, EscrowAccountTrait;
 
   /**
-   * Create a new job instance.
-   *
-   * @return void
+   * @param OrderFulfillment $order_fulfillment
    */
   public function __construct(private OrderFulfillment $order_fulfillment)
   {
@@ -37,7 +37,10 @@ class HandleConfirmedOrderPaymentJob implements ShouldQueue
     $order = $this->order_fulfillment->order;
     $amount = (float)$order->total_amount;
 
-    DebitEscrowAccountJob::dispatch($order->customer, $amount);
+    if(strtoupper($order->payment->account_type) == strtoupper(PaymentAccountTypeEnum::ESCROW->value)) {
+      DebitEscrowAccountJob::dispatch($order->customer, $amount);
+    }
+
     InitializeTransferPaymentJob::dispatch($order->store->merchant, $this->order_fulfillment->reference, $amount);
     $this->order_fulfillment->update(['payment_processed' => 1]);
   }

@@ -2,6 +2,7 @@
 
 namespace App\Notifications\V1\Order;
 use App\Enums\Queue\QueueEnum;
+use App\Models\Order\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -12,13 +13,10 @@ class MerchantFulfilledOrderConfirmedNotification extends Notification implement
   use Queueable;
 
   /**
-   * Create a new notification instance.
-   *
-   * @return void
+   * @param Order $order
    */
-  public function __construct(private string $tracking_number)
+  public function __construct(private Order $order)
   {
-    $this->tracking_number = $tracking_number;
     $this->onQueue(QueueEnum::ORDER->value);
   }
 
@@ -41,9 +39,10 @@ class MerchantFulfilledOrderConfirmedNotification extends Notification implement
    */
   public function toMail($notifiable)
   {
+    $tracking_number = $this->order->tracking_number;
     return (new MailMessage)
       ->subject('Buildadom Order fulfillment Confirmation')
-      ->line("Your fulfillment of the order with tracking number $this->tracking_number has been confirmed.")
+      ->line("Your fulfillment of the order with tracking number $tracking_number has been confirmed.")
       ->line('Thank you for choosing our platform');
   }
 

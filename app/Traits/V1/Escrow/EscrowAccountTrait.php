@@ -6,6 +6,7 @@ use App\Enums\Escrow\EscrowBalanceTypeEnum;
 use App\Jobs\V1\Escrow\LogEscrowAccountBalanceJob;
 use App\Models\Escrow\EscrowAccount;
 use App\Models\User;
+use App\Notifications\V1\Escrow\EscrowAccountCreditedNotification;
 use App\Notifications\V1\Escrow\EscrowAccountDebitedNotification;
 use App\Traits\V1\CurrencyTrait;
 
@@ -16,7 +17,7 @@ trait EscrowAccountTrait
   /**
    * @param float $amount
    * @param User $user
-   * @return array
+   * @return EscrowAccount
    */
   public function creditEscrowAccount(User $user, float $amount)
   {
@@ -24,7 +25,7 @@ trait EscrowAccountTrait
     $escrow = EscrowAccount::where(['user_id' => $user_id])->first();
 
     if(empty($escrow)) {
-      $new_balance = $old_balance = $amount;
+      $old_balance = $new_balance = (float)$amount;
       $escrow = EscrowAccount::create([
         'balance' => $new_balance,
         'user_id' => $user_id,
@@ -33,34 +34,32 @@ trait EscrowAccountTrait
       ]);
     }else {
       $old_balance = $escrow->balance ?? 0;
-      $new_balance = $old_balance + $amount;
+      $new_balance = (float)($old_balance + $amount);
       $escrow->update(['balance' => $new_balance]);
     }
 
-    return [
-      'new_balance' => $new_balance,
-      'old_balance' => $old_balance,
-      'escrow_account_id' => $escrow->id
-    ];
+    $user->notify(new EscrowAccountCreditedNotification($amount, $new_balance));
+    LogEscrowAccountBalanceJob::dispatch($new_balance, $old_balance, $escrow, $amount, EscrowBalanceTypeEnum::CREDIT->value, $user);
+    return $escrow;
   }
 
   /**
    * @param float $amount
    * @param User $user
-   * @return void
+   * @return EscrowAccount
    */
   public function debitEscrowAccount(User $user, float $amount)
   {
     $user_id = $user->id;
     $escrow = EscrowAccount::where(['user_id' => $user_id])->first();
+
     $old_balance = $escrow->balance ?? 0;
-    $new_balance = $old_balance - $amount;
-
+    $new_balance = (float)($old_balance - $amount);
     $escrow->update(['balance' => $new_balance]);
-    $user->notify(new EscrowAccountDebitedNotification($amount));
 
-    $balance_type = strtolower(EscrowBalanceTypeEnum::DEBIT->value);
-    LogEscrowAccountBalanceJob::dispatch($new_balance, $old_balance, $escrow->id, $amount, $balance_type, $user_id);
+    $user->notify(new EscrowAccountDebitedNotification($amount, $new_balance));
+    LogEscrowAccountBalanceJob::dispatch($new_balance, $old_balance, $escrow, $amount, EscrowBalanceTypeEnum::DEBIT->value, $user);
+    return $escrow;
   }
 
 }

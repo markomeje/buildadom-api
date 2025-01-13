@@ -6,7 +6,6 @@ use App\Jobs\V1\Payment\HandlePaystackWebhookEventJob;
 use App\Services\BaseService;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 
 class PaystackWebhookService extends BaseService
@@ -18,7 +17,7 @@ class PaystackWebhookService extends BaseService
   public function webhook(Request $request)
   {
     try {
-      if((strtolower($request->server('REQUEST_METHOD')) !== 'post')) {
+      if(strtolower($request->server('REQUEST_METHOD')) !== 'post') {
         LogDeveloperInfoJob::dispatch('Invalid paystack webhook request method');
         exit();
       }
@@ -38,10 +37,9 @@ class PaystackWebhookService extends BaseService
       HandlePaystackWebhookEventJob::dispatch($payload);
 
       LogDeveloperInfoJob::dispatch('Paystack webhook event recieved successfully.');
-      Log::info('Paystack Webhook Payload - '.json_encode($payload));
       http_response_code(200);
     } catch (Exception $e) {
-      LogDeveloperInfoJob::dispatch($e->getMessage());
+      LogDeveloperInfoJob::dispatch('PAYSTACK WEBHOOK EXCEPTION - '.$e->getMessage());
       exit();
     }
   }

@@ -26,6 +26,7 @@ class Payment extends Model
     'amount',
     'user_id',
     'status',
+    'account_type',
     'reference',
     'fee',
     'type',

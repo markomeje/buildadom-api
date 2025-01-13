@@ -1,9 +1,10 @@
 <?php
 
 namespace Database\Seeders;
+use App\Enums\User\UserRoleEnum;
 use App\Models\Country;
 use App\Models\Store\Store;
-use App\Models\User;
+use App\Models\UserRole;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -21,8 +22,11 @@ class StoreSeeder extends Seeder
     Store::truncate();
     DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
 
-    foreach($this->dummyStores() as $store) {
-      Store::create($store);
+    $stores = $this->dummyStores();
+    if(!empty($stores) && is_array($stores)) {
+      foreach($stores as $store) {
+        Store::create($store);
+      }
     }
   }
 
@@ -39,7 +43,7 @@ class StoreSeeder extends Seeder
         'published' => 1,
         'description' => fake()->text(),
         'address' => fake()->address(),
-        'user_id' => $faker->randomElement(User::all()->pluck('id')->toArray()),
+        'user_id' => $faker->randomElement(UserRole::where('name', UserRoleEnum::MERCHANT->value)->pluck('user_id')->toArray()),
       ],
       [
         'name' => fake()->sentence(2),
@@ -47,7 +51,7 @@ class StoreSeeder extends Seeder
         'published' => 1,
         'description' => fake()->text(),
         'address' => fake()->address(),
-        'user_id' => $faker->randomElement(User::all()->pluck('id')->toArray()),
+        'user_id' => $faker->randomElement(UserRole::where('name', UserRoleEnum::MERCHANT->value)->pluck('user_id')->toArray()),
       ],
       [
         'name' => fake()->sentence(2),
@@ -55,7 +59,7 @@ class StoreSeeder extends Seeder
         'published' => 1,
         'description' => fake()->text(),
         'address' => fake()->address(),
-        'user_id' => $faker->randomElement(User::all()->pluck('id')->toArray()),
+        'user_id' => $faker->randomElement(UserRole::where('name', UserRoleEnum::MERCHANT->value)->pluck('user_id')->toArray()),
       ],
       [
         'name' => fake()->sentence(2),
@@ -63,7 +67,7 @@ class StoreSeeder extends Seeder
         'published' => 1,
         'description' => fake()->text(),
         'address' => fake()->address(),
-        'user_id' => $faker->randomElement(User::all()->pluck('id')->toArray()),
+        'user_id' => $faker->randomElement(UserRole::where('name', UserRoleEnum::MERCHANT->value)->pluck('user_id')->toArray()),
       ],
       [
         'name' => fake()->sentence(2),
@@ -71,7 +75,7 @@ class StoreSeeder extends Seeder
         'published' => 1,
         'description' => fake()->text(),
         'address' => fake()->address(),
-        'user_id' => $faker->randomElement(User::all()->pluck('id')->toArray()),
+        'user_id' => $faker->randomElement(UserRole::where('name', UserRoleEnum::MERCHANT->value)->pluck('user_id')->toArray()),
       ],
       [
         'name' => fake()->sentence(2),
@@ -79,7 +83,7 @@ class StoreSeeder extends Seeder
         'published' => 1,
         'description' => fake()->text(),
         'address' => fake()->address(),
-        'user_id' => $faker->randomElement(User::all()->pluck('id')->toArray()),
+        'user_id' => $faker->randomElement(UserRole::where('name', UserRoleEnum::MERCHANT->value)->pluck('user_id')->toArray()),
       ],
     ];
   }

@@ -15,14 +15,11 @@ class DebitEscrowAccountJob implements ShouldQueue
   use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, EscrowAccountTrait;
 
   /**
-   * Create a new job instance.
-   *
-   * @return void
+   * @param User $user
+   * @param float $amount
    */
   public function __construct(private User $user, private float $amount)
   {
-    $this->user = $user;
-    $this->amount = $amount;
     $this->onQueue(QueueEnum::ESCROW->value);
   }
 
@@ -33,7 +30,7 @@ class DebitEscrowAccountJob implements ShouldQueue
    */
   public function handle()
   {
-    $this->debitEscrowAccount($this->user, $this->amount);
+    $this->debitEscrowAccount($this->user, (float)$this->amount);
   }
 
 }

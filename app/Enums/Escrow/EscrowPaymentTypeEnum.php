@@ -3,11 +3,11 @@
 namespace App\Enums\Escrow;
 use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
-enum EscrowTransactionTypeEnum: string
+enum EscrowPaymentTypeEnum: string
 {
   use UsefulEnums;
 
-  case CREDIT = 'credit';
-  case DEBIT = 'debit';
+  case DEPOSIT = 'DEPOSIT';
+  case WITHDRAWAL = 'WITHDRAWAL';
 
 }

@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Jobs\V1\Escrow;
-use App\Enums\Escrow\EscrowBalanceTypeEnum;
+use App\Enums\Escrow\EscrowPaymentTypeEnum;
+use App\Enums\Payment\PaymentAccountTypeEnum;
+use App\Enums\Payment\PaymentStatusEnum;
+use App\Enums\Payment\PaymentTypeEnum;
 use App\Enums\Queue\QueueEnum;
-use App\Models\User;
-use App\Notifications\V1\Escrow\EscrowAccountCreditedNotification;
+use App\Models\Escrow\EscrowPayment;
+use App\Models\Payment\Payment;
 use App\Traits\V1\Escrow\EscrowAccountTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,12 +19,14 @@ class CreditEscrowAccountJob implements ShouldQueue
 {
   use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, EscrowAccountTrait;
 
+  protected $tries = 5; // Number of attempts
+
   /**
    * Create a new job instance.
    *
    * @return void
    */
-  public function __construct(private User $user, private float $amount)
+  public function __construct()
   {
     $this->onQueue(QueueEnum::ESCROW->value);
   }
@@ -33,9 +38,45 @@ class CreditEscrowAccountJob implements ShouldQueue
    */
   public function handle()
   {
-    $this->user->notify(new EscrowAccountCreditedNotification($this->amount));
-    $escrow = $this->creditEscrowAccount($this->user, $this->amount);
-    LogEscrowAccountBalanceJob::dispatch($escrow['new_balance'], $escrow['old_balance'], $escrow['escrow_account_id'], $this->amount, EscrowBalanceTypeEnum::CREDIT->value, $this->user->id);
+    $payments = Payment::where([
+      'status' => PaymentStatusEnum::SUCCESS->value,
+      'account_type' => PaymentAccountTypeEnum::ESCROW->value,
+      'type' => PaymentTypeEnum::CHARGE->value,
+    ])->get();
+
+    if ($payments->count()) {
+      $payments->map(function($payment) {
+        $this->handleEscrowPayment($payment);
+      });
+    }
+  }
+
+  /**
+   * @param Payment $payment
+   * @return void
+   */
+  private function handleEscrowPayment(Payment $payment)
+  {
+    $float_amount = (float)$payment->amount;
+    $payment_id = $payment->id;
+    $user_id = $payment->user_id;
+
+    $escrow_payment = EscrowPayment::where([
+      'payment_id' => $payment_id,
+      'user_id' => $user_id,
+      'payment_type' => EscrowPaymentTypeEnum::DEPOSIT->value
+    ])->first();
+
+    if(!$escrow_payment) {
+      $escrow = $this->creditEscrowAccount($payment->user, $float_amount);
+      EscrowPayment::create([
+        'payment_id' => $payment_id,
+        'user_id' => $user_id,
+        'amount' => $float_amount,
+        'payment_type' => EscrowPaymentTypeEnum::DEPOSIT->value,
+        'escrow_account_id' => $escrow->id
+      ]);
+    }
   }
 
 }

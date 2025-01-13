@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Console;
+use App\Jobs\V1\Escrow\CreditEscrowAccountJob;
 use App\Jobs\V1\Order\CustomerPendingOrderReminderJob;
 use App\Jobs\V1\Order\UpdateCustomerOrderPaymentDetailsJob;
 use App\Jobs\V1\Payment\CreatePaystackTransferRecipientJob;
@@ -24,6 +25,7 @@ class Kernel extends ConsoleKernel
       $schedule->job(new PaystackPaymentVerificationJob)->everyMinute();
     }
 
+    $schedule->job(new CreditEscrowAccountJob)->everyMinute();
     $schedule->job(new CreatePaystackTransferRecipientJob)->everyMinute();
     $schedule->job(new UpdateCustomerOrderPaymentDetailsJob)->everyMinute();
     $schedule->job(new CustomerPendingOrderReminderJob)->daily();

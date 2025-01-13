@@ -18,9 +18,9 @@ class InitializeTransferPaymentJob implements ShouldQueue
   use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, EscrowAccountTrait, PaymentTrait;
 
   /**
-   * Create a new job instance.
-   *
-   * @return void
+   * @param User $user
+   * @param string $reference
+   * @param float $amount
    */
   public function __construct(private User $user, private string $reference, private float $amount)
   {
@@ -34,7 +34,7 @@ class InitializeTransferPaymentJob implements ShouldQueue
    */
   public function handle()
   {
-    $payment = $this->initializePayment($this->user, $this->reference, $this->amount, PaymentTypeEnum::TRANSFER->value);
+    $payment = $this->initializePayment($this->user, $this->reference, $this->amount, 0, PaymentTypeEnum::TRANSFER->value);
     InitiatePaystackTransferPaymentJob::dispatch($payment, $this->user->bank);
   }
 

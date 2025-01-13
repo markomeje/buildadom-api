@@ -4,7 +4,6 @@ namespace App\Services\V1\Customer\Payment;
 use App\Http\Resources\V1\Payment\PaymentResource;
 use App\Models\Payment\Payment;
 use App\Services\BaseService;
-use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -15,7 +14,7 @@ class PaymentService extends BaseService
 {
 
   /**
-   * Request $request
+   * @param Request $request
    * @return JsonResponse
    */
   public function list(Request $request): JsonResponse

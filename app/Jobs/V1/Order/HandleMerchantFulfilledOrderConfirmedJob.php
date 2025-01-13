@@ -15,9 +15,7 @@ class HandleMerchantFulfilledOrderConfirmedJob implements ShouldQueue
   use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
   /**
-   * Create a new job instance.
-   *
-   * @return void
+   * @param OrderFulfillment $order_fulfillment
    */
   public function __construct(private OrderFulfillment $order_fulfillment)
   {
@@ -32,7 +30,7 @@ class HandleMerchantFulfilledOrderConfirmedJob implements ShouldQueue
   public function handle()
   {
     $order = $this->order_fulfillment->order;
-    $order->store->merchant->notify(new MerchantFulfilledOrderConfirmedNotification($order->tracking_number));
+    $order->store->merchant->notify(new MerchantFulfilledOrderConfirmedNotification($order));
     ProcessConfirmedOrderPaymentDisbursementsJob::dispatch($this->order_fulfillment);
   }
 

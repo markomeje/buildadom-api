@@ -2,7 +2,9 @@
 
 namespace App\Jobs\V1\Escrow;
 use App\Enums\Queue\QueueEnum;
+use App\Models\Escrow\EscrowAccount;
 use App\Models\Escrow\EscrowBalance;
+use App\Models\User;
 use App\Traits\V1\Escrow\EscrowAccountTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,18 +17,21 @@ class LogEscrowAccountBalanceJob implements ShouldQueue
   use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, EscrowAccountTrait;
 
   /**
-   * Create a new job instance.
-   *
-   * @return void
+   * @param float $new_balance
+   * @param float $old_balance
+   * @param EscrowAccount $escrow_account
+   * @param float $amount
+   * @param string $balance_type
+   * @param User $user
    */
-  public function __construct(private float $new_balance, private float $old_balance, private int $escrow_account_id, private float $amount, private string $balance_type, private int $user_id)
-  {
-    $this->new_balance = $new_balance;
-    $this->old_balance = $old_balance;
-    $this->escrow_account_id = $escrow_account_id;
-    $this->amount = $amount;
-    $this->balance_type = $balance_type;
-    $this->user_id = $user_id;
+  public function __construct(
+    private float $new_balance,
+    private float $old_balance,
+    private EscrowAccount $escrow_account,
+    private float $amount,
+    private string $balance_type,
+    private User $user
+  ) {
     $this->onQueue(QueueEnum::ESCROW->value);
   }
 
@@ -41,9 +46,9 @@ class LogEscrowAccountBalanceJob implements ShouldQueue
       'old_balance' => $this->old_balance,
       'new_balance' => $this->new_balance,
       'balance_type' => $this->balance_type,
-      'escrow_account_id' => $this->escrow_account_id,
+      'escrow_account_id' => $this->escrow_account->id,
       'amount' => $this->amount,
-      'user_id' => $this->user_id,
+      'user_id' => $this->user->id,
     ]);
   }
 

@@ -2,7 +2,6 @@
 
 namespace App\Models\Escrow;
 use App\Models\Currency;
-use App\Models\Payment\Payment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -46,14 +45,6 @@ class EscrowAccount extends Model
   public function user(): BelongsTo
   {
     return $this->belongsTo(User::class, 'user_id');
-  }
-
-  /**
-   * @return BelongsTo
-   */
-  public function payment(): BelongsTo
-  {
-    return $this->belongsTo(Payment::class, 'payment_id');
   }
 
   /**

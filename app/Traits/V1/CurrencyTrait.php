@@ -20,4 +20,13 @@ trait CurrencyTrait
     return $currency;
   }
 
+  /**
+   * @param float $amount
+   * @return string
+   */
+  public function formatCurrencyAmount(float $amount): string
+  {
+    return $this->getDefaultCurrency()->code.number_format($amount);
+  }
+
 }

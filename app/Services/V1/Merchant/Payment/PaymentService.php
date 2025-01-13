@@ -3,7 +3,6 @@
 namespace App\Services\V1\Merchant\Payment;
 use App\Models\Payment\Payment;
 use App\Services\BaseService;
-use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;

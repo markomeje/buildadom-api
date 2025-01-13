@@ -13,13 +13,11 @@ class EscrowAccountDebitedNotification extends Notification implements ShouldQue
   use Queueable, CurrencyTrait;
 
   /**
-   * Create a new notification instance.
-   *
-   * @return void
+   * @param float $amount
+   * @param float $new_balance
    */
-  public function __construct(private $amount)
+  public function __construct(private float $amount, private float $new_balance)
   {
-    $this->amount = $amount;
     $this->onQueue(QueueEnum::ESCROW->value);
   }
 
@@ -42,11 +40,9 @@ class EscrowAccountDebitedNotification extends Notification implements ShouldQue
    */
   public function toMail($notifiable)
   {
-    $amount = $this->getDefaultCurrency()->code.number_format($this->amount);
     return (new MailMessage)
-      ->subject('Buildadom Escrow Account debited.')
-      ->line("Your escrow account has been debited with the sum of $amount.")
-      ->line('Incase of an questions, kindly contact our support.')
+      ->subject('Escrow Account Debited')
+      ->line('Your escrow account has been debited with the sum of ' . $this->formatCurrencyAmount($this->amount) . ' and your new balance is '.$this->formatCurrencyAmount($this->new_balance))
       ->line('Thank you for choosing our platform');
   }
 

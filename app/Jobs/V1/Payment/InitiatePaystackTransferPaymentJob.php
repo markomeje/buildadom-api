@@ -17,9 +17,8 @@ class InitiatePaystackTransferPaymentJob implements ShouldQueue
   use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
   /**
-   * Create a new job instance.
-   *
-   * @return void
+   * @param Payment $payment
+   * @param BankAccount $account
    */
   public function __construct(private Payment $payment, private BankAccount $account)
   {
@@ -33,13 +32,13 @@ class InitiatePaystackTransferPaymentJob implements ShouldQueue
    */
   public function handle()
   {
-    $fields = [
+    $payload = [
       'reference' => $this->payment->reference,
       'recipient' => $this->account->recipient_code,
       'amount' => $this->payment->total_amount * 100,
     ];
 
-    $result = Paystack::payment()->initiateTransfer($fields);
+    $result = Paystack::payment()->initiateTransfer($payload);
     $this->payment->user->notify(new MarchantTransferPaymentProcessedNotification());
     $this->handleTransferResult($result);
   }

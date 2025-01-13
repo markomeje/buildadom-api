@@ -12,29 +12,29 @@ trait PaymentTrait
 
   /**
    * @param User $user
-   * @param string $reference,
+   * @param string $reference
    * @param float|int $amount
-   * @param string $type
    * @param float|int $fee
-   * @param array $payload
+   * @param string $type
+   * @param string|null $account_type
    * @return Payment
    */
-  public function initializePayment(User $user, string $reference, float|int $amount, string $type, float|int $fee = 0, array $payload = [])
+  public function initializePayment(User $user, string $reference, float|int $amount, float|int $fee = 0, string $type, string|null $account_type = null)
   {
     $user_id = $user->id;
     return Payment::updateOrCreate([
-      'reference' => $reference,
       'status' => TransferPaymentStatusEnum::INITIALIZED->value,
       'user_id' => $user_id,
     ], [
+      'fee' => $fee,
       'amount' => $amount,
       'total_amount' => $amount + $fee,
       'status' => TransferPaymentStatusEnum::INITIALIZED->value,
       'currency_id' => $this->getDefaultCurrency()->id,
+      'account_type' => $account_type,
       'reference' => $reference,
       'user_id' => $user_id,
       'type' => $type,
-      'payload' => $payload
     ]);
   }
 

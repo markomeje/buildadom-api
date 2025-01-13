@@ -35,7 +35,7 @@ class HandlePaystackWebhookEventJob implements ShouldQueue
     $paystack = $this->payload['data'];
     $payment = Payment::where('reference', $paystack['reference'])->first();
     if(empty($payment)) {
-      LogDeveloperInfoJob::dispatch("Invalid paystack payment reference");
+      LogDeveloperInfoJob::dispatch("Paystack webhook payload reference is invalid");
       return;
     }
 
