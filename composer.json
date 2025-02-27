@@ -19,7 +19,7 @@
         "league/flysystem-aws-s3-v3": "^3.12",
         "mane-olawale/termii": "^1.2",
         "php-open-source-saver/jwt-auth": "^2.0",
-        "propaganistas/laravel-phone": "^5.0",
+        "propaganistas/laravel-phone": "^5.1",
         "queueworker/sansdaemon": "^1.2",
         "smknstd/fakerphp-picsum-images": "^1.0"
     },

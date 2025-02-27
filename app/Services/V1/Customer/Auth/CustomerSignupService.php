@@ -9,8 +9,6 @@ use App\Models\UserRole;
 use App\Services\BaseService;
 use App\Services\V1\Email\EmailVerificationService;
 use App\Services\V1\Phone\PhoneVerificationService;
-use App\Utility\Help;
-use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -50,7 +48,7 @@ class CustomerSignupService extends BaseService
 
       DB::commit();
       return responser()->send(Status::HTTP_CREATED, ['token' => auth()->login($user), 'user' => $user], 'Signup successful. Verification detials has been sent.');
-    } catch (Exception $e) {
+    } catch (Exception) {
       DB::rollback();
       return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Oooops! singup failed. Try again.');
     }

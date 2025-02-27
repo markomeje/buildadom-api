@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Http\Requests\V1\Merchant\Auth;
-use App\Rules\EmailRule;
-use App\Utility\Responser;
 use App\Enums\User\UserTypeEnum;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\Rules\Enum;
-use Illuminate\Validation\Rules\Password;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\EmailRule;
+use App\Rules\PasswordRule;
+use App\Utility\Status;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
 
 class MerchantSignupRequest extends FormRequest
@@ -34,8 +34,9 @@ class MerchantSignupRequest extends FormRequest
     $business = strtolower($this->type ?? '') === 'business';
     return [
       'type' => ['required', 'string', new Enum(UserTypeEnum::class)],
-      'email' => ['required', 'email', 'unique:users', (new EmailRule)],
-      'phone' => ['required', 'unique:users', 'phone'],
+      'email' => ['required', 'unique:users', (new EmailRule)],
+      'phone' => ['required', 'string', Rule::unique('users'), 'phone'],
+
       'firstname' => [!$business ? 'required' : 'nullable', 'string', 'max:50'],
       'lastname' => [!$business ? 'required' : 'nullable', 'string', 'max:50'],
 
@@ -44,7 +45,7 @@ class MerchantSignupRequest extends FormRequest
       'website' => ['nullable', 'max:255'],
 
       'address' => ['required', 'max:255'],
-      'password' => ['required', app()->environment(['production']) ? Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised() : 'min:5'],
+      'password' => ['required', (new PasswordRule)],
       'confirm_password' => ['required', 'same:password']
     ];
   }
@@ -58,7 +59,7 @@ class MerchantSignupRequest extends FormRequest
   {
     return [
       'cac_number.required' => 'Please enter your CAC registration number.',
-      'phone.phone' => 'Invalid phone number. Please include country code and try again.'
+      'phone.phone' => 'Invalid phone number'
     ];
   }
 
@@ -71,7 +72,7 @@ class MerchantSignupRequest extends FormRequest
    */
   protected function failedValidation(Validator $validator)
   {
-    $response = responser()->send(JsonResponse::HTTP_UNPROCESSABLE_ENTITY, [
+    $response = responser()->send(Status::HTTP_UNPROCESSABLE_ENTITY, [
       'errors' => $validator->errors()
     ], 'Please check your inputs.');
 

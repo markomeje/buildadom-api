@@ -2,13 +2,12 @@
 
 namespace App\Http\Requests\V1\Customer\Auth;
 use App\Rules\EmailRule;
-use App\Utility\Responser;
+use App\Rules\PasswordRule;
 use App\Utility\Status;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Validation\Rules\Password;
 
 class CustomerSignupRequest extends FormRequest
 {
@@ -31,12 +30,12 @@ class CustomerSignupRequest extends FormRequest
   public function rules()
   {
     return [
-      'email' => ['required', 'email', 'unique:users', (new EmailRule)],
-      'password' => ['required', app()->environment(['production']) ? Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised() : 'min:4'],
+      'email' => ['required', 'unique:users', (new EmailRule)],
+      'password' => ['required', (new PasswordRule)],
       'confirm_password' => ['required', 'same:password'],
       'firstname' => ['required', 'string', 'max:255'],
       'lastname' => ['required', 'string', 'max:255'],
-      'phone' => ['required', 'string', Rule::unique('users')],
+      'phone' => ['required', 'string', Rule::unique('users'), 'phone'],
     ];
   }
 
@@ -47,7 +46,9 @@ class CustomerSignupRequest extends FormRequest
  */
   public function messages()
   {
-    return [];
+    return [
+      'phone.phone' => 'Invalid phone number'
+    ];
   }
 
   /**
