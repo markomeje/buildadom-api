@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Jobs\V1\Payment;
-
 use App\Enums\Payment\PaymentTypeEnum;
 use App\Enums\QueuedJobEnum;
 use App\Integrations\Paystack;
@@ -11,7 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class VerifyPaystackTransferPaymentJob implements ShouldQueue
 {
@@ -49,8 +47,6 @@ class VerifyPaystackTransferPaymentJob implements ShouldQueue
   private function handleResult($payment)
   {
     $result = Paystack::payment()->verifyTransfer($payment->reference);
-    Log::info('Verify Paystack Transfer Payment Result - '.json_encode($result));
-
     $message = $result['message'] ?? '';
     if(empty($result['status']) || empty($result['data'])) {
       $payment->update(['message' => $message, 'is_failed' => 1]);

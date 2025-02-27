@@ -10,7 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 /**
  * For local dev only
@@ -58,8 +57,6 @@ class PaystackPaymentVerificationJob implements ShouldQueue
   private function handlePaymentStatus(Payment $payment)
   {
     $result = Paystack::payment()->verify($payment->reference);
-    Log::info('Paystack Payment Verification Result - '.json_encode($result));
-
     if(empty($result['status']) || empty($result['data'])) {
       $payment->update(['message' => $result['message'] ?? '', 'is_failed' => 1]);
       return null;
