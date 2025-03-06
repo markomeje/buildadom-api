@@ -91,15 +91,15 @@ class ProductService extends BaseService
       $products = Product::query()->with(['images', 'unit', 'category', 'store', 'currency'])->published()
         ->where(function ($query) use ($product_unit, $product_category, $min_price, $max_price, $product_store) {
           $query->when($product_unit, function ($query) use ($product_unit) {
-            return $query->orWhere('product_unit_id', $product_unit);
+            return $query->where('product_unit_id', $product_unit);
           })->when($product_category, function ($query) use ($product_category) {
-            return $query->orWhere('product_category_id', $product_category);
+            return $query->where('product_category_id', $product_category);
           })->when($min_price, function ($query) use ($min_price) {
-            return $query->orWhere('price', '>=', $min_price);
+            return $query->where('price', '>=', $min_price);
           })->when($max_price, function ($query) use ($max_price) {
-            return $query->orWhere('price', '<=', $max_price);
+            return $query->where('price', '<=', $max_price);
           })->when($product_store, function ($query) use ($product_store) {
-            return $query->orWhere('store_id', $product_store);
+            return $query->where('store_id', $product_store);
           });
         })->get();
 
