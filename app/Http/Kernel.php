@@ -72,6 +72,7 @@ class Kernel extends HttpKernel
 
         'customers.only' => \App\Http\Middleware\CustomerRoleMiddleware::class,
         'merchants.only' => \App\Http\Middleware\MerchantRoleMiddleware::class,
+        'merchants.kyc.verified' => \App\Http\Middleware\MerchantKycVerifiedMiddleware::class,
 
         'paystack.ipwhitelist' => \App\Http\Middleware\PaystackIpWhitelist::class,
     ];

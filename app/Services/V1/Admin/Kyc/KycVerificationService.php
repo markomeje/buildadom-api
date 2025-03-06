@@ -5,7 +5,6 @@ use App\Enums\Kyc\KycVerificationStatusEnum;
 use App\Models\Kyc\KycVerification;
 use App\Notifications\V1\Admin\Kyc\AdminKycActionNotification;
 use App\Services\BaseService;
-use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;

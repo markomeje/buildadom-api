@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/signup', [MerchantSignupController::class, 'signup']);
 
-Route::middleware(['auth:api', 'merchants.only'])->group(function() {
+Route::middleware(['auth:api', 'merchants.only', 'merchants.kyc.verified'])->group(function() {
   Route::prefix('store')->group(function() {
     Route::post('/create', [StoreController::class, 'create']);
     Route::post('/{id}/update', [StoreController::class, 'update']);
