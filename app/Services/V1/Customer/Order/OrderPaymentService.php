@@ -2,15 +2,12 @@
 
 namespace App\Services\V1\Customer\Order;
 use App\Enums\Order\OrderStatusEnum;
-use App\Enums\Payment\PaymentAccountTypeEnum;
-use App\Enums\Payment\PaymentStatusEnum;
 use App\Enums\Payment\PaymentTypeEnum;
 use App\Http\Resources\V1\Customer\Order\OrderPaymentResource;
 use App\Integrations\Paystack;
 use App\Jobs\V1\Order\SaveCustomerOrderPaymentJob;
 use App\Models\Order\Order;
 use App\Models\Order\OrderPayment;
-use App\Models\Payment\Payment;
 use App\Models\User;
 use App\Services\BaseService;
 use App\Traits\V1\CurrencyTrait;

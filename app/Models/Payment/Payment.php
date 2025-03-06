@@ -30,6 +30,7 @@ class Payment extends Model
     'reference',
     'fee',
     'type',
+    'account_type',
     'currency_id',
     'payload',
     'initialize_response',
