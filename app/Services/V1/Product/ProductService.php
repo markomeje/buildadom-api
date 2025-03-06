@@ -21,8 +21,12 @@ class ProductService extends BaseService
   {
     try {
       $query = Product::query()->latest()->published();
-      if($request->query('category')) {
+      if($request->has('category')) {
         $query->where('product_category_id', (int)$request->category);
+      }
+
+      if($request->has('min_price')) {
+        $query->where('price', '>=', $request->min_price);
       }
 
       $products = $query->with(['unit', 'images', 'category', 'store', 'currency'])->paginate($request->limit ?? 20);
@@ -85,19 +89,19 @@ class ProductService extends BaseService
       $product_store = $request->get('product_store');
 
       $products = Product::query()->with(['images', 'unit', 'category', 'store', 'currency'])->published()
-      ->where(function ($query) use ($product_unit, $product_category, $min_price, $max_price, $product_store) {
-        $query->when($product_unit, function ($query) use ($product_unit) {
-          return $query->orWhere('product_unit_id', $product_unit);
-        })->when($product_category, function ($query) use ($product_category) {
-          return $query->orWhere('product_category_id', $product_category);
-        })->when($min_price, function ($query) use ($min_price) {
-          return $query->orWhere('price', '>=', $min_price);
-        })->when($max_price, function ($query) use ($max_price) {
-          return $query->orWhere('price', '<=', $max_price);
-        })->when($product_store, function ($query) use ($product_store) {
-          return $query->orWhere('store_id', $product_store);
-        });
-      })->get();
+        ->where(function ($query) use ($product_unit, $product_category, $min_price, $max_price, $product_store) {
+          $query->when($product_unit, function ($query) use ($product_unit) {
+            return $query->orWhere('product_unit_id', $product_unit);
+          })->when($product_category, function ($query) use ($product_category) {
+            return $query->orWhere('product_category_id', $product_category);
+          })->when($min_price, function ($query) use ($min_price) {
+            return $query->orWhere('price', '>=', $min_price);
+          })->when($max_price, function ($query) use ($max_price) {
+            return $query->orWhere('price', '<=', $max_price);
+          })->when($product_store, function ($query) use ($product_store) {
+            return $query->orWhere('store_id', $product_store);
+          });
+        })->get();
 
       return responser()->send(Status::HTTP_OK, ProductResource::collection($products), 'Operation successful.');
     } catch (Exception $e) {
