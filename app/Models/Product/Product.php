@@ -44,17 +44,6 @@ class Product extends Model
   ];
 
   /**
-   * @return Attribute
-   */
-  protected function price(): Attribute
-  {
-    return new Attribute(
-      get: fn($value) => $value ? ($value/100) : $value,
-      set: fn($value) => $value * 100,
-    );
-  }
-
-  /**
    * @return Builder
    */
   public function scopePublished($query)
