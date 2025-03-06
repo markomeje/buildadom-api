@@ -4,7 +4,6 @@ namespace App\Services\V1\Kyc;
 use App\Enums\Kyc\KycVerificationStatusEnum;
 use App\Models\Kyc\KycVerification;
 use App\Services\BaseService;
-use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
