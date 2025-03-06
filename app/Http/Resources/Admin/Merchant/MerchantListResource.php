@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Admin\Merchant;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class MerchantListResource extends JsonResource
 {
