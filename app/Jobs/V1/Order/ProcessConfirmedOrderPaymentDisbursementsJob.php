@@ -14,31 +14,31 @@ use Illuminate\Queue\SerializesModels;
 
 class ProcessConfirmedOrderPaymentDisbursementsJob implements ShouldQueue
 {
-  use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, OrderFulfillmentTrait, EscrowAccountTrait;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, OrderFulfillmentTrait, EscrowAccountTrait;
 
-  /**
-   * Create a new job instance.
-   *
-   * @return void
-   */
-  public function __construct()
-  {
-    $this->onQueue(QueuedJobEnum::ORDER->value);
-  }
-
-  /**
-   * Execute the job.
-   *
-   * @return void
-   */
-  public function handle()
-  {
-    $order_fulfillments = OrderFulfillment::where(['payment_processed' => 0, 'is_confirmed' => 1, 'payment_authorized' => 1])->get();
-    if($order_fulfillments->count()) {
-      $order_fulfillments->map(function ($order_fulfillment) {
-        HandleConfirmedOrderPaymentJob::dispatch($order_fulfillment);
-      });
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->onQueue(QueuedJobEnum::ORDER->value);
     }
-  }
+
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        $order_fulfillments = OrderFulfillment::where(['payment_processed' => 0, 'is_confirmed' => 1, 'payment_authorized' => 1])->get();
+        if($order_fulfillments->count()) {
+            $order_fulfillments->map(function ($order_fulfillment) {
+                HandleConfirmedOrderPaymentJob::dispatch($order_fulfillment);
+            });
+        }
+    }
 
 }

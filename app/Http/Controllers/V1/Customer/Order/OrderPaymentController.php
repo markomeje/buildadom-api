@@ -11,29 +11,29 @@ use Illuminate\Http\Request;
 class OrderPaymentController extends Controller
 {
 
-  /**
-   * @param OrderPaymentService $orderService
-   */
-  public function __construct(public OrderPaymentService $orderPaymentService)
-  {
-    $this->orderPaymentService = $orderPaymentService;
-  }
+    /**
+     * @param OrderPaymentService $orderService
+     */
+    public function __construct(public OrderPaymentService $orderPaymentService)
+    {
+        $this->orderPaymentService = $orderPaymentService;
+    }
 
-  /**
-   * @param InitializeOrderPaymentRequest $request
-   * @return JsonResponse
-   */
-  public function initialize(InitializeOrderPaymentRequest $request): JsonResponse
-  {
-    return $this->orderPaymentService->initialize($request);
-  }
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function list(Request $request): JsonResponse
-  {
-    return $this->orderPaymentService->list($request);
-  }
+    /**
+     * @param InitializeOrderPaymentRequest $request
+     * @return JsonResponse
+     */
+    public function initialize(InitializeOrderPaymentRequest $request): JsonResponse
+    {
+        return $this->orderPaymentService->initialize($request);
+    }
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function list(Request $request): JsonResponse
+    {
+        return $this->orderPaymentService->list($request);
+    }
 
 }

@@ -19,56 +19,58 @@ use Illuminate\Support\Facades\Log;
 
 class OrderFulfillmentService extends BaseService
 {
-  use OrderFulfillmentTrait;
+    use OrderFulfillmentTrait;
 
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function confirm(Request $request): JsonResponse
-  {
-    try {
-      $order_fulfillment = OrderFulfillment::where(['order_id' => $request->order_id])->first();
-      if(empty($order_fulfillment)) {
-        return responser()->send(Status::HTTP_NOT_FOUND, null, 'Order fulfillment not found.');
-      }
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function confirm(Request $request): JsonResponse
+    {
+        try {
+            $order_fulfillment = OrderFulfillment::where(['order_id' => $request->order_id])->first();
+            if(empty($order_fulfillment)) {
+                return responser()->send(Status::HTTP_NOT_FOUND, null, 'Order fulfillment not found.');
+            }
 
-      if($order_fulfillment->is_confirmed) {
-        throw new ConfirmOrderException('Order have already been confirmed.', Status::HTTP_NOT_ACCEPTABLE);
-      }elseif(strtolower($order_fulfillment->order->status) !== strtolower(OrderStatusEnum::FULFILLED->value)) {
-        throw new ConfirmOrderException('Only fulfilled orders can be confirmed.', Status::HTTP_NOT_ACCEPTABLE);
-      }
+            if($order_fulfillment->is_confirmed) {
+                throw new ConfirmOrderException('Order have already been confirmed.', Status::HTTP_NOT_ACCEPTABLE);
+            }
 
-      $order_fulfillment->update([
-        'confirmation_code' => null,
-        'is_confirmed' => 1,
-        'confirmed_at' => Carbon::now(),
-        'status' => strtolower(OrderFulfillmentStatusEnum::CONFIRMED->value),
-        'payment_authorized' => 1
-      ]);
+            if(strtolower($order_fulfillment->order->status) !== strtolower(OrderStatusEnum::FULFILLED->value)) {
+                throw new ConfirmOrderException('Only fulfilled orders can be confirmed.', Status::HTTP_NOT_ACCEPTABLE);
+            }
 
-      HandleMerchantFulfilledOrderConfirmedJob::dispatch($order_fulfillment);
-      return responser()->send(Status::HTTP_OK, new OrderFulfillmentResource($order_fulfillment), 'Order confirmed successfully.');
-    } catch (ConfirmOrderException $c) {
-      return responser()->send($c->getCode(), null, $c->getMessage());
-    } catch (Exception $e) {
-      Log::info('ORDER CONFIRMATION PAYMENT FAILED - '.$e->getMessage());
-      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Order confirmation failed. Try again.');
+            $order_fulfillment->update([
+                'confirmation_code' => null,
+                'is_confirmed' => 1,
+                'confirmed_at' => Carbon::now(),
+                'status' => strtolower(OrderFulfillmentStatusEnum::CONFIRMED->value),
+                'payment_authorized' => 1
+            ]);
+
+            HandleMerchantFulfilledOrderConfirmedJob::dispatch($order_fulfillment);
+            return responser()->send(Status::HTTP_OK, new OrderFulfillmentResource($order_fulfillment), 'Order confirmed successfully.');
+        } catch (ConfirmOrderException $c) {
+            return responser()->send($c->getCode(), null, $c->getMessage());
+        } catch (Exception $e) {
+            Log::info('ORDER CONFIRMATION PAYMENT FAILED - '.$e->getMessage());
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Order confirmation failed. Try again.');
+        }
     }
-  }
 
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function list(Request $request): JsonResponse
-  {
-    try {
-      $order_fulfillments = OrderFulfillment::where(['customer_id' => auth()->id()])->paginate($request->limit ?? 20);
-      return responser()->send(Status::HTTP_OK, OrderFulfillmentResource::collection($order_fulfillments), 'Operation successful.');
-    } catch (Exception $e) {
-      return responser()->send($e->getCode(), null, $e->getMessage());
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function list(Request $request): JsonResponse
+    {
+        try {
+        $order_fulfillments = OrderFulfillment::where(['customer_id' => auth()->id()])->paginate($request->limit ?? 20);
+        return responser()->send(Status::HTTP_OK, OrderFulfillmentResource::collection($order_fulfillments), 'Operation successful.');
+        } catch (Exception $e) {
+        return responser()->send($e->getCode(), null, $e->getMessage());
+        }
     }
-  }
 
 }

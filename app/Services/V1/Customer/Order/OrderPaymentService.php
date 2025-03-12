@@ -22,60 +22,60 @@ use Illuminate\Support\Facades\Log;
 
 class OrderPaymentService extends BaseService
 {
-  use CurrencyTrait, FeeSettingTrait, PaymentTrait;
+    use CurrencyTrait, FeeSettingTrait, PaymentTrait;
 
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function initialize(Request $request): JsonResponse
-  {
-    try {
-      $orders = Order::owner()->where(['status' => OrderStatusEnum::PENDING->value])->get();
-      if(empty($orders->count())) {
-        return responser()->send(Status::HTTP_NOT_FOUND, null, 'No pending orders found.');
-      }
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function initialize(Request $request): JsonResponse
+    {
+        try {
+            $orders = Order::owner()->where(['status' => OrderStatusEnum::PENDING->value])->get();
+            if(empty($orders->count())) {
+                return responser()->send(Status::HTTP_NOT_FOUND, null, 'No pending orders found.');
+            }
 
-      $amount = $orders->sum('total_amount');
-      $currency = $this->getDefaultCurrency();
+            $amount = $orders->sum('total_amount');
+            $currency = $this->getDefaultCurrency();
 
-      $fee = $this->calculateFeeAmount('VAT', $amount);
-      $total_amount = ($amount + $fee);
-      $reference = (string)str()->uuid();
+            $fee = $this->calculateFeeAmount('VAT', $amount);
+            $total_amount = ($amount + $fee);
+            $reference = (string)str()->uuid();
 
-      $customer_id = (int)auth()->id();
-      $customer = User::find($customer_id);
-      $payment = $this->initializePayment($customer, $reference, $amount, $fee, PaymentTypeEnum::CHARGE->value, $request->account_type);
+            $customer_id = (int)auth()->id();
+            $customer = User::find($customer_id);
+            $payment = $this->initializePayment($customer, $reference, $amount, $fee, PaymentTypeEnum::CHARGE->value, $request->account_type);
 
-      $payload = [
-        'amount' => (int)($total_amount * 100), //in kobo
-        'reference' => $reference,
-        'email' => auth()->user()->email,
-        'currency' => strtoupper($currency->code)
-      ];
+            $payload = [
+                'amount' => (int)($total_amount * 100), //in kobo
+                'reference' => $reference,
+                'email' => auth()->user()->email,
+                'currency' => strtoupper($currency->code)
+            ];
 
-      $paystack = Paystack::payment()->initialize($payload);
-      $payment->update(['payload' => $payload, 'initialize_response' => $paystack]);
+            $paystack = Paystack::payment()->initialize($payload);
+            $payment->update(['payload' => $payload, 'initialize_response' => $paystack]);
 
-      SaveCustomerOrderPaymentJob::dispatch($orders, $customer_id, $payment->id);
-      return responser()->send(Status::HTTP_OK, $paystack, 'Operation successful.');
-    } catch (Exception $e) {
-      Log::info('INITIALIZE ORDER PAYMENT FAILED - '.$e->getMessage());
-      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again later.');
+            SaveCustomerOrderPaymentJob::dispatch($orders, $customer_id, $payment->id);
+            return responser()->send(Status::HTTP_OK, $paystack, 'Operation successful.');
+        } catch (Exception $e) {
+            Log::info('INITIALIZE ORDER PAYMENT FAILED - '.$e->getMessage());
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again later.');
+        }
     }
-  }
 
-  /**
-   * @param Request $request
-   */
-  public function list(Request $request): JsonResponse
-  {
-    try {
-      $orders = OrderPayment::owner()->latest()->with(['payment', 'order'])->paginate($request->limit ?? 20);
-      return responser()->send(Status::HTTP_OK, OrderPaymentResource::collection($orders), 'Operation successful.');
-    } catch (Exception $e) {
-      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+    /**
+     * @param Request $request
+     */
+    public function list(Request $request): JsonResponse
+    {
+        try {
+            $orders = OrderPayment::owner()->latest()->with(['payment', 'order'])->paginate($request->limit ?? 20);
+            return responser()->send(Status::HTTP_OK, OrderPaymentResource::collection($orders), 'Operation successful.');
+        } catch (Exception $e) {
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+        }
     }
-  }
 
 }

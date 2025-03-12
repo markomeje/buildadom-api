@@ -16,54 +16,54 @@ use Illuminate\Queue\SerializesModels;
  */
 class PaystackPaymentVerificationJob implements ShouldQueue
 {
-  use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-  /**
-   * Create a new job instance.
-   *
-   * @return void
-   */
-  public function __construct()
-  {
-    $this->onQueue(QueueEnum::PAYMENT->value);
-  }
-
-  /**
-   * Execute the job.
-   *
-   * @return void
-   */
-  public function handle()
-  {
-    $payments = Payment::whereIn('status', [
-      PaymentStatusEnum::INITIALIZED->value,
-      PaymentStatusEnum::ONGOING->value,
-      PaymentStatusEnum::PROCESSING->value,
-      PaymentStatusEnum::PENDING->value,
-      PaymentStatusEnum::QUEUED->value,
-      PaymentStatusEnum::ABANDONED->value,
-    ])->get();
-
-    if ($payments->count()) {
-      $payments->map(function($payment) {
-        $this->handlePaymentStatus($payment);
-      });
-    }
-  }
-
-  /**
-   * @param Payment $payment
-   */
-  private function handlePaymentStatus(Payment $payment)
-  {
-    $result = Paystack::payment()->verify($payment->reference);
-    if(empty($result['status']) || empty($result['data'])) {
-      $payment->update(['message' => $result['message'] ?? '', 'is_failed' => 1]);
-      return null;
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->onQueue(QueueEnum::PAYMENT->value);
     }
 
-    $data = $result['data'];
-    $payment->update(['response' => $data, 'status' => strtolower($data['status'])]);
-  }
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        $payments = Payment::whereIn('status', [
+        PaymentStatusEnum::INITIALIZED->value,
+        PaymentStatusEnum::ONGOING->value,
+        PaymentStatusEnum::PROCESSING->value,
+        PaymentStatusEnum::PENDING->value,
+        PaymentStatusEnum::QUEUED->value,
+        PaymentStatusEnum::ABANDONED->value,
+        ])->get();
+
+        if ($payments->count()) {
+            $payments->map(function($payment) {
+                $this->handlePaymentStatus($payment);
+            });
+        }
+    }
+
+    /**
+     * @param Payment $payment
+     */
+    private function handlePaymentStatus(Payment $payment)
+    {
+        $result = Paystack::payment()->verify($payment->reference);
+        if(empty($result['status']) || empty($result['data'])) {
+            $payment->update(['message' => $result['message'] ?? '', 'is_failed' => 1]);
+            return null;
+        }
+
+        $data = $result['data'];
+        $payment->update(['response' => $data, 'status' => strtolower($data['status'])]);
+    }
 
 }
