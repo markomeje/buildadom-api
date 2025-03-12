@@ -11,17 +11,17 @@ use Illuminate\Http\JsonResponse;
 
 class DocumentTypeService extends BaseService
 {
-  /**
-   * @return JsonResponse
-   */
-  public function list(): JsonResponse
-  {
-    try {
-      $documents = DocumentType::latest()->get();
-      return responser()->send(Status::HTTP_OK, $documents, 'Operation successful.');
-    } catch (Exception $e) {
-      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+    /**
+     * @return JsonResponse
+     */
+    public function list(): JsonResponse
+    {
+        try {
+            $documents = DocumentType::latest()->get();
+            return responser()->send(Status::HTTP_OK, $documents, 'Operation successful.');
+        } catch (Exception $e) {
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+        }
     }
-  }
 
 }
