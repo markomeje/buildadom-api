@@ -10,30 +10,30 @@ use Illuminate\Http\Request;
 
 class OrderFulfillmentController extends Controller
 {
-  /**
-   * @param OrderFulfillmentService $orderFulfillmentService
-   */
-  public function __construct(public OrderFulfillmentService $orderFulfillmentService)
-  {
-    $this->orderFulfillmentService = $orderFulfillmentService;
-  }
+    /**
+     * @param OrderFulfillmentService $orderFulfillmentService
+     */
+    public function __construct(public OrderFulfillmentService $orderFulfillmentService)
+    {
+        $this->orderFulfillmentService = $orderFulfillmentService;
+    }
 
-  /**
-   * @param ConfirmOrderFulfillmentRequest $request
-   * @return JsonResponse
-   */
-  public function confirm(ConfirmOrderFulfillmentRequest $request): JsonResponse
-  {
-    return $this->orderFulfillmentService->confirm($request);
-  }
+    /**
+     * @param ConfirmOrderFulfillmentRequest $request
+     * @return JsonResponse
+     */
+    public function confirm(ConfirmOrderFulfillmentRequest $request): JsonResponse
+    {
+        return $this->orderFulfillmentService->confirm($request);
+    }
 
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function list(Request $request): JsonResponse
-  {
-    return $this->orderFulfillmentService->list($request);
-  }
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function list(Request $request): JsonResponse
+    {
+        return $this->orderFulfillmentService->list($request);
+    }
 
 }

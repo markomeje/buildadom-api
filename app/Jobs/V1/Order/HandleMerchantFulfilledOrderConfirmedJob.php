@@ -12,26 +12,26 @@ use Illuminate\Queue\SerializesModels;
 
 class HandleMerchantFulfilledOrderConfirmedJob implements ShouldQueue
 {
-  use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-  /**
-   * @param OrderFulfillment $order_fulfillment
-   */
-  public function __construct(private OrderFulfillment $order_fulfillment)
-  {
-    $this->onQueue(QueuedJobEnum::ORDER->value);
-  }
+    /**
+     * @param OrderFulfillment $order_fulfillment
+     */
+    public function __construct(private OrderFulfillment $order_fulfillment)
+    {
+        $this->onQueue(QueuedJobEnum::ORDER->value);
+    }
 
-  /**
-   * Execute the job.
-   *
-   * @return void
-   */
-  public function handle()
-  {
-    $order = $this->order_fulfillment->order;
-    $order->store->merchant->notify(new MerchantFulfilledOrderConfirmedNotification($order));
-    ProcessConfirmedOrderPaymentDisbursementsJob::dispatch($this->order_fulfillment);
-  }
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        $order = $this->order_fulfillment->order;
+        $order->store->merchant->notify(new MerchantFulfilledOrderConfirmedNotification($order));
+        ProcessConfirmedOrderPaymentDisbursementsJob::dispatch($this->order_fulfillment);
+    }
 
 }

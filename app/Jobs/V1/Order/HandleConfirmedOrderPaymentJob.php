@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Jobs\V1\Order;
-
 use App\Enums\Payment\PaymentAccountTypeEnum;
 use App\Enums\QueuedJobEnum;
 use App\Jobs\V1\Escrow\DebitEscrowAccountJob;
@@ -17,32 +16,32 @@ use Illuminate\Queue\SerializesModels;
 
 class HandleConfirmedOrderPaymentJob implements ShouldQueue
 {
-  use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, OrderFulfillmentTrait, EscrowAccountTrait;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, OrderFulfillmentTrait, EscrowAccountTrait;
 
-  /**
-   * @param OrderFulfillment $order_fulfillment
-   */
-  public function __construct(private OrderFulfillment $order_fulfillment)
-  {
-    $this->onQueue(QueuedJobEnum::ORDER->value);
-  }
-
-  /**
-   * Execute the job.
-   *
-   * @return void
-   */
-  public function handle()
-  {
-    $order = $this->order_fulfillment->order;
-    $amount = (float)$order->total_amount;
-
-    if(strtoupper($order->payment->account_type) == strtoupper(PaymentAccountTypeEnum::ESCROW->value)) {
-      DebitEscrowAccountJob::dispatch($order->customer, $amount);
+    /**
+     * @param OrderFulfillment $order_fulfillment
+     */
+    public function __construct(private OrderFulfillment $order_fulfillment)
+    {
+        $this->onQueue(QueuedJobEnum::ORDER->value);
     }
 
-    InitializeTransferPaymentJob::dispatch($order->store->merchant, $this->order_fulfillment->reference, $amount);
-    $this->order_fulfillment->update(['payment_processed' => 1]);
-  }
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        $order = $this->order_fulfillment->order;
+        $amount = (float)$order->total_amount;
+
+        if(strtoupper($order->payment->account_type) == strtoupper(PaymentAccountTypeEnum::ESCROW->value)) {
+            DebitEscrowAccountJob::dispatch($order->customer, $amount);
+        }
+
+        InitializeTransferPaymentJob::dispatch($order->store->merchant, $this->order_fulfillment->reference, $amount);
+        $this->order_fulfillment->update(['payment_processed' => 1]);
+    }
 
 }
