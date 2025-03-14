@@ -12,7 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class InitiatePaystackTransferPaymentJob implements ShouldQueue
+class MakePaystackTransferPaymentJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -40,7 +40,6 @@ class InitiatePaystackTransferPaymentJob implements ShouldQueue
 
         $result = Paystack::payment()->initiateTransfer($payload);
         $this->handleTransferResult($result);
-        $this->payment->user->notify(new TransferPaymentProcessedNotification());
     }
 
     /**
@@ -58,6 +57,7 @@ class InitiatePaystackTransferPaymentJob implements ShouldQueue
         }
 
         $data = $result['data'];
+        $this->payment->user->notify(new TransferPaymentProcessedNotification());
         return $this->payment->update([
             'status' => $data['status'],
             'message' => $message,

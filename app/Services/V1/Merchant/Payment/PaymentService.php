@@ -18,7 +18,7 @@ class PaymentService extends BaseService
     public function list(Request $request): JsonResponse
     {
         try {
-            $payments = Payment::owner()->latest()->paginate($request->limit ?? 20);
+            $payments = Payment::owner()->with(['order_payment', 'currency'])->latest()->paginate($request->limit ?? 20);
             return responser()->send(Status::HTTP_OK, $payments, 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);

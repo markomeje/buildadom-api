@@ -3,7 +3,7 @@
 namespace App\Http\Resources\V1\Order;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderFulfillmentResource extends JsonResource
+class OrderPaymentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -13,6 +13,10 @@ class OrderFulfillmentResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'order_id' => $this->order_id,
+            'status' => $this->status,
+        ];
     }
 }

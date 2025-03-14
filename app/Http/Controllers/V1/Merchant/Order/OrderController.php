@@ -10,31 +10,31 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-  /**
-   * @param OrderService $OrderService
-   */
-  public function __construct(public OrderService $orderService)
-  {
-    $this->orderService = $orderService;
-  }
+    /**
+     * @param OrderService $OrderService
+     */
+    public function __construct(public OrderService $orderService)
+    {
+        $this->orderService = $orderService;
+    }
 
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function list(Request $request): JsonResponse
-  {
-    return $this->orderService->list($request);
-  }
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function list(Request $request): JsonResponse
+    {
+        return $this->orderService->list($request);
+    }
 
-  /**
-   * @param int $id
-   * @param MerchantOrderActionRequest $request
-   * @return JsonResponse
-   */
-  public function action($id, MerchantOrderActionRequest $request): JsonResponse
-  {
-    return $this->orderService->action($id, $request);
-  }
+    /**
+     * @param int $id
+     * @param MerchantOrderActionRequest $request
+     * @return JsonResponse
+     */
+    public function action($id, MerchantOrderActionRequest $request): JsonResponse
+    {
+        return $this->orderService->action($id, $request);
+    }
 
 }
