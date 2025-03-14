@@ -8,40 +8,40 @@ use Illuminate\Database\Query\Builder;
 
 class ProductImage extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array<int, string>
-   */
-  protected $fillable = [
-    'id',
-    'url',
-    'product_id',
-    'role',
-    'extras',
-    'user_id'
-  ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'id',
+        'url',
+        'product_id',
+        'role',
+        'extras',
+        'user_id'
+    ];
 
-  public $casts = [
-    'extras' => 'json',
-  ];
+    public $casts = [
+        'extras' => 'json',
+    ];
 
-  /**
-   * @return Builder
-   */
-  public function scopeOwner($query)
-  {
-    return $query->where(['user_id' => auth()->id()]);
-  }
+    /**
+     * @return Builder
+     */
+    public function scopeOwner($query)
+    {
+        return $query->where(['user_id' => auth()->id()]);
+    }
 
-  /**
-   * @return BelongsTo
-   */
-  public function product(): BelongsTo
-  {
-    return $this->belongsTo(Product::class);
-  }
+    /**
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
 
 }

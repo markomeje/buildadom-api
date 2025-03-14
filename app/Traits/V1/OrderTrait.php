@@ -11,56 +11,56 @@ use Exception;
 
 trait OrderTrait
 {
-  use CurrencyTrait;
+    use CurrencyTrait;
 
-  /**
-   * @return string
-   */
-  public function generateOrderTrackingNumber(): string
-  {
-    do {
-      $tracking_number = help()->generateRandomDigits(15);
-    } while (Order::where('tracking_number', $tracking_number)->exists());
-    return $tracking_number;
-  }
-
-  /**
-   * @param CartItem $item
-   * @throws Exception
-   * @return void
-   */
-  public function createOrder(CartItem $item)
-  {
-    $product = $item->product;
-    if(empty($product)) {
-      throw new Exception('Invalid cart product');
+    /**
+     * @return string
+     */
+    public function generateOrderTrackingNumber(): string
+    {
+        do {
+            $tracking_number = help()->generateRandomDigits(15);
+        } while (Order::where('tracking_number', $tracking_number)->exists());
+        return $tracking_number;
     }
 
-    $quantity = (int)($item->quantity ?? 1);
-    $price = (float)$product->price;
-    $total_amount = (float)($price * $quantity);
-    $customer_id = auth()->id();
+    /**
+     * @param CartItem $item
+     * @throws Exception
+     * @return void
+     */
+    public function createOrder(CartItem $item)
+    {
+        $product = $item->product;
+        if(empty($product)) {
+            throw new Exception('Invalid cart product');
+        }
 
-    $product_id = $item->product_id;
+        $quantity = (int)($item->quantity ?? 1);
+        $price = (float)$product->price;
+        $total_amount = (float)($price * $quantity);
+        $customer_id = auth()->id();
 
-    $order = Order::updateOrCreate([
-      'product_id' => $product_id,
-      'status' => OrderStatusEnum::PENDING->value,
-      'customer_id' => $customer_id
-    ], [
-      'total_amount' => $total_amount,
-      'product_id' => $product_id,
-      'status' => OrderStatusEnum::PENDING->value,
-      'customer_id' => $customer_id,
-      'store_id' => $product->store_id,
-      'currency_id' => $this->getDefaultCurrency()->id,
-      'tracking_number' => $this->generateOrderTrackingNumber(),
-      'quantity' => $quantity,
-      'amount' => $price,
-    ]);
+        $product_id = $item->product_id;
 
-    $order->customer->notify(new CustomerPendingOrderNotification($order, $product));
-    $item->update(['status' => CartItemStatusEnum::PROCESSED->value]);
-  }
+        $order = Order::updateOrCreate([
+            'product_id' => $product_id,
+            'status' => OrderStatusEnum::PENDING->value,
+            'customer_id' => $customer_id
+        ], [
+            'total_amount' => $total_amount,
+            'product_id' => $product_id,
+            'status' => OrderStatusEnum::PENDING->value,
+            'customer_id' => $customer_id,
+            'store_id' => $product->store_id,
+            'currency_id' => $this->getDefaultCurrency()->id,
+            'tracking_number' => $this->generateOrderTrackingNumber(),
+            'quantity' => $quantity,
+            'amount' => $price,
+        ]);
+
+        $order->customer->notify(new CustomerPendingOrderNotification($order, $product));
+        $item->update(['status' => CartItemStatusEnum::PROCESSED->value]);
+    }
 
 }

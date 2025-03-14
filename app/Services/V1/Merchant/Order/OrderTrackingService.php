@@ -2,6 +2,7 @@
 
 namespace App\Services\V1\Merchant\Order;
 use App\Enums\Order\OrderStatusEnum;
+use App\Exceptions\OrderTrackingException;
 use App\Http\Resources\V1\Order\OrderResource;
 use App\Jobs\V1\Order\CustomerOrderStatusUpdateJob;
 use App\Models\Order\Order;
@@ -32,18 +33,25 @@ class OrderTrackingService extends BaseService
 
             $current_status = strtolower($order->status);
             if($current_status == strtolower(OrderStatusEnum::FULFILLED->value)) {
-                return responser()->send(Status::HTTP_OK, new OrderResource($order->load(['trackings'])), 'The Order has already been fulfilled.');
+                return responser()->send(Status::HTTP_OK, new OrderResource($order->load(['trackings'])), 'The order has already been fulfilled.');
             }
 
-            $this->handleOrderTrackingChecks($current_status);
+            if($current_status == strtolower(OrderStatusEnum::DECLINED->value)) {
+                throw new OrderTrackingException('Order has already been declined.');
+            }elseif($current_status == strtolower(OrderStatusEnum::PLACED->value)) {
+                throw new OrderTrackingException('You need to accept or decline the order first.');
+            }
+
             $next_status = $this->getNextOrderTrackingStatus($current_status);
             $order->update(['status' => $next_status]);
             OrderTracking::create(['order_id' => $order->id, 'status' => $next_status]);
 
             CustomerOrderStatusUpdateJob::dispatch($order);
             return responser()->send(Status::HTTP_OK, new OrderResource($order->load(['trackings'])), 'Operation successful.');
-        } catch (Exception $e) {
-            return responser()->send($e->getCode(), null, $e->getMessage());
+        } catch(OrderTrackingException $t) {
+            return responser()->send(Status::HTTP_NOT_ACCEPTABLE, [], $t->getMessage());
+        } catch (Exception) {
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Order tracking failed. Try again.');
         }
     }
 

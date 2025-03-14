@@ -17,7 +17,6 @@ use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 
 class OrderPaymentService extends BaseService
@@ -57,11 +56,10 @@ class OrderPaymentService extends BaseService
             $paystack = Paystack::payment()->initialize($payload);
             $payment->update(['payload' => $payload, 'initialize_response' => $paystack]);
 
-            SaveCustomerOrderPaymentJob::dispatch($orders, $customer_id, $payment->id);
-            return responser()->send(Status::HTTP_OK, $paystack, 'Operation successful.');
-        } catch (Exception $e) {
-            Log::info('INITIALIZE ORDER PAYMENT FAILED - '.$e->getMessage());
-            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again later.');
+            SaveCustomerOrderPaymentJob::dispatch($orders, $customer, $payment);
+            return responser()->send(Status::HTTP_OK, $paystack, 'Order payment initialized successfully.');
+        } catch (Exception) {
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Order payment initialization failed. Try again.');
         }
     }
 

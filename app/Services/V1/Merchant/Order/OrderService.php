@@ -25,9 +25,9 @@ class OrderService extends BaseService
         try {
             $stores = auth()->user()->stores;
             $orders = Order::whereIn('store_id', $stores->pluck('id')->toArray())
-                ->whereNotIn('status', [OrderStatusEnum::PENDING->value, OrderStatusEnum::CANCELLED->value])
+                ->whereNotIn('status', [OrderStatusEnum::CANCELLED->value])
                 ->with(['currency', 'trackings', 'fulfillment', 'store', 'product' => function($query) {
-                $query->with(['images', 'category', 'unit', 'currency']);
+                    $query->with(['images', 'category', 'unit', 'currency']);
                 }])
                 ->latest()
                 ->with(['currency', 'payment'])

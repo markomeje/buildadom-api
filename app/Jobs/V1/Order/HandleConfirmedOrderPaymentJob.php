@@ -1,13 +1,10 @@
 <?php
 
 namespace App\Jobs\V1\Order;
-use App\Enums\Payment\PaymentAccountTypeEnum;
+use App\Enums\Payment\PaymentTypeEnum;
 use App\Enums\QueuedJobEnum;
-use App\Jobs\V1\Escrow\DebitEscrowAccountJob;
-use App\Jobs\V1\Payment\InitializeTransferPaymentJob;
 use App\Models\Order\OrderFulfillment;
-use App\Traits\V1\Escrow\EscrowAccountTrait;
-use App\Traits\V1\Order\OrderFulfillmentTrait;
+use App\Traits\V1\Payment\PaymentTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -16,10 +13,10 @@ use Illuminate\Queue\SerializesModels;
 
 class HandleConfirmedOrderPaymentJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, OrderFulfillmentTrait, EscrowAccountTrait;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, PaymentTrait;
 
     /**
-     * @param OrderFulfillment $order_fulfillment
+     * @param \App\Models\Order\OrderFulfillment $order_fulfillment
      */
     public function __construct(private OrderFulfillment $order_fulfillment)
     {
@@ -34,13 +31,10 @@ class HandleConfirmedOrderPaymentJob implements ShouldQueue
     public function handle()
     {
         $order = $this->order_fulfillment->order;
-        $amount = (float)$order->total_amount;
+        $merchant = $order->store->merchant;
 
-        if(strtoupper($order->payment->account_type) == strtoupper(PaymentAccountTypeEnum::ESCROW->value)) {
-            DebitEscrowAccountJob::dispatch($order->customer, $amount);
-        }
-
-        InitializeTransferPaymentJob::dispatch($order->store->merchant, $this->order_fulfillment->reference, $amount);
+        $payment = $this->initializePayment($merchant, str()->uuid(), (float)$order->total_amount, 0, PaymentTypeEnum::TRANSFER->value);
+        HandleOrderSettlementJob::dispatch($order, $merchant, $payment);
         $this->order_fulfillment->update(['payment_processed' => 1]);
     }
 

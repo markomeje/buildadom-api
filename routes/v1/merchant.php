@@ -13,50 +13,45 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/signup', [MerchantSignupController::class, 'signup']);
-
 Route::middleware(['auth:api', 'merchants.only', 'merchants.kyc.verified'])->group(function() {
-  Route::prefix('store')->group(function() {
-    Route::post('/create', [StoreController::class, 'create']);
-    Route::post('/{id}/update', [StoreController::class, 'update']);
-    Route::get('/list', [StoreController::class, 'list']);
-    Route::post('/{id}/publish', [StoreController::class, 'publish']);
+    Route::prefix('store')->group(function() {
+        Route::post('/create', [StoreController::class, 'create']);
+        Route::post('/{id}/update', [StoreController::class, 'update']);
+        Route::get('/list', [StoreController::class, 'list']);
+        Route::post('/{id}/publish', [StoreController::class, 'publish']);
 
-    Route::post('/{store_id}/upload-logo', [StoreUploadController::class, 'logo']);
-    Route::post('/{store_id}/upload-banner', [StoreUploadController::class, 'banner']);
-  });
-
-  Route::prefix('product')->group(function() {
-    Route::get('/list', [ProductController::class, 'list']);
-    Route::post('/add', [ProductController::class, 'add']);
-
-    Route::post('/{id}/update', [ProductController::class, 'update']);
-    Route::get('/{id}/details', [ProductController::class, 'product']);
-    Route::post('/{id}/publish', [ProductController::class, 'publish']);
-
-    Route::prefix('image')->group(function() {
-      Route::post('/upload', [ProductImageController::class, 'upload']);
-      Route::post('/{id}/delete', [ProductImageController::class, 'delete']);
-      Route::post('/{id}/change', [ProductImageController::class, 'change']);
+        Route::post('/{store_id}/upload-logo', [StoreUploadController::class, 'logo']);
+        Route::post('/{store_id}/upload-banner', [StoreUploadController::class, 'banner']);
     });
-  });
 
-  Route::prefix('driver')->group(function() {
-    Route::get('/list', [DispatchDriverController::class, 'list']);
-    Route::post('/add', [DispatchDriverController::class, 'add']);
-    Route::post('/update', [DispatchDriverController::class, 'update']);
-  });
+    Route::prefix('product')->group(function() {
+        Route::get('/list', [ProductController::class, 'list']);
+        Route::post('/add', [ProductController::class, 'add']);
 
-  Route::prefix('order')->group(function() {
-    Route::get('/list', [OrderController::class, 'list']);
-    Route::post('/track', [OrderTrackingController::class, 'track']);
-    Route::post('/{id}/action', [OrderController::class, 'action']);
-  });
+        Route::post('/{id}/update', [ProductController::class, 'update']);
+        Route::get('/{id}/details', [ProductController::class, 'product']);
+        Route::post('/{id}/publish', [ProductController::class, 'publish']);
 
-  Route::prefix('escrow')->group(function() {
-    Route::get('/accounts', [OrderController::class, 'list']);
-  });
+        Route::prefix('image')->group(function() {
+            Route::post('/upload', [ProductImageController::class, 'upload']);
+            Route::post('/{id}/delete', [ProductImageController::class, 'delete']);
+            Route::post('/{id}/change', [ProductImageController::class, 'change']);
+        });
+    });
 
-  Route::prefix('payment')->group(function() {
-    Route::get('/list', [PaymentController::class, 'list']);
-  });
+    Route::prefix('driver')->group(function() {
+        Route::get('/list', [DispatchDriverController::class, 'list']);
+        Route::post('/add', [DispatchDriverController::class, 'add']);
+        Route::post('/update', [DispatchDriverController::class, 'update']);
+    });
+
+    Route::prefix('order')->group(function() {
+        Route::get('/list', [OrderController::class, 'list']);
+        Route::post('/track', [OrderTrackingController::class, 'track']);
+        Route::post('/{id}/action', [OrderController::class, 'action']);
+    });
+
+    Route::prefix('payment')->group(function() {
+        Route::get('/list', [PaymentController::class, 'list']);
+    });
 });
