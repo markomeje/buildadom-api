@@ -5,7 +5,6 @@ use App\Http\Resources\CurrencyResource;
 use App\Http\Resources\V1\Order\OrderFulfillmentResource;
 use App\Http\Resources\V1\Order\OrderPaymentResource;
 use App\Http\Resources\V1\OrderTrackingResource;
-use App\Http\Resources\V1\Payment\PaymentResource;
 use App\Http\Resources\V1\Product\ProductResource;
 use App\Http\Resources\V1\Store\StoreResource;
 use Illuminate\Http\Resources\Json\JsonResource;

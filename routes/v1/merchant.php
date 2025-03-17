@@ -3,6 +3,7 @@
 use App\Http\Controllers\V1\Merchant\Auth\MerchantSignupController;
 use App\Http\Controllers\V1\Merchant\Driver\DispatchDriverController;
 use App\Http\Controllers\V1\Merchant\Order\OrderController;
+use App\Http\Controllers\V1\Merchant\Order\OrderSettlementController;
 use App\Http\Controllers\V1\Merchant\Order\OrderTrackingController;
 use App\Http\Controllers\V1\Merchant\Payment\PaymentController;
 use App\Http\Controllers\V1\Merchant\Product\ProductController;
@@ -12,8 +13,10 @@ use App\Http\Controllers\V1\Merchant\Store\StoreUploadController;
 use Illuminate\Support\Facades\Route;
 
 
+
 Route::post('/signup', [MerchantSignupController::class, 'signup']);
 Route::middleware(['auth:api', 'merchants.only', 'merchants.kyc.verified'])->group(function() {
+
     Route::prefix('store')->group(function() {
         Route::post('/create', [StoreController::class, 'create']);
         Route::post('/{id}/update', [StoreController::class, 'update']);
@@ -49,6 +52,10 @@ Route::middleware(['auth:api', 'merchants.only', 'merchants.kyc.verified'])->gro
         Route::get('/list', [OrderController::class, 'list']);
         Route::post('/track', [OrderTrackingController::class, 'track']);
         Route::post('/{id}/action', [OrderController::class, 'action']);
+
+        Route::prefix('settlement')->group(function() {
+            Route::get('/list', [OrderSettlementController::class, 'list']);
+        });
     });
 
     Route::prefix('payment')->group(function() {

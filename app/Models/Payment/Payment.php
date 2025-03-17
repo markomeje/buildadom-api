@@ -2,12 +2,15 @@
 
 namespace App\Models\Payment;
 use App\Models\Currency;
+use App\Models\Order\Order;
 use App\Models\Order\OrderPayment;
+use App\Models\Order\OrderSettlement;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
 
@@ -24,7 +27,6 @@ class Payment extends Model
         'amount',
         'user_id',
         'status',
-        'account_type',
         'reference',
         'fee',
         'type',
@@ -112,6 +114,14 @@ class Payment extends Model
     public function orderPayment()
     {
         return $this->hasOne(OrderPayment::class);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function settlement(): HasOne
+    {
+        return $this->hasOne(OrderSettlement::class, 'payment_id');
     }
 
 }
