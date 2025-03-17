@@ -20,12 +20,16 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        if(app()->environment(['local']) && config('app.url') == 'https://buildadom-api.test') {
+        if(app()->environment(['local'])) {
             $schedule->job(new VerifyPaystackTransferPaymentJob)->everyMinute();
             $schedule->job(new PaystackPaymentVerificationJob)->everyMinute();
         }
 
-        $schedule->command('queue:work --sansdaemon --tries=3 --max_exec_time=0')
+        $schedule->command('queue:work --sansdaemon --queue=escrow,payment,order,sms,email,kyc,info --tries=3 --memory=128 --max_exec_time=0')
+            ->cron('* * * * * *')
+            ->withoutOverlapping();
+
+        $schedule->command('queue:retry all')
             ->cron('* * * * * *')
             ->withoutOverlapping();
 
