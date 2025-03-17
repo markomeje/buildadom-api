@@ -2,7 +2,7 @@
 
 namespace App\Services\V1\Merchant\Order;
 use App\Enums\Order\OrderStatusEnum;
-use App\Http\Resources\V1\Order\OrderResource;
+use App\Http\Resources\V1\Order\OrderSettlementResource;
 use App\Models\Order\OrderSettlement;
 use App\Services\BaseService;
 use App\Utility\Status;
@@ -20,17 +20,18 @@ class OrderSettlementService extends BaseService
     public function list(Request $request): JsonResponse
     {
         try {
-            $stores = auth()->user()->stores;
-            $orders = OrderSettlement::whereIn('store_id', $stores->pluck('id')->toArray())
+            $settlements = OrderSettlement::query()
+                ->where('merchant_id', auth()->id())
                 ->whereNotIn('status', [OrderStatusEnum::CANCELLED->value])
-                ->with(['currency', 'trackings', 'fulfillment', 'store', 'product' => function($query) {
-                    $query->with(['images', 'category', 'unit', 'currency']);
-                }])
                 ->latest()
-                ->with(['currency', 'payment'])
+                ->with(['order' => function($q1) {
+                    $q1->with(['product' => function($q2) {
+                        $q2->with(['images', 'category', 'unit', 'currency']);
+                    }]);
+                }, 'payment'])
                 ->paginate($request->limit ?? 20);
 
-            return responser()->send(Status::HTTP_OK, OrderResource::collection($orders), 'Operation successful.');
+            return responser()->send(Status::HTTP_OK, OrderSettlementResource::collection($settlements), 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
         }
