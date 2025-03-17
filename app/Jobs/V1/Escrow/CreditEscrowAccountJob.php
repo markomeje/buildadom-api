@@ -17,66 +17,66 @@ use Illuminate\Queue\SerializesModels;
 
 class CreditEscrowAccountJob implements ShouldQueue
 {
-  use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, EscrowAccountTrait;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, EscrowAccountTrait;
 
-  protected $tries = 5; // Number of attempts
+    protected $tries = 5; // Number of attempts
 
-  /**
-   * Create a new job instance.
-   *
-   * @return void
-   */
-  public function __construct()
-  {
-    $this->onQueue(QueueEnum::ESCROW->value);
-  }
-
-  /**
-   * Execute the job.
-   *
-   * @return void
-   */
-  public function handle()
-  {
-    $payments = Payment::where([
-      'status' => PaymentStatusEnum::SUCCESS->value,
-      'account_type' => PaymentAccountTypeEnum::ESCROW->value,
-      'type' => PaymentTypeEnum::CHARGE->value,
-    ])->get();
-
-    if ($payments->count()) {
-      $payments->map(function($payment) {
-        $this->handleEscrowPayment($payment);
-      });
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->onQueue(QueueEnum::ESCROW->value);
     }
-  }
 
-  /**
-   * @param Payment $payment
-   * @return void
-   */
-  private function handleEscrowPayment(Payment $payment)
-  {
-    $float_amount = (float)$payment->amount;
-    $payment_id = $payment->id;
-    $user_id = $payment->user_id;
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        $payments = Payment::where([
+            'status' => PaymentStatusEnum::SUCCESS->value,
+            'account_type' => PaymentAccountTypeEnum::ESCROW->value,
+            'type' => PaymentTypeEnum::CHARGE->value,
+        ])->get();
 
-    $escrow_payment = EscrowPayment::where([
-      'payment_id' => $payment_id,
-      'user_id' => $user_id,
-      'payment_type' => EscrowPaymentTypeEnum::DEPOSIT->value
-    ])->first();
-
-    if(!$escrow_payment) {
-      $escrow = $this->creditEscrowAccount($payment->user, $float_amount);
-      EscrowPayment::create([
-        'payment_id' => $payment_id,
-        'user_id' => $user_id,
-        'amount' => $float_amount,
-        'payment_type' => EscrowPaymentTypeEnum::DEPOSIT->value,
-        'escrow_account_id' => $escrow->id
-      ]);
+        if ($payments->count()) {
+            $payments->map(function($payment) {
+                $this->handleEscrowPayment($payment);
+            });
+        }
     }
-  }
+
+    /**
+     * @param Payment $payment
+     * @return void
+     */
+    private function handleEscrowPayment(Payment $payment)
+    {
+        $float_amount = (float)$payment->amount;
+        $payment_id = $payment->id;
+        $user_id = $payment->user_id;
+
+        $escrow_payment = EscrowPayment::where([
+            'payment_id' => $payment_id,
+            'user_id' => $user_id,
+            'payment_type' => EscrowPaymentTypeEnum::DEPOSIT->value
+        ])->first();
+
+        if(!$escrow_payment) {
+            $escrow = $this->creditEscrowAccount($payment->user, $float_amount);
+            EscrowPayment::create([
+                'payment_id' => $payment_id,
+                'user_id' => $user_id,
+                'amount' => $float_amount,
+                'payment_type' => EscrowPaymentTypeEnum::DEPOSIT->value,
+                'escrow_account_id' => $escrow->id
+            ]);
+        }
+    }
 
 }
