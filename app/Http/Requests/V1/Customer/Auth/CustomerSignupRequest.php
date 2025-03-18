@@ -12,58 +12,58 @@ use Illuminate\Validation\ValidationException;
 class CustomerSignupRequest extends FormRequest
 {
 
-  /**
-   * Determine if the user is authorized to make this request.
-   *
-   * @return bool
-   */
-  public function authorize()
-  {
-    return true;
-  }
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
 
-/**
- * Get the validation rules that apply to the request.
- *
- * @return array
- */
-  public function rules()
-  {
-    return [
-      'email' => ['required', 'unique:users', (new EmailRule)],
-      'password' => ['required', (new PasswordRule)],
-      'confirm_password' => ['required', 'same:password'],
-      'firstname' => ['required', 'string', 'max:255'],
-      'lastname' => ['required', 'string', 'max:255'],
-      'phone' => ['required', 'string', Rule::unique('users'), 'phone'],
-    ];
-  }
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'email' => ['required', 'unique:users', (new EmailRule)],
+            'password' => ['required', (new PasswordRule)],
+            'confirm_password' => ['required', 'same:password'],
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', Rule::unique('users'), 'phone'],
+        ];
+    }
 
-  /**
- * Custom message for validation
- *
- * @return array
- */
-  public function messages()
-  {
-    return [
-      'phone.phone' => 'Invalid phone number'
-    ];
-  }
+    /**
+     * Custom message for validation
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'phone.phone' => 'Invalid phone number'
+        ];
+    }
 
-  /**
-   * Customize failed validation json response
-   *
-   * @return void
-   *
-   * @param Validator
-   */
-  protected function failedValidation(Validator $validator)
-  {
-    $response = responser()->send(Status::HTTP_UNPROCESSABLE_ENTITY, [
-      'errors' => $validator->errors()
-    ], 'Please check your inputs.');
+    /**
+     * Customize failed validation json response
+     *
+     * @return void
+     *
+     * @param Validator
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        $response = responser()->send(Status::HTTP_UNPROCESSABLE_ENTITY, [
+            'errors' => $validator->errors()
+        ], 'Please check your inputs.');
 
-    throw new ValidationException($validator, $response);
-  }
+        throw new ValidationException($validator, $response);
+    }
 }

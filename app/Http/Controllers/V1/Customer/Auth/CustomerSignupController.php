@@ -8,21 +8,21 @@ use Illuminate\Http\JsonResponse;
 
 class CustomerSignupController extends Controller
 {
-  /**
-   * @param CustomerSignupService $customerSignupService
-   */
-  public function __construct(private CustomerSignupService $customerSignupService)
-  {
-    $this->customerSignupService = $customerSignupService;
-  }
+    /**
+     * @param CustomerSignupService $customerSignupService
+     */
+    public function __construct(private CustomerSignupService $customerSignupService)
+    {
+        $this->customerSignupService = $customerSignupService;
+    }
 
-  /**
-   * @param CustomerSignupRequest $request
-   * @return JsonResponse
-   */
-  public function signup(CustomerSignupRequest $request): JsonResponse
-  {
-    return $this->customerSignupService->signup($request);
-  }
+    /**
+     * @param CustomerSignupRequest $request
+     * @return JsonResponse
+     */
+    public function signup(CustomerSignupRequest $request): JsonResponse
+    {
+        return $this->customerSignupService->signup($request);
+    }
 
 }
