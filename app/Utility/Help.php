@@ -33,6 +33,7 @@ class Help
 
         return $country;
     }
+
     public function formatPhoneNumber($phone)
     {
         return (string)(new PhoneNumber($phone));

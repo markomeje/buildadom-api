@@ -5,12 +5,12 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum FeesEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case ESCROW_DEPOSIT_FEE = 'escrow_deposit_fee';
-  case VAT = 'vat';
-  case ESCROW_DISBURSEMENT_FEE = 'escrow_disbursement_fee';
-  case ESCROW_WITHDRAWAL_FEE = 'escrow_withdrawal_fee';
-  case PAYMENT_FEE = 'payment_fee';
+    case ESCROW_DEPOSIT_FEE = 'ESCROW_DEPOSIT_FEE';
+    case VAT = 'VAT';
+    case ESCROW_DISBURSEMENT_FEE = 'ESCROW_DISBURSEMENT_FEE';
+    case ESCROW_WITHDRAWAL_FEE = 'ESCROW_WITHDRAWAL_FEE';
+    case PAYMENT_FEE = 'PAYMENT_FEE';
 
 }

@@ -7,23 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class FeeSetting extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array<int, string>
-   */
-  protected $fillable = [
-    'code',
-    'currency_id',
-    'description',
-    'amount',
-    'type',
-  ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'code',
+        'currency_id',
+        'description',
+        'amount',
+        'type',
+    ];
 
-  public $casts = [
-    'total_amount' => 'float',
-    'amount' => 'float'
-  ];
+    public $casts = [
+        'total_amount' => 'float',
+        'amount' => 'float'
+    ];
 }

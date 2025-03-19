@@ -7,7 +7,7 @@ enum FeeTypeEnum: string
 {
   use UsefulEnums;
 
-  case FLAT_FEE = 'flat_fee';
-  case PERCENTAGE_FEE = 'percentage_fee';
+  case FLAT_FEE = 'FLAT_FEE';
+  case PERCENTAGE_FEE = 'PERCENTAGE_FEE';
 
 }
