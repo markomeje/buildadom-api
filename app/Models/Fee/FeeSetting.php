@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models\Fee;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,8 +21,4 @@ class FeeSetting extends Model
         'type',
     ];
 
-    public $casts = [
-        'total_amount' => 'float',
-        'amount' => 'float'
-    ];
 }
