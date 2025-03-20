@@ -99,7 +99,7 @@ class OrderService extends BaseService
         try {
             $order = Order::owner()->with(['trackings', 'currency', 'store', 'product' => function($query) {
                 $query->with(['images', 'category', 'unit', 'currency']);
-            }])->find($id);
+            }, 'fulfillment'])->find($id);
 
             if(empty($order)) {
                 return responser()->send(Status::HTTP_NOT_FOUND, null, 'Order not found.');
