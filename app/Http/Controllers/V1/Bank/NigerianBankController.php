@@ -8,19 +8,20 @@ use Illuminate\Http\JsonResponse;
 class NigerianBankController extends Controller
 {
 
-  /**
-   * @param NigerianBankService $nigerianBank
-   */
-  public function __construct(private NigerianBankService $nigerianBank)
-  {
-    $this->nigerianBank = $nigerianBank;
-  }
+    /**
+     * @param NigerianBankService $nigerianBank
+     */
+    public function __construct(private NigerianBankService $nigerianBank)
+    {
+        $this->nigerianBank = $nigerianBank;
+    }
 
-  /**
-   * @return JsonResponse
-   */
-  public function list(): JsonResponse
-  {
-    return $this->nigerianBank->list();
-  }
+    /**
+     * @return JsonResponse
+     */
+    public function list(): JsonResponse
+    {
+        return $this->nigerianBank->list();
+    }
+
 }

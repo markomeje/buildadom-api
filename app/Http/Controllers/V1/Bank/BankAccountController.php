@@ -9,29 +9,29 @@ use Illuminate\Http\JsonResponse;
 
 class BankAccountController extends Controller
 {
-  /**
-   * @param BankAccountService $bankAccountService
-   */
-  public function __construct(private BankAccountService $bankAccountService)
-  {
-    $this->bankAccountService = $bankAccountService;
-  }
+    /**
+     * @param BankAccountService $bankAccountService
+     */
+    public function __construct(private BankAccountService $bankAccountService)
+    {
+        $this->bankAccountService = $bankAccountService;
+    }
 
-  /**
-   * @param CreateBankAccountRequest $request
-   * @return JsonResponse
-   */
-  public function save(CreateBankAccountRequest $request): JsonResponse
-  {
-    return $this->bankAccountService->save($request);
-  }
+    /**
+     * @param CreateBankAccountRequest $request
+     * @return JsonResponse
+     */
+    public function save(CreateBankAccountRequest $request): JsonResponse
+    {
+        return $this->bankAccountService->save($request);
+    }
 
-  /**
-   * @return JsonResponse
-   */
-  public function details(): JsonResponse
-  {
-    return $this->bankAccountService->details();
-  }
+    /**
+     * @return JsonResponse
+     */
+    public function details(): JsonResponse
+    {
+        return $this->bankAccountService->details();
+    }
 
 }
