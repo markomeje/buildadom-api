@@ -2,24 +2,24 @@
 
 namespace App\Jobs;
 use App\Enums\QueuedJobEnum;
-use App\Notifications\LogDeveloperInfoNotification;
+use App\Models\Store\Store;
+use App\Traits\V1\StoreTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Notification;
 
-class LogDeveloperInfoJob implements ShouldQueue
+class UpdateStoreRefJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, StoreTrait;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(private $info)
+    public function __construct()
     {
         $this->onQueue(QueuedJobEnum::INFO->value);
     }
@@ -31,7 +31,12 @@ class LogDeveloperInfoJob implements ShouldQueue
      */
     public function handle()
     {
-        Notification::route('mail', ['markomejeonline@gmail.com'])->notify(new LogDeveloperInfoNotification($this->info));
+        $stores = Store::where(['ref' => null])->get();
+        if($stores->count()) {
+            $stores->map(function ($store) {
+                $store->update(['ref' => $this->generateUniqueStoreRef()]);
+            });
+        }
     }
 
 }
