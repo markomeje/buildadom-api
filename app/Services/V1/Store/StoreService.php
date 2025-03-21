@@ -26,13 +26,14 @@ class StoreService extends BaseService
         }
 	}
 
-  /**
-   * @return JsonResponse
-   */
-	public function show($ref): JsonResponse
+    /**
+     * @param string $slug
+     * @return JsonResponse
+     */
+	public function show(string $slug): JsonResponse
 	{
         try {
-            $store = Store::published()->with(['state', 'city'])->where('ref', $ref)->first();
+            $store = Store::published()->with(['state', 'city'])->where('slug', $slug)->first();
             return responser()->send(Status::HTTP_OK, $store, 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Operation failed. Try again.');

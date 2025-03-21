@@ -8,38 +8,38 @@ use Illuminate\Http\Request;
 
 class StoreController extends Controller
 {
-  /**
-   * @param StoreService $StoreService
-   */
-  public function __construct(private StoreService $storeService)
-  {
-    $this->storeService = $storeService;
-  }
+    /**
+     * @param StoreService $StoreService
+     */
+    public function __construct(private StoreService $storeService)
+    {
+        $this->storeService = $storeService;
+    }
 
-  /**
-   * @return JsonResponse
-   */
-  public function list(): JsonResponse
-  {
-    return $this->storeService->list();
-  }
+    /**
+     * @return JsonResponse
+     */
+    public function list(): JsonResponse
+    {
+        return $this->storeService->list();
+    }
 
-  /**
-   * @param int $ref
-   * @return JsonResponse
-   */
-  public function show($ref): JsonResponse
-  {
-    return $this->storeService->show($ref);
-  }
+    /**
+     * @param string $slug
+     * @return JsonResponse
+     */
+    public function show($slug): JsonResponse
+    {
+        return $this->storeService->show($slug);
+    }
 
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function search(Request $request): JsonResponse
-  {
-    return $this->storeService->search($request);
-  }
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function search(Request $request): JsonResponse
+    {
+        return $this->storeService->search($request);
+    }
 
 }

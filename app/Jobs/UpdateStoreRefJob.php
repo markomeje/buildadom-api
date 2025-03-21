@@ -31,10 +31,10 @@ class UpdateStoreRefJob implements ShouldQueue
      */
     public function handle()
     {
-        $stores = Store::where(['ref' => null])->get();
+        $stores = Store::where(['ref' => null])->orWhere('slug', null)->get();
         if($stores->count()) {
             $stores->map(function ($store) {
-                $store->update(['ref' => $this->generateUniqueStoreRef()]);
+                $store->update(['ref' => $this->generateUniqueStoreRef(), 'slug' => strtolower(str()->slug($store->name))]);
             });
         }
     }

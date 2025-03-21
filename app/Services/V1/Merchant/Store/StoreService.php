@@ -23,8 +23,10 @@ class StoreService extends BaseService
     {
         try {
             UpdateStoreRefJob::dispatch();
+            $store_name = $request->name;
             $store = Store::create([
-                'name' => $request->name,
+                'name' => ucwords($store_name),
+                'slug' => strtolower(str()->slug($store_name)),
                 'country_id' => $request->country_id,
                 'description' => $request->description,
                 'address' => $request->address,
@@ -68,8 +70,10 @@ class StoreService extends BaseService
                 return responser()->send(Status::HTTP_NOT_FOUND, $store, 'Store record not found. Try again.');
             }
 
+            $store_name = $request->name ?? $store->name;
             $store->update([
-                'name' => $request->name,
+                'name' => ucwords($store_name),
+                'slug' => strtolower(str()->slug($store_name)),
                 'country_id' => $request->country_id,
                 'description' => $request->description,
                 'address' => $request->address,
