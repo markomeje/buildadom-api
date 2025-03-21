@@ -25,12 +25,12 @@ class StoreController extends Controller
   }
 
   /**
-   * @param int $id
+   * @param int $ref
    * @return JsonResponse
    */
-  public function show($id): JsonResponse
+  public function show($ref): JsonResponse
   {
-    return $this->storeService->show($id);
+    return $this->storeService->show($ref);
   }
 
   /**
