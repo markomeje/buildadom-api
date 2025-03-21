@@ -35,6 +35,7 @@ class Store extends Model
         'extras',
         'banner',
         'ref',
+        'slug',
     ];
 
     public $casts = [

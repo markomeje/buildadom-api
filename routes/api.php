@@ -74,7 +74,7 @@ Route::middleware([])->domain(env('API_URL'))->prefix('v1')->group(function() {
         Route::prefix('store')->group(function() {
             Route::get('/list', [StoreController::class, 'list']);
             Route::get('/search', [StoreController::class, 'search']);
-            Route::get('/show/{ref}', [StoreController::class, 'show']);
+            Route::get('/show/{slug}', [StoreController::class, 'show']);
         });
 
         Route::prefix('logistics')->group(function() {

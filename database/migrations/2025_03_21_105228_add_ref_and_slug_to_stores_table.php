@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('stores', function (Blueprint $table) {
             $table->string('ref')->nullable()->index()->unique();
+            $table->string('slug')->nullable()->index()->unique();
         });
     }
 
@@ -26,7 +27,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->dropColumn(['ref']);
+            $table->dropColumn(['ref', 'slug']);
         });
     }
 };
