@@ -29,10 +29,10 @@ class StoreService extends BaseService
   /**
    * @return JsonResponse
    */
-	public function show($id): JsonResponse
+	public function show($ref): JsonResponse
 	{
         try {
-            $store = Store::published()->with(['state', 'city'])->find($id);
+            $store = Store::published()->with(['state', 'city'])->where('ref', $ref)->first();
             return responser()->send(Status::HTTP_OK, $store, 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Operation failed. Try again.');
