@@ -8,48 +8,48 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-  /**
-   * @param ProductService $productService
-   */
-  public function __construct(private ProductService $productService)
-  {
-    $this->productService = $productService;
-  }
+    /**
+     * @param ProductService $productService
+     */
+    public function __construct(private ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
 
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function list(Request $request): JsonResponse
-  {
-    return $this->productService->list($request);
-  }
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function list(Request $request): JsonResponse
+    {
+        return $this->productService->list($request);
+    }
 
-  /**
-   * @param int $id
-   * @return JsonResponse
-   */
-  public function show($id): JsonResponse
-  {
-    return $this->productService->show($id);
-  }
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function show($id): JsonResponse
+    {
+        return $this->productService->show($id);
+    }
 
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function search(Request $request): JsonResponse
-  {
-    return $this->productService->search($request);
-  }
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function search(Request $request): JsonResponse
+    {
+        return $this->productService->search($request);
+    }
 
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function filter(Request $request): JsonResponse
-  {
-    return $this->productService->filter($request);
-  }
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function filter(Request $request): JsonResponse
+    {
+        return $this->productService->filter($request);
+    }
 
 }
