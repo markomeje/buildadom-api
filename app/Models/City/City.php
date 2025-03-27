@@ -7,19 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class City extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array<int, string>
-   */
-  protected $fillable = [
-    'country_id',
-    'name',
-    'latitude',
-    'longitude',
-    'state_id',
-    'status',
-  ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'country_id',
+        'name',
+        'latitude',
+        'longitude',
+        'state_id',
+        'status',
+    ];
 }

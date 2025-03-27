@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Http\Resources;
-
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CountryResource extends JsonResource
+class CountryStateResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,8 +16,6 @@ class CountryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => ucwords($this->name),
-            'capital' => ucwords($this->capital),
-            'iso2' => strtoupper($this->iso2),
         ];
     }
 }
