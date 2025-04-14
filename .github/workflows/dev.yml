@@ -1,8 +1,8 @@
+name: 🚀 Deploy website on push to dev branch
 on:
   push:
     branches:
       - dev
-name: 🚀 Deploy website on push to dev branch
 jobs:
   web-deploy:
     name: 🎉 Deploy

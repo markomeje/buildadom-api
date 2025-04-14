@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Services\V1\Bank;
-use App\Integrations\Paystack;
+use App\Partners\Paystack;
 use App\Models\Bank\NigerianBank;
 use App\Services\BaseService;
 use App\Utility\Status;

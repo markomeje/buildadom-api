@@ -4,7 +4,7 @@ namespace App\Services\V1\Customer\Order;
 use App\Enums\Order\OrderStatusEnum;
 use App\Enums\Payment\PaymentTypeEnum;
 use App\Http\Resources\V1\Customer\Order\OrderPaymentResource;
-use App\Integrations\Paystack;
+use App\Partners\Paystack;
 use App\Jobs\Order\SaveCustomerOrderPaymentJob;
 use App\Models\Order\Order;
 use App\Models\Order\OrderPayment;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integrations;
+namespace App\Partners;
 use \ManeOlawale\Termii\Client;
 use App\Interfaces\SmsSenderInterface;
 use Exception;

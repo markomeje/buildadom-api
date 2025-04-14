@@ -1,8 +1,8 @@
+name: 🚀 Deploy website on push to QA branch
 on:
   push:
     branches:
       - qa
-name: 🚀 Deploy website on push to QA branch
 jobs:
   web-deploy:
     name: 🎉 Deploy

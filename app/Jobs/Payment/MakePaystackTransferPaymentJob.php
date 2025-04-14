@@ -2,7 +2,7 @@
 
 namespace App\Jobs\Payment;
 use App\Enums\QueuedJobEnum;
-use App\Integrations\Paystack;
+use App\Partners\Paystack;
 use App\Models\Bank\BankAccount;
 use App\Models\Payment\Payment;
 use App\Notifications\V1\Payment\TransferPaymentProcessedNotification;

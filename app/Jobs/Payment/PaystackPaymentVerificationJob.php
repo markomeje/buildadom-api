@@ -3,7 +3,7 @@
 namespace App\Jobs\Payment;
 use App\Enums\Payment\PaymentStatusEnum;
 use App\Enums\Queue\QueueEnum;
-use App\Integrations\Paystack;
+use App\Partners\Paystack;
 use App\Models\Payment\Payment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

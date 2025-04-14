@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integrations;
+namespace App\Partners;
 use App\Models\Bank\BankAccount;
 use App\Traits\PaystackPaymentTrait;
 use Illuminate\Http\Client\PendingRequest;

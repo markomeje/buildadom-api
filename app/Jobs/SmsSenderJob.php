@@ -3,7 +3,7 @@
 namespace App\Jobs;
 use App\Enums\Queue\QueueEnum;
 use App\Enums\Sms\SmsStatusEnum;
-use App\Integrations\TermiiSms;
+use App\Partners\TermiiSms;
 use App\Models\SmsLog;
 use Exception;
 use Illuminate\Bus\Queueable;

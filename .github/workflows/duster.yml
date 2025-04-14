@@ -1,5 +1,4 @@
 name:  🧽 Automatically dust the code from nonsense
-
 on:
     push:
         branches: [ '*' ]
@@ -8,7 +7,6 @@ on:
 jobs:
   duster:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
         with:
