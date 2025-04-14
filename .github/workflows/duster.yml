@@ -1,0 +1,20 @@
+name:  🧽 Automatically dust the code from nonsense
+
+on:
+    push:
+        branches: [ '*' ]
+    pull_request:
+        branches: [ '*' ]
+jobs:
+  duster:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - name: "Duster Lint"
+        uses: tighten/duster-action@v3
+        with:
+          args: lint
