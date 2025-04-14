@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 return [
 
     /*
@@ -27,7 +30,7 @@ return [
 
     'separator' => '.',
 
-     /*
+    /*
     |--------------------------------------------------------------------------
     | Cache Expiry
     |--------------------------------------------------------------------------
@@ -54,7 +57,7 @@ return [
     */
 
     'models' => [
-        'role' => HttpOz\Roles\Models\Role::class
+        'role' => HttpOz\Roles\Models\Role::class,
     ],
 
     /*
@@ -70,7 +73,7 @@ return [
     'pretend' => [
         'enabled' => false,
         'options' => [
-            'isRole' => true
+            'isRole' => true,
         ],
     ],
 

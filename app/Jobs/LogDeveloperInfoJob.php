@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 use App\Enums\QueuedJobEnum;
 use App\Notifications\LogDeveloperInfoNotification;
@@ -12,7 +14,10 @@ use Illuminate\Support\Facades\Notification;
 
 class LogDeveloperInfoJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -33,5 +38,4 @@ class LogDeveloperInfoJob implements ShouldQueue
     {
         Notification::route('mail', ['markomejeonline@gmail.com'])->notify(new LogDeveloperInfoNotification($this->info));
     }
-
 }

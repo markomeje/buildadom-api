@@ -1,102 +1,98 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\V1\Logistics;
 use App\Models\Country;
 use App\Models\Logistics\LogisticsCompany;
 use App\Services\BaseService;
 use App\Traits\CurrencyTrait;
 use App\Traits\FileUploadTrait;
-use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-
 class LogisticsCompanyService extends BaseService
 {
-  use FileUploadTrait, CurrencyTrait;
+    use CurrencyTrait;
+    use FileUploadTrait;
 
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function create(Request $request): JsonResponse
-  {
-    try {
+    public function create(Request $request): JsonResponse
+    {
+        try {
 
-      $logistics_company = LogisticsCompany::create([
-        'name' => $request->name,
-        'vehicle_picture' => $this->uploadToS3($request->file('vehicle_picture')),
-        'drivers_license' => $this->uploadToS3($request->file('drivers_license')),
-        'driver_picture' => $this->uploadToS3($request->file('driver_picture')),
-        'state_id' => $request->state_id,
-        'plate_number' => $request->plate_number,
-        'city_id' => $request->city_id,
-        'phone_number' => $request->phone_number,
-        'base_price' => $request->base_price,
-        'park_address' => $request->park_address,
-        'vehicle_type' => $request->vehicle_type,
-        'country_id' => Country::where('iso2', 'ng')->first()->id,
-        'reference' => $this->generateLogisticsCompanyReference(),
-        'currency_id' => $this->getDefaultCurrency()->id,
-      ]);
+            $logistics_company = LogisticsCompany::create([
+                'name' => $request->name,
+                'vehicle_picture' => $this->uploadToS3($request->file('vehicle_picture')),
+                'drivers_license' => $this->uploadToS3($request->file('drivers_license')),
+                'driver_picture' => $this->uploadToS3($request->file('driver_picture')),
+                'state_id' => $request->state_id,
+                'plate_number' => $request->plate_number,
+                'city_id' => $request->city_id,
+                'phone_number' => $request->phone_number,
+                'base_price' => $request->base_price,
+                'park_address' => $request->park_address,
+                'vehicle_type' => $request->vehicle_type,
+                'country_id' => Country::where('iso2', 'ng')->first()->id,
+                'reference' => $this->generateLogisticsCompanyReference(),
+                'currency_id' => $this->getDefaultCurrency()->id,
+            ]);
 
-      return responser()->send(Status::HTTP_OK, $logistics_company, 'Operation successful.');
-    } catch (Exception $e) {
-      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+            return responser()->send(Status::HTTP_OK, $logistics_company, 'Operation successful.');
+        } catch (Exception $e) {
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
+        }
     }
-  }
 
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function list(Request $request)
-  {
-    try {
-      $logistics_company = LogisticsCompany::latest()->paginate($request->limit ?? 20);
-      return responser()->send(Status::HTTP_OK, $logistics_company, 'Operation successful.');
-    } catch (Exception $e) {
-      return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Operation failed. Try again.');
+    /**
+     * @return JsonResponse
+     */
+    public function list(Request $request)
+    {
+        try {
+            $logistics_company = LogisticsCompany::latest()->paginate($request->limit ?? 20);
+
+            return responser()->send(Status::HTTP_OK, $logistics_company, 'Operation successful.');
+        } catch (Exception $e) {
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Operation failed. Try again.');
+        }
     }
-  }
 
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function update(Request $request): JsonResponse
-  {
-    try {
-      $logistics_company = LogisticsCompany::where('reference', $request->reference)->first();
-      if(empty($logistics_company)) {
-        throw new Exception('Invalid logistics company record.');
-      }
+    public function update(Request $request): JsonResponse
+    {
+        try {
+            $logistics_company = LogisticsCompany::where('reference', $request->reference)->first();
+            if (empty($logistics_company)) {
+                throw new Exception('Invalid logistics company record.');
+            }
 
-      $logistics_company->update([
-        'name' => $request->name,
-        'state_id' => $request->state_id,
-        'plate_number' => $request->plate_number,
-        'city_id' => $request->city_id,
-        'phone_number' => $request->phone_number,
-        'base_price' => $request->base_price,
-        'park_address' => $request->park_address,
-        'vehicle_type' => $request->vehicle_type,
-      ]);
+            $logistics_company->update([
+                'name' => $request->name,
+                'state_id' => $request->state_id,
+                'plate_number' => $request->plate_number,
+                'city_id' => $request->city_id,
+                'phone_number' => $request->phone_number,
+                'base_price' => $request->base_price,
+                'park_address' => $request->park_address,
+                'vehicle_type' => $request->vehicle_type,
+            ]);
 
-      return responser()->send(Status::HTTP_OK, $logistics_company, 'Operation successful.');
-    } catch (Exception $e) {
-      return responser()->send($e->getCode(), null, $e->getMessage());
+            return responser()->send(Status::HTTP_OK, $logistics_company, 'Operation successful.');
+        } catch (Exception $e) {
+            return responser()->send($e->getCode(), null, $e->getMessage());
+        }
     }
-  }
 
-  private function generateLogisticsCompanyReference()
-  {
-    do {
-      $reference = str()->random(64);
-    } while (LogisticsCompany::where('reference', $reference)->exists());
-    return $reference;
-  }
+    /**
+     * @return string
+     */
+    private function generateLogisticsCompanyReference()
+    {
+        do {
+            $ref = str()->random(64);
+        } while (LogisticsCompany::where('reference', $ref)->exists());
 
+        return $ref;
+    }
 }

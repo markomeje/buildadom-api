@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 use App\Enums\Kyc\KycVerificationStatusEnum;
 use App\Models\Kyc\KycVerification;
@@ -12,13 +14,12 @@ class MerchantKycVerifiedMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @param  Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      */
     public function handle(Request $request, Closure $next)
     {
         $kyc_verified = KycVerification::where(['user_id' => auth()->id(), 'status' => KycVerificationStatusEnum::VERIFIED->value])->first();
-        if(empty($kyc_verified)) {
+        if (empty($kyc_verified)) {
             return responser()->send(Status::HTTP_FORBIDDEN, null, 'Invalid KYC verification.');
         }
 

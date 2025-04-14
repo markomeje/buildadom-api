@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Order;
 use App\Enums\QueuedJobEnum;
 use App\Models\Order\Order;
@@ -13,11 +15,12 @@ use Illuminate\Queue\SerializesModels;
 
 class HandleMerchantFulfilledOrderJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, OrderFulfillmentTrait;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use OrderFulfillmentTrait;
+    use Queueable;
+    use SerializesModels;
 
-    /**
-     * @param \App\Models\Order\Order $order
-     */
     public function __construct(private Order $order)
     {
         $this->onQueue(QueuedJobEnum::ORDER->value);
@@ -34,5 +37,4 @@ class HandleMerchantFulfilledOrderJob implements ShouldQueue
         $this->saveOrderFulfillment($this->order, $confirmation_code);
         $this->order->customer->notify(new CustomerConfirmOrderFulfilledNotification($this->order->tracking_number, $confirmation_code));
     }
-
 }

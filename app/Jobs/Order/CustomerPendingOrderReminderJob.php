@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Order;
 use App\Enums\QueuedJobEnum;
 use App\Models\Order\Order;
@@ -12,7 +14,10 @@ use Illuminate\Queue\SerializesModels;
 
 class CustomerPendingOrderReminderJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -32,11 +37,10 @@ class CustomerPendingOrderReminderJob implements ShouldQueue
     public function handle()
     {
         $orders = Order::isPending()->where('created_at', '>', now()->subDay())->get();
-        if($orders->count()) {
+        if ($orders->count()) {
             foreach ($orders as $order) {
                 $order->customer->notify(new CustomerPendingOrderReminderNotification($order));
             }
         }
     }
-
 }

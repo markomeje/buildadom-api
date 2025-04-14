@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Order;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Order\OrderStatusEnum;
@@ -16,7 +18,10 @@ use Illuminate\Queue\SerializesModels;
 
 class UpdateCustomerOrderPaymentDetailsJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -37,27 +42,24 @@ class UpdateCustomerOrderPaymentDetailsJob implements ShouldQueue
     {
         $orders = Order::where('status', OrderStatusEnum::PENDING->value)->get();
         if ($orders->count()) {
-            $orders->map(function($order) {
+            $orders->map(function ($order)
+            {
                 $this->updateOrderPayment($order);
             });
         }
     }
 
-    /**
-     * @param Order $order
-     */
     private function updateOrderPayment(Order $order)
     {
         $order_payment = OrderPayment::where('order_id', $order->id)->first();
-        if(!empty($order_payment)) {
+        if (!empty($order_payment)) {
             $payment = $order_payment->payment;
-            if($payment && (strtolower($payment->status) == strtolower(PaymentStatusEnum::SUCCESS->value))) {
+            if ($payment && (strtolower($payment->status) == strtolower(PaymentStatusEnum::SUCCESS->value))) {
                 $order_payment->update(['status' => OrderPaymentStatusEnum::PAID->value]);
 
                 $order->update(['status' => OrderStatusEnum::PLACED->value]);
-                $order->store->merchant->notify(new MerchantOrderPlacedNotification());
+                $order->store->merchant->notify(new MerchantOrderPlacedNotification);
             }
         }
     }
-
 }

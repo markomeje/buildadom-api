@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Order;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\QueuedJobEnum;
@@ -15,13 +17,11 @@ use Illuminate\Queue\SerializesModels;
 
 class SaveCustomerOrderPaymentJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
-    /**
-     * @param \Illuminate\Database\Eloquent\Collection $orders
-     * @param \App\Models\User $customer
-     * @param \App\Models\Payment\Payment $payment
-     */
     public function __construct(private Collection $orders, private User $customer, private Payment $payment)
     {
         $this->onQueue(QueuedJobEnum::ORDER->value);
@@ -40,9 +40,8 @@ class SaveCustomerOrderPaymentJob implements ShouldQueue
                 'order_id' => $order_id,
                 'customer_id' => $this->customer->id,
                 'payment_id' => $this->payment->id,
-                'status' => OrderPaymentStatusEnum::PENDING->value
+                'status' => OrderPaymentStatusEnum::PENDING->value,
             ]);
         }
     }
-
 }

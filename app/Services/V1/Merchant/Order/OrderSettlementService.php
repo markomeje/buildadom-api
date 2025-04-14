@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\V1\Merchant\Order;
 use App\Enums\Order\OrderStatusEnum;
 use App\Http\Resources\V1\Order\OrderSettlementResource;
@@ -10,13 +12,8 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-
 class OrderSettlementService extends BaseService
 {
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function list(Request $request): JsonResponse
     {
         try {
@@ -24,8 +21,10 @@ class OrderSettlementService extends BaseService
                 ->where('merchant_id', auth()->id())
                 ->whereNotIn('status', [OrderStatusEnum::CANCELLED->value])
                 ->latest()
-                ->with(['order' => function($q1) {
-                    $q1->with(['product' => function($q2) {
+                ->with(['order' => function ($q1)
+                {
+                    $q1->with(['product' => function ($q2)
+                    {
                         $q2->with(['images', 'category', 'unit', 'currency']);
                     }]);
                 }, 'payment'])
@@ -36,5 +35,4 @@ class OrderSettlementService extends BaseService
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
         }
     }
-
 }

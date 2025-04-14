@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Enums\Store;
 use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum StoreStatusEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case ACTIVE = 'active';
-  case BANNED = 'banned';
-  case SUSPENDED = 'suspended';
-  case DISABLED = 'disabled';
+    case ACTIVE = 'active';
+    case BANNED = 'banned';
+    case SUSPENDED = 'suspended';
+    case DISABLED = 'disabled';
 
 }

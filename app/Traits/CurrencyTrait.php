@@ -1,32 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Traits;
 use App\Models\Currency;
 use Exception;
 
 trait CurrencyTrait
 {
-  /**
-   * @throws Exception
-   * @return Currency
-   */
-  public function getDefaultCurrency()
-  {
-    $currency = Currency::isSupported()->isDefault()->first();
-    if(empty($currency)) {
-      throw new Exception('Default supported currency not set.');
+    /**
+     * @return Currency
+     *
+     * @throws Exception
+     */
+    public function getDefaultCurrency()
+    {
+        $currency = Currency::isSupported()->isDefault()->first();
+        if (empty($currency)) {
+            throw new Exception('Default supported currency not set.');
+        }
+
+        return $currency;
     }
 
-    return $currency;
-  }
-
-  /**
-   * @param float $amount
-   * @return string
-   */
-  public function formatCurrencyAmount(float $amount): string
-  {
-    return $this->getDefaultCurrency()->code.number_format($amount);
-  }
-
+    public function formatCurrencyAmount(float $amount): string
+    {
+        return $this->getDefaultCurrency()->code . number_format($amount);
+    }
 }

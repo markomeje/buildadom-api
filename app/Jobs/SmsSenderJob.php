@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 use App\Enums\Queue\QueueEnum;
 use App\Enums\Sms\SmsStatusEnum;
-use App\Partners\TermiiSms;
 use App\Models\SmsLog;
+use App\Partners\TermiiSms;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +16,10 @@ use Illuminate\Queue\SerializesModels;
 
 class SmsSenderJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -35,11 +40,11 @@ class SmsSenderJob implements ShouldQueue
     {
         $smsLog = SmsLog::query()->find($this->log_id);
         try {
-            (new TermiiSms())->setPhone($smsLog->phone)
+            (new TermiiSms)->setPhone($smsLog->phone)
                 ->setMessage($smsLog->message)
                 ->send();
 
-            if($smsLog) {
+            if ($smsLog) {
                 $smsLog->status = SmsStatusEnum::SENT->value;
                 $smsLog->save();
             }
@@ -50,5 +55,4 @@ class SmsSenderJob implements ShouldQueue
         }
 
     }
-
 }

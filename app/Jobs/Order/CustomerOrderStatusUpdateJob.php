@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Order;
 use App\Enums\Order\OrderStatusEnum;
 use App\Enums\QueuedJobEnum;
-use App\Jobs\Order\HandleMerchantFulfilledOrderJob;
 use App\Models\Order\Order;
 use App\Notifications\V1\Order\CustomerOrderStatusUpdateNotification;
 use Illuminate\Bus\Queueable;
@@ -14,7 +15,10 @@ use Illuminate\Queue\SerializesModels;
 
 class CustomerOrderStatusUpdateJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -34,9 +38,8 @@ class CustomerOrderStatusUpdateJob implements ShouldQueue
     public function handle()
     {
         $this->order->customer->notify(new CustomerOrderStatusUpdateNotification($this->order));
-        if(strtolower($this->order->status) == strtolower(OrderStatusEnum::FULFILLED->value)) {
+        if (strtolower($this->order->status) == strtolower(OrderStatusEnum::FULFILLED->value)) {
             HandleMerchantFulfilledOrderJob::dispatch($this->order);
         }
     }
-
 }

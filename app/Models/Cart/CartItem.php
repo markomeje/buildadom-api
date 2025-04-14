@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Cart;
 use App\Models\Product\Product;
 use App\Models\Store\Store;
@@ -11,58 +13,48 @@ use Illuminate\Database\Query\Builder;
 
 class CartItem extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array<int, string>
-   */
-  protected $fillable = [
-    'customer_id',
-    'quantity',
-    'store_id',
-    'product_id',
-    'status',
-  ];
+    public $casts = [
+        'product_id' => 'int',
+        'store_id' => 'int',
+        'customer_id' => 'int',
+        'quantity' => 'int',
+    ];
 
-  public $casts = [
-    'product_id' => 'int',
-    'store_id' => 'int',
-    'customer_id' => 'int',
-    'quantity' => 'int'
-  ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'customer_id',
+        'quantity',
+        'store_id',
+        'product_id',
+        'status',
+    ];
 
-  /**
-   * @return Builder
-   */
-  public function scopeOwner($query)
-  {
-    return $query->where(['customer_id' => auth()->id()]);
-  }
+    /**
+     * @return Builder
+     */
+    public function scopeOwner($query)
+    {
+        return $query->where(['customer_id' => auth()->id()]);
+    }
 
-  /**
-   * @return BelongsTo
-   */
-  public function customer(): BelongsTo
-  {
-    return $this->belongsTo(User::class, 'customer_id');
-  }
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'customer_id');
+    }
 
-  /**
-   * @return BelongsTo
-   */
-  public function product(): BelongsTo
-  {
-    return $this->belongsTo(Product::class, 'product_id');
-  }
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 
-  /**
-   * @return BelongsTo
-   */
-  public function store(): BelongsTo
-  {
-    return $this->belongsTo(Store::class, 'store_id');
-  }
-
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(Store::class, 'store_id');
+    }
 }

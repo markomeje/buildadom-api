@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 use App\Enums\Fee\FeesEnum;
 use App\Enums\Fee\FeeTypeEnum;
@@ -8,10 +10,9 @@ use App\Traits\CurrencyTrait;
 use App\Traits\Fee\FeeSettingTrait;
 use Illuminate\Database\Seeder;
 
-
 class FeesSeeder extends Seeder
 {
-    use FeeSettingTrait, CurrencyTrait;
+    use CurrencyTrait, FeeSettingTrait;
 
     /**
      * Run the database seeds.
@@ -31,7 +32,7 @@ class FeesSeeder extends Seeder
                 'currency_id' => $this->getDefaultCurrency()->id,
                 'type' => FeeTypeEnum::FLAT_FEE->value,
                 'description' => $this->convertToReadable($code),
-                'amount' => 1.00
+                'amount' => 1.00,
             ]);
         }
 

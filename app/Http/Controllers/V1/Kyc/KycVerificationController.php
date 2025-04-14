@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\V1\Kyc;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Kyc\InitializeKycVerificationRequest;
@@ -8,31 +10,24 @@ use Illuminate\Http\JsonResponse;
 
 class KycVerificationController extends Controller
 {
+    public function __construct(private KycVerificationService $kycVerification)
+    {
+        $this->kycVerification = $kycVerification;
+    }
 
-  /**
-   * @param KycVerificationService $kycVerification
-   */
-  public function __construct(private KycVerificationService $kycVerification)
-  {
-    $this->kycVerification = $kycVerification;
-  }
+    /**
+     * @param JsonResponse
+     */
+    public function initialize(InitializeKycVerificationRequest $request): JsonResponse
+    {
+        return $this->kycVerification->initialize($request);
+    }
 
-  /**
-   *
-   * @param InitializeKycVerificationRequest $request
-   * @param JsonResponse
-   */
-  public function initialize(InitializeKycVerificationRequest $request): JsonResponse
-  {
-    return $this->kycVerification->initialize($request);
-  }
-
-  /**
-   *
-   * @param JsonResponse
-   */
-  public function info(): JsonResponse
-  {
-    return $this->kycVerification->info();
-  }
+    /**
+     * @param JsonResponse
+     */
+    public function info(): JsonResponse
+    {
+        return $this->kycVerification->info();
+    }
 }

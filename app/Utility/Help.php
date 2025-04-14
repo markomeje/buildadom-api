@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Utility;
 use App\Models\Country;
-use Propaganistas\LaravelPhone\PhoneNumber;
 use Exception;
-
+use Propaganistas\LaravelPhone\PhoneNumber;
 
 class Help
 {
     /**
-     * @param string $string
-     * @param int $length
+     * @param  string  $string
+     * @param  int  $length
      * @return string
      */
     public function getOnlyNumbers($string, $length = 0)
@@ -18,6 +19,7 @@ class Help
         preg_match_all('!\d+!', $string, $matches);
         $string = implode('', $matches[0]);
         unset($matches);
+
         return substr($string, $length);
     }
 
@@ -27,7 +29,7 @@ class Help
     public function getDefaultCountry()
     {
         $country = Country::where('iso2', 'NG')->first();
-        if(empty($country)) {
+        if (empty($country)) {
             throw new Exception('An error occurred with default country');
         }
 
@@ -36,18 +38,17 @@ class Help
 
     public function formatPhoneNumber($phone)
     {
-        return (string)(new PhoneNumber($phone));
+        return (string) (new PhoneNumber($phone));
     }
 
     /**
-     * @param int $length
      * @return string
      */
     public function generateRandomDigits(int $length = 6)
     {
         $digits = range(1, 9);
         shuffle($digits);
+
         return implode('', array_slice($digits, 0, $length));
     }
-
 }

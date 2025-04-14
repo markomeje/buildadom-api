@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Payment;
 use App\Enums\QueuedJobEnum;
-use App\Jobs\Payment\MakePaystackTransferPaymentJob;
 use App\Models\Bank\BankAccount;
 use App\Models\Payment\Payment;
 use App\Traits\Payment\PaymentTrait;
@@ -14,12 +15,12 @@ use Illuminate\Queue\SerializesModels;
 
 class InitializeTransferPaymentJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, PaymentTrait;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use PaymentTrait;
+    use Queueable;
+    use SerializesModels;
 
-    /**
-     * @param \App\Models\Payment\Payment $payment
-     * @param \App\Models\Bank\BankAccount $bank
-     */
     public function __construct(private Payment $payment, private BankAccount $bank)
     {
         $this->onQueue(QueuedJobEnum::PAYMENT->value);
@@ -34,5 +35,4 @@ class InitializeTransferPaymentJob implements ShouldQueue
     {
         MakePaystackTransferPaymentJob::dispatch($this->payment, $this->bank);
     }
-
 }

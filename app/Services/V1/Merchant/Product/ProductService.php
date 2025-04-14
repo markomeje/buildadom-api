@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\V1\Merchant\Product;
 use App\Models\Product\Product;
 use App\Services\BaseService;
@@ -8,13 +10,8 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-
 class ProductService extends BaseService
 {
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function add(Request $request): JsonResponse
     {
         try {
@@ -42,57 +39,55 @@ class ProductService extends BaseService
     {
         try {
             $products = Product::owner()->latest()->with([
-                'currency' => function($query) {
+                'currency' => function ($query)
+                {
                     return $query->select(['id', 'name', 'code']);
                 },
-                'unit' => function($query) {
+                'unit' => function ($query)
+                {
                     return $query->select(['id', 'name']);
                 },
                 'category',
                 'images',
                 'store',
-                ])->paginate($request->limit ?? 20);
+            ])->paginate($request->limit ?? 20);
+
             return responser()->send(Status::HTTP_OK, $products, 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
         }
     }
 
-    /**
-     * @param Request $request,
-     * @param $id
-     */
     public function publish($id, Request $request)
     {
         try {
             $product = Product::owner()->with(['images'])->find($id);
-            if(empty($product)) {
+            if (empty($product)) {
                 return responser()->send(Status::HTTP_NOT_FOUND, null, 'Product record not found. Try again.');
             }
 
-            if(!$product->images()->exists()) {
+            if (!$product->images()->exists()) {
                 return responser()->send(Status::HTTP_NOT_ACCEPTABLE, null, 'Upload at least one product picture.');
             }
 
-            $product->update(['published' => (boolean)$request->published]);
+            $product->update(['published' => (bool) $request->published]);
+
             return responser()->send(Status::HTTP_OK, $product, 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
         }
     }
 
-    /**
-     * @param Request $request,
-     * @param $id
-     */
     public function product($id, Request $request)
     {
         try {
             $product = Product::owner()->with([
-                'currency' => function($query) {
+                'currency' => function ($query)
+                {
                     return $query->select(['id', 'name', 'code']);
                 },
-                'unit' => function($query) {
+                'unit' => function ($query)
+                {
                     return $query->select(['id', 'name']);
                 },
                 'category',
@@ -100,7 +95,7 @@ class ProductService extends BaseService
                 'store',
             ])->find($id);
 
-            if(empty($product)) {
+            if (empty($product)) {
                 return responser()->send(Status::HTTP_NOT_FOUND, null, 'Product record not found. Try again.');
             }
 
@@ -111,15 +106,13 @@ class ProductService extends BaseService
     }
 
     /**
-     * @param Request $request
-     * @param int $id
-     * @return JsonResponse
+     * @param  int  $id
      */
     public function update($id, Request $request): JsonResponse
     {
         try {
             $product = Product::owner()->with(['images'])->find($id);
-            if(empty($product)) {
+            if (empty($product)) {
                 return responser()->send(Status::HTTP_NOT_FOUND, $product, 'Product record not found. Try again.');
             }
 
@@ -140,5 +133,4 @@ class ProductService extends BaseService
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
         }
     }
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +11,10 @@ use Illuminate\Database\Query\Builder;
 class ProductImage extends Model
 {
     use HasFactory;
+
+    public $casts = [
+        'extras' => 'json',
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -21,11 +27,7 @@ class ProductImage extends Model
         'product_id',
         'role',
         'extras',
-        'user_id'
-    ];
-
-    public $casts = [
-        'extras' => 'json',
+        'user_id',
     ];
 
     /**
@@ -36,12 +38,8 @@ class ProductImage extends Model
         return $query->where(['user_id' => auth()->id()]);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\V1\Auth;
 use App\Rules\EmailRule;
 use App\Utility\Status;
@@ -10,52 +12,51 @@ use Illuminate\Validation\ValidationException;
 
 class InitiatePasswordResetRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
 
-  /**
-   * Determine if the user is authorized to make this request.
-   *
-   * @return bool
-   */
-  public function authorize()
-  {
-    return true;
-  }
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'email' => ['required', 'string', (new EmailRule), Rule::exists('users', 'email')],
+        ];
+    }
 
-  /**
-   * Get the validation rules that apply to the request.
-   *
-   * @return array
-   */
-  public function rules()
-  {
-    return [
-      'email' => ['required', 'string', (new EmailRule), Rule::exists('users', 'email')],
-    ];
-  }
+    /**
+     * Custom message for validation
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [];
+    }
 
-  /**
- * Custom message for validation
- *
- * @return array
- */
-  public function messages()
-  {
-    return [];
-  }
+    /**
+     * Customize failed validation json response
+     *
+     *
+     * @param Validator
+     * @return void
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        $response = responser()->send(Status::HTTP_UNPROCESSABLE_ENTITY, [
+            'errors' => $validator->errors(),
+        ], 'Please check your inputs.');
 
-  /**
-   * Customize failed validation json response
-   *
-   * @return void
-   *
-   * @param Validator
-   */
-  protected function failedValidation(Validator $validator)
-  {
-    $response = responser()->send(Status::HTTP_UNPROCESSABLE_ENTITY, [
-      'errors' => $validator->errors()
-    ], 'Please check your inputs.');
-
-    throw new ValidationException($validator, $response);
-  }
+        throw new ValidationException($validator, $response);
+    }
 }

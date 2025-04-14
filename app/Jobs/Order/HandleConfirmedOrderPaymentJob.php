@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Order;
 use App\Enums\Payment\PaymentTypeEnum;
 use App\Enums\QueuedJobEnum;
@@ -13,11 +15,12 @@ use Illuminate\Queue\SerializesModels;
 
 class HandleConfirmedOrderPaymentJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, PaymentTrait;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use PaymentTrait;
+    use Queueable;
+    use SerializesModels;
 
-    /**
-     * @param \App\Models\Order\OrderFulfillment $order_fulfillment
-     */
     public function __construct(private OrderFulfillment $order_fulfillment)
     {
         $this->onQueue(QueuedJobEnum::ORDER->value);
@@ -33,9 +36,8 @@ class HandleConfirmedOrderPaymentJob implements ShouldQueue
         $order = $this->order_fulfillment->order;
         $merchant = $order->store->merchant;
 
-        $payment = $this->initializePayment($merchant, str()->uuid(), (float)$order->total_amount, 0, PaymentTypeEnum::TRANSFER->value);
+        $payment = $this->initializePayment($merchant, str()->uuid(), (float) $order->total_amount, 0, PaymentTypeEnum::TRANSFER->value);
         HandleOrderSettlementJob::dispatch($order, $merchant, $payment);
         $this->order_fulfillment->update(['payment_processed' => 1]);
     }
-
 }

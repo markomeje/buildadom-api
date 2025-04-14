@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,12 +12,12 @@ class ProductUnit extends Model
 
     /**
      * The attributes that are mass assignable.
-    *
-    * @var array<int, string>
-    */
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'name',
-        'description'
+        'description',
     ];
 
 }

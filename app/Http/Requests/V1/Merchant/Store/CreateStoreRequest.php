@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\V1\Merchant\Store;
 use App\Utility\Status;
 use Illuminate\Contracts\Validation\Validator;
@@ -9,7 +11,6 @@ use Illuminate\Validation\ValidationException;
 
 class CreateStoreRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -52,17 +53,16 @@ class CreateStoreRequest extends FormRequest
     /**
      * Customize failed validation json response
      *
-     * @return void
      *
      * @param Validator
+     * @return void
      */
     protected function failedValidation(Validator $validator)
     {
         $response = responser()->send(Status::HTTP_UNPROCESSABLE_ENTITY, [
-            'errors' => $validator->errors()
+            'errors' => $validator->errors(),
         ], 'Please check your inputs.');
 
         throw new ValidationException($validator, $response);
     }
-
 }

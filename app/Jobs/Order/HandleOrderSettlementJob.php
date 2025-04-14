@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Order;
 use App\Enums\Order\OrderSettlementStatusEnum;
 use App\Enums\Payment\PaymentAccountTypeEnum;
@@ -18,13 +20,11 @@ use Illuminate\Queue\SerializesModels;
 
 class HandleOrderSettlementJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
-    /**
-     * @param \App\Models\Order\Order $order
-     * @param \App\Models\User $user
-     * @param \App\Models\Payment\Payment $payment
-     */
     public function __construct(private Order $order, private User $user, private Payment $payment)
     {
         $this->onQueue(QueuedJobEnum::ORDER->value);
@@ -37,15 +37,15 @@ class HandleOrderSettlementJob implements ShouldQueue
      */
     public function handle()
     {
-        if(strtoupper($this->payment->account_type) == strtoupper(PaymentAccountTypeEnum::ESCROW->value)) {
-            DebitEscrowAccountJob::dispatch($this->order->customer, (float)$this->order->total_amount);
+        if (strtoupper($this->payment->account_type) == strtoupper(PaymentAccountTypeEnum::ESCROW->value)) {
+            DebitEscrowAccountJob::dispatch($this->order->customer, (float) $this->order->total_amount);
         }
 
         InitializeTransferPaymentJob::dispatch($this->payment, $this->user->bank);
         OrderSettlement::updateOrCreate([
             'merchant_id' => $this->user->id,
             'order_id' => $this->order->id,
-            'status' => OrderSettlementStatusEnum::PROCESSED->value
+            'status' => OrderSettlementStatusEnum::PROCESSED->value,
         ], [
             'merchant_id' => $this->user->id,
             'order_id' => $this->order->id,
@@ -54,5 +54,4 @@ class HandleOrderSettlementJob implements ShouldQueue
             'status' => OrderSettlementStatusEnum::PROCESSED->value,
         ]);
     }
-
 }

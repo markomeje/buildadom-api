@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications\V1\Order;
 use App\Enums\Queue\QueueEnum;
 use App\Traits\CurrencyTrait;
@@ -10,43 +12,43 @@ use Illuminate\Notifications\Notification;
 
 class CustomerConfirmOrderFulfilledNotification extends Notification implements ShouldQueue
 {
-  use Queueable, CurrencyTrait;
+    use CurrencyTrait;
+    use Queueable;
 
-  /**
-   * Create a new notification instance.
-   *
-   * @return void
-   */
-  public function __construct(private string $tracking_number, private int $confirmation_code)
-  {
-    $this->onQueue(QueueEnum::ORDER->value);
-  }
+    /**
+     * Create a new notification instance.
+     *
+     * @return void
+     */
+    public function __construct(private string $tracking_number, private int $confirmation_code)
+    {
+        $this->onQueue(QueueEnum::ORDER->value);
+    }
 
-  /**
-   * Get the notification's fulfillment channels.
-   *
-   * @param  mixed  $notifiable
-   * @return array
-   */
-  public function via($notifiable)
-  {
-    return ['mail'];
-  }
+    /**
+     * Get the notification's fulfillment channels.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function via($notifiable)
+    {
+        return ['mail'];
+    }
 
-  /**
-   * Get the mail representation of the notification.
-   *
-   * @param  mixed  $notifiable
-   * @return \Illuminate\Notifications\Messages\MailMessage
-   */
-  public function toMail($notifiable)
-  {
-    return (new MailMessage)
-      ->subject('Buildadom Order Fulfillment Confirmation Required')
-      ->line('Dear valued Customer,')
-      ->line("Kindly confirm the fulfillment of order $this->tracking_number with the confirmation code below:")
-      ->line("Confirmation code: $this->confirmation_code")
-      ->line('Thank you for choosing our platform');
-  }
-
+    /**
+     * Get the mail representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return \Illuminate\Notifications\Messages\MailMessage
+     */
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)
+            ->subject('Buildadom Order Fulfillment Confirmation Required')
+            ->line('Dear valued Customer,')
+            ->line("Kindly confirm the fulfillment of order {$this->tracking_number} with the confirmation code below:")
+            ->line("Confirmation code: {$this->confirmation_code}")
+            ->line('Thank you for choosing our platform');
+    }
 }

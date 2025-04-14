@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Enums\Logistics;
 use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum LogisticsCompanyFileEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case DRIVERS_LICENSE = 'drivers_license';
-  case VEHICLE_PICTURE = 'vehicle_picture';
-  case DRIVER_PICTURE = 'driver_picture';
+    case DRIVERS_LICENSE = 'drivers_license';
+    case VEHICLE_PICTURE = 'vehicle_picture';
+    case DRIVER_PICTURE = 'driver_picture';
 
 }

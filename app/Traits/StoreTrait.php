@@ -1,22 +1,18 @@
 <?php
 
-namespace App\Traits;
-use App\Enums\User\UserTypeEnum;
-use App\Models\Store\Store;
-use App\Models\User;
+declare(strict_types=1);
 
+namespace App\Traits;
+use App\Models\Store\Store;
 
 trait StoreTrait
 {
-    /**
-     * @return string
-     */
     public function generateUniqueStoreRef(): string
     {
         do {
             $ref = str()->random(64);
         } while (Store::where('ref', $ref)->exists());
+
         return $ref;
     }
-
 }

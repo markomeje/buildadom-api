@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Order;
 use App\Models\Escrow\EscrowAccount;
 use App\Models\Payment\Payment;
@@ -21,7 +23,7 @@ class OrderPayment extends Model
         'payment_id',
         'order_id',
         'customer_id',
-        'status'
+        'status',
     ];
 
     /**
@@ -32,28 +34,18 @@ class OrderPayment extends Model
         return $query->where(['customer_id' => auth()->id()]);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function payment(): BelongsTo
     {
         return $this->belongsTo(Payment::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function escrow(): BelongsTo
     {
         return $this->belongsTo(EscrowAccount::class, 'payment_id');
     }
-
 }

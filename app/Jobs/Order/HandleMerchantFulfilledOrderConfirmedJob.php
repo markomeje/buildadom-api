@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Order;
 use App\Enums\QueuedJobEnum;
 use App\Models\Order\OrderFulfillment;
@@ -11,10 +13,11 @@ use Illuminate\Queue\SerializesModels;
 
 class HandleMerchantFulfilledOrderConfirmedJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
-    /**
-     */
     public function __construct()
     {
         $this->onQueue(QueuedJobEnum::ORDER->value);
@@ -28,11 +31,11 @@ class HandleMerchantFulfilledOrderConfirmedJob implements ShouldQueue
     public function handle()
     {
         $order_fulfillments = OrderFulfillment::where(['payment_processed' => 0, 'is_confirmed' => 1, 'payment_authorized' => 1])->get();
-        if($order_fulfillments->count()) {
-            $order_fulfillments->map(function ($order_fulfillment) {
+        if ($order_fulfillments->count()) {
+            $order_fulfillments->map(function ($order_fulfillment)
+            {
                 HandleConfirmedOrderPaymentJob::dispatch($order_fulfillment);
             });
         }
     }
-
 }

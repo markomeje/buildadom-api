@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -211,8 +213,8 @@ return [
     |
     */
 
-  'aliases' => Facade::defaultAliases()->merge([
-    'Socialite' => Laravel\Socialite\Facades\Socialite::class
-  ])->toArray(),
+    'aliases' => Facade::defaultAliases()->merge([
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+    ])->toArray(),
 
 ];

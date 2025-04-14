@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources\V1\Order;
 use App\Http\Resources\CurrencyResource;
-use App\Http\Resources\V1\Order\OrderFulfillmentResource;
-use App\Http\Resources\V1\Order\OrderPaymentResource;
 use App\Http\Resources\V1\OrderTrackingResource;
 use App\Http\Resources\V1\Product\ProductResource;
 use App\Http\Resources\V1\Store\StoreResource;
 use Illuminate\Http\Resources\Json\JsonResource;
+use JsonSerializable;
 
 class OrderResource extends JsonResource
 {
@@ -15,7 +16,7 @@ class OrderResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @return array|\Illuminate\Contracts\Support\Arrayable|JsonSerializable
      */
     public function toArray($request)
     {

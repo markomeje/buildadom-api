@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\V1\Merchant\Store;
 use App\Jobs\UpdateStoreRefJob;
 use App\Models\Store\Store;
@@ -10,15 +12,10 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-
 class StoreService extends BaseService
 {
     use StoreTrait;
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function create(Request $request): JsonResponse
     {
         try {
@@ -34,7 +31,7 @@ class StoreService extends BaseService
                 'state_id' => $request->state_id,
                 'user_id' => auth()->id(),
                 'published' => false,
-                'ref' => $this->generateUniqueStoreRef()
+                'ref' => $this->generateUniqueStoreRef(),
             ]);
 
             return responser()->send(Status::HTTP_OK, $store, 'Operation successful.');
@@ -43,14 +40,11 @@ class StoreService extends BaseService
         }
     }
 
-    /**
-     * @return JsonResponse
-     * @param Request $request
-     */
     public function list(Request $request): JsonResponse
     {
         try {
             $stores = auth()->user()->stores;
+
             return responser()->send(Status::HTTP_OK, $stores, 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
@@ -58,15 +52,13 @@ class StoreService extends BaseService
     }
 
     /**
-     * @param int $id
-     * @param Request $request
-     * @return JsonResponse
+     * @param  int  $id
      */
     public function update($id, Request $request): JsonResponse
     {
         try {
             $store = Store::owner()->find($id);
-            if(empty($store)) {
+            if (empty($store)) {
                 return responser()->send(Status::HTTP_NOT_FOUND, $store, 'Store record not found. Try again.');
             }
 
@@ -87,32 +79,28 @@ class StoreService extends BaseService
         }
     }
 
-    /**
-     * @param Request $request,
-     * @param $id
-     */
     public function publish($id, Request $request)
     {
         try {
             $store = Store::owner()->with(['products'])->find($id);
-            if(empty($store)) {
+            if (empty($store)) {
                 return responser()->send(Status::HTTP_NOT_FOUND, null, 'Store record not found. Try again.');
             }
 
-            $published = (boolean)($request->published ?? 0);
-            if(empty($store->banner) || empty($store->logo)) {
+            $published = (bool) ($request->published ?? 0);
+            if (empty($store->banner) || empty($store->logo)) {
                 return responser()->send(Status::HTTP_NOT_ACCEPTABLE, null, 'Store banner and logo must be uploaded before publishing a store');
             }
 
-            if(!$store->products()->where('published', 1)->count()) {
+            if (!$store->products()->where('published', 1)->count()) {
                 return responser()->send(Status::HTTP_NOT_ACCEPTABLE, null, 'Kindly upload and publish a product first.');
             }
 
             $store->update(['published' => $published]);
+
             return responser()->send(Status::HTTP_OK, $store, 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
         }
     }
-
 }

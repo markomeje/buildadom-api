@@ -77,6 +77,12 @@
         ],
         "test": [
             "./vendor/bin/pest"
+        ],
+        "duster-lint": [
+            "./vendor/bin/duster lint"
+        ],
+        "duster-fix": [
+            "./vendor/bin/duster fix"
         ]
     },
     "extra": {

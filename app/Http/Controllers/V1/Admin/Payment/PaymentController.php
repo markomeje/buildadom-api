@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\V1\Admin\Payment;
 use App\Http\Controllers\Controller;
 use App\Services\V1\Admin\Payment\PaymentService;
@@ -8,22 +10,13 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
+    public function __construct(private PaymentService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
 
-  /**
-   * @param PaymentService $paymentService
-   */
-  public function __construct(private PaymentService $paymentService)
-  {
-    $this->paymentService = $paymentService;
-  }
-
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function list(Request $request): JsonResponse
-  {
-    return $this->paymentService->list($request);
-  }
-
+    public function list(Request $request): JsonResponse
+    {
+        return $this->paymentService->list($request);
+    }
 }

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Payment;
 use App\Enums\QueuedJobEnum;
-use App\Partners\Paystack;
 use App\Models\Bank\BankAccount;
 use App\Models\Payment\Payment;
 use App\Notifications\V1\Payment\TransferPaymentProcessedNotification;
+use App\Partners\Paystack;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,12 +16,11 @@ use Illuminate\Queue\SerializesModels;
 
 class MakePaystackTransferPaymentJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
-    /**
-     * @param Payment $payment
-     * @param BankAccount $account
-     */
     public function __construct(private Payment $payment, private BankAccount $account)
     {
         $this->onQueue(QueuedJobEnum::PAYMENT->value);
@@ -43,28 +44,29 @@ class MakePaystackTransferPaymentJob implements ShouldQueue
     }
 
     /**
-     * @param array $transfer_result
+     * @param  array  $transfer_result
      * @return mixed
      */
     private function handleTransferResult($transfer_result)
     {
-        $result = (array)$transfer_result;
+        $result = (array) $transfer_result;
         $message = $result['message'] ?? '';
 
-        if(empty($result['status']) || empty($result['data'])) {
+        if (empty($result['status']) || empty($result['data'])) {
             $this->payment->update(['message' => $message, 'is_failed' => 1]);
+
             return null;
         }
 
         $data = $result['data'];
-        $this->payment->user->notify(new TransferPaymentProcessedNotification());
+        $this->payment->user->notify(new TransferPaymentProcessedNotification);
+
         return $this->payment->update([
             'status' => $data['status'],
             'message' => $message,
             'transfer_code' => $data['transfer_code'],
             'initialize_response' => $data,
-            'is_failed' => 0
+            'is_failed' => 0,
         ]);
     }
-
 }

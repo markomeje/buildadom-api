@@ -1,21 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Enums\Order;
 use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum OrderStatusEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case ACCEPTED = 'accepted';
-  case DISPATCHED = 'dispatched';
-  case PLACED = 'placed';
-  case FULFILLED = 'fulfilled';
-  case DELIVERED = 'delivered';
-  case PENDING = 'pending';
-  case PROCESSED = 'processed';
-  case DECLINED = 'declined';
-  case CANCELLED = 'cancelled';
-
+    case ACCEPTED = 'accepted';
+    case DISPATCHED = 'dispatched';
+    case PLACED = 'placed';
+    case FULFILLED = 'fulfilled';
+    case DELIVERED = 'delivered';
+    case PENDING = 'pending';
+    case PROCESSED = 'processed';
+    case DECLINED = 'declined';
+    case CANCELLED = 'cancelled';
 
 }

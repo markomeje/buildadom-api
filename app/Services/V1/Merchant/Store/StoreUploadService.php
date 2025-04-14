@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\V1\Merchant\Store;
 use App\Models\Store\Store;
 use App\Services\BaseService;
@@ -9,21 +11,18 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-
 class StoreUploadService extends BaseService
 {
     use FileUploadTrait;
 
     /**
-     * @param int $store_id,
-     * @param Request $request
-     * @return JsonResponse
+     * @param  int  $store_id,
      */
     public function logo($store_id, Request $request): JsonResponse
     {
         try {
             $store = Store::find($store_id);
-            if(empty($store)) {
+            if (empty($store)) {
                 return responser()->send(Status::HTTP_NOT_FOUND, $store, 'Store record not found. Try again.');
             }
 
@@ -31,6 +30,7 @@ class StoreUploadService extends BaseService
             $logo_url = $this->uploadToS3($file, $store->logo);
 
             $store->update(['logo' => $logo_url]);
+
             return responser()->send(Status::HTTP_OK, $store, 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
@@ -38,15 +38,14 @@ class StoreUploadService extends BaseService
     }
 
     /**
-     * @param int $store_id,
-     * @param Request $request
+     * @param  int  $store_id,
      * @return JsonResponse
      */
     public function banner($store_id, Request $request)
     {
         try {
             $store = Store::find($store_id);
-            if(empty($store)) {
+            if (empty($store)) {
                 return responser()->send(Status::HTTP_NOT_FOUND, $store, 'Store record not found. Try again.');
             }
 
@@ -54,10 +53,10 @@ class StoreUploadService extends BaseService
             $banner_url = $this->uploadToS3($file, $store->banner);
 
             $store->update(['banner' => $banner_url]);
+
             return responser()->send(Status::HTTP_OK, $store, 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
         }
     }
-
 }

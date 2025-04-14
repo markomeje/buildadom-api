@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console;
 use App\Jobs\Escrow\CreditEscrowAccountJob;
 use App\Jobs\Order\CustomerPendingOrderReminderJob;
@@ -15,12 +17,11 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        if(app()->environment(['local'])) {
+        if (app()->environment(['local'])) {
             $schedule->job(new VerifyPaystackTransferPaymentJob)->everyMinute();
             $schedule->job(new PaystackPaymentVerificationJob)->everyMinute();
         }
@@ -38,7 +39,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
         require base_path('routes/console.php');
     }
 }

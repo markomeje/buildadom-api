@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
 
     /*
@@ -53,6 +55,5 @@ return [
         'base_url' => env('PAYSTACK_PAYMENT_URL'),
         'secret_key' => env('PAYSTACK_SECRET_KEY'),
     ],
-
 
 ];
