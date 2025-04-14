@@ -2,7 +2,7 @@
 
 namespace App\Services\V1\Bank;
 use App\Integrations\Paystack;
-use App\Jobs\V1\Payment\CreatePaystackTransferRecipientJob;
+use App\Jobs\Payment\CreatePaystackTransferRecipientJob;
 use App\Models\Bank\BankAccount;
 use App\Models\Bank\NigerianBank;
 use App\Services\BaseService;

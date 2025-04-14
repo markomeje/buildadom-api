@@ -4,7 +4,7 @@ namespace App\Services\V1\Merchant\Store;
 use App\Jobs\UpdateStoreRefJob;
 use App\Models\Store\Store;
 use App\Services\BaseService;
-use App\Traits\V1\StoreTrait;
+use App\Traits\StoreTrait;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;

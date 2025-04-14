@@ -1,24 +1,23 @@
 
-  2024-07-06 21:24:27 Running [App\Jobs\V1\Payment\CreatePaystackTransferRecipientJob] .............................................. 16ms DONE
-  2024-07-06 21:24:27 Running [App\Jobs\V1\Payment\PaystackPaymentVerificationJob] ................................................... 1ms DONE
-  2024-07-06 21:24:27 Running [App\Jobs\V1\Order\UpdateCustomerOrderPaymentDetailsJob] ............................................... 1ms DONE
-  2024-07-06 21:24:27 Running [App\Jobs\V1\Payment\VerifyPaystackTransferPaymentJob] ................................................. 1ms DONE
+  2024-07-06 21:24:27 Running [App\Jobs\Payment\CreatePaystackTransferRecipientJob] .............................................. 16ms DONE
+  2024-07-06 21:24:27 Running [App\Jobs\Payment\PaystackPaymentVerificationJob] ................................................... 1ms DONE
+  2024-07-06 21:24:27 Running [App\Jobs\Order\UpdateCustomerOrderPaymentDetailsJob] ............................................... 1ms DONE
+  2024-07-06 21:24:27 Running [App\Jobs\Payment\VerifyPaystackTransferPaymentJob] ................................................. 1ms DONE
 
 
-  2024-07-06 21:27:02 Running [App\Jobs\V1\Payment\CreatePaystackTransferRecipientJob] ................................................... 63ms DONE
-  2024-07-06 21:27:02 Running [App\Jobs\V1\Payment\PaystackPaymentVerificationJob] ....................................................... 45ms DONE
-  2024-07-06 21:27:02 Running [App\Jobs\V1\Order\UpdateCustomerOrderPaymentDetailsJob] .................................................... 1ms DONE
-  2024-07-06 21:27:02 Running [App\Jobs\V1\Payment\VerifyPaystackTransferPaymentJob] ...................................................... 1ms DONE
+  2024-07-06 21:27:02 Running [App\Jobs\Payment\CreatePaystackTransferRecipientJob] ................................................... 63ms DONE
+  2024-07-06 21:27:02 Running [App\Jobs\Payment\PaystackPaymentVerificationJob] ....................................................... 45ms DONE
+  2024-07-06 21:27:02 Running [App\Jobs\Order\UpdateCustomerOrderPaymentDetailsJob] .................................................... 1ms DONE
+  2024-07-06 21:27:02 Running [App\Jobs\Payment\VerifyPaystackTransferPaymentJob] ...................................................... 1ms DONE
 
 
-  2024-07-06 21:28:11 Running [App\Jobs\V1\Payment\CreatePaystackTransferRecipientJob] ................................................... 16ms DONE
-  2024-07-06 21:28:11 Running [App\Jobs\V1\Payment\PaystackPaymentVerificationJob] ........................................................ 1ms DONE
-  2024-07-06 21:28:11 Running [App\Jobs\V1\Order\UpdateCustomerOrderPaymentDetailsJob] .................................................... 1ms DONE
-  2024-07-06 21:28:11 Running [App\Jobs\V1\Payment\VerifyPaystackTransferPaymentJob] ...................................................... 1ms DONE
+  2024-07-06 21:28:11 Running [App\Jobs\Payment\CreatePaystackTransferRecipientJob] ................................................... 16ms DONE
+  2024-07-06 21:28:11 Running [App\Jobs\Payment\PaystackPaymentVerificationJob] ........................................................ 1ms DONE
+  2024-07-06 21:28:11 Running [App\Jobs\Order\UpdateCustomerOrderPaymentDetailsJob] .................................................... 1ms DONE
+  2024-07-06 21:28:11 Running [App\Jobs\Payment\VerifyPaystackTransferPaymentJob] ...................................................... 1ms DONE
 
 
-  2024-07-06 21:35:19 Running [App\Jobs\V1\Payment\CreatePaystackTransferRecipientJob] ................................................... 99ms DONE
-  2024-07-06 21:35:19 Running [App\Jobs\V1\Payment\PaystackPaymentVerificationJob] ....................................................... 41ms DONE
-  2024-07-06 21:35:19 Running [App\Jobs\V1\Order\UpdateCustomerOrderPaymentDetailsJob] .................................................... 2ms DONE
-  2024-07-06 21:35:19 Running [App\Jobs\V1\Payment\VerifyPaystackTransferPaymentJob] ...................................................... 1ms DONE
-
+  2024-07-06 21:35:19 Running [App\Jobs\Payment\CreatePaystackTransferRecipientJob] ................................................... 99ms DONE
+  2024-07-06 21:35:19 Running [App\Jobs\Payment\PaystackPaymentVerificationJob] ....................................................... 41ms DONE
+  2024-07-06 21:35:19 Running [App\Jobs\Order\UpdateCustomerOrderPaymentDetailsJob] .................................................... 2ms DONE
+  2024-07-06 21:35:19 Running [App\Jobs\Payment\VerifyPaystackTransferPaymentJob] ...................................................... 1ms DONE

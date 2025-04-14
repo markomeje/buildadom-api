@@ -3,7 +3,7 @@
 namespace App\Facades\V1;
 use App\Enums\Sms\SmsStatusEnum;
 use App\Facades\BaseFacade;
-use App\Jobs\V1\SmsSenderJob;
+use App\Jobs\SmsSenderJob;
 use App\Models\SmsLog;
 use App\Models\User;
 

@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Console;
-use App\Jobs\V1\Escrow\CreditEscrowAccountJob;
-use App\Jobs\V1\Order\CustomerPendingOrderReminderJob;
-use App\Jobs\V1\Order\UpdateCustomerOrderPaymentDetailsJob;
-use App\Jobs\V1\Payment\CreatePaystackTransferRecipientJob;
-use App\Jobs\V1\Payment\PaystackPaymentVerificationJob;
-use App\Jobs\V1\Payment\VerifyPaystackTransferPaymentJob;
+use App\Jobs\Escrow\CreditEscrowAccountJob;
+use App\Jobs\Order\CustomerPendingOrderReminderJob;
+use App\Jobs\Order\UpdateCustomerOrderPaymentDetailsJob;
+use App\Jobs\Payment\CreatePaystackTransferRecipientJob;
+use App\Jobs\Payment\PaystackPaymentVerificationJob;
+use App\Jobs\Payment\VerifyPaystackTransferPaymentJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 

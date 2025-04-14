@@ -5,14 +5,14 @@ use App\Enums\Order\OrderStatusEnum;
 use App\Enums\Payment\PaymentTypeEnum;
 use App\Http\Resources\V1\Customer\Order\OrderPaymentResource;
 use App\Integrations\Paystack;
-use App\Jobs\V1\Order\SaveCustomerOrderPaymentJob;
+use App\Jobs\Order\SaveCustomerOrderPaymentJob;
 use App\Models\Order\Order;
 use App\Models\Order\OrderPayment;
 use App\Models\User;
 use App\Services\BaseService;
-use App\Traits\V1\CurrencyTrait;
-use App\Traits\V1\Fee\FeeSettingTrait;
-use App\Traits\V1\Payment\PaymentTrait;
+use App\Traits\CurrencyTrait;
+use App\Traits\Fee\FeeSettingTrait;
+use App\Traits\Payment\PaymentTrait;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -42,8 +42,7 @@ class OrderPaymentService extends BaseService
             $total_amount = ($amount + $fee);
             $reference = (string)str()->uuid();
 
-            $customer_id = (int)auth()->id();
-            $customer = User::find($customer_id);
+            $customer = User::find(auth()->id());
             $payment = $this->initializePayment($customer, $reference, $amount, $fee, PaymentTypeEnum::CHARGE->value, $request->account_type);
 
             $payload = [

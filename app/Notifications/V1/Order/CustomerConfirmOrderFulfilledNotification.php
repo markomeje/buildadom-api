@@ -2,7 +2,7 @@
 
 namespace App\Notifications\V1\Order;
 use App\Enums\Queue\QueueEnum;
-use App\Traits\V1\CurrencyTrait;
+use App\Traits\CurrencyTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;

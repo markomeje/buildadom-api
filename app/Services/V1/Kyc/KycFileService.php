@@ -5,7 +5,7 @@ use App\Enums\Kyc\KycFileStatusEnum;
 use App\Models\Kyc\KycFile;
 use App\Models\Kyc\KycVerification;
 use App\Services\BaseService;
-use App\Traits\V1\FileUploadTrait;
+use App\Traits\FileUploadTrait;
 use App\Utility\Responser;
 use App\Utility\Status;
 use Exception;

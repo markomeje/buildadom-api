@@ -4,7 +4,7 @@ namespace App\Notifications\V1\Order;
 use App\Enums\Queue\QueueEnum;
 use App\Models\Order\Order;
 use App\Models\Product\Product;
-use App\Traits\V1\CurrencyTrait;
+use App\Traits\CurrencyTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;

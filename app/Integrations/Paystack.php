@@ -2,7 +2,7 @@
 
 namespace App\Integrations;
 use App\Models\Bank\BankAccount;
-use App\Traits\V1\PaystackPaymentTrait;
+use App\Traits\PaystackPaymentTrait;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 

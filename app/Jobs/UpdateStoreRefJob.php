@@ -3,7 +3,7 @@
 namespace App\Jobs;
 use App\Enums\QueuedJobEnum;
 use App\Models\Store\Store;
-use App\Traits\V1\StoreTrait;
+use App\Traits\StoreTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

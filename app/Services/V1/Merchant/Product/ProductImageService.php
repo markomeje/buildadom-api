@@ -5,8 +5,8 @@ use App\Enums\Product\ProductImageRoleEnum;
 use App\Models\Product\Product;
 use App\Models\Product\ProductImage;
 use App\Services\BaseService;
-use App\Traits\V1\FileUploadTrait;
-use App\Traits\V1\ProductImageTrait;
+use App\Traits\FileUploadTrait;
+use App\Traits\ProductImageTrait;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -18,7 +18,6 @@ class ProductImageService extends BaseService
     use FileUploadTrait, ProductImageTrait;
 
     /**
-     * @param int $product_id,
      * @param Request $request
      * @return JsonResponse
      */
@@ -43,7 +42,7 @@ class ProductImageService extends BaseService
 
             return responser()->send(Status::HTTP_OK, $product_image, 'Operation successful.');
         } catch (Exception $e) {
-            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
         }
     }
 
@@ -68,7 +67,7 @@ class ProductImageService extends BaseService
             $deleted = $product_image->delete();
             return responser()->send(Status::HTTP_OK, $deleted, 'Operation successful.');
         } catch (Exception $e) {
-            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
         }
     }
 
@@ -93,7 +92,7 @@ class ProductImageService extends BaseService
             $product_image->update(['url' => $image_url]);
             return responser()->send(Status::HTTP_OK, $product_image, 'Operation successful.');
         } catch (Exception $e) {
-            return responser()->send($e->getCode(), null, $e->getMessage());
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');
         }
     }
 

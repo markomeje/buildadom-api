@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\V1\Fee;
 use App\Http\Resources\CurrencyResource;
-use App\Traits\V1\Fee\FeeSettingTrait;
+use App\Traits\Fee\FeeSettingTrait;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FeeSettingResource extends JsonResource

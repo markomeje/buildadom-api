@@ -4,8 +4,8 @@ namespace Database\Seeders;
 use App\Enums\Fee\FeesEnum;
 use App\Enums\Fee\FeeTypeEnum;
 use App\Models\Fee\FeeSetting;
-use App\Traits\V1\CurrencyTrait;
-use App\Traits\V1\Fee\FeeSettingTrait;
+use App\Traits\CurrencyTrait;
+use App\Traits\Fee\FeeSettingTrait;
 use Illuminate\Database\Seeder;
 
 
