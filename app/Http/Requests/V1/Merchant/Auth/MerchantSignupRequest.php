@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Requests\V1\Merchant\Auth;
 use App\Enums\User\UserTypeEnum;
 use App\Rules\EmailRule;

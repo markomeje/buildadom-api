@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Document;
 use App\Models\Document\DocumentType;
 use App\Services\BaseService;

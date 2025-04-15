@@ -1,28 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Utility;
 use App\Models\Country;
 use Exception;
-use Propaganistas\LaravelPhone\PhoneNumber;
 
 class Help
 {
-    /**
-     * @param  string  $string
-     * @param  int  $length
-     * @return string
-     */
-    public function getOnlyNumbers($string, $length = 0)
-    {
-        preg_match_all('!\d+!', $string, $matches);
-        $string = implode('', $matches[0]);
-        unset($matches);
-
-        return substr($string, $length);
-    }
-
     /**
      * @return Country
      */
@@ -34,11 +17,6 @@ class Help
         }
 
         return $country;
-    }
-
-    public function formatPhoneNumber($phone)
-    {
-        return (string) (new PhoneNumber($phone));
     }
 
     /**

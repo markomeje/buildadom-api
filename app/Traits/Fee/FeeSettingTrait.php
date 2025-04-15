@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Traits\Fee;
 use App\Enums\Fee\FeeTypeEnum;
 use App\Models\Fee\FeeSetting;

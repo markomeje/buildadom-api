@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Admin\Payment;
 use App\Http\Resources\Admin\PaymentListResource;
 use App\Models\Payment\Payment;

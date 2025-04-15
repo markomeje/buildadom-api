@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -56,8 +54,8 @@ return [
     |
     */
 
-    'url' => env('APP_URL', ''),
-
+    'app_url' => env('APP_URL', ''),
+    'api_url' => env('API_URL', ''),
     'asset_url' => env('ASSET_URL'),
 
     /*

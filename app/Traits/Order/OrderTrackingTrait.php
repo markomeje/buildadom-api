@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Traits\Order;
 use App\Enums\Order\OrderStatusEnum;
 

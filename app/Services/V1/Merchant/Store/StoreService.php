@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Merchant\Store;
 use App\Jobs\UpdateStoreRefJob;
 use App\Models\Store\Store;

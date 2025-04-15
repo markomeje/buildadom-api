@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Models;
 use App\Models\City\City;
 use App\Models\State\State;

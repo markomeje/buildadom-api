@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Jobs\Escrow;
 use App\Enums\Queue\QueueEnum;
 use App\Models\Escrow\EscrowAccount;

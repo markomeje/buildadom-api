@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Admin\Order;
 use App\Models\Order\Order;
 use App\Services\BaseService;

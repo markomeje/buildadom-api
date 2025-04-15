@@ -1,23 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
 use App\Enums\Cart\CartItemStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+return new class extends Migration {
     public function up()
     {
-        Schema::create('cart_items', function (Blueprint $table)
-        {
+        Schema::create('cart_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->nullable()->references('id')->on('users');
             $table->bigInteger('quantity')->default(1);
@@ -27,11 +18,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('cart_items');

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Auth\Login;
 use App\Enums\User\UserRoleEnum;
 use App\Models\User;

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Notifications\V1\Payment;
 use App\Enums\Queue\QueueEnum;
 use Illuminate\Bus\Queueable;

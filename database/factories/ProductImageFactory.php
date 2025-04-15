@@ -1,13 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Database\Factories;
 use App\Enums\Product\ProductImageRoleEnum;
 use App\Models\Product\Product;
 use App\Models\User;
 use Faker\Factory as Faker;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Smknstd\FakerPicsumImages\FakerPicsumImagesProvider;
 
 class ProductImageFactory extends Factory
 {
@@ -19,7 +18,7 @@ class ProductImageFactory extends Factory
     public function definition()
     {
         $faker = Faker::create();
-        $faker->addProvider(new \Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+        $faker->addProvider(new FakerPicsumImagesProvider($faker));
 
         return [
             'product_id' => $faker->randomElement(Product::all()->pluck('id')->toArray()),

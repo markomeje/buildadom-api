@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Payment;
 use App\Jobs\LogDeveloperInfoJob;
 use App\Jobs\Payment\HandlePaystackWebhookEventJob;

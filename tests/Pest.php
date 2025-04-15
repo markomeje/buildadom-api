@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use Illuminate\Foundation\Testing\TestCase;
 use Tests\CreatesApplication;
 
@@ -29,8 +27,7 @@ uses(TestCase::class, CreatesApplication::class)->in('Feature', 'Unit');
 |
 */
 
-expect()->extend('toBeOne', function ()
-{
+expect()->extend('toBeOne', function () {
     return $this->toBe(1);
 });
 

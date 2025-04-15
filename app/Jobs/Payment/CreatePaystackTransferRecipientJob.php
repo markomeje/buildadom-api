@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Jobs\Payment;
 use App\Enums\QueuedJobEnum;
 use App\Models\Bank\BankAccount;
@@ -38,8 +36,7 @@ class CreatePaystackTransferRecipientJob implements ShouldQueue
     {
         $accounts = BankAccount::where(['transfer_recipient_created' => 0, 'recipient_code' => null])->get();
         if ($accounts->count()) {
-            $accounts->map(function ($account)
-            {
+            $accounts->map(function ($account) {
                 $this->createRecipient($account);
             });
         }

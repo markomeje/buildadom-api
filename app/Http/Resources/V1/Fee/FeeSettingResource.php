@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Resources\V1\Fee;
 use App\Http\Resources\CurrencyResource;
 use App\Traits\Fee\FeeSettingTrait;

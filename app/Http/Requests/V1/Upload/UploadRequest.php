@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Requests\V1\Upload;
 use App\Enums\Upload\UploadRoleEnum;
 use Illuminate\Contracts\Validation\Validator;

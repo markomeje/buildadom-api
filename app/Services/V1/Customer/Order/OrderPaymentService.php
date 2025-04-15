@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Customer\Order;
 use App\Enums\Order\OrderStatusEnum;
 use App\Enums\Payment\PaymentTypeEnum;

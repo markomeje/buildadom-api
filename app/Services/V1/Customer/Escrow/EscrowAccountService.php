@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Customer\Escrow;
 use App\Http\Resources\V1\Escrow\EscrowAccountResource;
 use App\Models\Escrow\EscrowAccount;
@@ -17,8 +15,7 @@ class EscrowAccountService extends BaseService
         try {
             $account = EscrowAccount::owner()->with([
                 'currency',
-                'balances' => function ($query)
-                {
+                'balances' => function ($query) {
                     $query->latest();
                 },
             ])->first();

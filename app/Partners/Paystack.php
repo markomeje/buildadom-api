@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Partners;
 use App\Models\Bank\BankAccount;
 use App\Traits\PaystackPaymentTrait;

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Kyc;
 use App\Enums\Kyc\KycFileStatusEnum;
 use App\Models\Kyc\KycFile;

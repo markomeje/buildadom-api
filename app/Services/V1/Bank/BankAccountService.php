@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Bank;
 use App\Jobs\Payment\CreatePaystackTransferRecipientJob;
 use App\Models\Bank\BankAccount;

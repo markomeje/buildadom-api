@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Models\Cart;
 use App\Models\Product\Product;
 use App\Models\Store\Store;

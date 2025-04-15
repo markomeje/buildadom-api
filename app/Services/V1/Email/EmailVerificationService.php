@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Email;
 use App\Models\Email\EmailVerification;
 use App\Models\User;

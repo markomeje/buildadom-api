@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Resources\V1\Escrow;
 use App\Http\Resources\CurrencyResource;
 use Illuminate\Http\Resources\Json\JsonResource;

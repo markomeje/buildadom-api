@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Currency;
 use App\Models\Currency;
 use App\Services\BaseService;

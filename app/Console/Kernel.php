@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Console;
 use App\Jobs\Escrow\CreditEscrowAccountJob;
 use App\Jobs\Order\CustomerPendingOrderReminderJob;

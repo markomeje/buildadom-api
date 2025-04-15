@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Merchant\Order;
 use App\Enums\Order\OrderStatusEnum;
 use App\Http\Resources\V1\Order\OrderSettlementResource;
@@ -21,10 +19,8 @@ class OrderSettlementService extends BaseService
                 ->where('merchant_id', auth()->id())
                 ->whereNotIn('status', [OrderStatusEnum::CANCELLED->value])
                 ->latest()
-                ->with(['order' => function ($q1)
-                {
-                    $q1->with(['product' => function ($q2)
-                    {
+                ->with(['order' => function ($q1) {
+                    $q1->with(['product' => function ($q2) {
                         $q2->with(['images', 'category', 'unit', 'currency']);
                     }]);
                 }, 'payment'])

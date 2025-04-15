@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Store;
 use App\Models\Store\Store;
 use App\Services\BaseService;
@@ -39,16 +37,13 @@ class StoreService extends BaseService
         try {
             $search = $request->get('query');
             $stores = Store::with(['state', 'city'])->published()
-                ->where(function ($query) use ($search)
-                {
+                ->where(function ($query) use ($search) {
                     $query->orWhere('name', 'LIKE', "%{$search}%")
                         ->orWhere('address', 'LIKE', "%{$search}%")
-                        ->whereHas('state', function ($query) use ($search)
-                        {
+                        ->whereHas('state', function ($query) use ($search) {
                             $query->orWhere('name', 'LIKE', "%{$search}%");
                         })
-                        ->whereHas('city', function ($query) use ($search)
-                        {
+                        ->whereHas('city', function ($query) use ($search) {
                             $query->orWhere('name', 'LIKE', "%{$search}%");
                         });
                 })

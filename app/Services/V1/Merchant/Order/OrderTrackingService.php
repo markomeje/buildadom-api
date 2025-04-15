@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Merchant\Order;
 use App\Enums\Order\OrderStatusEnum;
 use App\Exceptions\OrderTrackingException;

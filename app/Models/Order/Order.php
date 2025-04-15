@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Models\Order;
 use App\Enums\Order\OrderStatusEnum;
 use App\Models\Currency;

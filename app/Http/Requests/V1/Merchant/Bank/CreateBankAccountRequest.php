@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Requests\V1\Merchant\Bank;
 use App\Utility\Status;
 use Illuminate\Contracts\Validation\Validator;

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Country;
 use App\Models\Country;
 use App\Services\BaseService;

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Models\Business;
 use App\Models\Country;
 use App\Models\User;

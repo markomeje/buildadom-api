@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Jobs\Escrow;
 use App\Enums\Escrow\EscrowPaymentTypeEnum;
 use App\Enums\Payment\PaymentAccountTypeEnum;
@@ -51,8 +49,7 @@ class CreditEscrowAccountJob implements ShouldQueue
         ])->get();
 
         if ($payments->count()) {
-            $payments->map(function ($payment)
-            {
+            $payments->map(function ($payment) {
                 $this->handleEscrowPayment($payment);
             });
         }

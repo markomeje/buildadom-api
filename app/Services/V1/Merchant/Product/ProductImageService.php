@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Merchant\Product;
 use App\Enums\Product\ProductImageRoleEnum;
 use App\Models\Product\Product;

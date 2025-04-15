@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Merchant\Auth;
 use App\Enums\User\UserRoleEnum;
 use App\Enums\User\UserStatusEnum;

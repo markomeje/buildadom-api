@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Database\Seeders;
 use App\Models\Product\ProductUnit;
 use Illuminate\Database\Seeder;
@@ -29,8 +27,7 @@ class ProductUnitSeeder extends Seeder
         ];
 
         if (!empty($units)) {
-            collect($units)->map(function ($unit)
-            {
+            collect($units)->map(function ($unit) {
                 ProductUnit::updateOrCreate(['name' => $unit], [
                     'name' => strtolower($unit),
                 ]);

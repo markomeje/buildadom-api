@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Customer\Cart;
 use App\Models\Cart\CartItem;
 use App\Services\BaseService;

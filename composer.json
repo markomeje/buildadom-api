@@ -69,13 +69,10 @@
         "post-install-cmd": [
             "chmod -R ug+rwx storage bootstrap/cache"
         ],
-        "pint": [
-            "./vendor/bin/pint --config pint.json"
-        ],
-        "stan": [
+        "find-bugs": [
             "./vendor/bin/phpstan --level=9 analyse -- ./app"
         ],
-        "test": [
+        "run-test": [
             "./vendor/bin/pest"
         ],
         "duster-lint": [

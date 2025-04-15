@@ -1,22 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+return new class extends Migration {
     public function up()
     {
-        Schema::create('escrow_payments', function (Blueprint $table)
-        {
+        Schema::create('escrow_payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('payment_id')->nullable()->references('id')->on('payments');
             $table->foreignId('user_id')->nullable()->references('id')->on('users');
@@ -27,11 +18,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('escrow_payments');

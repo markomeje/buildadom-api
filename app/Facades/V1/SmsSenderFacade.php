@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Facades\V1;
 use App\Enums\Sms\SmsStatusEnum;
 use App\Facades\BaseFacade;

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Merchant\Order;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Order\OrderStatusEnum;
@@ -23,8 +21,7 @@ class OrderService extends BaseService
             $stores = auth()->user()->stores;
             $orders = Order::whereIn('store_id', $stores->pluck('id')->toArray())
                 ->whereNotIn('status', [OrderStatusEnum::CANCELLED->value])
-                ->with(['currency', 'trackings', 'fulfillment', 'store', 'product' => function ($query)
-                {
+                ->with(['currency', 'trackings', 'fulfillment', 'store', 'product' => function ($query) {
                     $query->with(['images', 'category', 'unit', 'currency']);
                 }])
                 ->latest()

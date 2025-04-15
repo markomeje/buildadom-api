@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Traits\Payment;
 use App\Enums\Payment\TransferPaymentStatusEnum;
 use App\Models\Payment\Payment;

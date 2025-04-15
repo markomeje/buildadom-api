@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Jobs\Payment;
 use App\Enums\Payment\PaymentTypeEnum;
 use App\Enums\QueuedJobEnum;
@@ -39,8 +37,7 @@ class VerifyPaystackTransferPaymentJob implements ShouldQueue
     {
         $transfers = Payment::where(['is_failed' => 1, 'type' => PaymentTypeEnum::TRANSFER->value])->get();
         if ($transfers->count()) {
-            $transfers->map(function ($payment)
-            {
+            $transfers->map(function ($payment) {
                 $this->handleResult($payment);
             });
         }

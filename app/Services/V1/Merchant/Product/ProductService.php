@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Merchant\Product;
 use App\Models\Product\Product;
 use App\Services\BaseService;
@@ -39,12 +37,10 @@ class ProductService extends BaseService
     {
         try {
             $products = Product::owner()->latest()->with([
-                'currency' => function ($query)
-                {
+                'currency' => function ($query) {
                     return $query->select(['id', 'name', 'code']);
                 },
-                'unit' => function ($query)
-                {
+                'unit' => function ($query) {
                     return $query->select(['id', 'name']);
                 },
                 'category',
@@ -82,12 +78,10 @@ class ProductService extends BaseService
     {
         try {
             $product = Product::owner()->with([
-                'currency' => function ($query)
-                {
+                'currency' => function ($query) {
                     return $query->select(['id', 'name', 'code']);
                 },
-                'unit' => function ($query)
-                {
+                'unit' => function ($query) {
                     return $query->select(['id', 'name']);
                 },
                 'category',

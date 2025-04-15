@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Jobs\Payment;
 use App\Enums\QueuedJobEnum;
 use App\Jobs\LogDeveloperInfoJob;

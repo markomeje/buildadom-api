@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Partners;
 use App\Interfaces\SmsSenderInterface;
 use Exception;
@@ -49,8 +47,7 @@ class TermiiSms implements SmsSenderInterface
     {
         try {
             $response = $this->getHttpClient()->send($this->phone, $this->message);
-            $response->onError(function ($response)
-            {
+            $response->onError(function ($response) {
                 throw new Exception($response['message']);
             });
 

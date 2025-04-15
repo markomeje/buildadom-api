@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Jobs\Order;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\QueuedJobEnum;

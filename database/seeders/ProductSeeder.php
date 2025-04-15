@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Database\Seeders;
 use App\Enums\User\UserRoleEnum;
 use App\Models\Product\Product;

@@ -1,23 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
 use App\Enums\Store\StoreStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+return new class extends Migration {
     public function up()
     {
-        Schema::create('stores', function (Blueprint $table)
-        {
+        Schema::create('stores', function (Blueprint $table) {
             $table->id();
             $table->text('name');
             $table->text('logo')->nullable();
@@ -35,11 +26,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');

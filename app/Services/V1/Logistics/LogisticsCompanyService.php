@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Logistics;
 use App\Models\Country;
 use App\Models\Logistics\LogisticsCompany;

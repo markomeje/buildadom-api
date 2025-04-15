@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use App\Utility\Help;
 use App\Utility\Responser;
 use Propaganistas\LaravelPhone\PhoneNumber;

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Jobs\Order;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Order\OrderStatusEnum;
@@ -42,8 +40,7 @@ class UpdateCustomerOrderPaymentDetailsJob implements ShouldQueue
     {
         $orders = Order::where('status', OrderStatusEnum::PENDING->value)->get();
         if ($orders->count()) {
-            $orders->map(function ($order)
-            {
+            $orders->map(function ($order) {
                 $this->updateOrderPayment($order);
             });
         }

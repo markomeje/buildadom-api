@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Merchant\Payment;
 use App\Enums\Payment\PaymentTypeEnum;
 use App\Models\Payment\Payment;
@@ -28,10 +26,8 @@ class PaymentService extends BaseService
                     'transfer_code',
                     'is_failed',
                 ])->where('type', PaymentTypeEnum::TRANSFER->value)
-                ->with(['settlement' => function ($q1)
-                {
-                    $q1->with(['order' => function ($q2)
-                    {
+                ->with(['settlement' => function ($q1) {
+                    $q1->with(['order' => function ($q2) {
                         $q2->select([
                             'id',
                             'total_amount',
@@ -40,8 +36,7 @@ class PaymentService extends BaseService
                             'quantity',
                             'currency_id',
                             'status',
-                        ])->with(['product' => function ($q3)
-                        {
+                        ])->with(['product' => function ($q3) {
                             $q3->with(['images']);
                         }]);
                     }]);

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Product;
 use App\Models\Product\ProductCategory;
 use App\Services\BaseService;

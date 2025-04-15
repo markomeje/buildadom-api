@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Admin\Merchant;
 use App\Enums\User\UserRoleEnum;
 use App\Http\Resources\Admin\Merchant\MerchantListResource;
@@ -17,8 +15,7 @@ class MerchantService extends BaseService
     public function list(Request $request): JsonResponse
     {
         try {
-            $merchants = User::whereHas('roles', function ($query)
-            {
+            $merchants = User::whereHas('roles', function ($query) {
                 $query->select(['name', 'user_id'])->where(['name' => UserRoleEnum::MERCHANT->value]);
             })->paginate($request->limit ?? 20);
 

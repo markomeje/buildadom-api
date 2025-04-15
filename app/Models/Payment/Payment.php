@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Models\Payment;
 use App\Models\Currency;
 use App\Models\Order\OrderPayment;

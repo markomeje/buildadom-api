@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Models;
 use App\Models\Bank\BankAccount;
 use App\Models\Business\BusinessProfile;
@@ -18,8 +16,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory;
-    use Notifiable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -52,6 +49,9 @@ class User extends Authenticatable implements JWTSubject
      * @var array<string, string>
      */
     protected $casts = [];
+
+    public function getAuthPasswordName()
+    {}
 
     /**
      * Get the user's full name.

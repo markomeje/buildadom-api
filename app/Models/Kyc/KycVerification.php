@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Models\Kyc;
 use App\Models\Country;
 use App\Models\Document\DocumentType;

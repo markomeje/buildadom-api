@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Models\Escrow;
 use App\Models\Payment\Payment;
 use App\Models\User;

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Jobs;
 use App\Enums\QueuedJobEnum;
 use App\Models\City\City;
@@ -37,8 +35,7 @@ class SeedCountryJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->countries->each(function ($country)
-        {
+        $this->countries->each(function ($country) {
             $this->runSeeder($country);
         });
 

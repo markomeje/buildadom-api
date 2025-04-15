@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Cart;
 use App\Enums\CartStatusEnum;
 use App\Models\V1\Cart;
@@ -43,8 +41,7 @@ class CartService extends BaseService
     public function items(): JsonResponse
     {
         try {
-            $items = $this->cart->with(['product' => function ($query)
-            {
+            $items = $this->cart->with(['product' => function ($query) {
                 return $query->with(['images', 'unit']);
             }])->latest()->where(['user_id' => auth()->id(), 'status' => CartStatusEnum::ACTIVE->value])->get();
 

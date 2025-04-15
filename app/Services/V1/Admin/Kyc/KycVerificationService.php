@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Admin\Kyc;
 use App\Enums\Kyc\KycVerificationStatusEnum;
 use App\Models\Kyc\KycVerification;

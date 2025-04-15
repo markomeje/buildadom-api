@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Customer\Order;
 use App\Enums\Cart\CartItemStatusEnum;
 use App\Enums\Order\OrderStatusEnum;
@@ -53,8 +51,7 @@ class OrderService extends BaseService
                 $query->where('status', $request->status);
             }
 
-            $orders = $query->with(['currency', 'trackings', 'fulfillment', 'product' => function ($query)
-            {
+            $orders = $query->with(['currency', 'trackings', 'fulfillment', 'product' => function ($query) {
                 $query->with(['images', 'category', 'unit', 'currency']);
             }, 'store'])->paginate($request->limit ?? 0);
 
@@ -90,8 +87,7 @@ class OrderService extends BaseService
     public function trackings($id): JsonResponse
     {
         try {
-            $order = Order::owner()->with(['trackings', 'currency', 'store', 'product' => function ($query)
-            {
+            $order = Order::owner()->with(['trackings', 'currency', 'store', 'product' => function ($query) {
                 $query->with(['images', 'category', 'unit', 'currency']);
             }, 'fulfillment'])->find($id);
 

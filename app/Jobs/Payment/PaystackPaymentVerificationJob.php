@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Jobs\Payment;
 use App\Enums\Payment\PaymentStatusEnum;
 use App\Enums\Queue\QueueEnum;
@@ -50,8 +48,7 @@ class PaystackPaymentVerificationJob implements ShouldQueue
         ])->get();
 
         if ($payments->count()) {
-            $payments->map(function ($payment)
-            {
+            $payments->map(function ($payment) {
                 $this->handlePaymentStatus($payment);
             });
         }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Customer\Shipping;
 use App\Models\Shipping\ShippingAddress;
 use App\Services\BaseService;

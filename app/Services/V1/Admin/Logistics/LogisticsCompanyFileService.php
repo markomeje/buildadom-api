@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services\V1\Admin\Logistics;
 use App\Services\BaseService;
 use App\Traits\CurrencyTrait;

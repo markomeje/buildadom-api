@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Requests\V1\Auth;
 use App\Rules\EmailRule;
 use App\Utility\Status;

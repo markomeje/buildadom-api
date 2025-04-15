@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Traits\Escrow;
 use App\Enums\Escrow\EscrowAccountStatusEnum;
 use App\Enums\Escrow\EscrowBalanceTypeEnum;

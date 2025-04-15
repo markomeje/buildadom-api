@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Jobs;
 use App\Enums\QueuedJobEnum;
 use App\Models\Store\Store;
@@ -39,8 +37,7 @@ class UpdateStoreRefJob implements ShouldQueue
     {
         $stores = Store::where(['ref' => null])->orWhere('slug', null)->get();
         if ($stores->count()) {
-            $stores->map(function ($store)
-            {
+            $stores->map(function ($store) {
                 $store->update(['ref' => $this->generateUniqueStoreRef(), 'slug' => strtolower(str()->slug($store->name))]);
             });
         }
