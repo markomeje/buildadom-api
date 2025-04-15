@@ -50,8 +50,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [];
 
-    public function getAuthPasswordName()
-    {}
+    public function getAuthPasswordName() {}
 
     /**
      * Get the user's full name.
