@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class CountryController extends Controller
 {
     /**
-     * @param \App\Services\V1\Country\CountryService $countryService
+     * @param  \App\Services\V1\Country\CountryService  $countryService
      */
     public function __construct(private CountryService $countryService) {}
 

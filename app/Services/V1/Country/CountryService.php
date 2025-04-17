@@ -18,7 +18,7 @@ class CountryService extends BaseService
             $countries = Country::all();
             return responser()->send(Status::HTTP_OK, $countries, 'Countries fetched successfully.');
         } catch (Exception $e) {
-            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Unknown error. Try again.');
         }
     }
 
@@ -31,7 +31,7 @@ class CountryService extends BaseService
             $countries = Country::isSupported()->get();
             return responser()->send(Status::HTTP_OK, $countries, 'Supported countries fetched successfully.');
         } catch (Exception $e) {
-            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Unknown error. Try again.');
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Unknown error. Try again.');
         }
     }
 }

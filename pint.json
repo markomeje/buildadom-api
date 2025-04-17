@@ -9,6 +9,7 @@
         "blank_lines_before_namespace": false,
         "braces_position": false,
         "not_operator_with_successor_space": false,
+        "no_superfluous_phpdoc_tags": false,
 
         "blank_line_between_import_groups": true,
         "cast_spaces": false,
