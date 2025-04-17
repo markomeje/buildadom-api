@@ -62,6 +62,7 @@ class TermiiSms implements SmsSenderInterface
     /**
      * @throws \App\Exceptions\SendSmsException
      * @throws Exception
+     *
      * @return bool
      */
     public function send()
