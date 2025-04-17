@@ -8,31 +8,24 @@ use Illuminate\Http\JsonResponse;
 
 class KycVerificationController extends Controller
 {
+    public function __construct(private KycVerificationService $kycVerification)
+    {
+        $this->kycVerification = $kycVerification;
+    }
 
-  /**
-   * @param KycVerificationService $kycVerification
-   */
-  public function __construct(private KycVerificationService $kycVerification)
-  {
-    $this->kycVerification = $kycVerification;
-  }
+    /**
+     * @param JsonResponse
+     */
+    public function initialize(InitializeKycVerificationRequest $request): JsonResponse
+    {
+        return $this->kycVerification->initialize($request);
+    }
 
-  /**
-   *
-   * @param InitializeKycVerificationRequest $request
-   * @param JsonResponse
-   */
-  public function initialize(InitializeKycVerificationRequest $request): JsonResponse
-  {
-    return $this->kycVerification->initialize($request);
-  }
-
-  /**
-   *
-   * @param JsonResponse
-   */
-  public function info(): JsonResponse
-  {
-    return $this->kycVerification->info();
-  }
+    /**
+     * @param JsonResponse
+     */
+    public function info(): JsonResponse
+    {
+        return $this->kycVerification->info();
+    }
 }

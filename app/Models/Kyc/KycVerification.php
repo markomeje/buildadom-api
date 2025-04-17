@@ -13,6 +13,8 @@ class KycVerification extends Model
 {
     use HasFactory;
 
+    public $casts = [];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -31,46 +33,28 @@ class KycVerification extends Model
         'address',
     ];
 
-    public $casts = [];
-
-    /**
-     * @return BelongsTo
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function citizenshipCountry(): BelongsTo
     {
         return $this->belongsTo(Country::class, 'citizenship_country');
     }
 
-    /**
-     * @return HasMany
-     */
     public function kycFiles(): HasMany
     {
         return $this->hasMany(KycFile::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function birthCountry(): BelongsTo
     {
         return $this->belongsTo(Country::class, 'birth_country');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function documentType(): BelongsTo
     {
         return $this->belongsTo(DocumentType::class, 'document_type_id');
     }
-
 }

@@ -8,13 +8,8 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-
 class DispatchDriverService extends BaseService
 {
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function add(Request $request): JsonResponse
     {
         try {
@@ -31,28 +26,22 @@ class DispatchDriverService extends BaseService
         }
     }
 
-    /**
-     * @return JsonResponse
-     */
     public function list(): JsonResponse
     {
         try {
             $drivers = DispatchDriver::owner()->get();
+
             return responser()->send(Status::HTTP_OK, $drivers, 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e->getMessage());
         }
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function update(Request $request): JsonResponse
     {
         try {
             $driver = DispatchDriver::where(['id' => $request->id, 'user_id' => auth()->id()])->first();
-            if(empty($driver)) {
+            if (empty($driver)) {
                 return responser()->send(Status::HTTP_NOT_FOUND, [], 'Driver not found');
             }
 
@@ -67,5 +56,4 @@ class DispatchDriverService extends BaseService
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.', $e);
         }
     }
-
 }

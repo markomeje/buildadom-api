@@ -5,9 +5,9 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum OrderFulfillmentStatusEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case CONFIRMED = 'confirmed';
-  case PENDING = 'pending';
+    case CONFIRMED = 'confirmed';
+    case PENDING = 'pending';
 
 }

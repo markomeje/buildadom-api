@@ -7,18 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class BusinessProfile extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array<int, string>
-   */
-  protected $fillable = [
-    'name',
-    'cac_number',
-    'website',
-    'user_id',
-  ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'cac_number',
+        'website',
+        'user_id',
+    ];
 
 }

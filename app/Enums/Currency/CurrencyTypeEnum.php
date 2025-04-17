@@ -5,9 +5,9 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum CurrencyTypeEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case FIAT = 'fiat';
-  case CRYPTO = 'crypto';
+    case FIAT = 'fiat';
+    case CRYPTO = 'crypto';
 
 }

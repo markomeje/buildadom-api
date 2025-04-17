@@ -5,13 +5,12 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum OrderTrackingStatusEnum: string
 {
+    use UsefulEnums;
 
-  use UsefulEnums;
+    case DISPATCHED = 'dispatched';
 
-  case DISPATCHED = 'dispatched';
-
-  case DELIVERED = 'delivered';
-  case PENDING = 'pending';
-  case PROCESSING = 'processing';
+    case DELIVERED = 'delivered';
+    case PENDING = 'pending';
+    case PROCESSING = 'processing';
 
 }

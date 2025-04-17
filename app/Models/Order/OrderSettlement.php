@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models\Order;
-use App\Models\Order\Order;
 use App\Models\Payment\Payment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,28 +25,18 @@ class OrderSettlement extends Model
         'status',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'order_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function payment(): BelongsTo
     {
         return $this->belongsTo(Payment::class, 'payment_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function merchant(): BelongsTo
     {
         return $this->belongsTo(User::class, 'merchant_id');
     }
-
 }

@@ -7,20 +7,13 @@ use Illuminate\Http\JsonResponse;
 
 class DocumentTypeController extends Controller
 {
-  /**
-   * @param DocumentTypeService $documentTypeService
-   */
-  public function __construct(private DocumentTypeService $documentTypeService)
-  {
-    $this->documentTypeService = $documentTypeService;
-  }
+    public function __construct(private DocumentTypeService $documentTypeService)
+    {
+        $this->documentTypeService = $documentTypeService;
+    }
 
-  /**
-   * @return JsonResponse
-   */
-  public function list(): JsonResponse
-  {
-    return $this->documentTypeService->list();
-  }
-
+    public function list(): JsonResponse
+    {
+        return $this->documentTypeService->list();
+    }
 }

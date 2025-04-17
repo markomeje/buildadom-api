@@ -5,9 +5,9 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum OrderPaymentStatusEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case PENDING = 'pending';
-  case PAID = 'paid';
+    case PENDING = 'pending';
+    case PAID = 'paid';
 
 }

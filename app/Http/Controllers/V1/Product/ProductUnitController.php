@@ -7,19 +7,13 @@ use Illuminate\Http\JsonResponse;
 
 class ProductUnitController extends Controller
 {
-  /**
-   * @param ProductUnitService $productUnitService
-   */
-  public function __construct(private ProductUnitService $productUnitService)
-  {
-    $this->productUnitService = $productUnitService;
-  }
+    public function __construct(private ProductUnitService $productUnitService)
+    {
+        $this->productUnitService = $productUnitService;
+    }
 
-  /**
-   * @return JsonResponse
-   */
-  public function list(): JsonResponse
-  {
-    return $this->productUnitService->list();
-  }
+    public function list(): JsonResponse
+    {
+        return $this->productUnitService->list();
+    }
 }

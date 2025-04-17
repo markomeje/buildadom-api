@@ -5,9 +5,9 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum CartItemStatusEnum: string
 {
-  use UsefulEnums;
-  case FULFILLED = 'fulfilled';
-  case PENDING = 'pending';
-  case PROCESSED = 'processed';
+    use UsefulEnums;
+    case FULFILLED = 'fulfilled';
+    case PENDING = 'pending';
+    case PROCESSED = 'processed';
 
 }

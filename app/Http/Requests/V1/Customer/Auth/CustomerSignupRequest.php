@@ -11,7 +11,6 @@ use Illuminate\Validation\ValidationException;
 
 class CustomerSignupRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -47,21 +46,21 @@ class CustomerSignupRequest extends FormRequest
     public function messages()
     {
         return [
-            'phone.phone' => 'Invalid phone number'
+            'phone.phone' => 'Invalid phone number',
         ];
     }
 
     /**
      * Customize failed validation json response
      *
-     * @return void
      *
      * @param Validator
+     * @return void
      */
     protected function failedValidation(Validator $validator)
     {
         $response = responser()->send(Status::HTTP_UNPROCESSABLE_ENTITY, [
-            'errors' => $validator->errors()
+            'errors' => $validator->errors(),
         ], 'Please check your inputs.');
 
         throw new ValidationException($validator, $response);

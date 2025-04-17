@@ -5,9 +5,9 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum EscrowBalanceTypeEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case CREDIT = 'credit';
-  case DEBIT = 'debit';
+    case CREDIT = 'credit';
+    case DEBIT = 'debit';
 
 }

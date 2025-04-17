@@ -5,12 +5,6 @@ use Illuminate\Http\JsonResponse;
 
 class Responser
 {
-    /**
-     * @param int $status
-     * @param mixed $data
-     * @param string $message
-     * @return JsonResponse
-     */
     public static function send(int $status, mixed $data = null, string $message): JsonResponse
     {
         $info = [
@@ -21,5 +15,4 @@ class Responser
 
         return new JsonResponse($info, $status);
     }
-
 }

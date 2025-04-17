@@ -54,8 +54,8 @@ return [
     |
     */
 
-    'url' => env('APP_URL', ''),
-
+    'app_url' => env('APP_URL', ''),
+    'api_url' => env('API_URL', ''),
     'asset_url' => env('ASSET_URL'),
 
     /*
@@ -211,8 +211,8 @@ return [
     |
     */
 
-  'aliases' => Facade::defaultAliases()->merge([
-    'Socialite' => Laravel\Socialite\Facades\Socialite::class
-  ])->toArray(),
+    'aliases' => Facade::defaultAliases()->merge([
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+    ])->toArray(),
 
 ];

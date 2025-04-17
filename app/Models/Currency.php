@@ -9,6 +9,12 @@ class Currency extends Model
 {
     use HasFactory;
 
+    public $casts = [
+        'is_supported' => 'boolean',
+        'is_default' => 'boolean',
+        'id' => 'int',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -20,13 +26,7 @@ class Currency extends Model
         'is_supported',
         'code',
         'status',
-        'is_default'
-    ];
-
-    public $casts = [
-        'is_supported' => 'boolean',
-        'is_default' => 'boolean',
-        'id' => 'int',
+        'is_default',
     ];
 
     /**
@@ -44,5 +44,4 @@ class Currency extends Model
     {
         return $query->where('is_default', 1);
     }
-
 }

@@ -3,7 +3,7 @@
 namespace App\Jobs;
 use App\Enums\QueuedJobEnum;
 use App\Models\Store\Store;
-use App\Traits\V1\StoreTrait;
+use App\Traits\StoreTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -12,7 +12,11 @@ use Illuminate\Queue\SerializesModels;
 
 class UpdateStoreRefJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, StoreTrait;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use StoreTrait;
 
     /**
      * Create a new job instance.
@@ -32,11 +36,10 @@ class UpdateStoreRefJob implements ShouldQueue
     public function handle()
     {
         $stores = Store::where(['ref' => null])->orWhere('slug', null)->get();
-        if($stores->count()) {
+        if ($stores->count()) {
             $stores->map(function ($store) {
                 $store->update(['ref' => $this->generateUniqueStoreRef(), 'slug' => strtolower(str()->slug($store->name))]);
             });
         }
     }
-
 }

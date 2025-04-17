@@ -8,21 +8,13 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    /**
-     * @param PaymentService $paymentService
-     */
     public function __construct(private PaymentService $paymentService)
     {
         $this->paymentService = $paymentService;
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function list(Request $request): JsonResponse
     {
         return $this->paymentService->list($request);
     }
-
 }

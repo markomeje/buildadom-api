@@ -5,9 +5,9 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum BusinessProfileStatusEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case ACTIVE = 'active';
-  case BLOCKED = 'blocked';
+    case ACTIVE = 'active';
+    case BLOCKED = 'blocked';
 
 }

@@ -10,38 +10,28 @@ use Illuminate\Http\JsonResponse;
 
 class PasswordResetController extends Controller
 {
+    public function __construct(
+        private PasswordResetService $passwordResetService
+    ) {}
 
-  /**
-   * @param PasswordResetService $passwordResetService
-   */
-  public function __construct(
-    private PasswordResetService $passwordResetService
-  ){}
+    public function initiate(InitiatePasswordResetRequest $request): JsonResponse
+    {
+        return $this->passwordResetService->initiate($request);
+    }
 
-  /**
-   * @param InitiatePasswordResetRequest $request
-   * @return JsonResponse
-   */
-  public function initiate(InitiatePasswordResetRequest $request): JsonResponse
-  {
-    return $this->passwordResetService->initiate($request);
-  }
+    /**
+     * @param  ResetPasswordRequest  $requests
+     */
+    public function reset(ResetPasswordRequest $request): JsonResponse
+    {
+        return $this->passwordResetService->reset($request);
+    }
 
-  /**
-   * @param ResetPasswordRequest $requests
-   * @return JsonResponse
-   */
-  public function reset(ResetPasswordRequest $request): JsonResponse
-  {
-    return $this->passwordResetService->reset($request);
-  }
-
-  /**
-   * @param ConfirmPasswordResetCodeRequest $requests
-   * @return JsonResponse
-   */
-  public function confirm(ConfirmPasswordResetCodeRequest $request): JsonResponse
-  {
-    return $this->passwordResetService->confirm($request);
-  }
+    /**
+     * @param  ConfirmPasswordResetCodeRequest  $requests
+     */
+    public function confirm(ConfirmPasswordResetCodeRequest $request): JsonResponse
+    {
+        return $this->passwordResetService->confirm($request);
+    }
 }

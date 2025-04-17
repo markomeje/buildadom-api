@@ -7,20 +7,13 @@ use Illuminate\Http\JsonResponse;
 
 class CurrencyController extends Controller
 {
-  /**
-   * @param CurrencyService $currencyService
-   */
-  public function __construct(private CurrencyService $currencyService)
-  {
-    $this->currencyService = $currencyService;
-  }
+    public function __construct(private CurrencyService $currencyService)
+    {
+        $this->currencyService = $currencyService;
+    }
 
-  /**
-   * @return JsonResponse
-   */
-  public function list(): JsonResponse
-  {
-    return $this->currencyService->list();
-  }
-
+    public function list(): JsonResponse
+    {
+        return $this->currencyService->list();
+    }
 }

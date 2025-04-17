@@ -5,9 +5,9 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum UploadRoleEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case MAIN = 'main';
-  case OTHERS = 'others';
+    case MAIN = 'main';
+    case OTHERS = 'others';
 
 }

@@ -6,22 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class NigerianBank extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array<int, string>
-   */
-  protected $fillable = [
-    'name',
-    'code',
-    'slug',
-    'ussd',
-    'is_active',
-  ];
+    public $casts = [
+        'is_active' => 'boolean',
+    ];
 
-  public $casts = [
-    'is_active' => 'boolean',
-  ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'code',
+        'slug',
+        'ussd',
+        'is_active',
+    ];
 }

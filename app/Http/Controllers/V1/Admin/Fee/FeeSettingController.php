@@ -9,31 +9,22 @@ use Illuminate\Http\Request;
 
 class FeeSettingController extends Controller
 {
+    public function __construct(private FeeSettingService $FeeSettingService)
+    {
+        $this->FeeSettingService = $FeeSettingService;
+    }
 
-  /**
-   * @param FeeSettingService $FeeSettingService
-   */
-  public function __construct(private FeeSettingService $FeeSettingService)
-  {
-    $this->FeeSettingService = $FeeSettingService;
-  }
+    /**
+     * @param  $id
+     * @param  FeeSettingActionRequest  $request
+     */
+    // public function action($id, FeeSettingActionRequest $request)
+    // {
+    //   return $this->FeeSettingService->action($id, $request);
+    // }
 
-  /**
-   * @param $id
-   * @param FeeSettingActionRequest $request
-   * @return JsonResponse
-   */
-  // public function action($id, FeeSettingActionRequest $request)
-  // {
-  //   return $this->FeeSettingService->action($id, $request);
-  // }
-
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function list(Request $request): JsonResponse
-  {
-    return $this->FeeSettingService->list($request);
-  }
+    public function list(Request $request): JsonResponse
+    {
+        return $this->FeeSettingService->list($request);
+    }
 }

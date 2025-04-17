@@ -25,20 +25,13 @@ class State extends Model
         'status',
     ];
 
-    /**
-     * @return HasMany
-     */
     public function cities(): HasMany
     {
         return $this->hasMany(City::class, 'state_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class, 'country_id');
     }
-
 }

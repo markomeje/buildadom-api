@@ -13,20 +13,15 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-
 class OrderService extends BaseService
 {
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function list(Request $request): JsonResponse
     {
         try {
             $stores = auth()->user()->stores;
             $orders = Order::whereIn('store_id', $stores->pluck('id')->toArray())
                 ->whereNotIn('status', [OrderStatusEnum::CANCELLED->value])
-                ->with(['currency', 'trackings', 'fulfillment', 'store', 'product' => function($query) {
+                ->with(['currency', 'trackings', 'fulfillment', 'store', 'product' => function ($query) {
                     $query->with(['images', 'category', 'unit', 'currency']);
                 }])
                 ->latest()
@@ -40,43 +35,41 @@ class OrderService extends BaseService
     }
 
     /**
-     * @param int $id
-     * @param Request $request
-     * @return JsonResponse
+     * @param  int  $id
      */
     public function action($id, Request $request): JsonResponse
     {
         try {
             $order = Order::find($id);
-            if(empty($order)) {
+            if (empty($order)) {
                 return responser()->send(Status::HTTP_NOT_FOUND, null, 'Order not found');
             }
 
             $request_status = strtolower($request->status);
-            if($request_status == strtolower(OrderStatusEnum::ACCEPTED->value) && !auth()->user()->bank) {
+            if ($request_status == strtolower(OrderStatusEnum::ACCEPTED->value) && !auth()->user()->bank) {
                 throw new Exception('You need to setup your bank details first.', Status::HTTP_NOT_ACCEPTABLE);
             }
 
             $order_payment = OrderPayment::where(['order_id' => $order->id])->first();
-            if(strtolower(optional($order_payment)->status) !== strtolower(OrderPaymentStatusEnum::PAID->value)) {
+            if (strtolower(optional($order_payment)->status) !== strtolower(OrderPaymentStatusEnum::PAID->value)) {
                 return responser()->send(Status::HTTP_NOT_ACCEPTABLE, $order_payment, 'Only paid orders can be acted on.');
             }
 
             $order_status = strtolower($order->status);
-            if($order_status == strtolower(OrderStatusEnum::DECLINED->value)) {
+            if ($order_status == strtolower(OrderStatusEnum::DECLINED->value)) {
                 return responser()->send(Status::HTTP_NOT_ACCEPTABLE, null, 'You have already declined this order.');
             }
 
-            if($order_status !== strtolower(OrderStatusEnum::PLACED->value)) {
+            if ($order_status !== strtolower(OrderStatusEnum::PLACED->value)) {
                 return responser()->send(Status::HTTP_NOT_ACCEPTABLE, null, 'Only placed others can be acted on.');
             }
 
             $order->update(['status' => strtolower($request_status)]);
             $order->customer->notify(new CustomerOrderStatusUpdateNotification($order));
+
             return responser()->send(Status::HTTP_OK, new OrderResource($order), 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send($e->getCode(), null, $e->getMessage());
         }
     }
-
 }

@@ -17,6 +17,11 @@ class Store extends Model
 {
     use HasFactory;
 
+    public $casts = [
+        'published' => 'boolean',
+        'extras' => 'json',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -38,11 +43,6 @@ class Store extends Model
         'slug',
     ];
 
-    public $casts = [
-        'published' => 'boolean',
-        'extras' => 'json',
-    ];
-
     /**
      * Scope published stores
      */
@@ -59,60 +59,38 @@ class Store extends Model
         return $query->where(['user_id' => auth()->id()]);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class, 'country_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function merchant(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * @return HasMany
-     */
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class, 'city_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function state(): BelongsTo
     {
         return $this->belongsTo(State::class, 'state_id');
     }
 
-    /**
-     * @return HasMany
-     */
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class, 'order_id');
     }
-
 }

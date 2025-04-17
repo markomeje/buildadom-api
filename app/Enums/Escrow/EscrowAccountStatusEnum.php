@@ -5,9 +5,9 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum EscrowAccountStatusEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case PENDING = 'pending';
-  case ACTIVE = 'active';
+    case PENDING = 'pending';
+    case ACTIVE = 'active';
 
 }

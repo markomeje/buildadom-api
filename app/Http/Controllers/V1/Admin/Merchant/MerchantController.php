@@ -8,22 +8,16 @@ use Illuminate\Http\Request;
 
 class MerchantController extends Controller
 {
+    public function __construct(private MerchantService $merchantService)
+    {
+        $this->merchantService = $merchantService;
+    }
 
-  /**
-   * @param MerchantService $merchantService
-   */
-  public function __construct(private MerchantService $merchantService)
-  {
-    $this->merchantService = $merchantService;
-  }
-
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function list(Request $request)
-  {
-    return $this->merchantService->list($request);
-  }
-
+    /**
+     * @return JsonResponse
+     */
+    public function list(Request $request)
+    {
+        return $this->merchantService->list($request);
+    }
 }

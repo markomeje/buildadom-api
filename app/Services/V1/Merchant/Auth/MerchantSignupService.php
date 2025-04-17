@@ -8,30 +8,26 @@ use App\Models\UserRole;
 use App\Services\BaseService;
 use App\Services\V1\Email\EmailVerificationService;
 use App\Services\V1\Phone\PhoneVerificationService;
-use App\Traits\V1\UserTypeCheckerTrait;
-use App\Traits\V1\BusinessProfileTrait;
+use App\Traits\BusinessProfileTrait;
+use App\Traits\UserTypeCheckerTrait;
 use App\Utility\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-
 class MerchantSignupService extends BaseService
 {
-    use UserTypeCheckerTrait, BusinessProfileTrait;
+    use BusinessProfileTrait;
+    use UserTypeCheckerTrait;
 
-    public function __construct(private PhoneVerificationService $phoneVerification, private EmailVerificationService $emailVerification)
-    {
-        $this->phoneVerification = $phoneVerification;
-        $this->emailVerification = $emailVerification;
-    }
+    public function __construct(
+        private PhoneVerificationService $phoneVerification,
+        private EmailVerificationService $emailVerification
+    ) {}
 
     /**
      * Signup merchant
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function signup(Request $request): JsonResponse
     {
@@ -44,22 +40,21 @@ class MerchantSignupService extends BaseService
                 'password' => Hash::make($request->password) ?? null,
                 'status' => UserStatusEnum::PENDING->value,
                 'firstname' => $request->firstname ?? null,
-                'lastname' => $request->lastname ?? null
+                'lastname' => $request->lastname ?? null,
             ]);
 
             $this->createUserBusinessProfile($request, $user);
             UserRole::create([
                 'name' => UserRoleEnum::MERCHANT->value,
-                'user_id' => $user->id
+                'user_id' => $user->id,
             ]);
 
-            (new PhoneVerificationService())->send($user);
-            (new EmailVerificationService())->send($user);
+            (new PhoneVerificationService)->send($user);
+            (new EmailVerificationService)->send($user);
 
             return responser()->send(Status::HTTP_CREATED, ['token' => auth()->login($user), 'user' => $user], 'Signup successful. Verification detials has been sent.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Oooops! singup failed. Try again.');
         }
     }
-
 }

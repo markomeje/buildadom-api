@@ -9,38 +9,34 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class KycFile extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array<int, string>
-   */
-  protected $fillable = [
-    'kyc_verification_id',
-    'extras',
-    'file_side',
-    'user_id',
-    'uploaded_file',
-    'description',
-    'status',
-  ];
+    public $casts = [
+        'extras' => 'json',
+    ];
 
-  public $casts = [
-    'extras' => 'json'
-  ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'kyc_verification_id',
+        'extras',
+        'file_side',
+        'user_id',
+        'uploaded_file',
+        'description',
+        'status',
+    ];
 
-  /**
-   * @return BelongsTo
-   */
-  public function kycVerification(): BelongsTo
-  {
-    return $this->belongsTo(kycVerification::class, 'kyc_verification_id');
-  }
+    public function kycVerification(): BelongsTo
+    {
+        return $this->belongsTo(kycVerification::class, 'kyc_verification_id');
+    }
 
-  public function user(): BelongsTo
-  {
-    return $this->belongsTo(User::class, 'user_id');
-  }
-
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

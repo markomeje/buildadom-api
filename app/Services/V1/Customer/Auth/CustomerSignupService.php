@@ -16,13 +16,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-
 class CustomerSignupService extends BaseService
 {
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function signup(Request $request): JsonResponse
     {
         try {
@@ -35,23 +30,24 @@ class CustomerSignupService extends BaseService
                 'type' => UserTypeEnum::INDIVIDUAL->value,
                 'address' => $request->address,
                 'password' => Hash::make($request->password),
-                'status' => UserStatusEnum::PENDING->value
+                'status' => UserStatusEnum::PENDING->value,
             ]);
 
             UserRole::create([
                 'name' => UserRoleEnum::CUSTOMER->value,
-                'user_id' => $user->id
+                'user_id' => $user->id,
             ]);
 
-            (new PhoneVerificationService())->send($user);
-            (new EmailVerificationService())->send($user);
+            (new PhoneVerificationService)->send($user);
+            (new EmailVerificationService)->send($user);
 
             DB::commit();
+
             return responser()->send(Status::HTTP_CREATED, ['token' => auth()->login($user), 'user' => $user], 'Signup successful. Verification detials has been sent.');
         } catch (Exception) {
             DB::rollback();
+
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Oooops! singup failed. Try again.');
         }
     }
-
 }

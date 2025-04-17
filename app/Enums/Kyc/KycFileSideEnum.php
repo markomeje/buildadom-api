@@ -5,9 +5,9 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum KycFileSideEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case FRONT = 'front';
-  case BACK = 'back';
+    case FRONT = 'front';
+    case BACK = 'back';
 
 }

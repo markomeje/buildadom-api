@@ -31,6 +31,7 @@ class MerchantSignupRequest extends FormRequest
     public function rules()
     {
         $business = strtolower($this->type ?? '') === 'business';
+
         return [
             'type' => ['required', 'string', new Enum(UserTypeEnum::class)],
             'email' => ['required', 'unique:users', (new EmailRule)],
@@ -45,7 +46,7 @@ class MerchantSignupRequest extends FormRequest
 
             'address' => ['required', 'max:255'],
             'password' => ['required', (new PasswordRule)],
-            'confirm_password' => ['required', 'same:password']
+            'confirm_password' => ['required', 'same:password'],
         ];
     }
 
@@ -58,21 +59,21 @@ class MerchantSignupRequest extends FormRequest
     {
         return [
             'cac_number.required' => 'Please enter your CAC registration number.',
-            'phone.phone' => 'Invalid phone number'
+            'phone.phone' => 'Invalid phone number',
         ];
     }
 
     /**
      * Customize failed validation json response
      *
-     * @return void
      *
      * @param Validator
+     * @return void
      */
     protected function failedValidation(Validator $validator)
     {
         $response = responser()->send(Status::HTTP_UNPROCESSABLE_ENTITY, [
-            'errors' => $validator->errors()
+            'errors' => $validator->errors(),
         ], 'Please check your inputs.');
 
         throw new ValidationException($validator, $response);

@@ -9,34 +9,30 @@ use Illuminate\Database\Query\Builder;
 
 class DispatchDriver extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array<int, string>
-   */
-  protected $fillable = [
-    'user_id',
-    'firstname',
-    'lastname',
-    'phone',
-  ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'user_id',
+        'firstname',
+        'lastname',
+        'phone',
+    ];
 
-  /**
-   * @return Builder
-   */
-  public function scopeOwner($query)
-  {
-    return $query->where(['user_id' => auth()->id()]);
-  }
+    /**
+     * @return Builder
+     */
+    public function scopeOwner($query)
+    {
+        return $query->where(['user_id' => auth()->id()]);
+    }
 
-  /**
-   * @return BelongsTo
-   */
-  public function user(): BelongsTo
-  {
-    return $this->belongsTo(User::class, 'user_id');
-  }
-
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

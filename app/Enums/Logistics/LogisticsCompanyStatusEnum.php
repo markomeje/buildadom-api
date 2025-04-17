@@ -5,10 +5,10 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum LogisticsCompanyStatusEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case ACTIVE = 'active';
-  case VERIFIED = 'verified';
-  case UNVERIFIED = 'unverified';
+    case ACTIVE = 'active';
+    case VERIFIED = 'verified';
+    case UNVERIFIED = 'unverified';
 
 }

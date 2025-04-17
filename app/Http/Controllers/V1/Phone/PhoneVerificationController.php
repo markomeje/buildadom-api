@@ -8,30 +8,28 @@ use Illuminate\Http\JsonResponse;
 
 class PhoneVerificationController extends Controller
 {
+    public function __construct(private PhoneVerificationService $phoneVerificationService)
+    {
+        $this->phoneVerificationService = $phoneVerificationService;
+    }
 
-  public function __construct(private PhoneVerificationService $phoneVerificationService)
-  {
-    $this->phoneVerificationService = $phoneVerificationService;
-  }
+    /**
+     * Verify phone number
+     *
+     * @param JsonResponse
+     */
+    public function verify(PhoneVerificationRequest $request): JsonResponse
+    {
+        return $this->phoneVerificationService->verify($request);
+    }
 
-  /**
-   * Verify phone number
-   *
-   * @param PhoneVerificationRequest $request
-   * @param JsonResponse
-   */
-  public function verify(PhoneVerificationRequest $request): JsonResponse
-  {
-    return $this->phoneVerificationService->verify($request);
-  }
-
-  /**
-   * Resend phone number verification code
-   *
-   * @param JsonResponse
-   */
-  public function resend(): JsonResponse
-  {
-    return $this->phoneVerificationService->resend();
-  }
+    /**
+     * Resend phone number verification code
+     *
+     * @param JsonResponse
+     */
+    public function resend(): JsonResponse
+    {
+        return $this->phoneVerificationService->resend();
+    }
 }

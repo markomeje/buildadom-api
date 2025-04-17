@@ -5,9 +5,9 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum EscrowPaymentTypeEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case DEPOSIT = 'DEPOSIT';
-  case WITHDRAWAL = 'WITHDRAWAL';
+    case DEPOSIT = 'DEPOSIT';
+    case WITHDRAWAL = 'WITHDRAWAL';
 
 }

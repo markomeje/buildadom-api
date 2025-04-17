@@ -5,9 +5,9 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum PaymentTypeEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case CHARGE = 'charge';
-  case TRANSFER = 'transfer';
+    case CHARGE = 'charge';
+    case TRANSFER = 'transfer';
 
 }

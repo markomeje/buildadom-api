@@ -10,58 +10,52 @@ use Illuminate\Database\Query\Builder;
 
 class Country extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array<int, string>
-   */
-  protected $fillable = [
-    'latitude',
-    'longitude',
-    'iso2',
-    'capital',
-    'iso3',
-    'name',
-    'phone_code',
-    'region',
-    'status',
-    'flag_url',
-    'emoji',
-    'translations',
-    'timezones',
-    'emoji',
-    'sub_region',
-  ];
+    public $casts = [
+        'translations' => 'json',
+        'timezones' => 'json',
+        'is_supported' => 'boolean',
+    ];
 
-  public $casts = [
-    'translations' => 'json',
-    'timezones' => 'json',
-    'is_supported' => 'boolean'
-  ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'latitude',
+        'longitude',
+        'iso2',
+        'capital',
+        'iso3',
+        'name',
+        'phone_code',
+        'region',
+        'status',
+        'flag_url',
+        'emoji',
+        'translations',
+        'timezones',
+        'emoji',
+        'sub_region',
+    ];
 
-  /**
-   * @return Builder
-   */
-  public function scopeIsSupported($query)
-  {
-    return $query->where('is_supported', 1);
-  }
+    /**
+     * @return Builder
+     */
+    public function scopeIsSupported($query)
+    {
+        return $query->where('is_supported', 1);
+    }
 
-  /**
-   * @return HasMany
-   */
-  public function states(): HasMany
-  {
-    return $this->hasMany(State::class, 'country_id');
-  }
+    public function states(): HasMany
+    {
+        return $this->hasMany(State::class, 'country_id');
+    }
 
-  /**
-   * @return HasMany
-   */
-  public function cities(): HasMany
-  {
-    return $this->hasMany(City::class, 'country_id');
-  }
+    public function cities(): HasMany
+    {
+        return $this->hasMany(City::class, 'country_id');
+    }
 }

@@ -8,22 +8,13 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    public function __construct(private OrderService $orderService)
+    {
+        $this->orderService = $orderService;
+    }
 
-  /**
-   * @param OrderService $orderService
-   */
-  public function __construct(private OrderService $orderService)
-  {
-    $this->orderService = $orderService;
-  }
-
-  /**
-   * @param Request $request
-   * @return JsonResponse
-   */
-  public function list(Request $request): JsonResponse
-  {
-    return $this->orderService->list($request);
-  }
-
+    public function list(Request $request): JsonResponse
+    {
+        return $this->orderService->list($request);
+    }
 }

@@ -5,9 +5,9 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum StoreUploadTypeEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case LOGO = 'logo';
-  case BANNER = 'banner';
+    case LOGO = 'logo';
+    case BANNER = 'banner';
 
 }

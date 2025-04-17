@@ -5,9 +5,9 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum FeeTypeEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case FLAT_FEE = 'FLAT_FEE';
-  case PERCENTAGE_FEE = 'PERCENTAGE_FEE';
+    case FLAT_FEE = 'FLAT_FEE';
+    case PERCENTAGE_FEE = 'PERCENTAGE_FEE';
 
 }

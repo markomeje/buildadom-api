@@ -1,7 +1,7 @@
 <?php
 
-use Tests\CreatesApplication;
 use Illuminate\Foundation\Testing\TestCase;
+use Tests\CreatesApplication;
 
 /*
 |--------------------------------------------------------------------------

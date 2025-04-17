@@ -5,9 +5,9 @@ use LaracraftTech\LaravelUsefulAdditions\Traits\UsefulEnums;
 
 enum PaymentAccountTypeEnum: string
 {
-  use UsefulEnums;
+    use UsefulEnums;
 
-  case ESCROW = 'ESCROW';
-  case DIRECT = 'DIRECT';
+    case ESCROW = 'ESCROW';
+    case DIRECT = 'DIRECT';
 
 }
