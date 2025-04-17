@@ -11,16 +11,22 @@ use Illuminate\Http\Request;
 
 class CountryController extends Controller
 {
-    public function __construct(private CountryService $countryService)
-    {
-        $this->countryService = $countryService;
-    }
+    /**
+     * @param \App\Services\V1\Country\CountryService $countryService
+     */
+    public function __construct(private CountryService $countryService) {}
 
+    /**
+     * @return JsonResponse
+     */
     public function list(): JsonResponse
     {
         return $this->countryService->list();
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function supported(): JsonResponse
     {
         return $this->countryService->supported();
@@ -33,7 +39,6 @@ class CountryController extends Controller
     {
         $country_id = $request->country_id ?? 0;
         $states = State::where('country_id', $country_id)->get();
-
         return responser()->send(Status::HTTP_OK, $states, 'States fetched successfully');
     }
 
@@ -48,7 +53,6 @@ class CountryController extends Controller
         }
 
         $cities = $query->where('country_id', $request->country_id)->get();
-
         return responser()->send(Status::HTTP_OK, $cities, 'Cities fetched successfully');
     }
 }

@@ -9,25 +9,26 @@ use Illuminate\Http\JsonResponse;
 
 class CountryService extends BaseService
 {
+    /**
+     * @return JsonResponse
+     */
     public function list(): JsonResponse
     {
         try {
             $countries = Country::all();
-
             return responser()->send(Status::HTTP_OK, $countries, 'Countries fetched successfully.');
         } catch (Exception $e) {
-            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Unknown error. Try again.');
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
         }
     }
 
     /**
-     * Supported countries
+     * @return JsonResponse
      */
     public function supported(): JsonResponse
     {
         try {
             $countries = Country::isSupported()->get();
-
             return responser()->send(Status::HTTP_OK, $countries, 'Supported countries fetched successfully.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Unknown error. Try again.');
