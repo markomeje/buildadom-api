@@ -3,7 +3,9 @@
 namespace App\Jobs;
 use App\Enums\Queue\QueueEnum;
 use App\Enums\Sms\SmsStatusEnum;
+use App\Exceptions\SendSmsException;
 use App\Models\SmsLog;
+use App\Models\User;
 use App\Partners\TermiiSms;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -14,17 +16,14 @@ use Illuminate\Queue\SerializesModels;
 
 class SmsSenderJob implements ShouldQueue
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
+     * @param  string  $phone
+     * @param  string  $message
+     * @param  \App\Models\User|null  $user
      */
-    public function __construct(private int $log_id)
+    public function __construct(private string $phone, private string $message, private ?User $user)
     {
         $this->onQueue(QueueEnum::SMS->value);
     }
@@ -36,9 +35,17 @@ class SmsSenderJob implements ShouldQueue
      */
     public function handle()
     {
-        $smsLog = SmsLog::query()->find($this->log_id);
+        $smsLog = SmsLog::query()->create([
+            'user_id' => optional($this->user)->id,
+            'phone' => formatPhoneNumber($this->phone),
+            'message' => $this->message,
+            'status' => SmsStatusEnum::PENDING->value,
+            'from' => config('services.termii.sender_id'),
+        ]);
+
         try {
-            (new TermiiSms)->setPhone($smsLog->phone)
+            (new TermiiSms)
+                ->setPhone($smsLog->phone)
                 ->setMessage($smsLog->message)
                 ->send();
 
@@ -46,7 +53,7 @@ class SmsSenderJob implements ShouldQueue
                 $smsLog->status = SmsStatusEnum::SENT->value;
                 $smsLog->save();
             }
-        } catch (Exception $e) {
+        } catch (Exception|SendSmsException $e) {
             $smsLog->status = SmsStatusEnum::ERROR->value;
             $smsLog->error_message = $e->getMessage();
             $smsLog->save();

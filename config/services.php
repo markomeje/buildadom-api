@@ -44,8 +44,12 @@ return [
     ],
 
     'termii' => [
-        'sender_id' => 'N-Alert',
+        'sender_id' => env('TERMII_SENDER_ID'),
         'api_key' => env('TERMII_API_KEY'),
+        'channel' => env('TERMII_MESSAGE_CHANNEL'),
+        'attempts' => env('TERMII_MESSAGE_ATTEMPTS'),
+        'time_to_live' => env('TERMII_MESSAGE_TIME_TO_LIVE'),
+        'type' => env('TERMII_MESSAGE_TYPE'),
     ],
 
     'paystack' => [

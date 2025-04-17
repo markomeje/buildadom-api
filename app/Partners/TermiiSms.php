@@ -1,56 +1,76 @@
 <?php
 
 namespace App\Partners;
-use App\Interfaces\SmsSenderInterface;
+use App\Contracts\SmsSenderInterface;
+use App\Exceptions\SendSmsException;
 use Exception;
 use ManeOlawale\Termii\Client;
 
 class TermiiSms implements SmsSenderInterface
 {
+    /**
+     * @var array
+     */
     public array $config;
 
+    /**
+     * @var string
+     */
     private string $message;
 
+    /**
+     * @var string
+     */
     private string $phone;
 
-    public function __construct()
+    public function __construct() {}
+
+    /**
+     * @return array
+     */
+    public function getConfig()
     {
-        $this->config = [
+        return [
             'sender_id' => config('services.termii.sender_id'),
-            'channel' => 'dnd',
-            'attempts' => 10,
-            'time_to_live' => 30,
-            'type' => 'plain',
+            'channel' => config('services.termii.channel'),
+            'attempts' => config('services.termii.attempts'),
+            'time_to_live' => config('services.termii.time_to_live'),
+            'type' => config('services.termii.type'),
         ];
     }
 
+    /**
+     * @param  string  $phone
+     * @return self
+     */
     public function setPhone(string $phone): self
     {
         $this->phone = formatPhoneNumber($phone);
-
-        return $this;
-    }
-
-    public function setMessage(string $message): self
-    {
-        $this->message = $message;
-
         return $this;
     }
 
     /**
-     * Send sms via Termii API client
-     *
-     * @return mixed
+     * @param  string  $message
+     * @return self
+     */
+    public function setMessage(string $message): self
+    {
+        $this->message = $message;
+        return $this;
+    }
+
+    /**
+     * @throws \App\Exceptions\SendSmsException
+     * @throws Exception
+     * @return bool
      */
     public function send()
     {
         try {
-            $response = $this->getHttpClient()->send($this->phone, $this->message);
-            $response->onError(function ($response) {
-                throw new Exception($response['message']);
-            });
-
+            $response = $this->httpClient()->send($this->phone, $this->message);
+            $response->onError(fn ($response) => throw new SendSmsException($response['message']));
+        } catch (SendSmsException $e) {
+            throw new SendSmsException($e->getMessage());
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -58,10 +78,12 @@ class TermiiSms implements SmsSenderInterface
         return true;
     }
 
-    private function getHttpClient()
+    /**
+     * @return \ManeOlawale\Termii\Api\Sms
+     */
+    private function httpClient()
     {
         $api_key = config('services.termii.api_key');
-
-        return (new Client($api_key, $this->config))->sms;
+        return (new Client($api_key, $this->getConfig()))->sms;
     }
 }

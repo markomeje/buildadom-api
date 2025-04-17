@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Services\V1\Phone;
-use App\Facades\V1\SmsSenderFacade;
+use App\Jobs\SmsSenderJob;
 use App\Models\Phone\PhoneVerification;
 use App\Models\User;
 use App\Services\BaseService;
@@ -19,6 +19,10 @@ class PhoneVerificationService extends BaseService
      */
     private $expiry = 20;
 
+    /**
+     * @param \App\Models\User $user
+     * @return JsonResponse
+     */
     public function send(User $user): JsonResponse
     {
         try {
@@ -26,14 +30,17 @@ class PhoneVerificationService extends BaseService
             $message = $this->getMessage($code);
 
             $this->createPhoneVerificationDetail($code, $user);
-            SmsSenderFacade::push($user, $message);
+            SmsSenderJob::dispatch($user->phone, $message, $user);
 
-            return responser()->send(Status::HTTP_CREATED, [], 'Phone verification code has been sent.');
+            return responser()->send(Status::HTTP_CREATED, null, 'Phone verification code has been sent.');
         } catch (Exception $e) {
-            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
         }
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function resend(): JsonResponse
     {
         try {
@@ -42,37 +49,45 @@ class PhoneVerificationService extends BaseService
             $user = User::find(auth()->id());
 
             $this->createPhoneVerificationDetail($code, $user);
-            SmsSenderFacade::push($user, $message);
+            SmsSenderJob::dispatch($user->phone, $message, $user);
 
-            return responser()->send(Status::HTTP_CREATED, [], 'Your phone verification code has been resent.');
+            return responser()->send(Status::HTTP_CREATED, null, 'Your phone verification code has been resent.');
         } catch (Exception $e) {
-            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
         }
     }
 
+    /**
+     * @param \App\Models\Phone\PhoneVerification $verification
+     * @return bool
+     */
     public function phoneVerificationHasExpired(PhoneVerification $verification): bool
     {
         return $verification->expiry < now();
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
     public function verify(Request $request): JsonResponse
     {
         try {
             $phoneVerification = $this->getUserLatestPhoneVerificationDetails();
             if (empty($phoneVerification)) {
-                return responser()->send(Status::HTTP_NOT_ACCEPTABLE, [], 'Invalid phone verification.');
+                return responser()->send(Status::HTTP_NOT_ACCEPTABLE, null, 'Invalid phone verification.');
             }
 
             if ($this->phoneIsVerified($phoneVerification)) {
-                return responser()->send(Status::HTTP_OK, [], 'Your phone is already verified.');
+                return responser()->send(Status::HTTP_OK, null, 'Your phone is already verified.');
             }
 
             if ($request->code !== $phoneVerification->code) {
-                return responser()->send(Status::HTTP_FORBIDDEN, [], 'Invalid verification code.');
+                return responser()->send(Status::HTTP_FORBIDDEN, null, 'Invalid verification code.');
             }
 
             if ($this->phoneVerificationHasExpired($phoneVerification)) {
-                return responser()->send(Status::HTTP_FORBIDDEN, [], 'Expired verification code. Request another');
+                return responser()->send(Status::HTTP_FORBIDDEN, null, 'Expired verification code. Request another');
             }
 
             $phoneVerification->update([
@@ -83,15 +98,23 @@ class PhoneVerificationService extends BaseService
 
             return responser()->send(Status::HTTP_OK, [$phoneVerification], 'Your phone number has been verified.');
         } catch (Exception $e) {
-            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], $e->getMessage());
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
         }
     }
 
+    /**
+     * @param \App\Models\Phone\PhoneVerification $phoneVerification
+     * @return bool
+     */
     public function phoneIsVerified(PhoneVerification $phoneVerification): bool
     {
         return (bool) $phoneVerification->verified === true;
     }
 
+    /**
+     * @param int $code
+     * @return string
+     */
     private function getMessage(int $code): string
     {
         $sender_id = config('services.termii.sender_id');
@@ -100,13 +123,18 @@ class PhoneVerificationService extends BaseService
         return $message;
     }
 
+    /**
+     * @return object|PhoneVerification|\Illuminate\Database\Eloquent\Model|null
+     */
     private function getUserLatestPhoneVerificationDetails(): ?PhoneVerification
     {
         return PhoneVerification::where(['user_id' => auth()->id()])->latest()->first();
     }
 
     /**
-     * @return PhoneVerification
+     * @param int $code
+     * @param \App\Models\User $user
+     * @return PhoneVerification|\Illuminate\Database\Eloquent\Model
      */
     private function createPhoneVerificationDetail(int $code, User $user)
     {

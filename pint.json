@@ -14,6 +14,7 @@
         "blank_line_between_import_groups": true,
         "cast_spaces": false,
         "blank_line_before_statement": false,
+        "phpdoc_align": false,
 
         "concat_space": {
             "spacing": "one"
