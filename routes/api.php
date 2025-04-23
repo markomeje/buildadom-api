@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware([])->domain(config('app.api_url'))->prefix('v1')->group(function () {
+Route::middleware([])->domain(config('app.app_url'))->prefix('v1')->group(function () {
     Route::middleware(['accept.json'])->group(function () {
 
         Route::prefix('admin')->name('admin.')->group(base_path('routes/v1/admin.php'));
