@@ -16,4 +16,17 @@ interface SmsSenderInterface
      * @return array
      */
     public function getConfig();
+
+    /**
+     * @param  string  $phone
+     * @return self
+     */
+    public function setPhone(string $phone): self;
+
+    /**
+     * @param  string  $message
+     * @return self
+     */
+    public function setMessage(string $message): self;
+
 }

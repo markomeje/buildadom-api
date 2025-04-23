@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Services\V1\Merchant\Store;
-use App\Jobs\UpdateStoreRefJob;
 use App\Models\Store\Store;
 use App\Services\BaseService;
 use App\Traits\StoreTrait;
@@ -17,7 +16,6 @@ class StoreService extends BaseService
     public function create(Request $request): JsonResponse
     {
         try {
-            UpdateStoreRefJob::dispatch();
             $store_name = $request->name;
             $store = Store::create([
                 'name' => ucwords($store_name),
@@ -42,7 +40,6 @@ class StoreService extends BaseService
     {
         try {
             $stores = auth()->user()->stores;
-
             return responser()->send(Status::HTTP_OK, $stores, 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, $e->getMessage());
@@ -95,7 +92,6 @@ class StoreService extends BaseService
             }
 
             $store->update(['published' => $published]);
-
             return responser()->send(Status::HTTP_OK, $store, 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Operation failed. Try again.');

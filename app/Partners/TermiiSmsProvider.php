@@ -6,13 +6,8 @@ use App\Exceptions\SendSmsException;
 use Exception;
 use ManeOlawale\Termii\Client;
 
-class TermiiSms implements SmsSenderInterface
+class TermiiSmsProvider implements SmsSenderInterface
 {
-    /**
-     * @var array
-     */
-    public array $config;
-
     /**
      * @var string
      */
@@ -22,8 +17,6 @@ class TermiiSms implements SmsSenderInterface
      * @var string
      */
     private string $phone;
-
-    public function __construct() {}
 
     /**
      * @return array
@@ -68,7 +61,7 @@ class TermiiSms implements SmsSenderInterface
     public function send()
     {
         try {
-            $response = $this->httpClient()->send($this->phone, $this->message);
+            $response = $this->client()->send($this->phone, $this->message);
             $response->onError(fn ($response) => throw new SendSmsException($response['message']));
         } catch (SendSmsException $e) {
             throw new SendSmsException($e->getMessage());
@@ -82,9 +75,10 @@ class TermiiSms implements SmsSenderInterface
     /**
      * @return \ManeOlawale\Termii\Api\Sms
      */
-    private function httpClient()
+    private function client()
     {
         $api_key = config('services.termii.api_key');
-        return (new Client($api_key, $this->getConfig()))->sms;
+        $client = new Client($api_key, $this->getConfig());
+        return $client->sms;
     }
 }

@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Jobs;
+use App\Contracts\SmsSenderInterface;
 use App\Enums\Queue\QueueEnum;
+use App\Enums\Sms\SmsProviderNameEnum;
 use App\Enums\Sms\SmsStatusEnum;
 use App\Exceptions\SendSmsException;
 use App\Models\SmsLog;
 use App\Models\User;
-use App\Partners\TermiiSms;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,11 +20,12 @@ class SmsSenderJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @param  string  $phone
-     * @param  string  $message
-     * @param  \App\Models\User|null  $user
+     * @param \App\Contracts\SmsSenderInterface $smsSender
+     * @param string $phone
+     * @param string $message
+     * @param mixed $user
      */
-    public function __construct(private string $phone, private string $message, private ?User $user)
+    public function __construct(private SmsSenderInterface $smsSender, private string $phone, private string $message, private ?User $user)
     {
         $this->onQueue(QueueEnum::SMS->value);
     }
@@ -35,29 +37,28 @@ class SmsSenderJob implements ShouldQueue
      */
     public function handle()
     {
-        $smsLog = SmsLog::query()->create([
+        $log = SmsLog::query()->create([
             'user_id' => optional($this->user)->id,
             'phone' => formatPhoneNumber($this->phone),
             'message' => $this->message,
             'status' => SmsStatusEnum::PENDING->value,
-            'from' => config('services.termii.sender_id'),
+            'from' => SmsProviderNameEnum::TERMII->value,
         ]);
 
         try {
-            (new TermiiSms)
-                ->setPhone($smsLog->phone)
-                ->setMessage($smsLog->message)
+            $this->smsSender->setPhone($log->phone)
+                ->setMessage($log->message)
                 ->send();
 
-            if ($smsLog) {
-                $smsLog->status = SmsStatusEnum::SENT->value;
-                $smsLog->save();
+            if ($log) {
+                $log->status = SmsStatusEnum::SENT->value;
+                $log->save();
             }
         } catch (Exception|SendSmsException $e) {
-            $smsLog->status = SmsStatusEnum::ERROR->value;
-            $smsLog->error_message = $e->getMessage();
-            $smsLog->save();
+            $log->status = SmsStatusEnum::ERROR->value;
+            $log->error_message = $e->getMessage();
+            $log->save();
         }
-
     }
+
 }
