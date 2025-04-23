@@ -3,7 +3,6 @@
 namespace App\Models\Order;
 use App\Enums\Order\OrderStatusEnum;
 use App\Models\Currency;
-use App\Models\Payment\Payment;
 use App\Models\Product\Product;
 use App\Models\Store\Store;
 use App\Models\User;
@@ -22,6 +21,7 @@ class Order extends Model
     public $casts = [
         'total_amount' => 'float',
         'amount' => 'float',
+        'has_driver' => 'float',
     ];
 
     /**
@@ -39,6 +39,7 @@ class Order extends Model
         'amount',
         'currency_id',
         'quantity',
+        'has_driver'
     ];
 
     /**

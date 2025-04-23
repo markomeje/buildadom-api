@@ -28,5 +28,4 @@ interface SmsSenderInterface
      * @return self
      */
     public function setMessage(string $message): self;
-
 }

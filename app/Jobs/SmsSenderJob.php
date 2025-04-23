@@ -60,5 +60,4 @@ class SmsSenderJob implements ShouldQueue
             $log->save();
         }
     }
-
 }

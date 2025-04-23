@@ -21,6 +21,11 @@ class DispatchDriver extends Model
         'firstname',
         'lastname',
         'phone',
+        'order_id'
+    ];
+
+    public $casts = [
+        'order_id' => 'int'
     ];
 
     /**

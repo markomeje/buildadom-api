@@ -4,11 +4,14 @@ use App\Http\Controllers\V1\Customer\Auth\CustomerSignupController;
 use App\Http\Controllers\V1\Customer\Cart\CartItemController;
 use App\Http\Controllers\V1\Customer\Escrow\EscrowAccountController;
 use App\Http\Controllers\V1\Customer\Order\OrderController;
+use App\Http\Controllers\V1\Customer\Order\OrderDispatchDriverController;
 use App\Http\Controllers\V1\Customer\Order\OrderFulfillmentController;
 use App\Http\Controllers\V1\Customer\Order\OrderPaymentController;
 use App\Http\Controllers\V1\Customer\Payment\PaymentController;
 use App\Http\Controllers\V1\Customer\Shipping\ShippingAddressController;
 use Illuminate\Support\Facades\Route;
+
+
 
 Route::post('signup', [CustomerSignupController::class, 'signup']);
 
@@ -25,6 +28,11 @@ Route::middleware(['auth:api', 'customers.only'])->group(function () {
         Route::get('{id}/trackings', [OrderController::class, 'trackings']);
         Route::post('{id}/cancel', [OrderController::class, 'cancel']);
         Route::post('{id}/delete', [OrderController::class, 'delete']);
+
+        Route::post('{id}/has-driver', [OrderController::class, 'driver']);
+
+        Route::post('add-driver', [OrderDispatchDriverController::class, 'add']);
+        Route::get('{id}/get-driver', [OrderDispatchDriverController::class, 'show']);
 
         Route::prefix('payment')->group(function () {
             Route::get('list', [OrderPaymentController::class, 'list']);

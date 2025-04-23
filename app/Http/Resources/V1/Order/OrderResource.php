@@ -28,6 +28,7 @@ class OrderResource extends JsonResource
             'quantity' => $this->quantity,
             'currency_id' => $this->currency_id,
             'store_id' => $this->store_id,
+            'has_driver' => $this->has_driver,
             'status' => $this->status,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,

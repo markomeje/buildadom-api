@@ -29,7 +29,7 @@ class CreateDispatchDriverRequest extends FormRequest
         return [
             'firstname' => ['required', 'string', 'max:50'],
             'lastname' => ['required', 'string', 'max:50'],
-            'phone' => ['required', 'string', Rule::unique('dispatch_drivers', 'phone')],
+            'phone' => ['required', 'string', 'phone'],
         ];
     }
 
@@ -40,7 +40,9 @@ class CreateDispatchDriverRequest extends FormRequest
      */
     public function messages()
     {
-        return [];
+        return [
+            'phone.phone' => 'Invalid phone number',
+        ];
     }
 
     /**

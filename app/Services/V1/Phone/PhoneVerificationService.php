@@ -31,7 +31,7 @@ class PhoneVerificationService extends BaseService
             $message = $this->getMessage($code);
 
             $this->createPhoneVerificationDetail($code, $user);
-            SmsSenderJob::dispatch(new TermiiSmsProvider(), $user->phone, $message, $user);
+            SmsSenderJob::dispatch(new TermiiSmsProvider, $user->phone, $message, $user);
 
             return responser()->send(Status::HTTP_CREATED, null, 'Phone verification code has been sent.');
         } catch (Exception $e) {
@@ -50,7 +50,7 @@ class PhoneVerificationService extends BaseService
             $user = User::find(auth()->id());
 
             $this->createPhoneVerificationDetail($code, $user);
-            SmsSenderJob::dispatch(new TermiiSmsProvider(), $user->phone, $message, $user);
+            SmsSenderJob::dispatch(new TermiiSmsProvider, $user->phone, $message, $user);
 
             return responser()->send(Status::HTTP_CREATED, null, 'Your phone verification code has been resent.');
         } catch (Exception $e) {
