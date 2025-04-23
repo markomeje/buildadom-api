@@ -70,5 +70,4 @@ class OrderController extends Controller
     {
         return $this->orderService->driver($id);
     }
-
 }

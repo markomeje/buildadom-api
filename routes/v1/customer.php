@@ -11,8 +11,6 @@ use App\Http\Controllers\V1\Customer\Payment\PaymentController;
 use App\Http\Controllers\V1\Customer\Shipping\ShippingAddressController;
 use Illuminate\Support\Facades\Route;
 
-
-
 Route::post('signup', [CustomerSignupController::class, 'signup']);
 
 Route::middleware(['auth:api', 'customers.only'])->group(function () {

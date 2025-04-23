@@ -51,5 +51,4 @@ class OrderDispatchDriverController extends Controller
     {
         return $this->dispatchDriverService->update($request);
     }
-
 }

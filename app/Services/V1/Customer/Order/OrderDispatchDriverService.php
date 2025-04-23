@@ -23,12 +23,12 @@ class OrderDispatchDriverService extends BaseService
             $driver = DispatchDriver::updateOrCreate([
                 'order_id' => $order_id,
                 'user_id' => $user_id,
-            ],[
+            ], [
                 'phone' => formatPhoneNumber($request->phone),
                 'user_id' => $user_id,
                 'firstname' => $request->firstname,
                 'lastname' => $request->lastname,
-                'order_id' => $order_id
+                'order_id' => $order_id,
             ]);
 
             return responser()->send(Status::HTTP_OK, $driver, 'Operation successful.');
@@ -45,7 +45,7 @@ class OrderDispatchDriverService extends BaseService
     {
         try {
             $driver = DispatchDriver::owner()->where('order_id', $order_id)->first();
-            if(empty($driver)) {
+            if (empty($driver)) {
                 return responser()->send(Status::HTTP_NOT_FOUND, $driver, 'No driver was set for the order.');
             }
 
@@ -84,12 +84,11 @@ class OrderDispatchDriverService extends BaseService
                 'phone' => formatPhoneNumber($request->phone),
                 'firstname' => $request->firstname,
                 'lastname' => $request->lastname,
-                'order_id' => $request->order_id
+                'order_id' => $request->order_id,
             ]);
             return responser()->send(Status::HTTP_OK, $driver, 'Operation successful.');
         } catch (Exception $e) {
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Operation failed. Try again.');
         }
     }
-
 }

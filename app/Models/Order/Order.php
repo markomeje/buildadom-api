@@ -39,7 +39,7 @@ class Order extends Model
         'amount',
         'currency_id',
         'quantity',
-        'has_driver'
+        'has_driver',
     ];
 
     /**
