@@ -18,6 +18,11 @@
         "phpdoc_order": false,
         "phpdoc_separation": false,
 
+        "phpdoc_to_comment": false,
+        "phpdoc_no_empty_return": false,
+        "phpdoc_trim": false,
+        "class_definition": false,
+
         "concat_space": {
             "spacing": "one"
         },
