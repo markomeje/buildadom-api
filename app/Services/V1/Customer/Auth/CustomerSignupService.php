@@ -24,8 +24,8 @@ class CustomerSignupService extends BaseService
      */
     public function signup(Request $request): JsonResponse
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             $user = User::create([
                 'phone' => formatPhoneNumber($request->phone),
                 'email' => $request->email,
