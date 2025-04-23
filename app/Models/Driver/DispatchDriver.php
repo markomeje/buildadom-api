@@ -11,6 +11,10 @@ class DispatchDriver extends Model
 {
     use HasFactory;
 
+    public $casts = [
+        'order_id' => 'int',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,11 +25,7 @@ class DispatchDriver extends Model
         'firstname',
         'lastname',
         'phone',
-        'order_id'
-    ];
-
-    public $casts = [
-        'order_id' => 'int'
+        'order_id',
     ];
 
     /**

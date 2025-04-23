@@ -67,5 +67,4 @@ class DispatchDriverService extends BaseService
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Operation failed. Try again.');
         }
     }
-
 }

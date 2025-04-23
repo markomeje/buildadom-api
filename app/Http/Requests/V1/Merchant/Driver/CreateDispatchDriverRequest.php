@@ -4,7 +4,6 @@ namespace App\Http\Requests\V1\Merchant\Driver;
 use App\Utility\Status;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class CreateDispatchDriverRequest extends FormRequest
