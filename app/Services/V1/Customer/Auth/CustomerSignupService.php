@@ -18,6 +18,10 @@ use Illuminate\Support\Facades\Hash;
 
 class CustomerSignupService extends BaseService
 {
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
     public function signup(Request $request): JsonResponse
     {
         try {
@@ -42,12 +46,11 @@ class CustomerSignupService extends BaseService
             (new EmailVerificationService)->send($user);
 
             DB::commit();
-
             return responser()->send(Status::HTTP_CREATED, ['token' => auth()->login($user), 'user' => $user], 'Signup successful. Verification detials has been sent.');
-        } catch (Exception) {
+        } catch (Exception $e) {
             DB::rollback();
-
-            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, [], 'Oooops! singup failed. Try again.');
+            info('CUSTOMER SIGNUP ERROR - '.$e->getMessage());
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Oooops! singup failed. Try again.');
         }
     }
 }
