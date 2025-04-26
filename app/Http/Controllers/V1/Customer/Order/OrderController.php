@@ -63,11 +63,10 @@ class OrderController extends Controller
     }
 
     /**
-     * @param mixed $id
      * @return JsonResponse
      */
-    public function driver($id): JsonResponse
+    public function driver(): JsonResponse
     {
-        return $this->orderService->driver($id);
+        return $this->orderService->driver();
     }
 }

@@ -12,7 +12,7 @@ class DispatchDriver extends Model
     use HasFactory;
 
     public $casts = [
-        'order_id' => 'int',
+        'user_id' => 'int',
     ];
 
     /**
@@ -25,7 +25,6 @@ class DispatchDriver extends Model
         'firstname',
         'lastname',
         'phone',
-        'order_id',
     ];
 
     /**

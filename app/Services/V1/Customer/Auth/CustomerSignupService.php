@@ -49,7 +49,7 @@ class CustomerSignupService extends BaseService
             return responser()->send(Status::HTTP_CREATED, ['token' => auth()->login($user), 'user' => $user], 'Signup successful. Verification detials has been sent.');
         } catch (Exception $e) {
             DB::rollback();
-            info('CUSTOMER SIGNUP ERROR - '.$e->getMessage());
+            info('CUSTOMER SIGNUP ERROR - ' . $e->getMessage());
             return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Oooops! singup failed. Try again.');
         }
     }

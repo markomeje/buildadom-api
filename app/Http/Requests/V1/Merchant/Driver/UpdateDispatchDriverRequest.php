@@ -4,7 +4,6 @@ namespace App\Http\Requests\V1\Merchant\Driver;
 use App\Utility\Status;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class UpdateDispatchDriverRequest extends FormRequest
@@ -29,7 +28,7 @@ class UpdateDispatchDriverRequest extends FormRequest
         return [
             'firstname' => ['required', 'string', 'max:50'],
             'lastname' => ['required', 'string', 'max:50'],
-            'phone' => ['required', 'string', Rule::unique('dispatch_drivers', 'phone')->ignore($this->id)],
+            'phone' => ['required', 'string', 'phone'],
         ];
     }
 

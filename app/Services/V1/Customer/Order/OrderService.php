@@ -126,23 +126,18 @@ class OrderService extends BaseService
      * @param $id
      * @return JsonResponse
      */
-    public function driver($id): JsonResponse
+    public function driver(): JsonResponse
     {
         try {
-            $order = Order::owner()->find($id);
-            if (empty($order)) {
-                return responser()->send(Status::HTTP_NOT_FOUND, null, 'Order not found.');
+            $orders = Order::owner()->where('status', OrderStatusEnum::PLACED->value)->get();
+            if (empty($orders->count())) {
+                return responser()->send(Status::HTTP_NOT_FOUND, null, 'No placed orders found.');
             }
 
-            $status = strtolower($order->status);
-            if ($status == strtolower(OrderStatusEnum::PENDING->value) || $status == strtolower(OrderStatusEnum::FULFILLED->value)) {
-                return responser()->send(Status::HTTP_NOT_ACCEPTABLE, null, 'This operation is not allowed for this order.');
-            }
-
-            $order->update(['has_driver' => 1]);
-            return responser()->send(Status::HTTP_OK, $order, 'Operation successful.');
-        } catch (Exception $e) {
-            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Operation failed. Tyr again later');
+            $orders->each->update(['has_driver' => 1]);
+            return responser()->send(Status::HTTP_OK, $orders, 'Operation successful.');
+        } catch (Exception) {
+            return responser()->send(Status::HTTP_INTERNAL_SERVER_ERROR, null, 'Operation failed. Try again later');
         }
     }
 }
